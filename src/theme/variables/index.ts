@@ -27,7 +27,7 @@ import * as color_defaults from './colors';
 import * as font_defaults from './font';
 import * as border_defaults from './border';
 
-export const defaultTheme = {
+export const defaultVariables = {
 
   colors: color_defaults as { [key: string]: string },
   colorWeights: {
@@ -52,4 +52,4 @@ export const defaultTheme = {
   ...border_defaults,
 }
 
-export type ThemeType = Partial<typeof defaultTheme>;
+export type ThemeVariables = typeof defaultVariables;

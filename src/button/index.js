@@ -1,0 +1,121 @@
+//
+//  index.js
+//
+//  The MIT License
+//  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+import _ from 'lodash';
+import React from 'react';
+
+import {
+  Text,
+  Pressable,
+  StyleSheet,
+} from 'react-native';
+
+import { useTheme } from '../theme';
+import { shadeColor } from '../color';
+
+const textStyleList = [
+  'color',
+  'fontFamily',
+  'fontSize',
+  'fontStyle',
+  'fontWeight',
+  'includeFontPadding',
+  'fontVariant',
+  'letterSpacing',
+  'lineHeight',
+  'textAlign',
+  'textAlignVertical',
+  'textDecorationColor',
+  'textDecorationLine',
+  'textDecorationStyle',
+  'textShadowColor',
+  'textShadowOffset',
+  'textShadowRadius',
+  'textTransform',
+  'writingDirection',
+]
+
+export const Button = React.forwardRef(({
+  variant = 'primary',
+	title,
+	style,
+	titleStyle,
+	disabled,
+	focusable,
+	children,
+	onHoverIn,
+	onHoverOut,
+	onPressIn,
+	onPressOut,
+	...props
+}, forwardRef) => {
+
+  const [focused, setFocused] = React.useState({ hover: false, press: false });
+  
+  const theme = useTheme();
+  const selectedColor = theme.themeColors[variant];
+
+  const defaultStyle = StyleSheet.flatten([
+    theme.styles.buttonStyle,
+    {
+      color: theme.colorContrast(selectedColor),
+      backgroundColor: focused.hover || focused.press ? shadeColor(selectedColor, 0.2) : selectedColor,
+      borderColor: focused.hover || focused.press ? shadeColor(selectedColor, 0.2) : selectedColor,
+    }
+  ]);
+
+	const content = _.isEmpty(children) && !_.isEmpty(title) ? (
+    <Text style={[_.pick(defaultStyle, textStyleList), titleStyle]}>{title}</Text>
+  ) : children;
+
+  return (
+    <Pressable
+    ref={forwardRef}
+    disabled={disabled}
+    focusable={!disabled && focusable !== false}
+    style={[_.omit(defaultStyle, textStyleList), style]}
+    onHoverIn={(e) => {
+      setFocused(state => ({ ...state, hover: true }));
+      if (onHoverIn) onHoverIn(e);
+    }}
+    onHoverOut={(e) => {
+      setFocused(state => ({ ...state, hover: false }));
+      if (onHoverOut) onHoverOut(e);
+    }}
+    onPressIn={(e) => {
+      setFocused(state => ({ ...state, press: true }));
+      if (onPressIn) onPressIn(e);
+    }}
+    onPressOut={(e) => {
+      setFocused(state => ({ ...state, press: false }));
+      if (onPressOut) onPressOut(e);
+    }}
+    {...props}>
+		  {content}
+    </Pressable>
+  );
+})
+
+export default Button;

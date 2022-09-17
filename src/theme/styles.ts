@@ -1,5 +1,5 @@
 //
-//  index.js
+//  styles.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,6 +23,27 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
-export * from './button';
+import _ from 'lodash';
+import { StyleSheet } from 'react-native';
+import { ThemeVariables } from './variables';
+
+export const defaultStyle = (
+  theme: ThemeVariables
+) => StyleSheet.create({
+
+  buttonStyle: {
+
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+
+    borderWidth: theme.borderWidth,
+    borderRadius: theme.borderRadius,
+
+    fontSize: theme.fontSizeBase,
+    fontWeight: theme.fontWeightNormal,
+    
+  },
+
+})
+
+export type ThemeStyles = ReturnType<typeof defaultStyle>;
