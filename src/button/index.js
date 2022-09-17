@@ -75,7 +75,7 @@ export const Button = React.forwardRef(({
   const [focused, setFocused] = React.useState({ hover: false, press: false });
   
   const theme = useTheme();
-  const selectedColor = theme.themeColors[variant];
+  const selectedColor = theme.colors[variant];
 
   const defaultStyle = StyleSheet.flatten([
     theme.styles.buttonStyle,
