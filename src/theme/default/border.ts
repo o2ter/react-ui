@@ -1,5 +1,5 @@
 //
-//  index.js
+//  border.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,5 +23,7 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
+export const borderWidth: number = 1;
+export const borderRadius: number = 4;
+export const borderRadiusSmall: number = 3.2;
+export const borderRadiusLarge: number = 4.8;

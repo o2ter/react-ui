@@ -1,5 +1,5 @@
 //
-//  color.js
+//  index.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,7 +24,9 @@
 //
 
 import _ from 'lodash';
-import { ColorType, Color } from './internals/color';
+import { ColorType, Color } from '../internals/color';
+
+export { ColorType };
 
 export function mixColor(
   color1: string | ColorType,
@@ -49,6 +51,13 @@ export function shadeColor(
   weight: number
 ) {
   return mixColor('#000000', color, weight);
+}
+
+export function shiftColor(
+  color: string | ColorType,
+  weight: number
+) {
+  return weight > 0 ? shadeColor(color, weight) : tintColor(color, -weight);
 }
 
 export function luminance(color: string | ColorType) {

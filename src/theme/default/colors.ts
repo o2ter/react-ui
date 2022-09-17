@@ -1,5 +1,5 @@
 //
-//  index.js
+//  color.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,5 +23,11 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
+export const primary = '#0d6efd';
+export const secondary = '#6c757d';
+export const success = '#198754';
+export const info = '#0dcaf0';
+export const warning = '#ffc107';
+export const danger = '#dc3545';
+export const light = '#f8f9fa';
+export const dark = '#212529';

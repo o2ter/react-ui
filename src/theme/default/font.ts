@@ -1,5 +1,5 @@
 //
-//  index.js
+//  font.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,5 +23,12 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
+export const fontSizeBase: number = 16;
+export const fontSizeSmall = fontSizeBase * 0.875;
+export const fontSizeLarge = fontSizeBase * 1.25;
+
+export const fontWeightLight: string = '300';
+export const fontWeightNormal: string = '400';
+export const fontWeightBold: string = '700';
+
+export const fontWeightBase = fontWeightNormal;

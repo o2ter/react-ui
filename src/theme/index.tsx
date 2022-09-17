@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,5 +23,31 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
+import _ from 'lodash';
+import React from 'react';
+
+import { ColorType, colorContrast } from '../color';
+import { defaultTheme, ThemeType } from './default';
+
+const ThemeContext = React.createContext<ThemeType>(defaultTheme);
+
+export const ThemeProvider = ({ theme, children }: React.PropsWithChildren<{
+  theme?: ThemeType;
+}>) => (
+  <ThemeContext.Provider value={theme ?? defaultTheme}>
+    {children}
+  </ThemeContext.Provider>
+);
+
+export function useTheme() {
+  const computed = _.assign({}, defaultTheme, React.useContext(ThemeContext));
+  return {
+    colorContrast: (background: string | ColorType) => colorContrast(
+      background,
+      computed.colorContrastDark,
+      computed.colorContrastLight, 
+      computed.minContrastRatio
+    ),
+    ...computed,
+  };
+}
