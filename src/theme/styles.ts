@@ -33,6 +33,8 @@ export const defaultStyle = (
 
   buttonStyle: {
 
+    textAlign: 'center',
+    
     paddingHorizontal: 12,
     paddingVertical: 6,
 
