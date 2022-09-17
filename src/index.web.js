@@ -23,4 +23,4 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
+export * from './index.js';
