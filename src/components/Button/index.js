@@ -32,8 +32,8 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { useTheme } from '../theme';
-import { shadeColor } from '../color';
+import { useTheme } from '../../theme';
+import { shadeColor } from '../../color';
 
 const text_style = [
   'color',

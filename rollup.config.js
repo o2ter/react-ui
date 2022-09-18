@@ -77,16 +77,29 @@ export default [
                 format: 'es',
             },
         ],
-        plugins: [dts()],
+        plugins: [
+          resolve({
+              extensions: ['.ts', '.tsx', '.mjs', '.js']
+          }),
+          dts()
+        ],
     },
     {
-        input: 'src/index.web',
+        input: 'src/index',
         output: [
             {
                 file: 'dist/index.web.d.ts',
                 format: 'es',
             },
         ],
-        plugins: [dts()],
+        plugins: [
+          resolve({
+              extensions: [
+                '.web.ts', '.web.tsx', '.web.mjs', '.web.js',
+                '.ts', '.tsx', '.mjs', '.js',
+              ]
+          }),
+          dts()
+        ],
     },
 ];

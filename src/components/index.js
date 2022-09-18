@@ -23,6 +23,22 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
-export * from './components';
+export * from './ActivityIndicator';
+export { AsyncRefreshControl } from './AsyncRefreshControl';
+export { Barcode, BarcodeFormats } from './Barcode';
+export * from './Button';
+export { FlatList } from './FlatList';
+export { Icon } from './Icon';
+export { Image } from './Image';
+export { List } from './List';
+export { Lottie } from './Lottie';
+export { QRCode } from './QRCode';
+export * from './SafeAreaView';
+export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
+export * from './SegmentedControl';
+export { SleekAnimationView } from './SleekAnimationView';
+export { StickyView } from './StickyView';
+export { SVG } from './SVG';
+export { Touchable } from './Touchable';
+export * from './Icons';
+export * as Icons from './Icons';

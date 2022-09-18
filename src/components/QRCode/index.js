@@ -23,6 +23,48 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
-export * from './components';
+import _ from 'lodash';
+import React from 'react';
+import Svg, { Rect, Path } from 'react-native-svg';
+import qrcode from 'qrcode';
+
+export const QRCode = React.forwardRef(({
+    value = '',
+    options = {},
+    color = 'black',
+    backgroundColor,
+    ...props
+}, forwardRef) => {
+
+    const { path, size } = React.useMemo(() => {
+
+        try {
+
+            const { size, data } = qrcode.create(value, options).modules;
+    
+            let path = '';
+        
+            for (let i = 0; i < data.length; i++) {
+    
+                if (data[i]) {
+                    const col = Math.floor(i % size);
+                    const row = Math.floor(i / size);
+                    path += `M${col},${row}v1h1v-1z`
+                }
+            }
+
+            return { path, size };
+    
+        } catch { }
+        
+        return { path: '', size: 100 };
+        
+    }, [value, options]);
+    
+    return <Svg ref={forwardRef} viewBox={`0 0 ${size} ${size}`} preserveAspectRatio='none' {...props}>
+        {backgroundColor && <Rect x={0} y={0} width={size} height={size} fill={backgroundColor} />}
+        <Path d={path} fill={color} />
+    </Svg>;
+});
+
+export default QRCode;

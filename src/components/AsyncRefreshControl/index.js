@@ -23,6 +23,27 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
-export * from './components';
+import _ from 'lodash';
+import React from 'react';
+
+async function _onRefresh(onRefresh, setRefreshing) {
+    setRefreshing(true);
+    try { await onRefresh() } catch { }
+    setRefreshing(false);
+}
+
+export const AsyncRefreshControl = (RefreshControl) => React.forwardRef(({
+    onRefresh,
+    ...props
+}, forwardRef) => {
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    return <RefreshControl
+    ref={forwardRef}
+    refreshing={refreshing}
+    onRefresh={() => _onRefresh(onRefresh, setRefreshing)}
+    {...props} />;
+});
+
+export default AsyncRefreshControl;

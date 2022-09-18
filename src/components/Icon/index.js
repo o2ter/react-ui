@@ -23,6 +23,59 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
-export * from './components';
+import _ from 'lodash';
+import React from 'react';
+import { Text, StyleSheet } from 'react-native';
+import * as Icons from '../Icons';
+
+const text_style = [
+	'color',
+	'fontFamily',
+	'fontFeatureSettings',
+	'fontSize',
+	'fontStyle',
+	'fontVariant',
+	'fontWeight',
+	'includeFontPadding',
+	'letterSpacing',
+	'lineHeight',
+	'textAlign',
+	'textAlignVertical',
+	'textDecorationColor',
+	'textDecorationLine',
+	'textDecorationStyle',
+	'textIndent',
+	'textOverflow',
+	'textRendering',
+	'textShadowColor',
+	'textShadowOffset',
+	'textShadowRadius',
+	'textTransform',
+	'unicodeBidi',
+	'whiteSpace',
+	'wordBreak',
+	'wordWrap',
+	'writingDirection',
+]
+
+export const Icon = React.forwardRef(({
+	icon,
+	name,
+	style,
+	iconStyle,
+	children,
+	...props
+}, forwardRef) => {
+
+	const _Icon = Icons[icon];
+
+	const _iconStyle = StyleSheet.flatten([style, iconStyle]);
+	const { fontSize, color } = _iconStyle ?? {};
+	
+	return <Text ref={forwardRef} style={style} {...props}>
+		{!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_iconStyle, text_style)} />}
+		{children}
+	</Text>;
+});
+
+export default Icon;

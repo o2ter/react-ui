@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.web.js
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,6 +23,5 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
-export * from './components';
+import './font-inject';
+export * from './index.js';

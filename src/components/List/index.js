@@ -23,6 +23,9 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
-export * from './components';
+import _ from 'lodash';
+import React from 'react';
+
+export const List = ({ data, renderItem = ({item}) => item }) => React.createElement(React.Fragment, {}, ..._.map(data, (item, index) => renderItem({ item, index })));
+
+export default List;

@@ -23,6 +23,34 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
-export * from './components';
+import _ from 'lodash';
+import React from 'react';
+import { FlatList as RNFlatList, RefreshControl as RNRefreshControl } from 'react-native';
+import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
+import { AsyncRefreshControl } from '../AsyncRefreshControl';
+
+const FlatListBase = KeyboardAwareScrollable(RNFlatList);
+const RefreshControl = AsyncRefreshControl(RNRefreshControl);
+
+function array_of(children) {
+    if (_.isNil(children)) return [];
+    if (_.isArray(children)) return children;
+    return [children];
+}
+
+export const FlatList = React.forwardRef(({
+    onRefresh,
+    refreshControlProps,
+    children,
+    ...props
+}, forwardRef) => {
+
+    return <FlatListBase
+    ref={forwardRef}
+    data={array_of(children)}
+    renderItem={({item}) => item}
+    refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
+    {...props} />
+});
+
+export default FlatList;

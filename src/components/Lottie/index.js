@@ -23,6 +23,43 @@
 //  THE SOFTWARE.
 //
 
-export * from './color';
-export * from './theme';
-export * from './components';
+import _ from 'lodash';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import RNLottie from 'lottie-react-native';
+
+export const Lottie = React.forwardRef(({
+    source,
+    style,
+    duration = 0,
+    loop = true,
+    autoPlay = false,
+    ...props
+}, forwardRef) => {
+    
+    const _style = StyleSheet.flatten(style) ?? {};
+    
+    let aspectRatio;
+    let _width = _style.width;
+    let _height = _style.height;
+    
+    if (!_.isNil(source)) {
+        if (!_.isNil(_width) && !_.isNil(_height)) {
+            _width = source.w;
+            _height = source.h;
+        } else if (!_.isNil(_width) || !_.isNil(_height)) {
+            aspectRatio = source.w / source.h;
+        }
+    }
+    
+    return <RNLottie
+    ref={forwardRef}
+    source={source}
+    progress={Math.max(0, Math.min(1, duration))}
+    autoPlay={autoPlay}
+    loop={loop}
+    style={[{ aspectRatio, width: _width, height: _height }, style]}
+    {...props} />;
+});
+
+export default Lottie;
