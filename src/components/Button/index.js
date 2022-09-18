@@ -34,37 +34,7 @@ import {
 
 import { useTheme } from '../../theme';
 import { transparent } from '../../color';
-
-const text_style = [
-  'color',
-  'fontFamily',
-  'fontFeatureSettings',
-  'fontSize',
-  'fontStyle',
-  'fontVariant',
-  'fontWeight',
-  'includeFontPadding',
-  'fontVariant',
-  'letterSpacing',
-  'lineHeight',
-  'textAlign',
-  'textAlignVertical',
-  'textDecorationColor',
-  'textDecorationLine',
-  'textDecorationStyle',
-  'textIndent',
-  'textOverflow',
-  'textRendering',
-  'textShadowColor',
-  'textShadowOffset',
-  'textShadowRadius',
-  'textTransform',
-  'unicodeBidi',
-  'whiteSpace',
-  'wordBreak',
-  'wordWrap',
-  'writingDirection',
-]
+import { text_style } from '../../internals/text_style';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
