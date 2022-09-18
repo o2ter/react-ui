@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 
 import {
-  Text,
+  Animated,
   Pressable,
   StyleSheet,
 } from 'react-native';
@@ -65,6 +65,8 @@ const text_style = [
   'writingDirection',
 ]
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 export const Button = React.forwardRef(({
   variant = 'primary',
 	title,
@@ -81,21 +83,33 @@ export const Button = React.forwardRef(({
 }, forwardRef) => {
 
   const [focused, setFocused] = React.useState({ hover: false, press: false });
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    
+    Animated.timing(fadeAnim, {
+      toValue: focused.hover || focused.press ? 1 : 0,
+      duration: 50,
+      useNativeDriver: false,
+    }).start();
+    
+  }, [focused.hover || focused.press]);
   
   const theme = useTheme();
   const selectedColor = theme.colors[variant];
-  
-  const defaultStyle = StyleSheet.flatten([
-    theme.styles.buttonStyle,
-    focused.hover || focused.press ? theme.styles.buttonFocusedColors(selectedColor) : theme.styles.buttonColors(selectedColor),
-  ]);
-  
-	const content = _.isEmpty(children) && !_.isEmpty(title) ? (
-    <Text style={[_.pick(defaultStyle, text_style), titleStyle]}>{title}</Text>
-  ) : children;
 
+  const fromColors = theme.styles.buttonColors(selectedColor);
+  const toColors = theme.styles.buttonFocusedColors(selectedColor);
+  
+  const colors = _.mapValues(fromColors, (v, k) => fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [v, toColors[k]] }));
+  const defaultStyle = StyleSheet.flatten([theme.styles.buttonStyle, colors]);
+
+	const content = _.isEmpty(children) && !_.isEmpty(title) ? (
+    <Animated.Text style={[_.pick(defaultStyle, text_style), titleStyle]}>{title}</Animated.Text>
+  ) : children;
+  
   return (
-    <Pressable
+    <AnimatedPressable
     ref={forwardRef}
     disabled={disabled}
     focusable={!disabled && focusable !== false}
@@ -118,7 +132,7 @@ export const Button = React.forwardRef(({
     }}
     {...props}>
 		  {content}
-    </Pressable>
+    </AnimatedPressable>
   );
 })
 
