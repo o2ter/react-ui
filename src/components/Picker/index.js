@@ -2,7 +2,7 @@
 //  index.js
 //
 //  The MIT License
-//  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
+//  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,13 @@
 //  THE SOFTWARE.
 //
 
-export * from './ActivityIndicator';
-export { AsyncRefreshControl } from './AsyncRefreshControl';
-export { Barcode, BarcodeFormats } from './Barcode';
-export * from './Button';
-export { FlatList } from './FlatList';
-export { Icon } from './Icon';
-export { Image } from './Image';
-export { List } from './List';
-export { Lottie } from './Lottie';
-export { Picker } from './Picker';
-export { QRCode } from './QRCode';
-export * from './SafeAreaView';
-export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
-export * from './SegmentedControl';
-export { SleekAnimationView } from './SleekAnimationView';
-export { StickyView } from './StickyView';
-export { SVG } from './SVG';
-export { Touchable } from './Touchable';
-export * from './Icons';
-export * as Icons from './Icons';
+import _ from 'lodash';
+import React from 'react';
+import { List } from '../List';
+import { Picker as RNPicker } from '@react-native-picker/picker';
+
+export const Picker = React.forwardRef(({ items = [], ...props }, forwardRef) => <RNPicker ref={forwardRef} {...props}>
+    <List data={items} renderItem={({item}) => _.isString(item) ? <RNPicker.Item label={item} value={item} /> : <RNPicker.Item {...item} />} />
+</RNPicker>);
+
+export default Picker;
