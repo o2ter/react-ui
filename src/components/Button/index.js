@@ -76,7 +76,7 @@ export const Button = React.forwardRef(({
   const _interpolate = (c1, c2) => fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
   const colors = {
     color: _interpolate(outline ? selectedColor : fromColors.color, toColors.color),
-    backgroundColor: _interpolate(outline ? transparent(selectedColor, 0) : fromColors.backgroundColor, outline ? selectedColor : toColors.backgroundColor),
+    backgroundColor: outline ? _interpolate(transparent(selectedColor, 0), selectedColor) : _interpolate(fromColors.backgroundColor, toColors.backgroundColor),
     borderColor: outline ? selectedColor : _interpolate(fromColors.borderColor, toColors.borderColor),
   };
 
