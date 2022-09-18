@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { ThemeVariables } from './variables';
-import { shiftColor } from '../color';
+import { ColorType, colorContrast, shiftColor, shadeColor } from '../color';
 
 const createStyle = <T extends ViewStyle | TextStyle | ImageStyle>(style: T) => StyleSheet.create({ style }).style;
 
@@ -34,25 +34,39 @@ const createToastColor = (theme: ThemeVariables, color: string) => ({
   color: theme.colors[color],
   messageColor: shiftColor(theme.colors[color], theme.colorWeights[800]),
   backgroundColor: shiftColor(theme.colors[color], theme.colorWeights[100]),
-})
+});
+
+export const _colorContrast = (theme: ThemeVariables) => (background: string | ColorType) => colorContrast(
+  background,
+  theme.colorContrastDark,
+  theme.colorContrastLight, 
+  theme.minContrastRatio
+)
 
 export const defaultStyle = (
-  theme: ThemeVariables
+  theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
 ) => ({
 
-  buttonStyle: createStyle({
+  buttonColors: (color: string) => ({
+    color: theme.colorContrast(color),
+    backgroundColor: color,
+    borderColor: color,
+  }),
 
+  buttonFocusedColors: (color: string) => ({
+    color: theme.colorContrast(color),
+    backgroundColor: shadeColor(color, 0.2),
+    borderColor: shadeColor(color, 0.2),
+  }),
+
+  buttonStyle: createStyle({
     textAlign: 'center',
-    
     paddingHorizontal: 12,
     paddingVertical: 6,
-
     borderWidth: theme.borderWidth,
     borderRadius: theme.borderRadius,
-
     fontSize: theme.fontSizeBase,
     fontWeight: theme.fontWeightNormal,
-    
   }),
 
   toastColors: {

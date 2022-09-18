@@ -33,7 +33,6 @@ import {
 } from 'react-native';
 
 import { useTheme } from '../../theme';
-import { shadeColor } from '../../color';
 
 const text_style = [
   'color',
@@ -85,16 +84,12 @@ export const Button = React.forwardRef(({
   
   const theme = useTheme();
   const selectedColor = theme.colors[variant];
-
+  
   const defaultStyle = StyleSheet.flatten([
     theme.styles.buttonStyle,
-    {
-      color: theme.colorContrast(selectedColor),
-      backgroundColor: focused.hover || focused.press ? shadeColor(selectedColor, 0.2) : selectedColor,
-      borderColor: focused.hover || focused.press ? shadeColor(selectedColor, 0.2) : selectedColor,
-    }
+    focused.hover || focused.press ? theme.styles.buttonFocusedColors(selectedColor) : theme.styles.buttonColors(selectedColor),
   ]);
-
+  
 	const content = _.isEmpty(children) && !_.isEmpty(title) ? (
     <Text style={[_.pick(defaultStyle, text_style), titleStyle]}>{title}</Text>
   ) : children;

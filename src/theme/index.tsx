@@ -26,15 +26,14 @@
 import _ from 'lodash';
 import React from 'react';
 
-import { ColorType, colorContrast } from '../color';
 import { defaultVariables, ThemeVariables } from './variables';
-import { defaultStyle, ThemeStyles } from './styles';
+import { defaultStyle, ThemeStyles, _colorContrast } from './styles';
 
 export { ThemeVariables, ThemeStyles };
 
 type ThemeProviderProps = Partial<{
   variables: Partial<ThemeVariables>;
-  styles: (theme: ThemeVariables) => Partial<ThemeStyles>;
+  styles: (...theme: Parameters<typeof defaultStyle>) => Partial<ThemeStyles>;
 }>
 
 const ThemeContext = React.createContext<ThemeProviderProps>({
@@ -58,15 +57,22 @@ export const ThemeProvider = ({
 };
 
 export function useTheme() {
+  
   const { variables, styles } = React.useContext(ThemeContext);
-  const computed = _.assign({
-    colorContrast: (background: string | ColorType) => colorContrast(
-      background,
-      computed.colorContrastDark,
-      computed.colorContrastLight, 
-      computed.minContrastRatio
-    ),
-    get styles() { return _.assign({}, defaultStyle(computed), styles?.(computed)) }
-  }, defaultVariables, variables);
-  return computed;
+  
+  return React.useMemo(() => {
+
+    let computed_style: ThemeStyles;
+    
+    const computed = _.assign({
+      get colorContrast() { return _colorContrast(computed) },
+      get styles() {
+        if (_.isNil(computed_style)) computed_style = _.assign({}, defaultStyle(computed), styles?.(computed));
+        return computed_style;
+      }
+    }, defaultVariables, variables);
+
+    return computed;
+    
+  }, [variables, styles]);
 }
