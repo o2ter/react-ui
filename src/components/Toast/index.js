@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Text, Pressable, Animated, Platform } from 'react-native';
+import { View, Text, Pressable, Animated, Platform, LayoutAnimation } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { useMount } from 'sugax';
 import uuid from 'react-native-uuid';
@@ -74,7 +74,10 @@ function ToastBody({
             toValue: 0,
             duration: 250,
             useNativeDriver: Platform.OS !== 'web',
-        }).start(() => _.isFunction(onDismiss) && onDismiss());
+        }).start(() => {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+          _.isFunction(onDismiss) && onDismiss();
+        });
     }
 
     useMount(() => {
