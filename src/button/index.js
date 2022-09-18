@@ -35,11 +35,13 @@ import {
 import { useTheme } from '../theme';
 import { shadeColor } from '../color';
 
-const textStyleList = [
+const text_style = [
   'color',
   'fontFamily',
+  'fontFeatureSettings',
   'fontSize',
   'fontStyle',
+  'fontVariant',
   'fontWeight',
   'includeFontPadding',
   'fontVariant',
@@ -50,10 +52,17 @@ const textStyleList = [
   'textDecorationColor',
   'textDecorationLine',
   'textDecorationStyle',
+  'textIndent',
+  'textOverflow',
+  'textRendering',
   'textShadowColor',
   'textShadowOffset',
   'textShadowRadius',
   'textTransform',
+  'unicodeBidi',
+  'whiteSpace',
+  'wordBreak',
+  'wordWrap',
   'writingDirection',
 ]
 
@@ -87,7 +96,7 @@ export const Button = React.forwardRef(({
   ]);
 
 	const content = _.isEmpty(children) && !_.isEmpty(title) ? (
-    <Text style={[_.pick(defaultStyle, textStyleList), titleStyle]}>{title}</Text>
+    <Text style={[_.pick(defaultStyle, text_style), titleStyle]}>{title}</Text>
   ) : children;
 
   return (
@@ -95,7 +104,7 @@ export const Button = React.forwardRef(({
     ref={forwardRef}
     disabled={disabled}
     focusable={!disabled && focusable !== false}
-    style={[_.omit(defaultStyle, textStyleList), style]}
+    style={[_.omit(defaultStyle, text_style), style]}
     onHoverIn={(e) => {
       setFocused(state => ({ ...state, hover: true }));
       if (onHoverIn) onHoverIn(e);
