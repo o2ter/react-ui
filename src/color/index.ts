@@ -28,6 +28,8 @@ import { ColorType, Color } from '../internals/color';
 
 export { ColorType };
 
+const _hex = (color: string | ColorType) => new Color(color).hex
+
 export function mixColor(
   color1: string | ColorType,
   color2: string | ColorType,
@@ -92,12 +94,12 @@ export function colorContrast(
   for (const color of foregrounds) {
     const _contrastRatio = contrastRatio(background, color);
     if (_contrastRatio > minContrastRatio) {
-      return color;
+      return _hex(color);
     } else if (_contrastRatio > maxRatio) {
       maxRatio = _contrastRatio;
       maxRatioColor = color;
     }
   }
   
-  return maxRatioColor;
+  return _hex(maxRatioColor ?? background);
 }
