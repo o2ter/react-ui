@@ -23,12 +23,14 @@
 //  THE SOFTWARE.
 //
 
+export type FontWeight = 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
+
 export const fontSizeBase: number = 16;
 export const fontSizeSmall = fontSizeBase * 0.875;
 export const fontSizeLarge = fontSizeBase * 1.25;
 
-export const fontWeightLight: string = '300';
-export const fontWeightNormal: string = '400';
-export const fontWeightBold: string = '700';
+export const fontWeightLight: FontWeight = '300';
+export const fontWeightNormal: FontWeight = '400';
+export const fontWeightBold: FontWeight = '700';
 
 export const fontWeightBase = fontWeightNormal;

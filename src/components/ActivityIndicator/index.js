@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { View, ActivityIndicator as RNActivityIndicator, StyleSheet } from 'react-native';
-import { v4 as uuidv4 } from 'uuid';
+import uuid from 'react-native-uuid';
 
 const ActivityIndicatorContext = React.createContext({ 
     setTasks: () => {}, 
@@ -39,7 +39,7 @@ export function useActivityIndicator() {
 
     return async (callback = async () => {}, delay) => {
 
-        const id = uuidv4();
+        const id = uuid.v4();
         
         let completed = false;
         const _delay = delay ?? defaultDelay;

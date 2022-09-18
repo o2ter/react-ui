@@ -28,7 +28,9 @@ import React from 'react';
 import { View, Text, Pressable, Animated, Platform } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { useMount } from 'sugax';
-import { v4 as uuidv4 } from 'uuid';
+import uuid from 'react-native-uuid';
+import { useTheme } from '../../theme';
+import { useSafeAreaInsets } from '../SafeAreaView';
 
 const ToastContext = React.createContext({
     showError(message, timeout) {},
@@ -40,44 +42,15 @@ const ToastContext = React.createContext({
 export const useToast = () => React.useContext(ToastContext);
 
 const icons = {
-    error: <Svg width={24} height={24}>
-        <Path fill='rgb(239, 83, 80)' d='M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' />
-    </Svg>,
-    warning: <Svg width={24} height={24}>
-        <Path fill='rgb(255, 152, 0)' d='M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z' />
-    </Svg>,
-    info: <Svg width={24} height={24}>
-        <Path fill='rgb(3, 169, 244)' d='M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20, 12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10, 10 0 0,0 12,2M11,17H13V11H11V17Z' />
-    </Svg>,
-    success: <Svg width={24} height={24}>
-        <Path fill='rgb(76, 175, 80)' d='M20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4C12.76,4 13.5,4.11 14.2, 4.31L15.77,2.74C14.61,2.26 13.34,2 12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0, 0 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z' />
-    </Svg>,
+    success: 'M20 12a8 8 0 0 1-8 8 8 8 0 0 1-8-8 8 8 0 0 1 8-8h2l2-1-4-1A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10M8 10l-1 2 4 4L21 6l-1-1-9 8-3-3Z',
+    info: 'M11 9h2V7h-2m1 13a8 8 0 1 1 0-16 8 8 0 0 1 0 16m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m-1 15h2v-6h-2v6z',
+    warning: 'm12 6 8 13H4l8-13m0-4L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z',
+    error: 'M11 15h2v2h-2zm0-8h2v6h-2zm1-5a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z',
 }
 
-const iconColor = {
-    error: 'rgb(239, 83, 80)',
-    warning: 'rgb(255, 152, 0)',
-    info: 'rgb(3, 169, 244)',
-    success: 'rgb(76, 175, 80)',
-}
-
-const CloseButton = ({type}) => <Svg width={24} height={24}>
-    <Path fill={iconColor[type]} d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z' />
+const CloseButton = ({ color }) => <Svg width={24} height={24}>
+    <Path fill={color} d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z' />
 </Svg>;
-
-const messageColor = {
-    error: 'rgb(95, 33, 32)',
-    warning: 'rgb(102, 60, 0)',
-    info: 'rgb(1, 67, 97)',
-    success: 'rgb(30, 70, 32)',
-}
-
-const backgroundColor = {
-    error: 'rgb(253, 237, 237)',
-    warning: 'rgb(255, 244, 229)',
-    info: 'rgb(229, 246, 253)',
-    success: 'rgb(237, 247, 237)',
-}
 
 function toString(message) {
     if (_.isString(message)) return message;
@@ -94,6 +67,7 @@ function ToastBody({
 }) {
 
     const fadeAnim = React.useRef(new Animated.Value(0)).current;
+    const theme = useTheme();
 
     function _dismiss() {
         Animated.timing(fadeAnim, { 
@@ -110,27 +84,14 @@ function ToastBody({
             useNativeDriver: Platform.OS !== 'web',
         }).start(() => onShow({ dismiss() { _dismiss(); } }));
     });
-
+    
+    const { color, messageColor, backgroundColor } = theme.styles.toastColors[type];
+    
     return <Animated.View
-    style={{
-        marginTop: 8,
-        padding: 16,
-        minWidth: 320,
-        borderRadius: 4,
-        backgroundColor: backgroundColor[type],
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        opacity: fadeAnim,
-    }}>
-        {icons[type]}
-        <Text style={{
-            flex: 1,
-            marginHorizontal: 8,
-            fontSize: 14,
-            color: messageColor[type]
-        }}>{toString(message)}</Text>
-        <Pressable onPress={_dismiss}><CloseButton type={type} /></Pressable>
+    style={[theme.styles.toastStyle, { backgroundColor: backgroundColor, opacity: fadeAnim }]}>
+        <Svg width={24} height={24}><Path fill={color} d={icons[type]} /></Svg>
+        <Text style={[theme.styles.toastTextStyle, { color: messageColor }]}>{toString(message)}</Text>
+        <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
     </Animated.View>
 }
 
@@ -140,13 +101,14 @@ export const ToastProvider = ({
 }) => {
 
     const [elements, setElements] = React.useState({});
+    const insets = useSafeAreaInsets();
 
     function show_message(message, type, timeout) {
 
         if (_.isNil(message)) return;
         if (!_.isString(message) && _.isArrayLike(message)) return _.forEach(message, x => show_message(x, type, timeout));
         
-        const id = uuidv4();
+        const id = uuid.v4();
         
         setElements(elements => ({
             ...elements,
@@ -156,17 +118,17 @@ export const ToastProvider = ({
         }));
     }
 
-    const provider = {
+    const provider = React.useMemo(() => ({
         showError(message, timeout) { show_message(message, 'error', timeout); },
         showWarning(message, timeout) { show_message(message, 'warning', timeout); },
         showInfo(message, timeout) { show_message(message, 'info', timeout); },
         showSuccess(message, timeout) { show_message(message, 'success', timeout); },
-    };
+    }), [setElements]);
 
     return <ToastContext.Provider value={provider}>
         {children}
         <View style={{
-            top: 0,
+            top: insets.top,
             position: 'absolute',
             alignItems: 'center',
             alignSelf: 'center',

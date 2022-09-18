@@ -24,14 +24,23 @@
 //
 
 import _ from 'lodash';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { ThemeVariables } from './variables';
+import { shiftColor } from '../color';
+
+const createStyle = <T extends ViewStyle | TextStyle | ImageStyle>(style: T) => StyleSheet.create({ style }).style;
+
+const createToastColor = (theme: ThemeVariables, color: string) => ({
+  color: theme.colors[color],
+  messageColor: shiftColor(theme.colors[color], theme.colorWeights[800]),
+  backgroundColor: shiftColor(theme.colors[color], theme.colorWeights[100]),
+})
 
 export const defaultStyle = (
   theme: ThemeVariables
-) => StyleSheet.create({
+) => ({
 
-  buttonStyle: {
+  buttonStyle: createStyle({
 
     textAlign: 'center',
     
@@ -44,7 +53,30 @@ export const defaultStyle = (
     fontSize: theme.fontSizeBase,
     fontWeight: theme.fontWeightNormal,
     
+  }),
+
+  toastColors: {
+    success: createToastColor(theme, 'success'),
+    info: createToastColor(theme, 'info'),
+    warning: createToastColor(theme, 'warning'),
+    error: createToastColor(theme, 'error'),
   },
+
+  toastStyle: createStyle({
+    marginTop: 8,
+    padding: 16,
+    minWidth: 320,
+    borderRadius: 4,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  }),
+
+  toastTextStyle: createStyle({
+    flex: 1,
+    marginHorizontal: 8,
+    fontSize: 14,
+  }),
 
 })
 
