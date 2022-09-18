@@ -33,6 +33,7 @@ import {
 } from 'react-native';
 
 import { useTheme } from '../../theme';
+import { transparent } from '../../color';
 
 const text_style = [
   'color',
@@ -69,6 +70,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const Button = React.forwardRef(({
   variant = 'primary',
+  outline = false,
 	title,
 	style,
 	titleStyle,
@@ -100,8 +102,14 @@ export const Button = React.forwardRef(({
 
   const fromColors = theme.styles.buttonColors(selectedColor);
   const toColors = theme.styles.buttonFocusedColors(selectedColor);
-  
-  const colors = _.mapValues(fromColors, (v, k) => fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [v, toColors[k]] }));
+
+  const _interpolate = (c1, c2) => fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
+  const colors = {
+    color: _interpolate(outline ? selectedColor : fromColors.color, toColors.color),
+    backgroundColor: _interpolate(outline ? transparent(selectedColor, 0) : fromColors.backgroundColor, outline ? selectedColor : toColors.backgroundColor),
+    borderColor: outline ? selectedColor : _interpolate(fromColors.borderColor, toColors.borderColor),
+  };
+
   const defaultStyle = StyleSheet.flatten([theme.styles.buttonStyle, colors]);
 
 	const content = _.isEmpty(children) && !_.isEmpty(title) ? (

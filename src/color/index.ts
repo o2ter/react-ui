@@ -103,3 +103,11 @@ export function colorContrast(
   
   return _hex(maxRatioColor ?? background);
 }
+
+export function transparent(
+  color: string | ColorType,
+  opacity: number
+) {
+  const { r, g, b } = new Color(color);
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
