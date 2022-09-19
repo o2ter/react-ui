@@ -1,5 +1,5 @@
 //
-//  index.js
+//  animation.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,37 +23,13 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import React from 'react';
-import { View, Modal as RNModal, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { Easing } from 'react-native';
 
-import { useTheme } from '../../theme';
+export const activityIndicatorDuration: number = 250;
+export const activityIndicatorEasing = Easing.linear;
 
-const ModalContext = React.createContext((element) => {});
+export const buttonDuration: number = 100;
+export const buttonEasing = Easing.linear;
 
-export const useModal = () => React.useContext(ModalContext);
-
-export const ModalProvider = ({ 
-    children,
-    backdrop = true,
-}) => {
-    
-    const [modal, setModal] = React.useState();
-    const theme = useTheme();
-    
-    return <ModalContext.Provider value={setModal}>
-      {children}
-      <RNModal visible={React.isValidElement(modal)} transparent>
-        <View style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          {backdrop === true && <TouchableWithoutFeedback onPress={() => setModal()}>
-            <View style={[theme.styles.modalBackdrop, StyleSheet.absoluteFill]} />
-          </TouchableWithoutFeedback>}
-          {modal}
-        </View>
-      </RNModal>
-    </ModalContext.Provider>;
-};
+export const toastDuration: number = 250;
+export const toastEasing = Easing.linear;

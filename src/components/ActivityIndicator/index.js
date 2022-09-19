@@ -25,8 +25,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, ActivityIndicator as RNActivityIndicator, StyleSheet } from 'react-native';
+import { Animated, View, ActivityIndicator as RNActivityIndicator, StyleSheet } from 'react-native';
 import uuid from 'react-native-uuid';
+
+import { useTheme } from '../../theme';
 
 const ActivityIndicatorContext = React.createContext({ 
     setTasks: () => {}, 
@@ -73,27 +75,35 @@ export const ActivityIndicatorProvider = ({
     children,
     defaultDelay = 250,
     backdrop = true,
-    backdropColor = 'rgba(0, 0, 0, 0.75)',
     passThroughEvents = false,
     ActivityIndicator = () => <RNActivityIndicator color='white' />,
 }) => {
 
     const [tasks, setTasks] = React.useState([]);
+    const [visible, setVisible] = React.useState(false);
+    const fadeAnim = React.useRef(new Animated.Value(0)).current;
+
+    const theme = useTheme();
+  
+    React.useEffect(() => {
+
+      setVisible(true);
+      
+      Animated.timing(fadeAnim, {
+        toValue: _.isEmpty(tasks) ? 0 : 1,
+        duration: theme.activityIndicatorDuration,
+        easing: theme.activityIndicatorEasing,
+        useNativeDriver: Platform.OS !== 'web',
+      }).start(() => setVisible(!_.isEmpty(tasks)));
+      
+    }, [_.isEmpty(tasks)]);
     
     return <ActivityIndicatorContext.Provider value={{ setTasks, defaultDelay }}>
-        {children}
-        {!_.isEmpty(tasks) && <View
-        pointerEvents={passThroughEvents ? 'none' : 'auto'}
-        style={[{
-            alignItems: 'center',
-            alignSelf: 'center',
-            justifyContent: 'center',
-        }, StyleSheet.absoluteFill]}>
-            {backdrop === true ? <View style={{
-                padding: 32,
-                borderRadius: 8,
-                backgroundColor: backdropColor,
-            }}><ActivityIndicator /></View> : <ActivityIndicator />}
-        </View>}
+      {children}
+      {visible && <Animated.View
+      pointerEvents={passThroughEvents ? 'none' : 'auto'}
+      style={[theme.styles.activityIndicator, StyleSheet.absoluteFill, { opacity: fadeAnim }]}>
+        {backdrop === true ? <View style={theme.styles.activityIndicatorBackdrop}><ActivityIndicator /></View> : <ActivityIndicator />}
+      </Animated.View>}
     </ActivityIndicatorContext.Provider>;
 };

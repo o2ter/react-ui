@@ -26,6 +26,7 @@
 import * as color_defaults from './colors';
 import * as font_defaults from './font';
 import * as border_defaults from './border';
+import * as animation_defaults from './animation';
 
 export const defaultVariables = {
 
@@ -50,6 +51,7 @@ export const defaultVariables = {
 
   ...font_defaults,
   ...border_defaults,
+  ...animation_defaults,
 }
 
 export type ThemeVariables = typeof defaultVariables;

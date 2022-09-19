@@ -61,7 +61,8 @@ export const Button = React.forwardRef(({
     
     Animated.timing(fadeAnim, {
       toValue: focused.hover || focused.press ? 1 : 0,
-      duration: 50,
+      duration: theme.buttonDuration,
+      easing: theme.buttonEasing,
       useNativeDriver: false,
     }).start();
     

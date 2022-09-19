@@ -33,6 +33,7 @@ const createStyle = <T extends ViewStyle | TextStyle | ImageStyle>(style: T) => 
 
 const createToastColor = (theme: ThemeVariables, color: string) => ({
   color: theme.colors[color],
+  borderColor: theme.colors[color],
   messageColor: shiftColor(theme.colors[color], theme.colorWeights[800]),
   backgroundColor: shiftColor(theme.colors[color], theme.colorWeights[100]),
 });
@@ -48,6 +49,18 @@ export const defaultStyle = (
   theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
 ) => ({
 
+  activityIndicator: createStyle({
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+  }),
+
+  activityIndicatorBackdrop: createStyle({
+    padding: 32,
+    borderRadius: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+  }),
+  
   buttonColors: _.memoize((color: string) => ({
     color: theme.colorContrast(color),
     backgroundColor: color,
@@ -74,6 +87,10 @@ export const defaultStyle = (
     fontWeight: theme.fontWeightNormal,
   }),
 
+  modalBackdrop: createStyle({
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+  }),
+  
   toastColors: {
     success: createToastColor(theme, 'success'),
     info: createToastColor(theme, 'info'),
@@ -83,9 +100,10 @@ export const defaultStyle = (
 
   toastStyle: createStyle({
     marginTop: 8,
-    padding: 16,
     minWidth: 320,
-    borderRadius: 4,
+    padding: theme.spacer,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: theme.borderRadius,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -93,8 +111,8 @@ export const defaultStyle = (
 
   toastTextStyle: createStyle({
     flex: 1,
-    marginHorizontal: 8,
-    fontSize: 14,
+    marginHorizontal: theme.spacer * 0.5,
+    fontSize: theme.fontSizeBase,
   }),
 
 })

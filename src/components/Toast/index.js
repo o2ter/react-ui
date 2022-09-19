@@ -72,7 +72,8 @@ function ToastBody({
     function _dismiss() {
         Animated.timing(fadeAnim, { 
             toValue: 0,
-            duration: 250,
+            duration: theme.toastDuration,
+            easing: theme.toastEasing,
             useNativeDriver: Platform.OS !== 'web',
         }).start(() => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -83,15 +84,16 @@ function ToastBody({
     useMount(() => {
         Animated.timing(fadeAnim, { 
             toValue: 1,
-            duration: 250,
+            duration: theme.toastDuration,
+            easing: theme.toastEasing,
             useNativeDriver: Platform.OS !== 'web',
         }).start(() => onShow({ dismiss() { _dismiss(); } }));
     });
     
-    const { color, messageColor, backgroundColor } = theme.styles.toastColors[type];
+    const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors[type];
     
     return <Animated.View
-    style={[theme.styles.toastStyle, { backgroundColor: backgroundColor, opacity: fadeAnim }]}>
+    style={[theme.styles.toastStyle, toastColorStyle, { opacity: fadeAnim }]}>
         <Svg width={24} height={24}><Path fill={color} d={icons[type]} /></Svg>
         <Text style={[theme.styles.toastTextStyle, { color: messageColor }]}>{toString(message)}</Text>
         <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
