@@ -33,7 +33,7 @@ const ActivityIndicatorContext = React.createContext({
     defaultDelay: 250,
 });
 
-export function useActivityIndicator() {
+export function useActivity() {
     
     const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
 
