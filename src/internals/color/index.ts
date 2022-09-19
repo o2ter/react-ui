@@ -26,7 +26,7 @@
 import _ from 'lodash';
 const normalizeColor = require('normalize-css-color');
 
-function _hex(c: number) {
+function _component_hex(c: number) {
   const hex = _.clamp(_.round(c), 0, 255).toString(16);
   return hex.length == 1 ? '0' + hex : hex;
 }
@@ -61,7 +61,7 @@ export class Color implements ColorType {
   }
 
   get hex() {
-    return "#" + _hex(this.r) + _hex(this.g) + _hex(this.b);
+    return "#" + _component_hex(this.r) + _component_hex(this.g) + _component_hex(this.b);
   }
 
   combine(other: number | ColorType, operand: (arg0: number, arg1: number) => number) {
@@ -100,3 +100,5 @@ export class Color implements ColorType {
     return this.combine(other, (a, b) => a / b);
   }
 }
+
+export const _hex = (color: string | ColorType) => new Color(color).hex

@@ -25,8 +25,9 @@
 
 import _ from 'lodash';
 import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from 'react-native';
-import { ThemeVariables } from './variables';
-import { ColorType, colorContrast, shiftColor, shadeColor } from '../color';
+import { ThemeVariables } from '../variables';
+import { ColorType, colorContrast, shiftColor, shadeColor, tintColor } from '../../color';
+import { _hex } from '../../internals/color';
 
 const createStyle = <T extends ViewStyle | TextStyle | ImageStyle>(style: T) => StyleSheet.create({ style }).style;
 
@@ -47,16 +48,20 @@ export const defaultStyle = (
   theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
 ) => ({
 
-  buttonColors: (color: string) => ({
+  buttonColors: _.memoize((color: string) => ({
     color: theme.colorContrast(color),
     backgroundColor: color,
     borderColor: color,
-  }),
+  })),
 
-  buttonFocusedColors: (color: string) => ({
-    color: theme.colorContrast(color),
-    backgroundColor: shadeColor(color, 0.2),
-    borderColor: shadeColor(color, 0.2),
+  buttonFocusedColors: _.memoize((color: string) => {
+    const _color = theme.colorContrast(color);
+    const _color2 =  _color === _hex(theme.colorContrastLight) ? shadeColor(color, 0.2) : tintColor(color, 0.2);
+    return {
+      color: _color,
+      backgroundColor: _color2,
+      borderColor: _color2,
+    };
   }),
 
   buttonStyle: createStyle({

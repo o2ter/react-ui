@@ -24,11 +24,9 @@
 //
 
 import _ from 'lodash';
-import { ColorType, Color } from '../internals/color';
+import { ColorType, Color, _hex } from '../internals/color';
 
 export { ColorType };
-
-const _hex = (color: string | ColorType) => new Color(color).hex
 
 export function mixColor(
   color1: string | ColorType,
