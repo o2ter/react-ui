@@ -30,7 +30,7 @@ import * as animation_defaults from './animation';
 
 export const defaultVariables = {
 
-  colors: color_defaults as { [key: string]: string },
+  colors: color_defaults as Record<string, string>,
   colorWeights: {
     '100': -0.8,
     '200': -0.6,
