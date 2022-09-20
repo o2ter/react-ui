@@ -53,7 +53,7 @@ type FormProps = {
 
 export const Form: React.FC<Partial<FormProps>> = ({
   schema = {},
-  initialValues = {},
+  initialValues = object(schema).getDefault(),
   onReset = () => {},
   onSubmit = () => {},
   children
