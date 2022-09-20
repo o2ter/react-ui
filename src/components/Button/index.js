@@ -95,19 +95,19 @@ export const Button = React.forwardRef(({
     style={[_.omit(defaultStyle, text_style), style]}
     onHoverIn={(e) => {
       setFocused(state => ({ ...state, hover: true }));
-      if (onHoverIn) onHoverIn(e);
+      if (_.isFunction(onHoverIn)) onHoverIn(e);
     }}
     onHoverOut={(e) => {
       setFocused(state => ({ ...state, hover: false }));
-      if (onHoverOut) onHoverOut(e);
+      if (_.isFunction(onHoverOut)) onHoverOut(e);
     }}
     onPressIn={(e) => {
       setFocused(state => ({ ...state, press: true }));
-      if (onPressIn) onPressIn(e);
+      if (_.isFunction(onPressIn)) onPressIn(e);
     }}
     onPressOut={(e) => {
       setFocused(state => ({ ...state, press: false }));
-      if (onPressOut) onPressOut(e);
+      if (_.isFunction(onPressOut)) onPressOut(e);
     }}
     {...props}>
 		  {content}

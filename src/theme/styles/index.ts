@@ -33,10 +33,10 @@ const createViewStyle = (style: ViewStyle) => StyleSheet.create({ style }).style
 const createTextStyle = (style: ViewStyle | TextStyle) => StyleSheet.create({ style }).style;
 
 const createToastColor = (theme: ThemeVariables, color: string) => ({
-  color: theme.colors[color],
-  borderColor: theme.colors[color],
-  messageColor: shiftColor(theme.colors[color], theme.colorWeights[800]),
-  backgroundColor: shiftColor(theme.colors[color], theme.colorWeights[100]),
+  color: theme.colors[color] ?? color,
+  borderColor: theme.colors[color] ?? color,
+  messageColor: shiftColor(theme.colors[color] ?? color, theme.colorWeights[800]),
+  backgroundColor: shiftColor(theme.colors[color] ?? color, theme.colorWeights[100]),
 });
 
 export const _colorContrast = (theme: ThemeVariables) => (background: string | ColorType) => colorContrast(
