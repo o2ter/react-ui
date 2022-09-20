@@ -26,22 +26,22 @@
 import _ from 'lodash';
 import React from 'react';
 import { useCallbackRef } from 'sugax';
-import { isSchema, AnySchema } from 'yup';
+import { isSchema, AnySchema, object } from 'yup';
 
 type FormState = {
   values: Record<string, any>;
   errors: Record<string, any>;
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
-  resetState: () => void;
   submit: () => void;
+  reset: () => void;
 }
 
 const FormContext = React.createContext<FormState>({
   values: {},
   errors: {},
   setValues: () => {},
-  resetState: () => {},
   submit: () => {},
+  reset: () => {},
 });
 
 type FormProps = {
@@ -59,20 +59,32 @@ export const Form: React.FC<Partial<FormProps>> = ({
   children
 }) => {
 
-  const [state, setState] = React.useState({ values: initialValues, errors: {} });
+  const [values, setValues] = React.useState(initialValues);
   
   const onResetRef = useCallbackRef(onReset);
   const onSubmitRef = useCallbackRef(onSubmit);
 
-  const formState = React.useMemo(() => ({
-    ...state,
-    setValues: (values: Record<string, any>) => setState(({ errors }) => ({ values, errors })),
-    resetState: () => {
-      setState({ values: initialValues, errors: {} });
-      if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
-    },
-    submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(state.values, formState); },
-  }), [state, setState]);
+  const formState = React.useMemo(() => {
+    
+    let errors: Record<string, any>;
+
+    return {
+
+      values, setValues,
+
+      get errors() {
+        if (_.isNil(errors)) errors = object(schema).validateSync(values);
+        return errors;
+      },
+
+      submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(values, formState); },
+
+      reset: () => {
+        setValues(initialValues);
+        if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
+      },
+    };
+  }, [values, setValues]);
 
   return <FormContext.Provider value={formState}>
     {children}
