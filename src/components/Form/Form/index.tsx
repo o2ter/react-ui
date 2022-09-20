@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useCallbackRef } from 'sugax';
-import { isSchema, AnySchema, object } from 'yup';
+import { AnySchema, object } from 'yup';
 
 type FormState = {
   values: Record<string, any>;
