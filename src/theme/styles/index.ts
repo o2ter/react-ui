@@ -24,12 +24,13 @@
 //
 
 import _ from 'lodash';
-import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from 'react-native';
+import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { ThemeVariables } from '../variables';
 import { ColorType, colorContrast, shiftColor, shadeColor, tintColor } from '../../color';
 import { _hex } from '../../internals/color';
 
-const createStyle = <T extends ViewStyle | TextStyle | ImageStyle>(style: T) => StyleSheet.create({ style }).style;
+const createViewStyle = (style: ViewStyle) => StyleSheet.create({ style }).style;
+const createTextStyle = (style: ViewStyle | TextStyle) => StyleSheet.create({ style }).style;
 
 const createToastColor = (theme: ThemeVariables, color: string) => ({
   color: theme.colors[color],
@@ -49,19 +50,19 @@ export const defaultStyle = (
   theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
 ) => ({
 
-  activityIndicator: createStyle({
+  activityIndicator: createViewStyle({
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'center',
   }),
 
-  activityIndicatorBackdrop: createStyle({
+  activityIndicatorBackdrop: createViewStyle({
     padding: 32,
     borderRadius: 8,
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
   }),
   
-  buttonColors: _.memoize((color: string) => ({
+  buttonColors: _.memoize((color: string) => createTextStyle({
     color: theme.colorContrast(color),
     backgroundColor: color,
     borderColor: color,
@@ -70,14 +71,14 @@ export const defaultStyle = (
   buttonFocusedColors: _.memoize((color: string) => {
     const _color = theme.colorContrast(color);
     const _color2 =  _color === _hex(theme.colorContrastLight) ? shadeColor(color, 0.2) : tintColor(color, 0.2);
-    return {
+    return createTextStyle({
       color: _color,
       backgroundColor: _color2,
       borderColor: _color2,
-    };
+    });
   }),
 
-  buttonStyle: createStyle({
+  buttonStyle: createTextStyle({
     textAlign: 'center',
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -87,7 +88,7 @@ export const defaultStyle = (
     fontWeight: theme.fontWeightNormal,
   }),
 
-  modalBackdrop: createStyle({
+  modalBackdrop: createViewStyle({
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
   }),
   
@@ -98,7 +99,7 @@ export const defaultStyle = (
     error: createToastColor(theme, 'error'),
   },
 
-  toastStyle: createStyle({
+  toastStyle: createViewStyle({
     marginTop: 8,
     minWidth: 320,
     padding: theme.spacer,
@@ -109,7 +110,7 @@ export const defaultStyle = (
     justifyContent: 'space-between',
   }),
 
-  toastTextStyle: createStyle({
+  toastTextStyle: createTextStyle({
     flex: 1,
     marginHorizontal: theme.spacer * 0.5,
     fontSize: theme.fontSizeBase,
