@@ -30,7 +30,8 @@ import { ColorType, colorContrast, shiftColor, shadeColor, tintColor } from '../
 import { _hex } from '../../internals/color';
 
 const createViewStyle = (style: ViewStyle) => StyleSheet.create({ style }).style;
-const createTextStyle = (style: ViewStyle | TextStyle) => StyleSheet.create({ style }).style;
+const createTextStyle = (style: ViewStyle & TextStyle) => StyleSheet.create({ style }).style;
+const createNonnullableTextStyle = <T extends ViewStyle & TextStyle>(style: T): T & ViewStyle & TextStyle => StyleSheet.create({ style }).style;
 
 const createToastColor = (theme: ThemeVariables, color: string) => ({
   color: theme.colors[color] ?? color,
@@ -62,7 +63,7 @@ export const defaultStyle = (
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
   }),
   
-  buttonColors: _.memoize((color: string) => createTextStyle({
+  buttonColors: _.memoize((color: string) => createNonnullableTextStyle({
     color: theme.colorContrast(color),
     backgroundColor: color,
     borderColor: color,
@@ -71,7 +72,7 @@ export const defaultStyle = (
   buttonFocusedColors: _.memoize((color: string) => {
     const _color = theme.colorContrast(color);
     const _color2 =  _color === _hex(theme.colorContrastLight) ? shadeColor(color, 0.2) : tintColor(color, 0.2);
-    return createTextStyle({
+    return createNonnullableTextStyle({
       color: _color,
       backgroundColor: _color2,
       borderColor: _color2,

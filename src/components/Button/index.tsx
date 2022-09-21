@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -27,9 +27,15 @@ import _ from 'lodash';
 import React from 'react';
 
 import {
+  Platform,
   Animated,
   Pressable,
+  PressableProps,
   StyleSheet,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+  GestureResponderEvent,
 } from 'react-native';
 
 import { useTheme } from '../../theme';
@@ -38,7 +44,17 @@ import { text_style } from '../../internals/text_style';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export const Button = React.forwardRef(({
+type ButtonProps = {
+  variant: string,
+  outline: boolean,
+	title: string,
+  style: StyleProp<ViewStyle>,
+	titleStyle: StyleProp<TextStyle>,
+	onHoverIn: (event: GestureResponderEvent) => void,
+	onHoverOut: (event: GestureResponderEvent) => void,
+} & PressableProps
+
+export const Button = React.forwardRef<React.RefObject<typeof AnimatedPressable>, Partial<ButtonProps>>(({
   variant = 'primary',
   outline = false,
 	title,
@@ -74,7 +90,7 @@ export const Button = React.forwardRef(({
   const fromColors = theme.styles.buttonColors(selectedColor);
   const toColors = theme.styles.buttonFocusedColors(selectedColor);
 
-  const _interpolate = (c1, c2) => fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
+  const _interpolate = (c1: string, c2: string) => fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
   const colors = {
     color: _interpolate(outline ? selectedColor : fromColors.color, toColors.color),
     backgroundColor: outline ? _interpolate(transparent(selectedColor, 0), selectedColor) : _interpolate(fromColors.backgroundColor, toColors.backgroundColor),
@@ -86,6 +102,20 @@ export const Button = React.forwardRef(({
 	const content = _.isEmpty(children) && !_.isEmpty(title) ? (
     <Animated.Text style={[_.pick(defaultStyle, text_style), titleStyle]}>{title}</Animated.Text>
   ) : children;
+
+  const callbacks = Platform.select({
+    web: {
+      onHoverIn: (e: GestureResponderEvent) => {
+        setFocused(state => ({ ...state, hover: true }));
+        if (_.isFunction(onHoverIn)) onHoverIn(e);
+      },
+      onHoverOut: (e: GestureResponderEvent) => {
+        setFocused(state => ({ ...state, hover: false }));
+        if (_.isFunction(onHoverOut)) onHoverOut(e);
+      },
+    },
+    default: {},
+  });
   
   return (
     <AnimatedPressable
@@ -93,23 +123,15 @@ export const Button = React.forwardRef(({
     disabled={disabled}
     focusable={!disabled && focusable !== false}
     style={[_.omit(defaultStyle, text_style), style]}
-    onHoverIn={(e) => {
-      setFocused(state => ({ ...state, hover: true }));
-      if (_.isFunction(onHoverIn)) onHoverIn(e);
-    }}
-    onHoverOut={(e) => {
-      setFocused(state => ({ ...state, hover: false }));
-      if (_.isFunction(onHoverOut)) onHoverOut(e);
-    }}
-    onPressIn={(e) => {
+    onPressIn={(e: GestureResponderEvent) => {
       setFocused(state => ({ ...state, press: true }));
       if (_.isFunction(onPressIn)) onPressIn(e);
     }}
-    onPressOut={(e) => {
+    onPressOut={(e: GestureResponderEvent) => {
       setFocused(state => ({ ...state, press: false }));
       if (_.isFunction(onPressOut)) onPressOut(e);
     }}
-    {...props}>
+    {...callbacks} {...props}>
 		  {content}
     </AnimatedPressable>
   );
