@@ -25,20 +25,28 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, TextProps } from 'react-native';
+import { LocalizationStrings } from 'sugax';
 import { useField } from '../Form';
 
-export default React.forwardRef(({
+import locales from '../locales';
+const strings = LocalizationStrings(locales);
+
+type FormErrorMessageProps = {
+  name: string | string[];
+} & TextProps
+
+export default React.forwardRef<Text, FormErrorMessageProps>(({
   name,
   ...props
 }, forwardRef) => {
 
-  const { error } = useField(name);
-  const { t } = useTranslation();
+  const { } = useField(name);
+  const localize = strings.useLocalize();
 
   return (
     <>
-      {!_.isNil(error) && <Text ref={forwardRef} {...props}>{t(error.rule, error)}</Text>}
+      {!_.isNil(null) && <Text ref={forwardRef} {...props}></Text>}
     </>
   );
 });
