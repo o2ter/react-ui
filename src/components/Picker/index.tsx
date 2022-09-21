@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,24 +23,46 @@
 //  THE SOFTWARE.
 //
 
-import './yup/config';
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase } from './Form';
-import { useFormGroup, FormGroup } from './Group';
+import React from 'react';
+import { StyleSheet, Platform, ViewStyle, TextStyle, StyleProp } from 'react-native';
+import PickerSelect, { PickerSelectProps } from 'react-native-picker-select';
 
-const Form = _.create(FormBase, {
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-})
+type PickerProps = Partial<{
+  style: StyleProp<TextStyle>;
+  containerStyle: StyleProp<ViewStyle>;
+} & PickerSelectProps>
 
-export {
-  useField,
-  useForm,
-  useFormGroup,
-  Form,
-}
+export const Picker = React.forwardRef<PickerSelect, PickerProps>(({
+  items = [],
+  style,
+  containerStyle,
+  onValueChange = () => {},
+  ...props
+}, forwardRef) => {
+
+  const _style = StyleSheet.flatten(style);
+  const _containerStyle = StyleSheet.flatten(containerStyle);
+  
+  return <PickerSelect
+  ref={forwardRef}
+  items={items}
+  style={Platform.select({
+    ios: {
+      inputIOS: _style,
+      inputIOSContainer: _containerStyle,
+    },
+    android: {
+      inputAndroid: _style,
+      inputAndroidContainer: _containerStyle,
+    },
+    web: {
+      inputWeb: _style,
+      viewContainer: _containerStyle,
+    },
+  })}
+  onValueChange={onValueChange}
+  {...props} />;
+});
+
+export default Picker;

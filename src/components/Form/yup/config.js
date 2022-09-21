@@ -1,5 +1,5 @@
 //
-//  index.js
+//  config.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,24 +23,16 @@
 //  THE SOFTWARE.
 //
 
-import './yup/config';
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase } from './Form';
-import { useFormGroup, FormGroup } from './Group';
+import { setLocale } from 'yup';
+import _locale from 'yup/lib/locale';
 
-const Form = _.create(FormBase, {
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-})
+const locale = _.mapValues(_locale, (rules, type) => _.fromPairs(_.map(_.keys(rules), rule => [
+    rule,
+    (params) => ({
+      ...params,
+      rule: `${type}.${rule}`,
+    })
+])));
 
-export {
-  useField,
-  useForm,
-  useFormGroup,
-  Form,
-}
+setLocale(locale);

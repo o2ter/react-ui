@@ -30,8 +30,8 @@ import { ColorType, colorContrast, shiftColor, shadeColor, tintColor } from '../
 import { _hex } from '../../internals/color';
 
 const createViewStyle = (style: ViewStyle) => StyleSheet.create({ style }).style;
-const createTextStyle = (style: ViewStyle & TextStyle) => StyleSheet.create({ style }).style;
-const createNonnullableTextStyle = <T extends ViewStyle & TextStyle>(style: T): T & ViewStyle & TextStyle => StyleSheet.create({ style }).style;
+const createTextStyle = (style: TextStyle) => StyleSheet.create({ style }).style;
+const createNonnullableTextStyle = <T extends TextStyle>(style: T): T & TextStyle => StyleSheet.create({ style }).style;
 
 const createToastColor = (theme: ThemeVariables, color: string) => ({
   color: theme.colors[color] ?? color,
@@ -114,6 +114,22 @@ export const defaultStyle = (
   toastTextStyle: createTextStyle({
     flex: 1,
     marginHorizontal: theme.spacer * 0.5,
+    fontSize: theme.fontSizeBase,
+  }),
+
+  formCheckboxStyle: createTextStyle({
+    fontSize: theme.fontSizeBase,
+  }),
+
+  formCheckboxColor: (value: boolean) => value ? theme.colors.primary : '#6c757d',
+
+  formRadioStyle: createTextStyle({
+    fontSize: theme.fontSizeBase,
+  }),
+
+  formRadioColor: (value: boolean) => value ? theme.colors.primary : '#6c757d',
+
+  formPickerStyle: createTextStyle({
     fontSize: theme.fontSizeBase,
   }),
 

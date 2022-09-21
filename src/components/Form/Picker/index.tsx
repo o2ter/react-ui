@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,24 +23,32 @@
 //  THE SOFTWARE.
 //
 
-import './yup/config';
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase } from './Form';
-import { useFormGroup, FormGroup } from './Group';
+import React, { ComponentPropsWithRef } from 'react';
+import { useField } from '../Form';
+import { useTheme } from '../../../theme';
+import { Picker } from '../../Picker';
 
-const Form = _.create(FormBase, {
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-})
+type FormPickerProps = {
+  name: string | string[];
+} & ComponentPropsWithRef<typeof Picker>
 
-export {
-  useField,
-  useForm,
-  useFormGroup,
-  Form,
-}
+export default React.forwardRef<RefType<typeof Picker>, FormPickerProps>(({
+  name,
+  style,
+  children,
+  ...props
+}, forwardRef) => {
+
+  const { value, onChange } = useField(name);
+  const theme = useTheme();
+
+  return (
+    <Picker
+      ref={forwardRef}
+      value={value}
+      style={[theme.styles.formPickerStyle, style]}
+      onValueChange={(x) => onChange(x)}
+      {...props} />
+  )
+});

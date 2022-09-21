@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,24 +23,29 @@
 //  THE SOFTWARE.
 //
 
-import './yup/config';
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase } from './Form';
-import { useFormGroup, FormGroup } from './Group';
+import React from 'react';
+import { TextInput } from 'react-native';
+import { useField } from '../Form';
+import { useTheme } from '../../../theme';
 
-const Form = _.create(FormBase, {
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-})
+export default React.forwardRef(({
+  style,
+  ...props
+}, forwardRef) => {
 
-export {
-  useField,
-  useForm,
-  useFormGroup,
-  Form,
-}
+  const { onChange, error, ...field } = useField(props);
+  const theme = useTheme();
+
+  return (
+    <TextInput
+    ref={forwardRef}
+    style={[
+      theme.formTextFieldStyle,
+      _.isNil(error) ? {} : theme.formTextFieldErrorStyle,
+      style
+    ]}
+    onChangeText={onChange}
+    {...field} {...props} />
+  );
+});

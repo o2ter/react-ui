@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,24 +23,22 @@
 //  THE SOFTWARE.
 //
 
-import './yup/config';
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase } from './Form';
-import { useFormGroup, FormGroup } from './Group';
+import React from 'react';
+import { Text } from 'react-native';
+import { useField } from '../Form';
 
-const Form = _.create(FormBase, {
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-})
+export default React.forwardRef(({
+  name,
+  ...props
+}, forwardRef) => {
 
-export {
-  useField,
-  useForm,
-  useFormGroup,
-  Form,
-}
+  const { error } = useField(name);
+  const { t } = useTranslation();
+
+  return (
+    <>
+      {!_.isNil(error) && <Text ref={forwardRef} {...props}>{t(error.rule, error)}</Text>}
+    </>
+  );
+});

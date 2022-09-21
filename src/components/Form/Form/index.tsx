@@ -25,13 +25,12 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { useFormGroup } from '../FormGroup';
+import { useFormGroup } from '../Group';
 import { useCallbackRef } from 'sugax';
 import { AnySchema, object } from 'yup';
 
 type FormState = {
   values: Record<string, any>;
-  errors: Record<string, any>;
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
   submit: () => void;
   reset: () => void;
@@ -39,20 +38,19 @@ type FormState = {
 
 const FormContext = React.createContext<FormState>({
   values: {},
-  errors: {},
   setValues: () => {},
   submit: () => {},
   reset: () => {},
 });
 
-type FormProps = {
-  schema: Record<string, AnySchema>,
-  initialValues: Record<string, any>,
-  onReset: (state: FormState) => void,
-  onSubmit: (values: Record<string, any>, state: FormState) => void,
-}
+type FormProps = Partial<{
+  schema: Record<string, AnySchema>;
+  initialValues: Record<string, any>;
+  onReset: (state: FormState) => void;
+  onSubmit: (values: Record<string, any>, state: FormState) => void;
+}>
 
-export const Form: React.FC<Partial<FormProps>> = ({
+export const Form: React.FC<FormProps> = ({
   schema = {},
   initialValues = object(schema).getDefault(),
   onReset = () => {},
@@ -65,27 +63,20 @@ export const Form: React.FC<Partial<FormProps>> = ({
   const onResetRef = useCallbackRef(onReset);
   const onSubmitRef = useCallbackRef(onSubmit);
 
-  const formState = React.useMemo(() => {
-    
-    let errors: Record<string, any>;
+  const _schema = React.useMemo(() => object(schema), [schema]);
 
-    return {
+  const formState = React.useMemo(() => ({
 
-      values, setValues,
+    values, setValues,
 
-      get errors() {
-        if (_.isNil(errors)) errors = object(schema).validateSync(values);
-        return errors;
-      },
+    submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(values, formState); },
 
-      submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(values, formState); },
+    reset: () => {
+      setValues(initialValues);
+      if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
+    },
 
-      reset: () => {
-        setValues(initialValues);
-        if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
-      },
-    };
-  }, [values, setValues]);
+  }), [values, setValues, _schema]);
 
   return <FormContext.Provider value={formState}>
     {children}
@@ -96,3 +87,15 @@ export const useForm = () => ({
   ...React.useContext(FormContext),
   groupPath: useFormGroup(),
 });
+
+export const useField = (name: string | string[]) => {
+
+  const { setValues, values, groupPath } = useForm();
+  const path = [...groupPath, ..._.toPath(name)].join('.');
+
+  const onChange = React.useMemo(() => (value: React.SetStateAction<any>) => setValues(
+    values => _.set(_.cloneDeep(values), path, _.isFunction(value) ? value(_.get(values, path)) : value)
+  ), [setValues]);
+
+  return { onChange, value: _.get(values, path) };
+}

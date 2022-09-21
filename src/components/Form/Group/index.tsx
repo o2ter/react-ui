@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,24 +23,22 @@
 //  THE SOFTWARE.
 //
 
-import './yup/config';
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase } from './Form';
-import { useFormGroup, FormGroup } from './Group';
+import React from 'react';
 
-const Form = _.create(FormBase, {
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-})
+const FormGroupContext = React.createContext<string[]>([]);
 
-export {
-  useField,
-  useForm,
-  useFormGroup,
-  Form,
+export const useFormGroup = () => React.useContext(FormGroupContext);
+
+type FormGroupProps = {
+  name: string | string[];
 }
+
+export const FormGroup: React.FC<FormGroupProps> = ({
+  name,
+  children
+}) => (
+  <FormGroupContext.Provider value={[...useFormGroup(), ..._.toPath(name)]}>
+    {children}
+  </FormGroupContext.Provider>
+);

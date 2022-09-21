@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,35 +24,37 @@
 //
 
 import _ from 'lodash';
-import { StyleSheet, Platform } from 'react-native';
-import RNPicker from 'react-native-picker-select';
+import React, { ComponentPropsWithRef } from 'react';
+import { useForm } from '../Form';
+import { Button } from '../../Button';
 
-export const Picker = React.forwardRef(({
-  style,
-  containerStyle,
+type FormButtonProps = Partial<{
+  action: 'submit' | 'reset';
+} & ComponentPropsWithRef<typeof Button>>
+
+export default React.forwardRef<typeof Button, FormButtonProps>(({
+  action = 'submit',
   ...props
 }, forwardRef) => {
 
-  const _style = StyleSheet.flatten([style]);
-  const _containerStyle = StyleSheet.flatten([containerStyle]);
-  
-  return <RNPicker
-  ref={forwardRef}
-  style={Platform.select({
-    ios: {
-      inputIOS: _style,
-      inputIOSContainer: _containerStyle,
-    },
-    android: {
-      inputAndroid: _style,
-      inputAndroidContainer: _containerStyle,
-    },
-    web: {
-      inputWeb: _style,
-      viewContainer: _containerStyle,
-    },
-  })}
-  {...props} />;
-});
+  const { submit, reset } = useForm();
 
-export default Picker;
+  const defaultProps = {
+    submit: {
+      variant: 'primary',
+      onPress: submit,
+    },
+    reset: {
+      variant: 'danger',
+      onPress: reset,
+    },
+  }
+
+  return (
+    <Button
+    ref={forwardRef}
+    title={_.upperFirst(action)}
+    {..._.get(defaultProps, action, {})}
+    {...props} />
+  );
+});

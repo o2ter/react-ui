@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,24 +23,35 @@
 //  THE SOFTWARE.
 //
 
-import './yup/config';
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase } from './Form';
-import { useFormGroup, FormGroup } from './Group';
+import React from 'react';
+import { TouchableWithoutFeedback, Text, TextProps } from 'react-native';
+import { useField } from '../Form';
+import { useTheme } from '../../../theme';
 
-const Form = _.create(FormBase, {
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-})
+import { MaterialCommunityIcons as Icon } from '../../Icons';
 
-export {
-  useField,
-  useForm,
-  useFormGroup,
-  Form,
-}
+type FormCheckboxProps = {
+  name: string | string[];
+} & TextProps
+
+export default React.forwardRef<TouchableWithoutFeedback, FormCheckboxProps>(({
+  name,
+  style,
+  children,
+  ...props
+}, forwardRef) => {
+
+  const { value, onChange } = useField(name);
+  const theme = useTheme();
+
+  const iconName = value ? 'checkbox-marked' : 'checkbox-blank-outline';
+
+  return (
+    <TouchableWithoutFeedback ref={forwardRef} onPress={() => onChange(!value)}>
+      <Text style={[theme.styles.formCheckboxStyle, style]}>
+        <Icon name={iconName} color={theme.styles.formCheckboxColor(value)} {...props} />
+      </Text>
+    </TouchableWithoutFeedback>
+  )
+});

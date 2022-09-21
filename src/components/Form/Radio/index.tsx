@@ -25,20 +25,35 @@
 
 import _ from 'lodash';
 import React from 'react';
+import { TouchableWithoutFeedback, Text, TextProps } from 'react-native';
+import { useField } from '../Form';
+import { useTheme } from '../../../theme';
 
-const FormGroupContext = React.createContext<string[]>([]);
+import { MaterialCommunityIcons as Icon } from '../../Icons';
 
-export const useFormGroup = () => React.useContext(FormGroupContext);
+type FormRadioProps = {
+  name: string | string[];
+  value: any;
+} & TextProps
 
-type FormGroupProps = {
-  name: string | string[]
-}
-
-export const FormGroup: React.FC<FormGroupProps> = ({
+export default React.forwardRef<TouchableWithoutFeedback, FormRadioProps>(({
   name,
-  children
-}) => (
-  <FormGroupContext.Provider value={[...useFormGroup(), ..._.toPath(name)]}>
-    {children}
-  </FormGroupContext.Provider>
-);
+  value,
+  style,
+  children,
+  ...props
+}, forwardRef) => {
+
+  const { value: _value, onChange } = useField(name);
+  const theme = useTheme();
+
+  const iconName = value === _value ? 'radiobox-marked' : 'radiobox-blank';
+
+  return (
+    <TouchableWithoutFeedback ref={forwardRef} onPress={() => onChange(!value)}>
+      <Text style={[theme.styles.formRadioStyle, style]}>
+        <Icon name={iconName} color={theme.styles.formRadioColor(value === _value)} {...props} />
+      </Text>
+    </TouchableWithoutFeedback>
+  )
+});
