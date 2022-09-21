@@ -133,6 +133,10 @@ export const defaultStyle = (
     fontSize: theme.fontSizeBase,
   }),
 
+  formTextFieldStyle: createTextStyle({
+    fontSize: theme.fontSizeBase,
+  }),
+
 })
 
 export type ThemeStyles = ReturnType<typeof defaultStyle>;

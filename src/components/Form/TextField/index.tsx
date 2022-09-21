@@ -25,26 +25,27 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextInput } from 'react-native';
+import { TextInput, TextInputProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 
-export default React.forwardRef(({
+type FormTextInputProps = {
+  name: string | string[];
+} & TextInputProps
+
+export default React.forwardRef<TextInput, FormTextInputProps>(({
+  name,
   style,
   ...props
 }, forwardRef) => {
 
-  const { onChange, error, ...field } = useField(props);
+  const { onChange, ...field } = useField(name);
   const theme = useTheme();
 
   return (
     <TextInput
     ref={forwardRef}
-    style={[
-      theme.formTextFieldStyle,
-      _.isNil(error) ? {} : theme.formTextFieldErrorStyle,
-      style
-    ]}
+    style={[theme.styles.formTextFieldStyle, style]}
     onChangeText={onChange}
     {...field} {...props} />
   );
