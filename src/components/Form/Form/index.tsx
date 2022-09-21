@@ -25,6 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
+import { useFormGroup } from '../FormGroup';
 import { useCallbackRef } from 'sugax';
 import { AnySchema, object } from 'yup';
 
@@ -90,3 +91,8 @@ export const Form: React.FC<Partial<FormProps>> = ({
     {children}
   </FormContext.Provider>;
 };
+
+export const useForm = () => ({
+  ...React.useContext(FormContext),
+  groupPath: useFormGroup(),
+});

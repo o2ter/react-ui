@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,14 +23,22 @@
 //  THE SOFTWARE.
 //
 
-import { useForm, Form } from './Form';
-import { useFormGroup, FormGroup } from './FormGroup';
+import _ from 'lodash';
+import React from 'react';
 
-Form.Group = FormGroup;
+const FormGroupContext = React.createContext<string[]>([]);
 
-export {
-  useForm,
-  useFormGroup,
-  Form,
-  FormGroup,
+export const useFormGroup = () => React.useContext(FormGroupContext);
+
+type FormGroupProps = {
+  name: string | string[]
 }
+
+export const FormGroup: React.FC<FormGroupProps> = ({
+  name,
+  children
+}) => (
+  <FormGroupContext.Provider value={[...useFormGroup(), ..._.toPath(name)]}>
+    {children}
+  </FormGroupContext.Provider>
+);
