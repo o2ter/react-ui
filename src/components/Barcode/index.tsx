@@ -25,13 +25,24 @@
 
 import _ from 'lodash';
 import React from 'react';
-import Svg, { Rect } from 'react-native-svg';
-import barcodes from 'jsbarcode/src/barcodes';
+import { ColorValue } from 'react-native';
+import Svg, { SvgProps, Rect } from 'react-native-svg';
 import { List } from '../List';
+import { Options } from 'jsbarcode';
+
+const barcodes = require('jsbarcode/src/barcodes');
 
 export const BarcodeFormats = _.keys(barcodes);
 
-export const Barcode = React.forwardRef(({
+type BarcodeProps = Partial<{
+  value: string;
+  format: string;
+  options: Options;
+  color: ColorValue;
+  backgroundColor: ColorValue;
+} & SvgProps>
+
+export const Barcode = React.forwardRef<Svg, BarcodeProps>(({
     value = '',
     format = 'CODE128',
     options = {},
