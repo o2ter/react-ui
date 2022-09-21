@@ -24,8 +24,35 @@
 //
 
 import _ from 'lodash';
-import Picker from 'react-native-picker-select';
+import { StyleSheet, Platform } from 'react-native';
+import RNPicker from 'react-native-picker-select';
 
-export { Picker };
+export const Picker = React.forwardRef(({
+  style,
+  containerStyle,
+  ...props
+}, forwardRef) => {
+
+  const _style = StyleSheet.flatten([style]);
+  const _containerStyle = StyleSheet.flatten([containerStyle]);
+  
+  return <RNPicker
+  ref={forwardRef}
+  style={Platform.select({
+    ios: {
+      inputIOS: _style,
+      inputIOSContainer: _containerStyle,
+    },
+    android: {
+      inputAndroid: _style,
+      inputAndroidContainer: _containerStyle,
+    },
+    web: {
+      inputWeb: _style,
+      viewContainer: _containerStyle,
+    },
+  })}
+  {...props} />;
+});
 
 export default Picker;
