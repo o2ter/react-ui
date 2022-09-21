@@ -24,12 +24,8 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { List } from '../List';
-import { Picker as RNPicker } from '@react-native-picker/picker';
+import Picker from 'react-native-picker-select';
 
-export const Picker = React.forwardRef(({ items = [], ...props }, forwardRef) => <RNPicker ref={forwardRef} {...props}>
-    <List data={items} renderItem={({item}) => _.isString(item) ? <RNPicker.Item label={item} value={item} /> : <RNPicker.Item {...item} />} />
-</RNPicker>);
+export { Picker };
 
 export default Picker;
