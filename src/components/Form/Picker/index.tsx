@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithRef } from 'react';
+import React, { ComponentPropsWithRef, ComponentRef } from 'react';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Picker } from '../../Picker';
@@ -33,7 +33,7 @@ type FormPickerProps = {
   name: string | string[];
 } & ComponentPropsWithRef<typeof Picker>
 
-export default React.forwardRef<RefType<typeof Picker>, FormPickerProps>(({
+export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
   name,
   style,
   children,

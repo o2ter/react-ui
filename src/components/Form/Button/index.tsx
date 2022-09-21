@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithRef } from 'react';
+import React, { ComponentPropsWithRef, ComponentRef } from 'react';
 import { useForm } from '../Form';
 import { Button } from '../../Button';
 
@@ -32,7 +32,7 @@ type FormButtonProps = Partial<{
   action: 'submit' | 'reset';
 } & ComponentPropsWithRef<typeof Button>>
 
-export default React.forwardRef<typeof Button, FormButtonProps>(({
+export default React.forwardRef<ComponentRef<typeof Button>, FormButtonProps>(({
   action = 'submit',
   ...props
 }, forwardRef) => {
