@@ -27,11 +27,12 @@ import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
 import { useCallbackRef } from 'sugax';
-import { AnySchema, object } from 'yup';
+import { AnySchema, object, ValidationError } from 'yup';
 
 type FormState = {
   values: Record<string, any>;
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+  validate: (value: any, path?: string) => any | undefined;
   submit: () => void;
   reset: () => void;
 }
@@ -39,6 +40,7 @@ type FormState = {
 const FormContext = React.createContext<FormState>({
   values: {},
   setValues: () => {},
+  validate: () => {},
   submit: () => {},
   reset: () => {},
 });
@@ -46,6 +48,7 @@ const FormContext = React.createContext<FormState>({
 type FormProps = Partial<{
   schema: Record<string, AnySchema>;
   initialValues: Record<string, any>;
+  validate: (value: any, path?: string) => any | undefined;
   onReset: (state: FormState) => void;
   onSubmit: (values: Record<string, any>, state: FormState) => void;
 }>
@@ -53,6 +56,7 @@ type FormProps = Partial<{
 export const Form: React.FC<FormProps> = ({
   schema = {},
   initialValues = object(schema).getDefault(),
+  validate,
   onReset = () => {},
   onSubmit = () => {},
   children
@@ -65,9 +69,22 @@ export const Form: React.FC<FormProps> = ({
 
   const _schema = React.useMemo(() => object(schema), [schema]);
 
+  const _validate = React.useMemo(() => validate ?? ((value: any, path?: string) => {
+    try {
+      if (_.isString(path)) {
+        _schema.validateSyncAt(path, value);
+      }
+      _schema.validateSync(value);
+    } catch (error) {
+      if (error instanceof ValidationError) return error.message;
+    }
+  }), [_schema, validate]);
+  
   const formState = React.useMemo(() => ({
 
     values, setValues,
+
+    validate: _validate,
 
     submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(values, formState); },
 
@@ -90,12 +107,16 @@ export const useForm = () => ({
 
 export const useField = (name: string | string[]) => {
 
-  const { setValues, values, groupPath } = useForm();
+  const { values, setValues, validate, groupPath } = useForm();
   const path = [...groupPath, ..._.toPath(name)].join('.');
 
   const onChange = React.useMemo(() => (value: React.SetStateAction<any>) => setValues(
     values => _.set(_.cloneDeep(values), path, _.isFunction(value) ? value(_.get(values, path)) : value)
   ), [setValues]);
-
-  return { onChange, value: _.get(values, path) };
+  
+  return {
+    value: _.get(values, path),
+    error: validate(values, path),
+    onChange,
+  };
 }

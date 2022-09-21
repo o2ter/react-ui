@@ -28,12 +28,12 @@ import _ from 'lodash';
 import { useField, useForm, Form as FormBase } from './Form';
 import { useFormGroup, FormGroup } from './Group';
 
-const Form = _.create(FormBase, {
+const Form = _.assign(FormBase, {
   Group: FormGroup,
   ErrorMessage: require('./ErrorMessage').default,
   TextField: require('./TextField').default,
   Button: require('./Button').default,
-  Picker: require('./Picker').default,
+  //Picker: require('./Picker').default,
   Checkbox: require('./Checkbox').default,
   Radio: require('./Radio').default,
 })
