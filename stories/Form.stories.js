@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import React from 'react';
 
-import { string } from 'yup';
+import { string, object } from 'yup';
 import { Form } from '../src/components/Form';
 
 export default {
@@ -10,9 +10,17 @@ export default {
   component: Form,
 };
 
-export const TextInput = (props) => <Form 
+export const TextInput = () => <Form 
 schema={{
-  test: string().email().required()
+  email: string().email().required(),
+  name: object({
+    first: string().required(),
+    last: string().required(),
+  }),
 }}>
-  <Form.TextField name='test' {...props} />
+  <Form.TextField name='email' />
+  <Form.Group name='name'>
+    <Form.TextField name='first' />
+    <Form.TextField name='last' />
+  </Form.Group>
 </Form>;
