@@ -26,9 +26,14 @@
 import _ from 'lodash';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import RNLottie from 'lottie-react-native';
+import RNLottie, { AnimatedLottieViewProps, AnimationObject } from 'lottie-react-native';
+import { Modify } from '../../internals/types';
 
-export const Lottie = React.forwardRef(({
+type LottieProps = Modify<AnimatedLottieViewProps, {
+  source: AnimationObject;
+}>
+
+export const Lottie = React.forwardRef<RNLottie, LottieProps>(({
     source,
     style,
     duration = 0,
