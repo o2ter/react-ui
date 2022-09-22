@@ -121,13 +121,13 @@ export const defaultStyle = (
     fontSize: theme.fontSizeBase,
   }),
 
-  formCheckboxColor: (value: boolean) => value ? theme.colors.primary : '#6c757d',
+  formCheckboxColor: (value: boolean) => value ? theme.colors.primary : theme.colors.grays['600'],
 
   formRadioStyle: createTextStyle({
     fontSize: theme.fontSizeLarge,
   }),
 
-  formRadioColor: (value: boolean) => value ? theme.colors.primary : '#6c757d',
+  formRadioColor: (value: boolean) => value ? theme.colors.primary : theme.colors.grays['600'],
 
   formPickerStyle: createTextStyle({
     fontSize: theme.fontSizeBase,
