@@ -116,7 +116,7 @@ export const useField = (name: string | string[]) => {
   
   return {
     value: _.get(values, path),
-    error: validate(values, path),
+    get error() { return validate(values, path) },
     onChange,
   };
 }
