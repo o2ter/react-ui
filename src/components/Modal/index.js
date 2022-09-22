@@ -49,7 +49,7 @@ export const ModalProvider = ({
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          {backdrop === true && <Pressable onPress={() => setModal()}>
+          {backdrop === true && <Pressable style={StyleSheet.absoluteFill} onPress={() => setModal()}>
             <View style={[theme.styles.modalBackdrop, StyleSheet.absoluteFill]} />
           </Pressable>}
           {modal}
