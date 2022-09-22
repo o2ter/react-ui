@@ -116,7 +116,7 @@ export const ToastProvider: React.FC<{ defaultTimeout: number }> = ({
   const [elements, setElements] = React.useState({});
   const insets = useSafeAreaInsets();
 
-  function show_message(message: ToastMessage | RecursiveArray<ToastMessage>, type: ToastType, timeout: number) {
+  function show_message(message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>, type: ToastType, timeout: number) {
 
     if (_.isNil(message)) return;
     if (!_.isString(message) && _.isArrayLike(message)) {
