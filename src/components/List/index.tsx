@@ -26,6 +26,14 @@
 import _ from 'lodash';
 import React from 'react';
 
-export const List = ({ data, renderItem = ({item}) => item }) => React.createElement(React.Fragment, {}, ..._.map(data, (item, index) => renderItem({ item, index })));
+type ListProps<T> = {
+  data: T[],
+  renderItem: (x: { item: T, index: number }) => any
+}
+
+export const List = <T extends any>({
+  data,
+  renderItem = ({item}) => item
+}: ListProps<T>) => React.createElement(React.Fragment, {}, ..._.map(data, (item, index) => renderItem({ item, index })));
 
 export default List;
