@@ -27,12 +27,12 @@ import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
 import { useCallbackRef } from 'sugax';
-import { AnySchema, object, ValidationError } from 'yup';
+import { AnySchema, object } from 'yup';
 
 type FormState = {
   values: Record<string, any>;
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
-  validate: (value: any, path?: string) => any | undefined;
+  validate: (value: any, path?: string) => Error | void;
   submit: () => void;
   reset: () => void;
 }
@@ -48,7 +48,7 @@ const FormContext = React.createContext<FormState>({
 type FormProps = Partial<{
   schema: Record<string, AnySchema>;
   initialValues: Record<string, any>;
-  validate: (value: any, path?: string) => any | undefined;
+  validate: (value: any, path?: string) => Error | void;
   onReset: (state: FormState) => void;
   onSubmit: (values: Record<string, any>, state: FormState) => void;
 }>
@@ -76,7 +76,7 @@ export const Form: React.FC<FormProps> = ({
       }
       _schema.validateSync(value);
     } catch (error) {
-      if (error instanceof ValidationError) return error.message;
+      return error as Error;
     }
   }), [_schema, validate]);
   
