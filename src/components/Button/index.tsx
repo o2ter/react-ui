@@ -41,10 +41,11 @@ import {
 import { useTheme } from '../../theme';
 import { transparent } from '../../color';
 import { text_style } from '../../internals/text_style';
+import { Modify } from '../../internals/types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-type ButtonProps = Partial<{
+type ButtonProps = Modify<PressableProps, Partial<{
   variant: string;
   outline: boolean;
 	title: string;
@@ -52,7 +53,7 @@ type ButtonProps = Partial<{
 	titleStyle: StyleProp<TextStyle>;
 	onHoverIn: (event: GestureResponderEvent) => void;
 	onHoverOut: (event: GestureResponderEvent) => void;
-} & PressableProps>
+}>>
 
 export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   variant = 'primary',

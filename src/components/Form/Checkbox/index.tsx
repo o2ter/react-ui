@@ -28,12 +28,13 @@ import React, { ComponentRef } from 'react';
 import { Pressable, Text, TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
+import { Modify } from '../../../internals/types';
 
 import { MaterialCommunityIcons as Icon } from '../../Icons';
 
-type FormCheckboxProps = {
+type FormCheckboxProps = Modify<TextProps, {
   name: string | string[];
-} & TextProps
+}>
 
 export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProps>(({
   name,

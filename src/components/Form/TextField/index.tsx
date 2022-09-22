@@ -28,10 +28,11 @@ import React from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
+import { Modify } from '../../../internals/types';
 
-type FormTextInputProps = {
+type FormTextInputProps = Modify<TextInputProps, {
   name: string | string[];
-} & TextInputProps
+}>
 
 export default React.forwardRef<TextInput, FormTextInputProps>(({
   name,

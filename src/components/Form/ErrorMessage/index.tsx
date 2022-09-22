@@ -28,13 +28,14 @@ import React from 'react';
 import { Text, TextProps } from 'react-native';
 import { LocalizationStrings } from 'sugax';
 import { useField } from '../Form';
+import { Modify } from '../../../internals/types';
 
 import locales from '../locales';
 const strings = LocalizationStrings(locales);
 
-type FormErrorMessageProps = {
+type FormErrorMessageProps = Modify<TextProps, {
   name: string | string[];
-} & TextProps
+}>
 
 export default React.forwardRef<Text, FormErrorMessageProps>(({
   name,

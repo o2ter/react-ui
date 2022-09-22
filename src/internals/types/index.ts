@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  index.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,33 +23,4 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import React, { ComponentPropsWithRef, ComponentRef } from 'react';
-import { useField } from '../Form';
-import { useTheme } from '../../../theme';
-import { Picker } from '../../Picker';
-import { Modify } from '../../../internals/types';
-
-type FormPickerProps = Modify<ComponentPropsWithRef<typeof Picker>, {
-  name: string | string[];
-}>
-
-export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
-  name,
-  style,
-  children,
-  ...props
-}, forwardRef) => {
-
-  const { value, error, onChange } = useField(name);
-  const theme = useTheme();
-
-  return (
-    <Picker
-      ref={forwardRef}
-      value={value}
-      onValueChange={onChange}
-      style={[theme.styles.formPickerStyle, _.isNil(error) ? {} : theme.styles.formTextFieldErrorStyle, style]}
-      {...props} />
-  )
-});
+export type Modify<T, R> = Omit<T, keyof R> & R;

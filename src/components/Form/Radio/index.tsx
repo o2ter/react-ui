@@ -28,13 +28,14 @@ import React, { ComponentRef } from 'react';
 import { Pressable, Text, TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
+import { Modify } from '../../../internals/types';
 
 import { MaterialCommunityIcons as Icon } from '../../Icons';
 
-type FormRadioProps = {
+type FormRadioProps = Modify<TextProps, {
   name: string | string[];
   value: any;
-} & TextProps
+}>
 
 export default React.forwardRef<ComponentRef<typeof Pressable>, FormRadioProps>(({
   name,

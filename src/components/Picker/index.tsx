@@ -27,11 +27,12 @@ import _ from 'lodash';
 import React from 'react';
 import { StyleSheet, Platform, ViewStyle, TextStyle, StyleProp } from 'react-native';
 import PickerSelect, { PickerSelectProps } from 'react-native-picker-select';
+import { Modify } from '../../internals/types';
 
-type PickerProps = Partial<{
+type PickerProps = Partial<Modify<PickerSelectProps, {
   style: StyleProp<TextStyle>;
   containerStyle: StyleProp<ViewStyle>;
-} & PickerSelectProps>
+}>>
 
 export const Picker = React.forwardRef<PickerSelect, PickerProps>(({
   items = [],

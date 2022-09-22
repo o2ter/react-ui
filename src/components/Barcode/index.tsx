@@ -29,18 +29,19 @@ import { ColorValue } from 'react-native';
 import Svg, { SvgProps, Rect } from 'react-native-svg';
 import { List } from '../List';
 import { Options } from 'jsbarcode';
+import { Modify } from '../../internals/types';
 
 const barcodes = require('jsbarcode/src/barcodes');
 
 export const BarcodeFormats = _.keys(barcodes);
 
-type BarcodeProps = Partial<{
+type BarcodeProps = Modify<SvgProps, Partial<{
   value: string;
   format: string;
   options: Options;
   color: ColorValue;
   backgroundColor: ColorValue;
-} & SvgProps>
+}>>
 
 export const Barcode = React.forwardRef<Svg, BarcodeProps>(({
     value = '',
