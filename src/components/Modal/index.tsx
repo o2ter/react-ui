@@ -29,16 +29,16 @@ import { View, Modal as RNModal, Pressable, StyleSheet } from 'react-native';
 
 import { useTheme } from '../../theme';
 
-const ModalContext = React.createContext((element) => {});
+const ModalContext = React.createContext((element: any | undefined) => {});
 
 export const useModal = () => React.useContext(ModalContext);
 
-export const ModalProvider = ({ 
+export const ModalProvider: React.FC<{ backdrop: boolean }> = ({ 
     children,
     backdrop = true,
 }) => {
     
-    const [modal, setModal] = React.useState();
+    const [modal, setModal] = React.useState<any | undefined>();
     const theme = useTheme();
     
     return <ModalContext.Provider value={setModal}>
@@ -50,7 +50,7 @@ export const ModalProvider = ({
           justifyContent: 'center',
         }}>
           {backdrop === true && <Pressable
-            onPress={() => setModal()}
+            onPress={() => setModal(undefined)}
             style={[
               theme.styles.modalBackdrop,
               StyleSheet.absoluteFill
