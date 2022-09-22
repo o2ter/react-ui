@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Text, Pressable, Animated, Platform, LayoutAnimation, ColorValue } from 'react-native';
+import { View, Text, Pressable, Animated, Platform, LayoutAnimation, ColorValue, RecursiveArray } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { useMount } from 'sugax';
 import uuid from 'react-native-uuid';
@@ -36,10 +36,10 @@ type ToastMessage = string | (Error & { code?: number });
 type ToastType = 'success' | 'info' | 'warning' | 'error';
 
 const ToastContext = React.createContext({
-  showError(message: ToastMessage | ToastMessage[], timeout: number) {},
-  showWarning(message: ToastMessage | ToastMessage[], timeout: number) {},
-  showInfo(message: ToastMessage | ToastMessage[], timeout: number) {},
-  showSuccess(message: ToastMessage | ToastMessage[], timeout: number) {},
+  showError(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) {},
+  showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) {},
+  showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) {},
+  showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) {},
 });
 
 export const useToast = () => React.useContext(ToastContext);
@@ -116,7 +116,7 @@ export const ToastProvider: React.FC<{ defaultTimeout: number }> = ({
   const [elements, setElements] = React.useState({});
   const insets = useSafeAreaInsets();
 
-  function show_message(message: ToastMessage | ToastMessage[], type: ToastType, timeout: number) {
+  function show_message(message: ToastMessage | RecursiveArray<ToastMessage>, type: ToastType, timeout: number) {
 
     if (_.isNil(message)) return;
     if (!_.isString(message) && _.isArrayLike(message)) {
@@ -135,10 +135,10 @@ export const ToastProvider: React.FC<{ defaultTimeout: number }> = ({
   }
 
   const provider = React.useMemo(() => ({
-    showError(message: ToastMessage | ToastMessage[], timeout: number) { show_message(message, 'error', timeout); },
-    showWarning(message: ToastMessage | ToastMessage[], timeout: number) { show_message(message, 'warning', timeout); },
-    showInfo(message: ToastMessage | ToastMessage[], timeout: number) { show_message(message, 'info', timeout); },
-    showSuccess(message: ToastMessage | ToastMessage[], timeout: number) { show_message(message, 'success', timeout); },
+    showError(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'error', timeout); },
+    showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'warning', timeout); },
+    showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'info', timeout); },
+    showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'success', timeout); },
   }), [setElements]);
 
   return <ToastContext.Provider value={provider}>
