@@ -24,8 +24,8 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { TouchableWithoutFeedback, Text, TextProps } from 'react-native';
+import React, { ComponentRef } from 'react';
+import { Pressable, Text, TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 
@@ -35,7 +35,7 @@ type FormCheckboxProps = {
   name: string | string[];
 } & TextProps
 
-export default React.forwardRef<TouchableWithoutFeedback, FormCheckboxProps>(({
+export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProps>(({
   name,
   style,
   children,
@@ -48,10 +48,10 @@ export default React.forwardRef<TouchableWithoutFeedback, FormCheckboxProps>(({
   const iconName = value ? 'checkbox-marked' : 'checkbox-blank-outline';
 
   return (
-    <TouchableWithoutFeedback ref={forwardRef} onPress={() => onChange(!value)}>
+    <Pressable ref={forwardRef} onPress={() => onChange(!value)}>
       <Text style={[theme.styles.formCheckboxStyle, style]}>
         <Icon name={iconName} color={theme.styles.formCheckboxColor(value)} {...props} />
       </Text>
-    </TouchableWithoutFeedback>
+    </Pressable>
   )
 });

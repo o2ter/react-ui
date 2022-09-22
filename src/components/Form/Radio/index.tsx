@@ -24,8 +24,8 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { TouchableWithoutFeedback, Text, TextProps } from 'react-native';
+import React, { ComponentRef } from 'react';
+import { Pressable, Text, TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 
@@ -36,7 +36,7 @@ type FormRadioProps = {
   value: any;
 } & TextProps
 
-export default React.forwardRef<TouchableWithoutFeedback, FormRadioProps>(({
+export default React.forwardRef<ComponentRef<typeof Pressable>, FormRadioProps>(({
   name,
   value,
   style,
@@ -50,10 +50,10 @@ export default React.forwardRef<TouchableWithoutFeedback, FormRadioProps>(({
   const iconName = value === _value ? 'radiobox-marked' : 'radiobox-blank';
 
   return (
-    <TouchableWithoutFeedback ref={forwardRef} onPress={() => onChange(!value)}>
+    <Pressable ref={forwardRef} onPress={() => onChange(!value)}>
       <Text style={[theme.styles.formRadioStyle, style]}>
         <Icon name={iconName} color={theme.styles.formRadioColor(value === _value)} {...props} />
       </Text>
-    </TouchableWithoutFeedback>
+    </Pressable>
   )
 });

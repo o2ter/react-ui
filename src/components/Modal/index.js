@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Modal as RNModal, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { View, Modal as RNModal, Pressable, StyleSheet } from 'react-native';
 
 import { useTheme } from '../../theme';
 
@@ -49,9 +49,9 @@ export const ModalProvider = ({
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          {backdrop === true && <TouchableWithoutFeedback onPress={() => setModal()}>
+          {backdrop === true && <Pressable onPress={() => setModal()}>
             <View style={[theme.styles.modalBackdrop, StyleSheet.absoluteFill]} />
-          </TouchableWithoutFeedback>}
+          </Pressable>}
           {modal}
         </View>
       </RNModal>
