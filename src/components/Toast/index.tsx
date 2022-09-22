@@ -36,10 +36,10 @@ type ToastMessage = string | (Error & { code?: number });
 type ToastType = 'success' | 'info' | 'warning' | 'error';
 
 const ToastContext = React.createContext({
-  showError(message: string | string[], timeout: number) {},
-  showWarning(message: string | string[], timeout: number) {},
-  showInfo(message: string | string[], timeout: number) {},
-  showSuccess(message: string | string[], timeout: number) {},
+  showError(message: ToastMessage | ToastMessage[], timeout: number) {},
+  showWarning(message: ToastMessage | ToastMessage[], timeout: number) {},
+  showInfo(message: ToastMessage | ToastMessage[], timeout: number) {},
+  showSuccess(message: ToastMessage | ToastMessage[], timeout: number) {},
 });
 
 export const useToast = () => React.useContext(ToastContext);
