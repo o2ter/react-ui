@@ -39,16 +39,15 @@ export default React.forwardRef<TextInput, FormTextInputProps>(({
   ...props
 }, forwardRef) => {
 
-  const { onChange, error, ...field } = useField(name);
+  const { onChange, error, value } = useField(name);
   const theme = useTheme();
-
-  console.log(error)
 
   return (
     <TextInput
     ref={forwardRef}
-    style={[theme.styles.formTextFieldStyle, style]}
+    value={value}
     onChangeText={onChange}
-    {...field} {...props} />
+    style={[theme.styles.formTextFieldStyle, _.isNil(error) ? {} : theme.styles.formTextFieldErrorStyle, style]}
+    {...props} />
   );
 });

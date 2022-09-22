@@ -41,8 +41,10 @@ export default React.forwardRef<Text, FormErrorMessageProps>(({
   ...props
 }, forwardRef) => {
 
-  const { } = useField(name);
+  const { error } = useField(name);
   const localize = strings.useLocalize();
+
+  console.log(error)
 
   return (
     <>

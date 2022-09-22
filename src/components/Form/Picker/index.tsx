@@ -40,15 +40,15 @@ export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
   ...props
 }, forwardRef) => {
 
-  const { value, onChange } = useField(name);
+  const { value, error, onChange } = useField(name);
   const theme = useTheme();
 
   return (
     <Picker
       ref={forwardRef}
       value={value}
-      style={[theme.styles.formPickerStyle, style]}
-      onValueChange={(x) => onChange(x)}
+      onValueChange={onChange}
+      style={[theme.styles.formPickerStyle, _.isNil(error) ? {} : theme.styles.formTextFieldErrorStyle, style]}
       {...props} />
   )
 });

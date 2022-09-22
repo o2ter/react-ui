@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
 import { ThemeVariables } from '../variables';
 import { ColorType, colorContrast, shiftColor, shadeColor, tintColor } from '../../color';
 import { _hex } from '../../internals/color';
@@ -124,17 +124,40 @@ export const defaultStyle = (
   formCheckboxColor: (value: boolean) => value ? theme.colors.primary : '#6c757d',
 
   formRadioStyle: createTextStyle({
-    fontSize: theme.fontSizeBase,
+    fontSize: theme.fontSizeLarge,
   }),
 
   formRadioColor: (value: boolean) => value ? theme.colors.primary : '#6c757d',
 
   formPickerStyle: createTextStyle({
     fontSize: theme.fontSizeBase,
+    backgroundColor: theme.colors.light,
+    borderColor: theme.colors.light,
+    borderWidth: theme.borderWidth,
+    borderRadius: theme.borderRadius,
+    margin: theme.spacer * 0.25,
+    ...Platform.select({
+      ios: { padding: 4 },
+      default: {}
+    }),
+  }),
+
+  formPickerErrorStyle: createTextStyle({
+    borderColor: theme.colors.danger,
   }),
 
   formTextFieldStyle: createTextStyle({
     fontSize: theme.fontSizeBase,
+    backgroundColor: theme.colors.light,
+    borderColor: theme.colors.light,
+    borderWidth: theme.borderWidth,
+    borderRadius: theme.borderRadius,
+    margin: theme.spacer * 0.25,
+    padding: theme.spacer * 0.25,
+  }),
+
+  formTextFieldErrorStyle: createTextStyle({
+    borderColor: theme.colors.danger,
   }),
 
 })
