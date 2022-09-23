@@ -36,7 +36,8 @@ export class _Date {
   month: number;
   day: number;
   
-  constructor(date: string | DateTime) {
+  constructor(date: string | Date | DateTime) {
+    if (date instanceof Date) date = DateTime.fromJSDate(date).toISODate();
     if (date instanceof DateTime) date = date.toISODate();
     if (!_.isString(date)) date = DateTime.now().toISODate();
     const matched = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -56,7 +57,7 @@ export class _Date {
     return dateToString(this.year, this.month, this.day);
   }
 
-  static lessThan(d1: string | DateTime | _Date, d2: string | DateTime | _Date) {
+  static lessThan(d1: string | Date | DateTime | _Date, d2: string | Date | DateTime | _Date) {
     const _d1 = d1 instanceof _Date ? d1 : new _Date(d1);
     const _d2 = d2 instanceof _Date ? d2 : new _Date(d2);
     if (_d1.year < _d2.year) return true;

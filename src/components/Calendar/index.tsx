@@ -55,9 +55,9 @@ const month_name = [
 ]
 
 type CalendarProps = Modify<ViewProps, {
-  value?: string | DateTime;
-  min?: string | DateTime;
-  max?: string | DateTime;
+  value?: string | Date | DateTime;
+  min?: string | Date | DateTime;
+  max?: string | Date | DateTime;
   selectable?: (date: string) => boolean;
   onChange: (date: string) => void;
 }>
