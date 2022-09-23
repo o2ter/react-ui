@@ -25,10 +25,20 @@
 
 import _ from 'lodash';
 import React from 'react';
-import Svg, { Rect, Path } from 'react-native-svg';
-import qrcode from 'qrcode';
+import { ColorValue } from 'react-native';
+import Svg, { SvgProps, Rect, Path } from 'react-native-svg';
+import { Modify } from '../../internals/types';
 
-export const QRCode = React.forwardRef(({
+const qrcode = require('qrcode');
+
+type QRCodeProps = Modify<SvgProps, {
+  value?: string | any[];
+  options?: object;
+  color?: ColorValue;
+  backgroundColor?: ColorValue;
+}>
+
+export const QRCode = React.forwardRef<Svg, QRCodeProps>(({
     value = '',
     options = {},
     color = 'black',
