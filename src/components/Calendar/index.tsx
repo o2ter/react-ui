@@ -154,3 +154,5 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
 });
 
 export const Calendar = _.assign(CalendarBase, { Date: _Date });
+
+export default Calendar;
