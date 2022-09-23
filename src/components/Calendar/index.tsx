@@ -58,7 +58,7 @@ type CalendarProps = Modify<ViewProps, {
   value?: string | DateTime;
   min?: string | DateTime;
   max?: string | DateTime;
-  selectable: (date: string) => boolean;
+  selectable?: (date: string) => boolean;
   onChange: (date: string) => void;
 }>
 
