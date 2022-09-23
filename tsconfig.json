@@ -5,6 +5,8 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "allowJs": true,
+    "maxNodeModuleJsDepth": 1,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "jsx": "react",
     "declaration": true,
@@ -14,6 +16,5 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "emitDeclarationOnly": true,
-    "resolveJsonModule": true,
   }
 }

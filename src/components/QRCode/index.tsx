@@ -28,8 +28,7 @@ import React from 'react';
 import { ColorValue } from 'react-native';
 import Svg, { SvgProps, Rect, Path } from 'react-native-svg';
 import { Modify } from '../../internals/types';
-
-const qrcode = require('qrcode');
+import qrcode from 'qrcode';
 
 type QRCodeProps = Modify<SvgProps, {
   value?: string | any[];

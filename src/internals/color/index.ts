@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-const normalizeColor = require('normalize-css-color');
+import normalizeColor from 'normalize-css-color';
 
 function _component_hex(c: number) {
   const hex = _.clamp(_.round(c), 0, 255).toString(16);
