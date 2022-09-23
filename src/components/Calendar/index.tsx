@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, ViewProps, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, ViewProps, Text, TextInput, Pressable } from 'react-native';
 import PickerSelect from 'react-native-picker-select';
 import { useTheme } from '../../theme';
 import { DateTime } from 'luxon';
