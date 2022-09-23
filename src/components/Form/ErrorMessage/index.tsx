@@ -48,8 +48,8 @@ export default React.forwardRef<Text, FormErrorMessageProps>(({
   console.log(error)
 
   return (
-    <>
+    <React.Fragment>
       {!_.isNil(null) && <Text ref={forwardRef} {...props}></Text>}
-    </>
+    </React.Fragment>
   );
 });

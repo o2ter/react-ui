@@ -113,5 +113,5 @@ export const CalendarBody: React.FC<{
   }
   rows.push(<View key={`${id}-row-${rows.length}`} style={style.weekContainer}>{current_row}</View>);
 
-  return rows;
+  return <React.Fragment>{rows}</React.Fragment>;
 };
