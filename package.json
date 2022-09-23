@@ -20,6 +20,7 @@
     "lottie-ios": ">=3.2.3",
     "lottie-react-native": ">=5.0.1",
     "lottie-web": ">=5.9.2",
+    "luxon": "^3.0.3",
     "normalize-css-color": ">=1.0.2",
     "qrcode": ">=1.5.0",
     "react-native-picker-select": "^8.0.4",
