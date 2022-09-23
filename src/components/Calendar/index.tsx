@@ -113,6 +113,7 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
           style={{
             inputIOS: { fontSize: theme.fontSizeBase * 1.5 },
             inputAndroid: { fontSize: theme.fontSizeBase * 1.5 },
+            inputWeb: { fontSize: theme.fontSizeBase * 1.5 },
           }} />
           <TextInput
           selectTextOnFocus
