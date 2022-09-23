@@ -35,13 +35,13 @@ const barcodes = require('jsbarcode/src/barcodes');
 
 export const BarcodeFormats = _.keys(barcodes);
 
-type BarcodeProps = Modify<SvgProps, Partial<{
-  value: string;
-  format: string;
-  options: Options;
-  color: ColorValue;
-  backgroundColor: ColorValue;
-}>>
+type BarcodeProps = Modify<SvgProps, {
+  value?: string;
+  format?: string;
+  options?: Options;
+  color?: ColorValue;
+  backgroundColor?: ColorValue;
+}>
 
 export const Barcode = React.forwardRef<Svg, BarcodeProps>(({
     value = '',

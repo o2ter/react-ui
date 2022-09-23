@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Modal as RNModal, Pressable, StyleSheet } from 'react-native';
+import { View, Modal as RNModal, Pressable, StyleSheet, Keyboard } from 'react-native';
 
 import { useTheme } from '../../theme';
 
@@ -33,9 +33,13 @@ const ModalContext = React.createContext((element: any | undefined) => {});
 
 export const useModal = () => React.useContext(ModalContext);
 
-export const ModalProvider: React.FC<{ backdrop: boolean }> = ({ 
-    children,
+export const ModalProvider: React.FC<{
+  backdrop?: boolean;
+  keyboardDismissMode?: 'none' | 'interactive';
+}> = ({
     backdrop = true,
+    keyboardDismissMode = 'interactive',
+    children,
 }) => {
     
     const [modal, setModal] = React.useState<any | undefined>();
@@ -44,7 +48,9 @@ export const ModalProvider: React.FC<{ backdrop: boolean }> = ({
     return <ModalContext.Provider value={setModal}>
       {children}
       <RNModal visible={React.isValidElement(modal)} transparent>
-        <View style={{
+        <Pressable
+        onPress={() => { if (keyboardDismissMode === 'interactive') Keyboard.dismiss() }}
+        style={{
           flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
@@ -56,7 +62,7 @@ export const ModalProvider: React.FC<{ backdrop: boolean }> = ({
               StyleSheet.absoluteFill
             ]} />}
           {modal}
-        </View>
+        </Pressable>
       </RNModal>
     </ModalContext.Provider>;
 };

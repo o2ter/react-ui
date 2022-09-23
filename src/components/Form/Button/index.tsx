@@ -29,9 +29,9 @@ import { useForm } from '../Form';
 import { Button } from '../../Button';
 import { Modify } from '../../../internals/types';
 
-type FormButtonProps = Modify<ComponentPropsWithRef<typeof Button>, Partial<{
-  action: 'submit' | 'reset';
-}>>
+type FormButtonProps = Modify<ComponentPropsWithRef<typeof Button>, {
+  action?: 'submit' | 'reset';
+}>
 
 export default React.forwardRef<ComponentRef<typeof Button>, FormButtonProps>(({
   action = 'submit',

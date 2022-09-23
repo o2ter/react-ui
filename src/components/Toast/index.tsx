@@ -51,7 +51,9 @@ const icons = {
   error: 'M11 15h2v2h-2zm0-8h2v6h-2zm1-5a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z',
 }
 
-const CloseButton: React.FC<{ color: ColorValue }> = ({ color }) => <Svg width={24} height={24}>
+const CloseButton: React.FC<{
+  color: ColorValue;
+}> = ({ color }) => <Svg width={24} height={24}>
   <Path fill={color} d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z' />
 </Svg>;
 
@@ -108,9 +110,11 @@ const ToastBody: React.FC<{
   </Animated.View>
 }
 
-export const ToastProvider: React.FC<{ defaultTimeout: number }> = ({
-  children,
+export const ToastProvider: React.FC<{
+  defaultTimeout?: number;
+}> = ({
   defaultTimeout = 5000,
+  children,
 }) => {
 
   const [elements, setElements] = React.useState({});

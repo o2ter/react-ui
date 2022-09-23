@@ -45,15 +45,13 @@ const FormContext = React.createContext<FormState>({
   reset: () => {},
 });
 
-type FormProps = Partial<{
-  schema: Record<string, AnySchema>;
-  initialValues: Record<string, any>;
-  validate: (value: any, path?: string) => Error | void;
-  onReset: (state: FormState) => void;
-  onSubmit: (values: Record<string, any>, state: FormState) => void;
-}>
-
-export const Form: React.FC<FormProps> = ({
+export const Form: React.FC<{
+  schema?: Record<string, AnySchema>;
+  initialValues?: Record<string, any>;
+  validate?: (value: any, path?: string) => Error | void;
+  onReset?: (state: FormState) => void;
+  onSubmit?: (values: Record<string, any>, state: FormState) => void;
+}> = ({
   schema = {},
   initialValues = object(schema).getDefault(),
   validate,

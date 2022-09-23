@@ -29,10 +29,10 @@ import { StyleSheet, Platform, ViewStyle, TextStyle, StyleProp } from 'react-nat
 import PickerSelect, { PickerSelectProps } from 'react-native-picker-select';
 import { Modify } from '../../internals/types';
 
-type PickerProps = Partial<Modify<PickerSelectProps, {
-  style: StyleProp<TextStyle>;
-  containerStyle: StyleProp<ViewStyle>;
-}>>
+type PickerProps = Modify<Partial<PickerSelectProps>, {
+  style?: StyleProp<TextStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+}>
 
 export const Picker = React.forwardRef<PickerSelect, PickerProps>(({
   items = [],

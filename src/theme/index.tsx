@@ -31,10 +31,10 @@ import { defaultStyle, ThemeStyles, _colorContrast } from './styles';
 
 export { ThemeVariables, ThemeStyles };
 
-type ThemeProviderProps = Partial<{
-  variables: Partial<ThemeVariables>;
-  styles: (...theme: Parameters<typeof defaultStyle>) => Partial<ThemeStyles>;
-}>
+type ThemeProviderProps = {
+  variables?: Partial<ThemeVariables>;
+  styles?: (...theme: Parameters<typeof defaultStyle>) => Partial<ThemeStyles>;
+}
 
 const ThemeContext = React.createContext<ThemeProviderProps>({
   variables: defaultVariables,
