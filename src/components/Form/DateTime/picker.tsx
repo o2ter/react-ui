@@ -51,7 +51,7 @@ export const PickerBase = React.forwardRef<ComponentRef<typeof Pressable>, Picke
       <Pressable ref={forwardRef} onPress={() => { if (!disabled) setShowPicker(true) }}>
         <Text style={style} {...props}>{text}</Text>
       </Pressable>
-      <Modal visible={showPicker} transparent>
+      <Modal visible={showPicker} transparent animationType='fade'>
         <Pressable
           onPress={() => Keyboard.dismiss()}
           style={{

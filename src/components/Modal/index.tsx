@@ -36,8 +36,10 @@ export const useModal = () => React.useContext(ModalContext);
 export const ModalProvider: React.FC<{
   backdrop?: boolean;
   keyboardDismissMode?: 'none' | 'interactive';
+  animationType?: 'none' | 'slide' | 'fade';
 }> = ({
     backdrop = true,
+    animationType = 'none',
     keyboardDismissMode = 'interactive',
     children,
 }) => {
@@ -47,7 +49,7 @@ export const ModalProvider: React.FC<{
     
     return <ModalContext.Provider value={setModal}>
       {children}
-      <RNModal visible={React.isValidElement(modal)} transparent>
+      <RNModal visible={React.isValidElement(modal)} transparent animationType={animationType}>
         <Pressable
         onPress={() => { if (keyboardDismissMode === 'interactive') Keyboard.dismiss() }}
         style={{
