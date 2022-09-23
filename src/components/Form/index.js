@@ -27,6 +27,7 @@ import './yup/config';
 import _ from 'lodash';
 import { useField, useForm, Form as FormBase } from './Form';
 import { useFormGroup, FormGroup } from './Group';
+import { FormDate } from './DateTime';
 
 const Form = _.assign(FormBase, {
   Group: FormGroup,
@@ -36,6 +37,7 @@ const Form = _.assign(FormBase, {
   Picker: require('./Picker').default,
   Checkbox: require('./Checkbox').default,
   Radio: require('./Radio').default,
+  Date: FormDate,
 })
 
 export {

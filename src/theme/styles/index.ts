@@ -160,6 +160,20 @@ export const defaultStyle = (
     borderColor: theme.colors.danger,
   }),
 
+  formDateStyle: createTextStyle({
+    fontSize: theme.fontSizeBase,
+    backgroundColor: theme.colors.light,
+    borderColor: theme.colors.light,
+    borderWidth: theme.borderWidth,
+    borderRadius: theme.borderRadius,
+    margin: theme.spacer * 0.25,
+    padding: theme.spacer * 0.25,
+  }),
+
+  formDateErrorStyle: createTextStyle({
+    borderColor: theme.colors.danger,
+  }),
+
 })
 
 export type ThemeStyles = ReturnType<typeof defaultStyle>;
