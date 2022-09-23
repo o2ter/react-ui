@@ -55,8 +55,13 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
   const date = _.isString(value) ? new Calendar.Date(value) : undefined;
 
   return (
-    <PickerBase ref={forwardRef} disabled={disabled} text={date?.toString()} picker={(
+    <PickerBase
+    ref={forwardRef}
+    disabled={disabled}
+    text={date?.toString()}
+    picker={(
       <Calendar value={value} min={min} max={max} onChange={onChange} />
-    )} {...props} />
+    )}
+    {...props} />
   )
 });
