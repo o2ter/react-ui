@@ -25,12 +25,14 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, ViewProps, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 import PickerSelect from 'react-native-picker-select';
 import { useTheme } from '../../theme';
 import { DateTime } from 'luxon';
+import { Modify } from '../../internals/types';
 
 import { _Date, dateToString } from './date';
+import { calendarStyle } from './style';
 import { CalendarBody } from './body';
 
 import { MaterialCommunityIcons as Icon } from '../Icons';
@@ -50,39 +52,29 @@ const month_name = [
   'december',
 ]
 
-const style = StyleSheet.create({
-  weekContainer: {
-    width: '100%',
-    aspectRatio: 7,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  weekdayContainer: {
-    flex: 1,
-    height: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  weekdays: {
-    flex: 1,
-    textAlign: 'center',
-    fontWeight: '500',
-  },
-  disabledWeekdays: {
-    color: '#adb5bd',
-  },
-})
+type CalendarProps = Modify<ViewProps, {
+  value?: string | DateTime;
+  min?: string | DateTime;
+  max?: string | DateTime;
+  selectable: (date: string) => boolean;
+  onChange: (date: string) => void;
+}>
 
-const CalendarBase = ({
+const CalendarBase = React.forwardRef<View, CalendarProps>(({
   value,
   min,
   max,
+  style,
+  selectable,
   onChange
-}) => {
+}, forwardRef) => {
+
+  const theme = useTheme();
+  const _value = React.useMemo(() => _.isNil(value) ? undefined : new _Date(value), [value]);
 
   const [current, setCurrent] = React.useState(() => {
     const now = DateTime.now();
-    return { month: value?.month ?? now.month, year: value?.year ?? now.year }
+    return { month: _value?.month ?? now.month, year: _value?.year ?? now.year }
   });
 
   const [yearText, setYearText] = React.useState<string | null>(null);
@@ -99,18 +91,14 @@ const CalendarBase = ({
     setYearText(null);
   }
 
-  function selectable(date: string) {
-    if (min && _Date.lessThan(date, min)) return false;
-    if (max && _Date.lessThan(max, date)) return false;
-    return true;
-  }
+  const _selectable = React.useMemo(() => (date: string) => {
+    if (!_.isNil(min) && _Date.lessThan(date, min)) return false;
+    if (!_.isNil(max) && _Date.lessThan(max, date)) return false;
+    return selectable(date);
+  }, [selectable, min, max]);
 
   return (
-    <View style={{
-      width: '80%',
-      maxWidth: 350,
-      backgroundColor: 'white',
-    }}>
+    <View ref={forwardRef} style={style}>
       <View style={{ padding: 8, flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
           <PickerSelect
@@ -119,8 +107,8 @@ const CalendarBase = ({
           placeholder={{}}
           onValueChange={(_value, index) => setCurrent(current => ({ ...current, month: index + 1 }))}
           style={{
-            inputIOS: { fontSize: 24 },
-            inputAndroid: { fontSize: 24 },
+            inputIOS: { fontSize: theme.fontSizeBase * 1.5 },
+            inputAndroid: { fontSize: theme.fontSizeBase * 1.5 },
           }} />
           <TextInput
           selectTextOnFocus
@@ -130,7 +118,7 @@ const CalendarBase = ({
           onChangeText={setYearText}
           onBlur={() => submit()}
           onSubmitEditing={() => submit()}
-          style={{ paddingLeft: 8, fontSize: 16 }} />
+          style={{ paddingLeft: 8, fontSize: theme.fontSizeBase }} />
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Pressable onPress={() => {
@@ -139,30 +127,30 @@ const CalendarBase = ({
             } else {
               setCurrent(current => ({ ...current, month: current.month - 1 }));
             }
-          }}><Icon name='chevron-left' size={24} /></Pressable>
+          }}><Icon name='chevron-left' size={theme.fontSizeBase * 1.5} /></Pressable>
           <Pressable onPress={() => {
             if (current.month === 12) {
               setCurrent(current => ({ year: current.year + 1, month: 1 }));
             } else {
               setCurrent(current => ({ ...current, month: current.month + 1 }));
             }
-          }}><Icon name='chevron-right' size={24} /></Pressable>
+          }}><Icon name='chevron-right' size={theme.fontSizeBase * 1.5} /></Pressable>
         </View>
       </View>
-      <View style={style.weekContainer}>
-        <Text style={style.weekdays}>SU</Text>
-        <Text style={style.weekdays}>MO</Text>
-        <Text style={style.weekdays}>TU</Text>
-        <Text style={style.weekdays}>WE</Text>
-        <Text style={style.weekdays}>TH</Text>
-        <Text style={style.weekdays}>FR</Text>
-        <Text style={style.weekdays}>SA</Text>
+      <View style={calendarStyle.weekContainer}>
+        <Text style={calendarStyle.weekdays}>SU</Text>
+        <Text style={calendarStyle.weekdays}>MO</Text>
+        <Text style={calendarStyle.weekdays}>TU</Text>
+        <Text style={calendarStyle.weekdays}>WE</Text>
+        <Text style={calendarStyle.weekdays}>TH</Text>
+        <Text style={calendarStyle.weekdays}>FR</Text>
+        <Text style={calendarStyle.weekdays}>SA</Text>
       </View>
-      <CalendarBody selected={value} selectable={selectable} onSelect={({ year, month, day }) => {
+      <CalendarBody selected={_value} selectable={_selectable} onSelect={({ year, month, day }) => {
         onChange(dateToString(year, month, day));
       }} {...current} />
     </View>
   )
-};
+});
 
 export const Calendar = _.assign(CalendarBase, { Date: _Date });
