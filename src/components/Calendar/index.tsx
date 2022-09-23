@@ -67,7 +67,7 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
   min,
   max,
   style,
-  selectable,
+  selectable = () => true,
   onChange
 }, forwardRef) => {
 
