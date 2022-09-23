@@ -57,6 +57,18 @@ export class _Date {
     return dateToString(this.year, this.month, this.day);
   }
 
+  toDateTime(opts?: object) {
+    return DateTime.fromObject({
+      year: this.year,
+      month: this.month,
+      day: this.day,
+    } as any, opts as any);
+  }
+
+  toDate(opts?: object) {
+    return this.toDateTime(opts).toJSDate();
+  }
+
   static lessThan(d1: string | Date | DateTime | _Date, d2: string | Date | DateTime | _Date) {
     const _d1 = d1 instanceof _Date ? d1 : new _Date(d1);
     const _d2 = d2 instanceof _Date ? d2 : new _Date(d2);
