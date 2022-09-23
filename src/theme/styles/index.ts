@@ -129,6 +129,10 @@ export const defaultStyle = (
 
   formRadioColor: (value: boolean) => value ? theme.colors.primary : theme.colors.grays['600'],
 
+  formPickerBackdrop: createViewStyle({
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+  }),
+  
   formPickerStyle: createTextStyle({
     fontSize: theme.fontSizeBase,
     backgroundColor: theme.colors.light,

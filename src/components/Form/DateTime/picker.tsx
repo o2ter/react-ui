@@ -25,38 +25,49 @@
 
 import _ from 'lodash';
 import React, { ComponentRef } from 'react';
-import { TextProps } from 'react-native';
-import { useField } from '../Form';
-import { Calendar } from '../../Calendar';
-import { PickerBase } from './picker';
+import { Text, TextProps, Pressable, Modal, StyleSheet, Keyboard } from 'react-native';
+import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 
-type FormDateProps = Modify<TextProps, {
-  name: string | string[];
-  min?: string;
-  max?: string;
+type PickerBaseProps = Modify<TextProps, {
+  text?: string;
+  picker?: any;
   disabled?: boolean;
-  selectable?: (x: string) => boolean;
 }>
 
-export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDateProps>(({
-  name,
-  min,
-  max,
+export const PickerBase = React.forwardRef<ComponentRef<typeof Pressable>, PickerBaseProps>(({
   style,
-  disabled = false,
-  selectable = () => true,
-  children,
+  text,
+  picker,
+  disabled,
   ...props
 }, forwardRef) => {
 
-  const { value, error, onChange } = useField(name);
-
-  const date = _.isString(value) ? new Calendar.Date(value) : undefined;
+  const [showPicker, setShowPicker] = React.useState(false);
+  const theme = useTheme();
 
   return (
-    <PickerBase ref={forwardRef} disabled={disabled} text={date?.toString()} picker={(
-      <Calendar value={value} min={min} max={max} onChange={onChange} />
-    )} {...props} />
+    <>
+      <Pressable ref={forwardRef} onPress={() => { if (!disabled) setShowPicker(true) }}>
+        <Text style={style} {...props}>{text}</Text>
+      </Pressable>
+      <Modal visible={showPicker} transparent>
+        <Pressable
+          onPress={() => Keyboard.dismiss()}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Pressable
+            onPress={() => setShowPicker(false)}
+            style={[
+              theme.styles.formPickerBackdrop,
+              StyleSheet.absoluteFill
+            ]} />
+          {picker}
+        </Pressable>
+      </Modal>
+    </>
   )
 });
