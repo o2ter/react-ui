@@ -37,6 +37,8 @@ import { CalendarBody } from './body';
 
 import { MaterialCommunityIcons as Icon } from '../Icons';
 
+import Localization from '../../locales';
+
 const month_name = [
   'january',
   'february',
@@ -70,6 +72,8 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
 }, forwardRef) => {
 
   const theme = useTheme();
+  const locale = Localization.useLocalize();
+
   const _value = React.useMemo(() => _.isNil(value) ? undefined : new _Date(value), [value]);
 
   const [current, setCurrent] = React.useState(() => {
@@ -103,7 +107,7 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
           <PickerSelect
           value={month_name[current.month - 1]}
-          items={month_name.map(x => ({ label: _.upperFirst(x), value: x }))}
+          items={month_name.map(x => ({ label: locale.string(`calendar.months.${x}`), value: x }))}
           placeholder={{}}
           onValueChange={(_value, index) => setCurrent(current => ({ ...current, month: index + 1 }))}
           style={{
@@ -138,13 +142,13 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
         </View>
       </View>
       <View style={calendarStyle.weekContainer}>
-        <Text style={calendarStyle.weekdays}>SU</Text>
-        <Text style={calendarStyle.weekdays}>MO</Text>
-        <Text style={calendarStyle.weekdays}>TU</Text>
-        <Text style={calendarStyle.weekdays}>WE</Text>
-        <Text style={calendarStyle.weekdays}>TH</Text>
-        <Text style={calendarStyle.weekdays}>FR</Text>
-        <Text style={calendarStyle.weekdays}>SA</Text>
+        <Text style={calendarStyle.weekdays}>{locale.string('calendar.weekdays.sunday')}</Text>
+        <Text style={calendarStyle.weekdays}>{locale.string('calendar.weekdays.monday')}</Text>
+        <Text style={calendarStyle.weekdays}>{locale.string('calendar.weekdays.tuesday')}</Text>
+        <Text style={calendarStyle.weekdays}>{locale.string('calendar.weekdays.wednesday')}</Text>
+        <Text style={calendarStyle.weekdays}>{locale.string('calendar.weekdays.thursday')}</Text>
+        <Text style={calendarStyle.weekdays}>{locale.string('calendar.weekdays.friday')}</Text>
+        <Text style={calendarStyle.weekdays}>{locale.string('calendar.weekdays.saturday')}</Text>
       </View>
       <CalendarBody selected={_value} selectable={_selectable} onSelect={({ year, month, day }) => {
         onChange(dateToString(year, month, day));
