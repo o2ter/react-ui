@@ -33,7 +33,7 @@ const Form = _.assign(FormBase, {
   ErrorMessage: require('./ErrorMessage').default,
   TextField: require('./TextField').default,
   Button: require('./Button').default,
-  //Picker: require('./Picker').default,
+  Picker: require('./Picker').default,
   Checkbox: require('./Checkbox').default,
   Radio: require('./Radio').default,
 })
