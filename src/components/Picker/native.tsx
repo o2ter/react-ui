@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  android.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -25,45 +25,41 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { StyleSheet, Platform, ViewStyle, TextStyle, StyleProp } from 'react-native';
-import PickerSelect, { PickerSelectProps } from 'react-native-picker-select';
-import { Modify } from '../../internals/types';
+import { StyleProp, TextStyle } from 'react-native';
+import { Picker as RNPicker, PickerItemProps } from '@react-native-picker/picker';
+import { List } from '../List';
 
-type PickerProps = Modify<Partial<PickerSelectProps>, {
+export type ItemValue = number | string;
+
+export type PickerNativeProps<T = ItemValue> = {
+  value?: T;
+  items: PickerItemProps<T>[];
+  disabled?: boolean;
   style?: StyleProp<TextStyle>;
-  containerStyle?: StyleProp<ViewStyle>;
-}>
+  onValueChange?: (itemValue: T, itemIndex: number) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+}
 
-export const Picker = React.forwardRef<PickerSelect, PickerProps>(({
-  items = [],
+export const PickerNative = React.forwardRef<RNPicker<ItemValue>, PickerNativeProps>(({
+  value,
+  items,
+  disabled = false,
   style,
-  containerStyle,
   onValueChange = () => {},
-  ...props
-}, forwardRef) => {
+  onFocus = () => {},
+  onBlur = () => {},
+}, forwardRef) => (
+  <RNPicker
+    ref={forwardRef}
+    style={style}
+    enabled={!disabled}
+    onValueChange={onValueChange}
+    selectedValue={value}
+    onFocus={onFocus}
+    onBlur={onBlur}>
+    <List data={items} renderItem={({item}) => <RNPicker.Item {...item} />} />
+  </RNPicker>
+));
 
-  const _style = StyleSheet.flatten(style);
-  const _containerStyle = StyleSheet.flatten(containerStyle);
-  
-  return <PickerSelect
-  ref={forwardRef}
-  items={items}
-  style={Platform.select({
-    ios: {
-      inputIOS: _style,
-      inputIOSContainer: _containerStyle,
-    },
-    android: {
-      inputAndroid: _style,
-      inputAndroidContainer: _containerStyle,
-    },
-    web: {
-      inputWeb: _style,
-      viewContainer: _containerStyle,
-    },
-  })}
-  onValueChange={onValueChange}
-  {...props} />;
-});
-
-export default Picker;
+export default PickerNative;

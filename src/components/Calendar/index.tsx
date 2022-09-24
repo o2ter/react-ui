@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { View, ViewProps, Text, TextInput, Pressable } from 'react-native';
-import PickerSelect from 'react-native-picker-select';
+import { Picker } from '../Picker';
 import { useTheme } from '../../theme';
 import { DateTime } from 'luxon';
 import { Modify } from '../../internals/types';
@@ -105,16 +105,11 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
     <View ref={forwardRef} style={style}>
       <View style={{ padding: 8, flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-          <PickerSelect
+          <Picker
           value={month_name[current.month - 1]}
           items={month_name.map(x => ({ label: locale.string(`calendar.months.${x}`), value: x }))}
-          placeholder={{}}
           onValueChange={(_value, index) => setCurrent(current => ({ ...current, month: index + 1 }))}
-          style={{
-            inputIOS: { fontSize: theme.fontSizeBase * 1.5 },
-            inputAndroid: { fontSize: theme.fontSizeBase * 1.5 },
-            inputWeb: { fontSize: theme.fontSizeBase * 1.5 },
-          }} />
+          style={{ fontSize: theme.fontSizeBase * 1.5 }} />
           <TextInput
           selectTextOnFocus
           keyboardType='number-pad'
