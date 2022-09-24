@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Text, TouchableWithoutFeedback, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { PickerNative, PickerNativeProps } from './native';
 
 export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
@@ -50,9 +50,9 @@ export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
 
   return (
     <React.Fragment>
-      <TouchableWithoutFeedback onPress={() => { if (!disabled) _setShowPicker(true) }}>
+      <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
         <Text ref={forwardRef} style={style}>{selected?.label}</Text>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
       <Modal
       transparent
       visible={showPicker}

@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  andorid.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,15 +24,39 @@
 //
 
 import _ from 'lodash';
-import { Platform } from 'react-native';
-import PickerIOS from './ios';
-import PickerAndroid from './android';
-import PickerNative from './native';
+import React from 'react';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { PickerNative, PickerNativeProps } from './native';
 
-export const Picker = Platform.select({
-  ios: PickerIOS,
-  android: PickerAndroid,
-  default: PickerNative,
+export const PickerAndroid = React.forwardRef<Text, PickerNativeProps>(({
+  value,
+  items = [],
+  disabled = false,
+  style,
+  onValueChange = () => {},
+  onFocus = () => {},
+  onBlur = () => {},
+}, forwardRef) => {
+
+  const selected = _.find(items, x => x.value === value);
+
+  function _setShowPicker(value: boolean) {
+    value ? onFocus() : onBlur();
+  }
+
+  return (
+    <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
+      <Text ref={forwardRef} style={style}>{selected?.label}</Text>
+      <PickerNative
+      value={value}
+      items={items}
+      onValueChange={onValueChange}
+      style={[StyleSheet.absoluteFill, {
+        color: 'transparent',
+        opacity: 0,
+      }]} />
+    </TouchableOpacity>
+  )
 });
 
-export default Picker;
+export default PickerAndroid;
