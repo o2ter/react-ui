@@ -36,6 +36,7 @@ export type PickerNativeProps<T = ItemValue> = {
   items: PickerItemProps<T>[];
   disabled?: boolean;
   style?: StyleProp<TextStyle>;
+  renderText?: (label?: PickerItemProps<T>) => any
   onValueChange?: (itemValue: T, itemIndex: number) => void;
   onFocus?: () => void;
   onBlur?: () => void;

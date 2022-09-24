@@ -33,6 +33,7 @@ export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
   items = [],
   disabled = false,
   style,
+  renderText = (item) => item?.label,
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
@@ -51,7 +52,7 @@ export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
   return (
     <React.Fragment>
       <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
-        <Text ref={forwardRef} style={style}>{selected?.label}</Text>
+        <Text ref={forwardRef} style={style}>{renderText(selected)}</Text>
       </TouchableOpacity>
       <Modal
       transparent
