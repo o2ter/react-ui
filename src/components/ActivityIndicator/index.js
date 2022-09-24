@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Animated, View, ActivityIndicator as RNActivityIndicator, StyleSheet } from 'react-native';
+import { Animated, View, ActivityIndicator as RNActivityIndicator, StyleSheet, Platform } from 'react-native';
 import uuid from 'react-native-uuid';
 
 import { useTheme } from '../../theme';
