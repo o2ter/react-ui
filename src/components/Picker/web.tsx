@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  web.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,17 +24,41 @@
 //
 
 import _ from 'lodash';
-import { Platform } from 'react-native';
-import PickerIOS from './ios';
-import PickerAndroid from './android';
-import PickerWeb from './web';
-import PickerNative from './native';
+import React, { ComponentRef } from 'react';
+import { StyleSheet } from 'react-native';
+import { PickerNative, PickerNativeProps } from './native';
 
-export const Picker = Platform.select({
-  ios: PickerIOS,
-  android: PickerAndroid,
-  web: PickerWeb,
-  default: PickerNative,
+const _style = StyleSheet.create({
+  picker: {
+    appearance: 'none',
+    backgroundColor: 'transparent',
+    border: '0 solid black',
+    borderRadius: 0,
+    margin: 0,
+    padding: 0,
+  }
 });
 
-export default Picker;
+export const PickerWeb = React.forwardRef<ComponentRef<typeof PickerNative>, PickerNativeProps>(({
+  value,
+  items = [],
+  disabled = false,
+  style,
+  renderText = (item) => item?.label,
+  onValueChange = () => {},
+  onFocus = () => {},
+  onBlur = () => {},
+}, forwardRef) => (
+  <PickerNative
+    ref={forwardRef}
+    value={value}
+    items={items}
+    disabled={disabled}
+    renderText={renderText}
+    onValueChange={onValueChange}
+    onFocus={onFocus}
+    onBlur={onBlur}
+    style={[_style.picker, style]} />
+));
+
+export default PickerWeb;
