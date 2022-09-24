@@ -30,7 +30,6 @@
     "react-native-vector-icons": ">=9.1.0",
     "react-router-dom": ">=6.3.0",
     "sugax": ">=1.0.28",
-    "webfontloader": ">=1.6.28",
     "yup": "^0.32.11"
   },
   "peerDependencies": {

@@ -25,6 +25,5 @@
 
 export { styleInject } from '../styleInject';
 export * from './index.js';
-export { useWebFont } from './useWebFont';
 export { NodeHandleProvider } from './NodeHandleProvider';
 export * from './Navigator';
