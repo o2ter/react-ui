@@ -1,5 +1,5 @@
 //
-//  android.tsx
+//  native.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import { Picker as RNPicker, PickerItemProps } from '@react-native-picker/picker';
-import { List } from '../List';
+import uuid from 'react-native-uuid';
 
 export type ItemValue = number | string;
 
@@ -49,17 +49,22 @@ export const PickerNative = React.forwardRef<RNPicker<ItemValue>, PickerNativePr
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}, forwardRef) => (
-  <RNPicker
-    ref={forwardRef}
-    style={style}
-    enabled={!disabled}
-    onValueChange={onValueChange}
-    selectedValue={value}
-    onFocus={onFocus}
-    onBlur={onBlur}>
-    <List data={items} renderItem={({item}) => <RNPicker.Item {...item} />} />
-  </RNPicker>
-));
+}, forwardRef) => {
+
+  const id = React.useMemo(() => uuid.v4(), []);
+
+  return (
+    <RNPicker
+      ref={forwardRef}
+      style={style}
+      enabled={!disabled}
+      onValueChange={onValueChange}
+      selectedValue={value}
+      onFocus={onFocus}
+      onBlur={onBlur}>
+        {_.map(items, (item, index) => <RNPicker.Item key={`${id}-${index}`} {...item} />)}
+    </RNPicker>
+  );
+});
 
 export default PickerNative;

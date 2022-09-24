@@ -3,7 +3,9 @@ import _ from 'lodash';
 import React from 'react';
 
 import { string, object } from 'yup';
-import { Form } from '../src/components/Form';
+import { Form } from '../src/components/Form/Form';
+import FormGroup from '../src/components/Form/Group';
+import FormTextField from '../src/components/Form/TextField';
 
 export default {
   title: 'Form',
@@ -18,9 +20,11 @@ schema={{
     last: string().required(),
   }),
 }}>
-  <Form.TextField name='email' />
-  <Form.Group name='name'>
-    <Form.TextField name='first' />
-    <Form.TextField name='last' />
-  </Form.Group>
+  <FormTextField name='email' />
+  <FormGroup name='name'>
+    <FormTextField name='first' />
+    <FormTextField name='last' />
+  </FormGroup>
 </Form>;
+TextInput.args = {
+}
