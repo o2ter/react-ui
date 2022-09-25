@@ -29,6 +29,7 @@ export { Barcode, BarcodeFormats } from './Barcode';
 export * from './Button';
 export { Calendar } from './Calendar';
 export { FlatList } from './FlatList';
+export * from './Form';
 export { Icon } from './Icon';
 export { Image } from './Image';
 export { List } from './List';
