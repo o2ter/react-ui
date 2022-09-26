@@ -10079,10 +10079,10 @@ styleq@^0.1.2:
   resolved "https://registry.yarnpkg.com/styleq/-/styleq-0.1.2.tgz#052b46af5ca4f920b1bdae2735ffb1e3970f53cd"
   integrity sha512-EBNuMVSxpssuFcJq/c4zmZ4tpCyX9E27hz5xPJhw4URjRHcYXPHh8rDHY/tJsw5gtP0+tIL3IBYeQVIYjdZFhg==
 
-sugax@>=1.0.28:
-  version "1.0.29"
-  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.29.tgz#3a3229dc861caa1ed1194f322f0afb4626dc2403"
-  integrity sha512-Ut05YmpYVqSEJxGrieM3uQzcg6p4d53dEGuNYoSj+h0gKhP0NWWWuAtksk13Y4JcPSD86OZ8EIGN6BAfsOU9pw==
+sugax@>=1.0.32:
+  version "1.0.32"
+  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.32.tgz#0a6e182f988887cc9646963411626f3bc6dcea92"
+  integrity sha512-8z8ghCvo+uK8Kx+ri6J5l4kZXZr8YSIZ4zS9EKNs/i6CTWrM8iyWa/zjC/odSykbqhmJHgOHuB7/xRiWxlEHOA==
 
 supports-color@^5.3.0:
   version "5.5.0"

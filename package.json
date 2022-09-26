@@ -29,7 +29,7 @@
     "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": ">=9.1.0",
     "react-router-dom": ">=6.3.0",
-    "sugax": ">=1.0.28",
+    "sugax": ">=1.0.32",
     "yup": "^0.32.11"
   },
   "peerDependencies": {
