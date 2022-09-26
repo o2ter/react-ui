@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Animated, View, Text, Pressable, Platform, StyleSheet } from 'react-native';
+import { Animated, View, Text, Pressable, StyleSheet } from 'react-native';
 import { List } from '../List';
 import { Icon } from '../Icon';
 
@@ -102,7 +102,7 @@ export const SegmentedControl = React.forwardRef(({
                 x: selected_bounds.x,
                 y: selected_bounds.width,
             },
-            useNativeDriver: Platform.OS !== 'web',
+            useNativeDriver: false,
         }).start();
     }, [selected_bounds.x, selected_bounds.width]);
 
