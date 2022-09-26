@@ -25,11 +25,12 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, ViewProps, Text, TextInput, Pressable } from 'react-native';
+import { View, ViewProps, Text, Pressable } from 'react-native';
 import { Picker } from '../Picker';
 import { useTheme } from '../../theme';
 import { DateTime } from 'luxon';
 import { Modify } from '../../internals/types';
+import { UncontrolledTextInput } from '../UncontrolledTextInput';
 
 import { _Date, dateToString } from './date';
 import { calendarStyle } from './style';
@@ -81,20 +82,6 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
     return { month: _value?.month ?? now.month, year: _value?.year ?? now.year }
   });
 
-  const [yearText, setYearText] = React.useState<string | null>(null);
-
-  function submit() {
-
-    try {
-
-      const year = parseInt(yearText ?? '');
-      if (year >= 1970 && year < 9999) setCurrent(current => ({ ...current, year }));
-
-    } catch {}
-
-    setYearText(null);
-  }
-
   const _selectable = React.useMemo(() => (date: string) => {
     if (!_.isNil(min) && _Date.lessThan(date, min)) return false;
     if (!_.isNil(max) && _Date.lessThan(max, date)) return false;
@@ -110,14 +97,16 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
           items={month_name.map(x => ({ label: locale.string(`calendar.months.${x}`), value: x }))}
           onValueChange={(_value, index) => setCurrent(current => ({ ...current, month: index + 1 }))}
           style={{ fontSize: theme.fontSizeBase * 1.5 }} />
-          <TextInput
+          <UncontrolledTextInput
           selectTextOnFocus
           keyboardType='number-pad'
-          value={yearText ?? `${current.year}`}
-          onFocus={() => setYearText(`${current.year}`)}
-          onChangeText={setYearText}
-          onBlur={() => submit()}
-          onSubmitEditing={() => submit()}
+          value={`${current.year}`}
+          onChangeText={(text) => {
+            try {
+              const year = parseInt(text);
+              if (year >= 1970 && year < 9999) setCurrent(current => ({ ...current, year }));
+            } catch {}
+          }}
           style={{ paddingLeft: 8, fontSize: theme.fontSizeBase }} />
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
