@@ -36,7 +36,6 @@ const segment_value = (item: string | { value: string }) => _.isString(item) ? i
 
 type SegmentedControlBaseProps = Modify<ViewProps, {
   value?: string;
-  style?: StyleProp<ViewStyle>;
   onChange?: (value: string) => void;
   segments?: (string | { label: any, value: string })[];
   segmentTextStyle?: StyleProp<TextStyle>;
