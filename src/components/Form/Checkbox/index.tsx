@@ -39,6 +39,7 @@ type FormCheckboxProps = Modify<TextProps, {
 export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProps>(({
   name,
   style,
+  onPress,
   children,
   ...props
 }, forwardRef) => {
@@ -49,7 +50,7 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProp
   const iconName = value ? 'checkbox-marked' : 'checkbox-blank-outline';
 
   return (
-    <Pressable ref={forwardRef} onPress={() => onChange(!value)}>
+    <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange(!value))}>
       <Text style={[theme.styles.formCheckboxStyle, style]}>
         <Icon name={iconName} color={theme.styles.formCheckboxColor(value)} {...props} />
       </Text>
