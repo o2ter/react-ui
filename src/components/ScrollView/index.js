@@ -40,48 +40,48 @@ const ScrollLayoutContext = React.createContext({ current: null });
 export const useScrollLayout = () => React.useContext(ScrollLayoutContext);
 
 export const ScrollView = React.forwardRef(({
-    onRefresh,
-    onLayout,
-    onContentSizeChange,
-    onScroll,
-    refreshControlProps,
-    scrollEventThrottle = 1,
-    horizontal = false,
-    children,
-    ...props
+  onRefresh,
+  onLayout,
+  onContentSizeChange,
+  onScroll,
+  refreshControlProps,
+  scrollEventThrottle = 1,
+  horizontal = false,
+  children,
+  ...props
 }, forwardRef) => {
 
-    const scrollViewRef = React.useRef();
-    const ref = useMergeRefs(scrollViewRef, forwardRef);
-    
-    const [layoutMeasurement, setLayout] = React.useState();
-    const [contentSize, setContentSize] = React.useState();
-    const [scroll, setScroll] = React.useState();
+  const scrollViewRef = React.useRef();
+  const ref = useMergeRefs(scrollViewRef, forwardRef);
 
-    const scrollLayout = React.useMemo(() => ({ ...scroll, layoutMeasurement, contentSize, horizontal }), [layoutMeasurement, contentSize, scroll, horizontal])
-    
-    return <ScrollViewBase
-        ref={ref}
-        onLayout={(event) => {
-            setLayout(event.nativeEvent.layout);
-            if (_.isFunction(onLayout)) onLayout(event);
-        }}
-        onContentSizeChange={(width, height) => {
-            setContentSize(width, height);
-            if (_.isFunction(onContentSizeChange)) onContentSizeChange(width, height);
-        }}
-        onScroll={(event) => {
-            setScroll(event.nativeEvent);
-            if (_.isFunction(onScroll)) onScroll(event);
-        }}
-        horizontal={horizontal}
-        scrollEventThrottle={scrollEventThrottle}
-        refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
-        {...props}>
-            <ScrollViewContext.Provider value={scrollViewRef}><ScrollLayoutContext.Provider value={scrollLayout}>
-                {children}
-            </ScrollLayoutContext.Provider></ScrollViewContext.Provider>
-        </ScrollViewBase>;
+  const [layoutMeasurement, setLayout] = React.useState();
+  const [contentSize, setContentSize] = React.useState();
+  const [scroll, setScroll] = React.useState();
+
+  const scrollLayout = React.useMemo(() => ({ ...scroll, layoutMeasurement, contentSize, horizontal }), [layoutMeasurement, contentSize, scroll, horizontal])
+
+  return <ScrollViewBase
+    ref={ref}
+    onLayout={(event) => {
+      setLayout(event.nativeEvent.layout);
+      if (_.isFunction(onLayout)) onLayout(event);
+    }}
+    onContentSizeChange={(width, height) => {
+      setContentSize(width, height);
+      if (_.isFunction(onContentSizeChange)) onContentSizeChange(width, height);
+    }}
+    onScroll={(event) => {
+      setScroll(event.nativeEvent);
+      if (_.isFunction(onScroll)) onScroll(event);
+    }}
+    horizontal={horizontal}
+    scrollEventThrottle={scrollEventThrottle}
+    refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
+    {...props}>
+    <ScrollViewContext.Provider value={scrollViewRef}><ScrollLayoutContext.Provider value={scrollLayout}>
+      {children}
+    </ScrollLayoutContext.Provider></ScrollViewContext.Provider>
+  </ScrollViewBase>;
 });
 
 export default ScrollView;

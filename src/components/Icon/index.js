@@ -31,23 +31,23 @@ import * as Icons from '../Icons';
 import { text_style } from '../../internals/text_style';
 
 export const Icon = React.forwardRef(({
-	icon,
-	name,
-	style,
-	iconStyle,
-	children,
-	...props
+  icon,
+  name,
+  style,
+  iconStyle,
+  children,
+  ...props
 }, forwardRef) => {
 
-	const _Icon = Icons[icon];
+  const _Icon = Icons[icon];
 
-	const _iconStyle = StyleSheet.flatten([style, iconStyle]);
-	const { fontSize, color } = _iconStyle ?? {};
-	
-	return <Text ref={forwardRef} style={style} {...props}>
-		{!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_iconStyle, text_style)} />}
-		{children}
-	</Text>;
+  const _iconStyle = StyleSheet.flatten([style, iconStyle]);
+  const { fontSize, color } = _iconStyle ?? {};
+
+  return <Text ref={forwardRef} style={style} {...props}>
+    {!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_iconStyle, text_style)} />}
+    {children}
+  </Text>;
 });
 
 export default Icon;

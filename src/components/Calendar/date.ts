@@ -31,11 +31,11 @@ export function dateToString(year: number, month: number, day: number) {
 }
 
 export class _Date {
-  
+
   year: number;
   month: number;
   day: number;
-  
+
   constructor(date: string | Date | DateTime) {
     if (date instanceof Date) date = DateTime.fromJSDate(date).toISODate();
     if (date instanceof DateTime) date = date.toISODate();
@@ -52,7 +52,7 @@ export class _Date {
       this.day = today.day;
     }
   }
-  
+
   toString() {
     return dateToString(this.year, this.month, this.day);
   }

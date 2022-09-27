@@ -28,11 +28,11 @@ import { setLocale } from 'yup';
 import _locale from 'yup/lib/locale';
 
 const locale = _.mapValues(_locale, (rules, type) => _.fromPairs(_.map(_.keys(rules), rule => [
-    rule,
-    (params) => ({
-      ...params,
-      rule: `${type}.${rule}`,
-    })
+  rule,
+  (params) => ({
+    ...params,
+    rule: `${type}.${rule}`,
+  })
 ])));
 
 setLocale(locale);

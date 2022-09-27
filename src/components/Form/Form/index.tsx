@@ -39,10 +39,10 @@ type FormState = {
 
 const FormContext = React.createContext<FormState>({
   values: {},
-  setValues: () => {},
-  validate: () => {},
-  submit: () => {},
-  reset: () => {},
+  setValues: () => { },
+  validate: () => { },
+  submit: () => { },
+  reset: () => { },
 });
 
 export const Form: React.FC<{
@@ -55,48 +55,48 @@ export const Form: React.FC<{
   schema = {},
   initialValues = object(schema).getDefault(),
   validate,
-  onReset = () => {},
-  onSubmit = () => {},
+  onReset = () => { },
+  onSubmit = () => { },
   children
 }) => {
 
-  const [values, setValues] = React.useState(initialValues);
-  
-  const onResetRef = useCallbackRef(onReset);
-  const onSubmitRef = useCallbackRef(onSubmit);
+    const [values, setValues] = React.useState(initialValues);
 
-  const _schema = React.useMemo(() => object(schema), [schema]);
+    const onResetRef = useCallbackRef(onReset);
+    const onSubmitRef = useCallbackRef(onSubmit);
 
-  const _validate = React.useMemo(() => validate ?? ((value: any, path?: string) => {
-    try {
-      if (_.isString(path)) {
-        _schema.validateSyncAt(path, value);
+    const _schema = React.useMemo(() => object(schema), [schema]);
+
+    const _validate = React.useMemo(() => validate ?? ((value: any, path?: string) => {
+      try {
+        if (_.isString(path)) {
+          _schema.validateSyncAt(path, value);
+        }
+        _schema.validateSync(value);
+      } catch (error) {
+        return error as Error;
       }
-      _schema.validateSync(value);
-    } catch (error) {
-      return error as Error;
-    }
-  }), [_schema, validate]);
-  
-  const formState = React.useMemo(() => ({
+    }), [_schema, validate]);
 
-    values, setValues,
+    const formState = React.useMemo(() => ({
 
-    validate: _validate,
+      values, setValues,
 
-    submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(values, formState); },
+      validate: _validate,
 
-    reset: () => {
-      setValues(initialValues);
-      if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
-    },
+      submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(values, formState); },
 
-  }), [values, setValues, _schema]);
+      reset: () => {
+        setValues(initialValues);
+        if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
+      },
 
-  return <FormContext.Provider value={formState}>
-    {children}
-  </FormContext.Provider>;
-};
+    }), [values, setValues, _schema]);
+
+    return <FormContext.Provider value={formState}>
+      {children}
+    </FormContext.Provider>;
+  };
 
 export const useForm = () => ({
   ...React.useContext(FormContext),
@@ -111,7 +111,7 @@ export const useField = (name: string | string[]) => {
   const onChange = React.useMemo(() => (value: React.SetStateAction<any>) => setValues(
     values => _.set(_.cloneDeep(values), path, _.isFunction(value) ? value(_.get(values, path)) : value)
   ), [setValues]);
-  
+
   return {
     value: _.get(values, path),
     get error() { return validate(values, path) },

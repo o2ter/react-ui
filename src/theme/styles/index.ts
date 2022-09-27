@@ -43,7 +43,7 @@ const createToastColor = (theme: ThemeVariables, color: string) => ({
 export const _colorContrast = (theme: ThemeVariables) => (background: string | ColorType) => colorContrast(
   background,
   theme.colorContrastDark,
-  theme.colorContrastLight, 
+  theme.colorContrastLight,
   theme.minContrastRatio
 )
 
@@ -62,7 +62,7 @@ export const defaultStyle = (
     borderRadius: 8,
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
   }),
-  
+
   buttonColors: _.memoize((color: string) => createNonnullableTextStyle({
     color: theme.colorContrast(color),
     backgroundColor: color,
@@ -71,7 +71,7 @@ export const defaultStyle = (
 
   buttonFocusedColors: _.memoize((color: string) => {
     const _color = theme.colorContrast(color);
-    const _color2 =  _color === _hex(theme.colorContrastLight) ? shadeColor(color, 0.2) : tintColor(color, 0.2);
+    const _color2 = _color === _hex(theme.colorContrastLight) ? shadeColor(color, 0.2) : tintColor(color, 0.2);
     return createNonnullableTextStyle({
       color: _color,
       backgroundColor: _color2,
@@ -92,7 +92,7 @@ export const defaultStyle = (
   modalBackdrop: createViewStyle({
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
   }),
-  
+
   toastColors: {
     success: createToastColor(theme, 'success'),
     info: createToastColor(theme, 'info'),
@@ -132,7 +132,7 @@ export const defaultStyle = (
   formPickerBackdrop: createViewStyle({
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
   }),
-  
+
   formPickerStyle: createTextStyle({
     fontSize: theme.fontSizeBase,
     backgroundColor: theme.colors.light,

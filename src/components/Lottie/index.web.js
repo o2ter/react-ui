@@ -30,79 +30,79 @@ import { View, StyleSheet, Animated } from 'react-native';
 import LottieWeb from 'lottie-web';
 
 const LottieBase = React.forwardRef(({
-    source,
-    style,
-    onLayout,
-    duration = 0,
-    autoPlay = false,
-    loop = true,
-    renderer = 'canvas',
-    preserveAspectRatio,
-    ...props
+  source,
+  style,
+  onLayout,
+  duration = 0,
+  autoPlay = false,
+  loop = true,
+  renderer = 'canvas',
+  preserveAspectRatio,
+  ...props
 }, forwardRef) => {
-    
-    const handleRef = React.useRef();
-    const containerRef = React.useRef();
-    const ref = useMergeRefs(containerRef, forwardRef);
-    const [layout, setLayout] = React.useState({});
-    
-    React.useImperativeHandle(forwardRef, () => ({
-        get currentFrame() { return handleRef.current?.currentFrame },
-        get totalFrames() { return handleRef.current?.totalFrames },
-        get frameRate() { return handleRef.current?.frameRate },
-        get playCount() { return handleRef.current?.playCount },
-        get isPaused() { return handleRef.current?.isPaused },
-        get duration() { return handleRef.current?.getDuration(false) },
-    }));
 
-    const _style = StyleSheet.flatten(style) ?? {};
+  const handleRef = React.useRef();
+  const containerRef = React.useRef();
+  const ref = useMergeRefs(containerRef, forwardRef);
+  const [layout, setLayout] = React.useState({});
 
-    let aspectRatio;
-    let _width = _style.width;
-    let _height = _style.height;
-    
-    if (!_.isNil(source)) {
-        if (!_.isNil(_width) && !_.isNil(_height)) {
-            _width = source.w;
-            _height = source.h;
-        } else if (!_.isNil(_width) || !_.isNil(_height)) {
-            aspectRatio = source.w / source.h;
-        }
+  React.useImperativeHandle(forwardRef, () => ({
+    get currentFrame() { return handleRef.current?.currentFrame },
+    get totalFrames() { return handleRef.current?.totalFrames },
+    get frameRate() { return handleRef.current?.frameRate },
+    get playCount() { return handleRef.current?.playCount },
+    get isPaused() { return handleRef.current?.isPaused },
+    get duration() { return handleRef.current?.getDuration(false) },
+  }));
+
+  const _style = StyleSheet.flatten(style) ?? {};
+
+  let aspectRatio;
+  let _width = _style.width;
+  let _height = _style.height;
+
+  if (!_.isNil(source)) {
+    if (!_.isNil(_width) && !_.isNil(_height)) {
+      _width = source.w;
+      _height = source.h;
+    } else if (!_.isNil(_width) || !_.isNil(_height)) {
+      aspectRatio = source.w / source.h;
     }
-    
-    React.useEffect(() => {
+  }
 
-        const handle = LottieWeb.loadAnimation({
-            container: containerRef.current,
-            animationData: source,
-            renderer: renderer,
-            rendererSettings: { preserveAspectRatio },
-            autoplay: autoPlay,
-            loop,
-        });
+  React.useEffect(() => {
 
-        handleRef.current = handle;
+    const handle = LottieWeb.loadAnimation({
+      container: containerRef.current,
+      animationData: source,
+      renderer: renderer,
+      rendererSettings: { preserveAspectRatio },
+      autoplay: autoPlay,
+      loop,
+    });
 
-        return () => handle.destroy();
+    handleRef.current = handle;
 
-    }, [source]);
-    
-    React.useEffect(() => {
-        
-        const handle = handleRef.current;
-        if (_.isNil(handle) || !handle.isPaused) return;
-        
-        handle.goToAndStop(Math.max(0, Math.min(1, duration)) * handle.getDuration(false) * 1000, false);
-        
-    }, [duration]);
-    
-    React.useEffect(() => { handleRef.current?.resize(); }, [layout.width, layout.height]);
-    
-    return <View
+    return () => handle.destroy();
+
+  }, [source]);
+
+  React.useEffect(() => {
+
+    const handle = handleRef.current;
+    if (_.isNil(handle) || !handle.isPaused) return;
+
+    handle.goToAndStop(Math.max(0, Math.min(1, duration)) * handle.getDuration(false) * 1000, false);
+
+  }, [duration]);
+
+  React.useEffect(() => { handleRef.current?.resize(); }, [layout.width, layout.height]);
+
+  return <View
     ref={ref}
     onLayout={(event) => {
-        setLayout(event.nativeEvent.layout);
-        if (_.isFunction(onLayout)) onLayout(event);
+      setLayout(event.nativeEvent.layout);
+      if (_.isFunction(onLayout)) onLayout(event);
     }}
     style={[{ aspectRatio, width: _width, height: _height }, style]}
     {...props} />;

@@ -31,7 +31,7 @@ function _component_hex(c: number) {
   return hex.length == 1 ? '0' + hex : hex;
 }
 
-export interface ColorType { 
+export interface ColorType {
   r: number;
   g: number;
   b: number;
@@ -49,7 +49,7 @@ export class Color implements ColorType {
       const colorInt = normalizeColor(color);
       color = normalizeColor.rgba(colorInt) as ColorType;
     }
-    
+
     const { r, g, b } = color ?? {};
 
     if (!_.isFinite(r) || !_.isFinite(g) || !_.isFinite(b))

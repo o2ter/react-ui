@@ -49,13 +49,13 @@ export const Segment: React.FC<{
   onPress,
 }) => {
 
-  const _segmentContainerStyle = isSelected ? StyleSheet.compose(segmentContainerStyle, selectedSegmentContainerStyle) : segmentContainerStyle;
-  const _segmentTextStyle = isSelected ? StyleSheet.compose(segmentTextStyle, selectedSegmentTextStyle) : segmentTextStyle;
+    const _segmentContainerStyle = isSelected ? StyleSheet.compose(segmentContainerStyle, selectedSegmentContainerStyle) : segmentContainerStyle;
+    const _segmentTextStyle = isSelected ? StyleSheet.compose(segmentTextStyle, selectedSegmentTextStyle) : segmentTextStyle;
 
-  return <Pressable
-    onPress={onPress}
-    onLayout={onLayout}
-    style={[{ paddingVertical: 8, paddingHorizontal: 16 }, _segmentContainerStyle]}>
+    return <Pressable
+      onPress={onPress}
+      onLayout={onLayout}
+      style={[{ paddingVertical: 8, paddingHorizontal: 16 }, _segmentContainerStyle]}>
       <Text style={_segmentTextStyle}>{_.isString(item) ? item : item.label}</Text>
     </Pressable>
-}
+  }

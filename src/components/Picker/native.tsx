@@ -47,9 +47,9 @@ export const PickerNative = React.forwardRef<RNPicker<ItemValue>, PickerNativePr
   items,
   disabled = false,
   style,
-  onValueChange = () => {},
-  onFocus = () => {},
-  onBlur = () => {},
+  onValueChange = () => { },
+  onFocus = () => { },
+  onBlur = () => { },
 }, forwardRef) => {
 
   const id = React.useMemo(() => uuid.v4(), []);
@@ -63,7 +63,7 @@ export const PickerNative = React.forwardRef<RNPicker<ItemValue>, PickerNativePr
       selectedValue={value}
       onFocus={onFocus}
       onBlur={onBlur}>
-        {_.map(items, (item, index) => <RNPicker.Item key={`${id}-${index}`} {...item} />)}
+      {_.map(items, (item, index) => <RNPicker.Item key={`${id}-${index}`} {...item} />)}
     </RNPicker>
   );
 });

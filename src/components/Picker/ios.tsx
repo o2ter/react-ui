@@ -34,9 +34,9 @@ export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
   disabled = false,
   style,
   renderText = (item) => item?.label,
-  onValueChange = () => {},
-  onFocus = () => {},
-  onBlur = () => {},
+  onValueChange = () => { },
+  onFocus = () => { },
+  onBlur = () => { },
 }, forwardRef) => {
 
   const selected = _.find(items, x => x.value === value);
@@ -55,11 +55,11 @@ export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
         <Text ref={forwardRef} style={style}>{renderText(selected)}</Text>
       </TouchableOpacity>
       <Modal
-      transparent
-      visible={showPicker}
-      animationType='slide'
-      supportedOrientations={['portrait', 'landscape']}
-      onOrientationChange={({ nativeEvent }) => setOrientation(nativeEvent.orientation)}>
+        transparent
+        visible={showPicker}
+        animationType='slide'
+        supportedOrientations={['portrait', 'landscape']}
+        onOrientationChange={({ nativeEvent }) => setOrientation(nativeEvent.orientation)}>
         <TouchableOpacity style={{ flex: 1 }} onPress={() => _setShowPicker(false)} />
         <View style={{
           height: 45,

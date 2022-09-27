@@ -30,26 +30,26 @@ import { List } from '../List';
 import { StickyView } from '../StickyView';
 
 export const SleekAnimationView = React.forwardRef(({
-    backgroundContainerStyle,
-    backgroundStyle,
-    backgroundImages: images = [],
-    resizeMode,
-    children,
-    ...props
+  backgroundContainerStyle,
+  backgroundStyle,
+  backgroundImages: images = [],
+  resizeMode,
+  children,
+  ...props
 }, forwardRef) => {
 
-    return <StickyView
+  return <StickyView
     ref={forwardRef}
     stickyContainerStyle={[{ zIndex: -1 }, backgroundContainerStyle]}
-    stickyView={({factor}) => <List 
-        data={images} 
-        renderItem={({ item, index }) => <Image
-            source={item}
-            style={[{ width: '100%', height: '100%', display: index === Math.min(images.length - 1, Math.floor(factor * images.length)) ? 'flex' : 'none' }, backgroundStyle]}
-            resizeMode={resizeMode} />} />}
+    stickyView={({ factor }) => <List
+      data={images}
+      renderItem={({ item, index }) => <Image
+        source={item}
+        style={[{ width: '100%', height: '100%', display: index === Math.min(images.length - 1, Math.floor(factor * images.length)) ? 'flex' : 'none' }, backgroundStyle]}
+        resizeMode={resizeMode} />} />}
     {...props}>
-        {children}
-    </StickyView>;
+    {children}
+  </StickyView>;
 });
 
 export default SleekAnimationView;

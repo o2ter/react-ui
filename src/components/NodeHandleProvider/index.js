@@ -29,35 +29,35 @@ import { findDOMNode } from 'react-dom';
 
 export class NodeHandleProvider extends React.PureComponent {
 
-    state = {
-        nodeHandle: null,
-    }
-    
-    componentDidMount() {
-        const nodeHandle = findDOMNode(this);
-        this.setState({ nodeHandle: nodeHandle }, () => { 
-            if (_.isFunction(this.props.onChangeHandle)) this.props.onChangeHandle(nodeHandle);
-        });
-    }
+  state = {
+    nodeHandle: null,
+  }
 
-    componentDidUpdate() {
-        const nodeHandle = findDOMNode(this);
-        if (nodeHandle !== this.state.nodeHandle) {
-            this.setState({ nodeHandle: nodeHandle }, () => { 
-                if (_.isFunction(this.props.onChangeHandle)) this.props.onChangeHandle(nodeHandle);
-            });
-        }
+  componentDidMount() {
+    const nodeHandle = findDOMNode(this);
+    this.setState({ nodeHandle: nodeHandle }, () => {
+      if (_.isFunction(this.props.onChangeHandle)) this.props.onChangeHandle(nodeHandle);
+    });
+  }
+
+  componentDidUpdate() {
+    const nodeHandle = findDOMNode(this);
+    if (nodeHandle !== this.state.nodeHandle) {
+      this.setState({ nodeHandle: nodeHandle }, () => {
+        if (_.isFunction(this.props.onChangeHandle)) this.props.onChangeHandle(nodeHandle);
+      });
     }
-    
-    componentWillUnmount() {
-        this.setState({ nodeHandle: null }, () => { 
-            if (_.isFunction(this.props.onChangeHandle)) this.props.onChangeHandle();
-        });
-    }
-    
-    render() {
-        return this.props.children;
-    }
+  }
+
+  componentWillUnmount() {
+    this.setState({ nodeHandle: null }, () => {
+      if (_.isFunction(this.props.onChangeHandle)) this.props.onChangeHandle();
+    });
+  }
+
+  render() {
+    return this.props.children;
+  }
 };
 
 export default NodeHandleProvider;

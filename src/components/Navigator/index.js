@@ -28,29 +28,29 @@ import React from 'react';
 import { BrowserRouter, useRoutes } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 
-export { 
-    useHref,
-    useLocation,
-    useMatch,
-    useNavigate,
-    useParams,
-    useResolvedPath,
-    useLinkClickHandler,
-    Link,
-    NavLink,
+export {
+  useHref,
+  useLocation,
+  useMatch,
+  useNavigate,
+  useParams,
+  useResolvedPath,
+  useLinkClickHandler,
+  Link,
+  NavLink,
 } from 'react-router-dom';
 
 const NavigatorContext = React.createContext();
 
 export const BrowserNavigator = ({ children }) => <BrowserRouter>{children}</BrowserRouter>;
 export const StaticNavigator = ({ location, context, children }) => <NavigatorContext.Provider value={context}>
-    <StaticRouter location={location}>{children}</StaticRouter>
+  <StaticRouter location={location}>{children}</StaticRouter>
 </NavigatorContext.Provider>;
 
 export const useNavigatorContext = () => React.useContext(NavigatorContext);
 
 function invariant(cond, message) {
-    if (!cond) throw new Error(message);
+  if (!cond) throw new Error(message);
 }
 
 export const Route = () => invariant(
@@ -61,80 +61,80 @@ export const Route = () => invariant(
 
 function createRoutesFromChildren(children) {
 
-    const routes = [];
-  
-    React.Children.forEach(children, element => {
+  const routes = [];
 
-        if (!React.isValidElement(element)) return;
-    
-        if (element.type === React.Fragment) {
-            routes.push(createRoutesFromChildren(element.props.children));
-            return;
-        }
-        
-        invariant(
-            element.type === Route,
-            `[${typeof element.type === 'string' ? element.type : element.type.name}] ` +
-            `is not a <Route> component. All component children of <Navigator> must be a <Route> or <React.Fragment>`
-        );
-        
-        const route = { ...element.props };
-        
-        if (element.props.children) {
-            route.children = createRoutesFromChildren(element.props.children);
-        }
-    
-        routes.push(route);
-    });
+  React.Children.forEach(children, element => {
 
-    return _.flattenDeep(routes);
+    if (!React.isValidElement(element)) return;
+
+    if (element.type === React.Fragment) {
+      routes.push(createRoutesFromChildren(element.props.children));
+      return;
+    }
+
+    invariant(
+      element.type === Route,
+      `[${typeof element.type === 'string' ? element.type : element.type.name}] ` +
+      `is not a <Route> component. All component children of <Navigator> must be a <Route> or <React.Fragment>`
+    );
+
+    const route = { ...element.props };
+
+    if (element.props.children) {
+      route.children = createRoutesFromChildren(element.props.children);
+    }
+
+    routes.push(route);
+  });
+
+  return _.flattenDeep(routes);
 }
 
 function RouteObject({ component: Component, statusCode, title, meta = {}, children, ...props }) {
 
-    const NavigatorContext = useNavigatorContext();
+  const NavigatorContext = useNavigatorContext();
 
-    if (NavigatorContext) {
-        for (const [key, value] of Object.entries(props)) {
-            NavigatorContext[key] = value;
-        }
-        NavigatorContext.statusCode = statusCode;
-        NavigatorContext.title = title;
-        NavigatorContext.meta = meta;
+  if (NavigatorContext) {
+    for (const [key, value] of Object.entries(props)) {
+      NavigatorContext[key] = value;
     }
-    
-    if (global.document && _.isString(title)) {
-        document.title = title;
-    }
-    
-    return <Component {...props}>{children}</Component>;
+    NavigatorContext.statusCode = statusCode;
+    NavigatorContext.title = title;
+    NavigatorContext.meta = meta;
+  }
+
+  if (global.document && _.isString(title)) {
+    document.title = title;
+  }
+
+  return <Component {...props}>{children}</Component>;
 }
 
 function routesBuilder(routes) {
-    
-    const result = [];
 
-    for (const route of routes) {
+  const result = [];
 
-        const {
-            caseSensitive,
-            component,
-            path,
-            index,
-            children = [],
-            ...props
-        } = route;
-        
-        result.push({
-            element: !_.isNil(component) ? <RouteObject component={component} {...props} /> : undefined,
-            caseSensitive,
-            path,
-            index,
-            children: routesBuilder(children),
-        });
-    }
-    
-    return result;
+  for (const route of routes) {
+
+    const {
+      caseSensitive,
+      component,
+      path,
+      index,
+      children = [],
+      ...props
+    } = route;
+
+    result.push({
+      element: !_.isNil(component) ? <RouteObject component={component} {...props} /> : undefined,
+      caseSensitive,
+      path,
+      index,
+      children: routesBuilder(children),
+    });
+  }
+
+  return result;
 }
 
 export const Navigator = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));

@@ -27,19 +27,19 @@ import _ from 'lodash';
 import React from 'react';
 
 async function _onRefresh(onRefresh, setRefreshing) {
-    setRefreshing(true);
-    try { await onRefresh() } catch { }
-    setRefreshing(false);
+  setRefreshing(true);
+  try { await onRefresh() } catch { }
+  setRefreshing(false);
 }
 
 export const AsyncRefreshControl = (RefreshControl) => React.forwardRef(({
-    onRefresh,
-    ...props
+  onRefresh,
+  ...props
 }, forwardRef) => {
 
-    const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-    return <RefreshControl
+  return <RefreshControl
     ref={forwardRef}
     refreshing={refreshing}
     onRefresh={() => _onRefresh(onRefresh, setRefreshing)}
