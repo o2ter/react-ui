@@ -52,7 +52,7 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormRadioProps>(
   const iconName = value === _value ? 'radiobox-marked' : 'radiobox-blank';
 
   return (
-    <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange(!value))}>
+    <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange(value))}>
       <Text style={[theme.styles.formRadioStyle, style]}>
         <Icon name={iconName} color={theme.styles.formRadioColor(value === _value)} {...props} />
       </Text>

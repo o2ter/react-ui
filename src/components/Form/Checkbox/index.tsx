@@ -34,25 +34,32 @@ import { MaterialCommunityIcons as Icon } from '../../Icons';
 
 type FormCheckboxProps = Modify<TextProps, {
   name: string | string[];
+  value?: string
 }>
 
 export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProps>(({
   name,
+  value,
   style,
   onPress,
   children,
   ...props
 }, forwardRef) => {
 
-  const { value, onChange } = useField(name);
+  const { value: state, onChange } = useField(name);
   const theme = useTheme();
 
   const iconName = value ? 'checkbox-marked' : 'checkbox-blank-outline';
 
   return (
-    <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange(!value))}>
+    <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange((state: any) => {
+      if (_.isArray(state)) {
+        return state.includes(value) ? state.filter(x => x !== value) : [...state, value];
+      }
+      return !value;
+    }))}>
       <Text style={[theme.styles.formCheckboxStyle, style]}>
-        <Icon name={iconName} color={theme.styles.formCheckboxColor(value)} {...props} />
+        <Icon name={iconName} color={theme.styles.formCheckboxColor(_.isArray(state) ? state.includes(value) : !!state)} {...props} />
       </Text>
     </Pressable>
   )
