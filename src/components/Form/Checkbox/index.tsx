@@ -49,6 +49,7 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProp
   const { value: state, onChange } = useField(name);
   const theme = useTheme();
 
+  const selected = !_.isNil(value) && _.isArray(state) ? state.includes(value) : !!state;
   const iconName = value ? 'checkbox-marked' : 'checkbox-blank-outline';
 
   return (
@@ -59,7 +60,7 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProp
       return !value;
     }))}>
       <Text style={[theme.styles.formCheckboxStyle, style]}>
-        <Icon name={iconName} color={theme.styles.formCheckboxColor(_.isArray(state) ? state.includes(value) : !!state)} {...props} />
+        <Icon name={iconName} color={theme.styles.formCheckboxColor(selected)} {...props} />
       </Text>
     </Pressable>
   )
