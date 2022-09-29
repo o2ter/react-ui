@@ -27,12 +27,12 @@ import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
 import { useCallbackRef } from 'sugax';
-import { ISchema, object, ValidateError } from 'sugax';
+import { ISchema, object } from 'sugax';
 
 type FormState = {
   values: Record<string, any>;
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
-  validate: (value: any, path?: string) => ValidateError[];
+  validate: (value: any, path?: string) => Error[];
   submit: () => void;
   reset: () => void;
 }
@@ -48,7 +48,7 @@ const FormContext = React.createContext<FormState>({
 export const Form: React.FC<{
   schema?: Record<string, ISchema<any, any>>;
   initialValues?: Record<string, any>;
-  validate?: (value: any, path?: string) => ValidateError[];
+  validate?: (value: any, path?: string) => Error[];
   onReset?: (state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
 }> = ({
