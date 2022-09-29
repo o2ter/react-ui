@@ -31,6 +31,7 @@ import { ISchema, object } from 'sugax';
 
 type FormState = {
   values: Record<string, any>;
+  errors: Error[];
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
   validate: (value: any, path?: string) => Error[];
   submit: () => void;
@@ -39,6 +40,7 @@ type FormState = {
 
 const FormContext = React.createContext<FormState>({
   values: {},
+  errors: [],
   setValues: () => { },
   validate: () => [],
   submit: () => { },
@@ -85,6 +87,8 @@ export const Form: React.FC<{
       values, setValues,
 
       validate: _validate,
+
+      get errors() { return _validate(values) },
 
       submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(values, formState); },
 
