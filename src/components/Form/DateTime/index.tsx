@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React, { ComponentRef } from 'react';
 import { TextProps } from 'react-native';
 import { useField } from '../Form';
+import { useTheme } from '../../../theme';
 import { Calendar } from '../../Calendar';
 import { PickerBase } from './picker';
 import { Modify } from '../../../internals/types';
@@ -50,7 +51,8 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
   ...props
 }, forwardRef) => {
 
-  const { value, onChange } = useField(name);
+  const { onChange, error, value } = useField(name);
+  const theme = useTheme();
 
   const date = _.isString(value) ? new Calendar.Date(value) : undefined;
 
@@ -59,6 +61,7 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
       ref={forwardRef}
       disabled={disabled}
       text={date?.toString()}
+      style={[theme.styles.formDateStyle, _.isEmpty(error) ? {} : theme.styles.formDateErrorStyle, style]}
       picker={(
         <Calendar value={value} min={min} max={max} onChange={onChange} style={{
           width: '80%',
