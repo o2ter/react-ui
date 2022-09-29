@@ -34,12 +34,12 @@ export const UncontrolledTextInput = React.forwardRef<TextInput, TextInputProps>
 }, forwardRef) => {
 
   const [text, setText] = React.useState<string | null>(null);
-  
+
   function submit() {
     onChangeText?.(text ?? '');
     setText(null);
   }
-  
+
   return (
     <TextInput
       ref={forwardRef}

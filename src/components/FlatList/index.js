@@ -33,22 +33,22 @@ const FlatListBase = KeyboardAwareScrollable(RNFlatList);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 function array_of(children) {
-    if (_.isNil(children)) return [];
-    if (_.isArray(children)) return children;
-    return [children];
+  if (_.isNil(children)) return [];
+  if (_.isArray(children)) return children;
+  return [children];
 }
 
 export const FlatList = React.forwardRef(({
-    onRefresh,
-    refreshControlProps,
-    children,
-    ...props
+  onRefresh,
+  refreshControlProps,
+  children,
+  ...props
 }, forwardRef) => {
 
-    return <FlatListBase
+  return <FlatListBase
     ref={forwardRef}
     data={array_of(children)}
-    renderItem={({item}) => item}
+    renderItem={({ item }) => item}
     refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
     {...props} />
 });

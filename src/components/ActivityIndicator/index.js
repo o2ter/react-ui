@@ -30,80 +30,80 @@ import uuid from 'react-native-uuid';
 
 import { useTheme } from '../../theme';
 
-const ActivityIndicatorContext = React.createContext({ 
-    setTasks: () => {}, 
-    defaultDelay: 250,
+const ActivityIndicatorContext = React.createContext({
+  setTasks: () => { },
+  defaultDelay: 250,
 });
 
 export function useActivity() {
-    
-    const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
 
-    return async (callback = async () => {}, delay) => {
+  const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
 
-        const id = uuid.v4();
-        
-        let completed = false;
-        const _delay = delay ?? defaultDelay;
-        
-        if (_.isNumber(_delay) && _delay > 0) {
-            setTimeout(() => { if (!completed) setTasks(tasks => [...tasks, id]); }, _delay);
-        } else {
-            setTasks(tasks => [...tasks, id]);
-        }
+  return async (callback = async () => { }, delay) => {
 
-        try {
+    const id = uuid.v4();
 
-            const result = await callback();
+    let completed = false;
+    const _delay = delay ?? defaultDelay;
 
-            completed = true;
-            setTasks(tasks => _.filter(tasks, x => x !== id));
+    if (_.isNumber(_delay) && _delay > 0) {
+      setTimeout(() => { if (!completed) setTasks(tasks => [...tasks, id]); }, _delay);
+    } else {
+      setTasks(tasks => [...tasks, id]);
+    }
 
-            return result;
+    try {
 
-        } catch (e) {
+      const result = await callback();
 
-            completed = true;
-            setTasks(tasks => _.filter(tasks, x => x !== id));
+      completed = true;
+      setTasks(tasks => _.filter(tasks, x => x !== id));
 
-            throw e;
-        }
-    };
+      return result;
+
+    } catch (e) {
+
+      completed = true;
+      setTasks(tasks => _.filter(tasks, x => x !== id));
+
+      throw e;
+    }
+  };
 }
 
-export const ActivityIndicatorProvider = ({ 
-    children,
-    defaultDelay = 250,
-    backdrop = true,
-    passThroughEvents = false,
-    ActivityIndicator = () => <RNActivityIndicator color='white' />,
+export const ActivityIndicatorProvider = ({
+  children,
+  defaultDelay = 250,
+  backdrop = true,
+  passThroughEvents = false,
+  ActivityIndicator = () => <RNActivityIndicator color='white' />,
 }) => {
 
-    const [tasks, setTasks] = React.useState([]);
-    const [visible, setVisible] = React.useState(false);
-    const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const [tasks, setTasks] = React.useState([]);
+  const [visible, setVisible] = React.useState(false);
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
-    const theme = useTheme();
-  
-    React.useEffect(() => {
+  const theme = useTheme();
 
-      setVisible(true);
-      
-      Animated.timing(fadeAnim, {
-        toValue: _.isEmpty(tasks) ? 0 : 1,
-        duration: theme.activityIndicatorDuration,
-        easing: theme.activityIndicatorEasing,
-        useNativeDriver: Platform.OS !== 'web',
-      }).start(() => setVisible(!_.isEmpty(tasks)));
-      
-    }, [_.isEmpty(tasks)]);
-    
-    return <ActivityIndicatorContext.Provider value={{ setTasks, defaultDelay }}>
-      {children}
-      {visible && <Animated.View
+  React.useEffect(() => {
+
+    setVisible(true);
+
+    Animated.timing(fadeAnim, {
+      toValue: _.isEmpty(tasks) ? 0 : 1,
+      duration: theme.activityIndicatorDuration,
+      easing: theme.activityIndicatorEasing,
+      useNativeDriver: Platform.OS !== 'web',
+    }).start(() => setVisible(!_.isEmpty(tasks)));
+
+  }, [_.isEmpty(tasks)]);
+
+  return <ActivityIndicatorContext.Provider value={{ setTasks, defaultDelay }}>
+    {children}
+    {visible && <Animated.View
       pointerEvents={passThroughEvents ? 'none' : 'auto'}
       style={[theme.styles.activityIndicator, StyleSheet.absoluteFill, { opacity: fadeAnim }]}>
-        {backdrop === true ? <View style={theme.styles.activityIndicatorBackdrop}><ActivityIndicator /></View> : <ActivityIndicator />}
-      </Animated.View>}
-    </ActivityIndicatorContext.Provider>;
+      {backdrop === true ? <View style={theme.styles.activityIndicatorBackdrop}><ActivityIndicator /></View> : <ActivityIndicator />}
+    </Animated.View>}
+  </ActivityIndicatorContext.Provider>;
 };

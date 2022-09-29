@@ -34,9 +34,9 @@ export const PickerAndroid = React.forwardRef<Text, PickerNativeProps>(({
   disabled = false,
   style,
   renderText = (item) => item?.label,
-  onValueChange = () => {},
-  onFocus = () => {},
-  onBlur = () => {},
+  onValueChange = () => { },
+  onFocus = () => { },
+  onBlur = () => { },
 }, forwardRef) => {
 
   const selected = _.find(items, x => x.value === value);
@@ -49,13 +49,13 @@ export const PickerAndroid = React.forwardRef<Text, PickerNativeProps>(({
     <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
       <Text ref={forwardRef} style={style}>{renderText(selected)}</Text>
       <PickerNative
-      value={value}
-      items={items}
-      onValueChange={onValueChange}
-      style={[StyleSheet.absoluteFill, {
-        color: 'transparent',
-        opacity: 0,
-      }]} />
+        value={value}
+        items={items}
+        onValueChange={onValueChange}
+        style={[StyleSheet.absoluteFill, {
+          color: 'transparent',
+          opacity: 0,
+        }]} />
     </TouchableOpacity>
   )
 });

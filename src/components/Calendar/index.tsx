@@ -93,21 +93,21 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
       <View style={{ padding: 8, flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
           <Picker
-          value={month_name[current.month - 1]}
-          items={month_name.map(x => ({ label: locale.string(`calendar.months.${x}`), value: x }))}
-          onValueChange={(_value, index) => setCurrent(current => ({ ...current, month: index + 1 }))}
-          style={{ fontSize: theme.fontSizeBase * 1.5 }} />
+            value={month_name[current.month - 1]}
+            items={month_name.map(x => ({ label: locale.string(`calendar.months.${x}`), value: x }))}
+            onValueChange={(_value, index) => setCurrent(current => ({ ...current, month: index + 1 }))}
+            style={{ fontSize: theme.fontSizeBase * 1.5 }} />
           <UncontrolledTextInput
-          selectTextOnFocus
-          keyboardType='number-pad'
-          value={`${current.year}`}
-          onChangeText={(text) => {
-            try {
-              const year = parseInt(text);
-              if (year >= 1970 && year < 9999) setCurrent(current => ({ ...current, year }));
-            } catch {}
-          }}
-          style={{ paddingLeft: 8, fontSize: theme.fontSizeBase }} />
+            selectTextOnFocus
+            keyboardType='number-pad'
+            value={`${current.year}`}
+            onChangeText={(text) => {
+              try {
+                const year = parseInt(text);
+                if (year >= 1970 && year < 9999) setCurrent(current => ({ ...current, year }));
+              } catch { }
+            }}
+            style={{ paddingLeft: 8, fontSize: theme.fontSizeBase }} />
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Pressable onPress={() => {

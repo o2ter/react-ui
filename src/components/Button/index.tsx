@@ -48,43 +48,43 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 type ButtonProps = Modify<PressableProps, Partial<{
   variant: string;
   outline: boolean;
-	title: string;
+  title: string;
   style: StyleProp<ViewStyle>;
-	titleStyle: StyleProp<TextStyle>;
-	onHoverIn: (event: GestureResponderEvent) => void;
-	onHoverOut: (event: GestureResponderEvent) => void;
+  titleStyle: StyleProp<TextStyle>;
+  onHoverIn: (event: GestureResponderEvent) => void;
+  onHoverOut: (event: GestureResponderEvent) => void;
 }>>
 
 export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   variant = 'primary',
   outline = false,
-	title,
-	style,
-	titleStyle,
-	disabled,
-	focusable,
-	children,
-	onHoverIn,
-	onHoverOut,
-	onPressIn,
-	onPressOut,
-	...props
+  title,
+  style,
+  titleStyle,
+  disabled,
+  focusable,
+  children,
+  onHoverIn,
+  onHoverOut,
+  onPressIn,
+  onPressOut,
+  ...props
 }, forwardRef) => {
 
   const [focused, setFocused] = React.useState({ hover: false, press: false });
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
-    
+
     Animated.timing(fadeAnim, {
       toValue: focused.hover || focused.press ? 1 : 0,
       duration: theme.buttonDuration,
       easing: theme.buttonEasing,
       useNativeDriver: false,
     }).start();
-    
+
   }, [focused.hover || focused.press]);
-  
+
   const theme = useTheme();
   const selectedColor = theme.colors[variant];
 
@@ -100,7 +100,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
 
   const defaultStyle = StyleSheet.flatten([theme.styles.buttonStyle, colors]);
 
-	const content = _.isEmpty(children) && !_.isEmpty(title) ? (
+  const content = _.isEmpty(children) && !_.isEmpty(title) ? (
     <Animated.Text style={[_.pick(defaultStyle, text_style), titleStyle]}>{title}</Animated.Text>
   ) : children;
 
@@ -117,23 +117,23 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     },
     default: {},
   });
-  
+
   return (
     <AnimatedPressable
-    ref={forwardRef}
-    disabled={disabled}
-    focusable={!disabled && focusable !== false}
-    style={[_.omit(defaultStyle, text_style), style]}
-    onPressIn={(e: GestureResponderEvent) => {
-      setFocused(state => ({ ...state, press: true }));
-      if (_.isFunction(onPressIn)) onPressIn(e);
-    }}
-    onPressOut={(e: GestureResponderEvent) => {
-      setFocused(state => ({ ...state, press: false }));
-      if (_.isFunction(onPressOut)) onPressOut(e);
-    }}
-    {...callbacks} {...props}>
-		  {content}
+      ref={forwardRef}
+      disabled={disabled}
+      focusable={!disabled && focusable !== false}
+      style={[_.omit(defaultStyle, text_style), style]}
+      onPressIn={(e: GestureResponderEvent) => {
+        setFocused(state => ({ ...state, press: true }));
+        if (_.isFunction(onPressIn)) onPressIn(e);
+      }}
+      onPressOut={(e: GestureResponderEvent) => {
+        setFocused(state => ({ ...state, press: false }));
+        if (_.isFunction(onPressOut)) onPressOut(e);
+      }}
+      {...callbacks} {...props}>
+      {content}
     </AnimatedPressable>
   );
 })

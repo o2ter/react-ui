@@ -29,7 +29,7 @@ import { View, Modal as RNModal, Pressable, StyleSheet, Keyboard } from 'react-n
 
 import { useTheme } from '../../theme';
 
-const ModalContext = React.createContext((element: any | undefined) => {});
+const ModalContext = React.createContext((element: any | undefined) => { });
 
 export const useModal = () => React.useContext(ModalContext);
 
@@ -38,25 +38,25 @@ export const ModalProvider: React.FC<{
   keyboardDismissMode?: 'none' | 'interactive';
   animationType?: 'none' | 'slide' | 'fade';
 }> = ({
-    backdrop = true,
-    animationType = 'none',
-    keyboardDismissMode = 'interactive',
-    children,
+  backdrop = true,
+  animationType = 'none',
+  keyboardDismissMode = 'interactive',
+  children,
 }) => {
-    
+
     const [modal, setModal] = React.useState<any | undefined>();
     const theme = useTheme();
-    
+
     return <ModalContext.Provider value={setModal}>
       {children}
       <RNModal visible={React.isValidElement(modal)} transparent animationType={animationType}>
         <Pressable
-        onPress={() => { if (keyboardDismissMode === 'interactive') Keyboard.dismiss() }}
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+          onPress={() => { if (keyboardDismissMode === 'interactive') Keyboard.dismiss() }}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
           {backdrop === true && <Pressable
             onPress={() => setModal(undefined)}
             style={[
@@ -67,4 +67,4 @@ export const ModalProvider: React.FC<{
         </Pressable>
       </RNModal>
     </ModalContext.Provider>;
-};
+  };

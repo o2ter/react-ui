@@ -53,9 +53,9 @@ export default React.forwardRef<ComponentRef<typeof Button>, FormButtonProps>(({
 
   return (
     <Button
-    ref={forwardRef}
-    title={_.upperFirst(action)}
-    {..._.get(defaultProps, action, {})}
-    {...props} />
+      ref={forwardRef}
+      title={_.upperFirst(action)}
+      {..._.get(defaultProps, action, {})}
+      {...props} />
   );
 });

@@ -28,18 +28,18 @@ import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
 export const Touchable = React.forwardRef(({
-    onDragStart,
-    onDragEnd,
-    onDrop,
-    onDragIn,
-    onDragOver,
-    onDragOut,
-    onHoverIn,
-    onHoverOut,
-    children,
-    ...props
+  onDragStart,
+  onDragEnd,
+  onDrop,
+  onDragIn,
+  onDragOver,
+  onDragOut,
+  onHoverIn,
+  onHoverOut,
+  children,
+  ...props
 }, forwardRef) => {
-    return <TouchableWithoutFeedback ref={forwardRef} {...props}>{children}</TouchableWithoutFeedback>;
+  return <TouchableWithoutFeedback ref={forwardRef} {...props}>{children}</TouchableWithoutFeedback>;
 });
 
 export default Touchable;

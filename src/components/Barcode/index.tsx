@@ -44,51 +44,51 @@ type BarcodeProps = Modify<SvgProps, {
 }>
 
 export const Barcode = React.forwardRef<Svg, BarcodeProps>(({
-    value = '',
-    format = 'CODE128',
-    options = {},
-    color = 'black',
-    backgroundColor,
-    ...props
+  value = '',
+  format = 'CODE128',
+  options = {},
+  color = 'black',
+  backgroundColor,
+  ...props
 }, forwardRef) => {
-    
-    const { rects, size } = React.useMemo(() => {
-        
-        const rects = [];
-        let last_char;
-        let start = 0;
-        let end = 0;
-        
-        try {
-            
-            const encoder = new barcodes[format](value, options);
-            const encoded = encoder.encode();
-            
-            for (const char of encoded.data) {
-                if (last_char != char) {
-                    if (last_char == '1') {
-                        rects.push({ x: start, width: end - start });
-                    }
-                    start = end;
-                    last_char = char;
-                }
-                end += 1;
-            }
-            
-            if (last_char == '1') {
-                rects.push({ x: start, width: end - start });
-            }
-            
-        } catch { }
-        
-        return { rects, size: end };
-        
-    }, [value, format, options]);
-    
-    return <Svg ref={forwardRef} viewBox={`0 0 ${size} 100`} preserveAspectRatio='none' {...props}>
-        {backgroundColor && <Rect x={0} y={0} width={size} height={100} fill={backgroundColor} />}
-        <List data={rects} renderItem={({item}) => <Rect y={0} height={100} fill={color} {...item} />} />
-    </Svg>;
+
+  const { rects, size } = React.useMemo(() => {
+
+    const rects = [];
+    let last_char;
+    let start = 0;
+    let end = 0;
+
+    try {
+
+      const encoder = new barcodes[format](value, options);
+      const encoded = encoder.encode();
+
+      for (const char of encoded.data) {
+        if (last_char != char) {
+          if (last_char == '1') {
+            rects.push({ x: start, width: end - start });
+          }
+          start = end;
+          last_char = char;
+        }
+        end += 1;
+      }
+
+      if (last_char == '1') {
+        rects.push({ x: start, width: end - start });
+      }
+
+    } catch { }
+
+    return { rects, size: end };
+
+  }, [value, format, options]);
+
+  return <Svg ref={forwardRef} viewBox={`0 0 ${size} 100`} preserveAspectRatio='none' {...props}>
+    {backgroundColor && <Rect x={0} y={0} width={size} height={100} fill={backgroundColor} />}
+    <List data={rects} renderItem={({ item }) => <Rect y={0} height={100} fill={color} {...item} />} />
+  </Svg>;
 });
 
 export default Barcode;

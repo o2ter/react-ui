@@ -57,13 +57,13 @@ export const ThemeProvider = ({
 };
 
 export function useTheme() {
-  
+
   const { variables, styles } = React.useContext(ThemeContext);
-  
+
   return React.useMemo(() => {
 
     let computed_style: ThemeStyles;
-    
+
     const computed = _.assign({
       get colorContrast() { return _colorContrast(computed) },
       get styles() {
@@ -73,6 +73,6 @@ export function useTheme() {
     }, defaultVariables, variables);
 
     return computed;
-    
+
   }, [variables, styles]);
 }

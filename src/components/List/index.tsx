@@ -33,7 +33,7 @@ type ListProps<T> = {
 
 export const List = <T extends any>({
   data,
-  renderItem = ({item}) => item
+  renderItem = ({ item }) => item
 }: ListProps<T>) => React.createElement(React.Fragment, {}, ..._.map(data, (item, index) => renderItem({ item, index })));
 
 export default List;

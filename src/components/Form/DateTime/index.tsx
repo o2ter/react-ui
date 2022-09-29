@@ -50,22 +50,22 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
   ...props
 }, forwardRef) => {
 
-  const { value, error, onChange } = useField(name);
+  const { value, onChange } = useField(name);
 
   const date = _.isString(value) ? new Calendar.Date(value) : undefined;
 
   return (
     <PickerBase
-    ref={forwardRef}
-    disabled={disabled}
-    text={date?.toString()}
-    picker={(
-      <Calendar value={value} min={min} max={max} onChange={onChange} style={{
-        width: '80%',
-        maxWidth: 350,
-        backgroundColor: 'white',
-      }} />
-    )}
-    {...props} />
+      ref={forwardRef}
+      disabled={disabled}
+      text={date?.toString()}
+      picker={(
+        <Calendar value={value} min={min} max={max} onChange={onChange} style={{
+          width: '80%',
+          maxWidth: 350,
+          backgroundColor: 'white',
+        }} />
+      )}
+      {...props} />
   )
 });

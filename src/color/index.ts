@@ -98,7 +98,7 @@ export function colorContrast(
       maxRatioColor = color;
     }
   }
-  
+
   return _hex(maxRatioColor ?? background);
 }
 
