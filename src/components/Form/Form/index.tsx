@@ -27,12 +27,12 @@ import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
 import { useCallbackRef } from 'sugax';
-import { AnySchema, object } from 'yup';
+import { ISchema, object, ValidateError } from 'sugax';
 
 type FormState = {
   values: Record<string, any>;
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
-  validate: (value: any, path?: string) => Error | void;
+  validate: (value: any, path?: string) => ValidateError[];
   submit: () => void;
   reset: () => void;
 }
@@ -40,20 +40,20 @@ type FormState = {
 const FormContext = React.createContext<FormState>({
   values: {},
   setValues: () => { },
-  validate: () => { },
+  validate: () => [],
   submit: () => { },
   reset: () => { },
 });
 
 export const Form: React.FC<{
-  schema?: Record<string, AnySchema>;
+  schema?: Record<string, ISchema<any, any>>;
   initialValues?: Record<string, any>;
-  validate?: (value: any, path?: string) => Error | void;
+  validate?: (value: any, path?: string) => ValidateError[];
   onReset?: (state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
 }> = ({
   schema = {},
-  initialValues = object(schema).getDefault(),
+  initialValues = object(schema).getDefault() ?? {},
   validate,
   onReset = () => { },
   onSubmit = () => { },
@@ -68,14 +68,16 @@ export const Form: React.FC<{
     const _schema = React.useMemo(() => object(schema), [schema]);
 
     const _validate = React.useMemo(() => validate ?? ((value: any, path?: string) => {
-      try {
-        if (_.isString(path)) {
-          _schema.validateSyncAt(path, value);
-        }
-        _schema.validateSync(value);
-      } catch (error) {
-        return error as Error;
+      
+      const errors = _.memoize(_schema.validate)(value);
+      
+      if (_.isString(path)) {
+        const prefix = _.toPath(path).join('.');
+        return errors.filter(e => e.path.join('.').startsWith(prefix));
       }
+      
+      return errors;
+
     }), [_schema, validate]);
 
     const formState = React.useMemo(() => ({
@@ -91,7 +93,7 @@ export const Form: React.FC<{
         if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
       },
 
-    }), [values, setValues, _schema]);
+    }), [values, setValues, _validate]);
 
     return <FormContext.Provider value={formState}>
       {children}

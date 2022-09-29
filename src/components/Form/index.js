@@ -23,7 +23,6 @@
 //  THE SOFTWARE.
 //
 
-import './yup/config';
 import _ from 'lodash';
 import { useField, useForm, Form as FormBase } from './Form';
 import { useFormGroup, FormGroup } from './Group';

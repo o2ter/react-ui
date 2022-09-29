@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import React from 'react';
 
-import { string, object } from 'yup';
+import { string, object } from 'sugax';
 import { Form } from '../src/components/Form';
 
 export default {

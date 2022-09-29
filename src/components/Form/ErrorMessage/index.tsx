@@ -26,12 +26,9 @@
 import _ from 'lodash';
 import React from 'react';
 import { Text, TextProps } from 'react-native';
-import { LocalizationStrings } from 'sugax';
+import { useLocalize } from 'sugax';
 import { useField } from '../Form';
 import { Modify } from '../../../internals/types';
-
-import locales from '../locales';
-const strings = LocalizationStrings(locales);
 
 type FormErrorMessageProps = Modify<TextProps, {
   name: string | string[];
@@ -43,13 +40,15 @@ export default React.forwardRef<Text, FormErrorMessageProps>(({
 }, forwardRef) => {
 
   const { error } = useField(name);
-  const localize = strings.useLocalize();
 
-  console.log(error)
+  const path = _.toPath(name);
+  const _error = error.find(x => _.isEqual(x.path, path)) ?? _.first(error);
+
+  const message = useLocalize(_error?.locales ?? {});
 
   return (
     <React.Fragment>
-      {!_.isNil(null) && <Text ref={forwardRef} {...props}></Text>}
+      {!_.isNil(null) && <Text ref={forwardRef} {...props}>{message}</Text>}
     </React.Fragment>
   );
 });
