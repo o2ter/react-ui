@@ -30,7 +30,6 @@ import { useCallbackRef } from 'sugax';
 import { ISchema, object } from 'sugax';
 
 type FormState = {
-  schema?: ISchema<Record<string, any>, any>;
   values: Record<string, any>;
   errors: Error[];
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
@@ -63,49 +62,47 @@ export const Form: React.FC<{
   children
 }) => {
 
-    const [values, setValues] = React.useState(initialValues);
+  const [values, setValues] = React.useState(initialValues);
 
-    const onResetRef = useCallbackRef(onReset);
-    const onSubmitRef = useCallbackRef(onSubmit);
+  const onResetRef = useCallbackRef(onReset);
+  const onSubmitRef = useCallbackRef(onSubmit);
 
-    const _schema = React.useMemo(() => object(schema), [schema]);
+  const _schema = React.useMemo(() => object(schema), [schema]);
 
-    const _validate = React.useMemo(() => validate ?? ((value: any, path?: string) => {
+  const _validate = React.useMemo(() => validate ?? ((value: any, path?: string) => {
 
-      const errors = _.memoize(_schema.validate)(value);
+    const errors = _.memoize(_schema.validate)(value);
 
-      if (_.isString(path)) {
-        const prefix = _.toPath(path).join('.');
-        return errors.filter(e => e.path.join('.').startsWith(prefix));
-      }
+    if (_.isString(path)) {
+      const prefix = _.toPath(path).join('.');
+      return errors.filter(e => e.path.join('.').startsWith(prefix));
+    }
 
-      return errors;
+    return errors;
 
-    }), [_schema, validate]);
+  }), [_schema, validate]);
 
-    const formState = React.useMemo(() => ({
+  const formState = React.useMemo(() => ({
 
-      schema: _schema,
+    values, setValues,
 
-      values, setValues,
+    validate: _validate,
 
-      validate: _validate,
+    get errors() { return _validate(values) },
 
-      get errors() { return _validate(values) },
+    submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(_schema.cast(values), formState); },
 
-      submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(_schema.cast(values), formState); },
+    reset: () => {
+      setValues(initialValues);
+      if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
+    },
 
-      reset: () => {
-        setValues(initialValues);
-        if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
-      },
+  }), [values, setValues, _validate]);
 
-    }), [values, setValues, _validate]);
-
-    return <FormContext.Provider value={formState}>
-      {children}
-    </FormContext.Provider>;
-  };
+  return <FormContext.Provider value={formState}>
+    {children}
+  </FormContext.Provider>;
+};
 
 export const useForm = () => ({
   ...React.useContext(FormContext),
