@@ -48,7 +48,7 @@ export default React.forwardRef<TextInput, FormTextInputProps>(({
       ref={forwardRef}
       value={value}
       onChangeText={onChange}
-      style={[theme.styles.formTextFieldStyle, _.isEmpty(error) ? theme.styles.formTextFieldErrorStyle : {}, style]}
+      style={[theme.styles.formTextFieldStyle, _.isEmpty(error) ? {} : theme.styles.formTextFieldErrorStyle, style]}
       {...props} />
   );
 });

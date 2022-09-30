@@ -49,7 +49,7 @@ export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
       ref={forwardRef}
       value={value}
       onValueChange={onChange}
-      style={[theme.styles.formPickerStyle, _.isEmpty(error) ? theme.styles.formPickerErrorStyle : {}, style]}
+      style={[theme.styles.formPickerStyle, _.isEmpty(error) ? {} : theme.styles.formPickerErrorStyle, style]}
       {...props} />
   )
 });
