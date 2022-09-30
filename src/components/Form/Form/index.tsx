@@ -26,8 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
-import { useCallbackRef } from 'sugax';
-import { ISchema, object } from 'sugax';
+import { useCallbackRef, ISchema, object } from 'sugax';
 
 type FormState = {
   values: Record<string, any>;
