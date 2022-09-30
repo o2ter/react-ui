@@ -30,6 +30,7 @@ import { useCallbackRef } from 'sugax';
 import { ISchema, object } from 'sugax';
 
 type FormState = {
+  schema?: ISchema<Record<string, any>, any>;
   values: Record<string, any>;
   errors: Error[];
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
@@ -70,19 +71,21 @@ export const Form: React.FC<{
     const _schema = React.useMemo(() => object(schema), [schema]);
 
     const _validate = React.useMemo(() => validate ?? ((value: any, path?: string) => {
-      
+
       const errors = _.memoize(_schema.validate)(value);
-      
+
       if (_.isString(path)) {
         const prefix = _.toPath(path).join('.');
         return errors.filter(e => e.path.join('.').startsWith(prefix));
       }
-      
+
       return errors;
 
     }), [_schema, validate]);
 
     const formState = React.useMemo(() => ({
+
+      schema: _schema,
 
       values, setValues,
 
@@ -90,7 +93,7 @@ export const Form: React.FC<{
 
       get errors() { return _validate(values) },
 
-      submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(values, formState); },
+      submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(_schema.cast(values), formState); },
 
       reset: () => {
         setValues(initialValues);
