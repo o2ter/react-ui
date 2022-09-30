@@ -43,7 +43,7 @@ export const UncontrolledTextInput = React.forwardRef<TextInput, TextInputProps>
   return (
     <TextInput
       ref={forwardRef}
-      value={text ?? value}
+      value={text ?? value ?? ''}
       onFocus={() => setText(value ?? '')}
       onChangeText={setText}
       onBlur={() => submit()}
