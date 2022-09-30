@@ -40,10 +40,10 @@ type FormState = {
 const FormContext = React.createContext<FormState>({
   values: {},
   errors: [],
-  setValues: () => { },
+  setValues: () => {},
   validate: () => [],
-  submit: () => { },
-  reset: () => { },
+  submit: () => {},
+  reset: () => {},
 });
 
 export const Form: React.FC<{
@@ -56,8 +56,8 @@ export const Form: React.FC<{
   schema = {},
   initialValues = object(schema).getDefault() ?? {},
   validate,
-  onReset = () => { },
-  onSubmit = () => { },
+  onReset = () => {},
+  onSubmit = () => {},
   children
 }) => {
 

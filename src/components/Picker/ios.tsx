@@ -34,9 +34,9 @@ export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
   disabled = false,
   style,
   renderText = (item) => item?.label,
-  onValueChange = () => { },
-  onFocus = () => { },
-  onBlur = () => { },
+  onValueChange = () => {},
+  onFocus = () => {},
+  onBlur = () => {},
 }, forwardRef) => {
 
   const selected = _.find(items, x => x.value === value);

@@ -45,9 +45,9 @@ export const PickerWeb = React.forwardRef<ComponentRef<typeof PickerNative>, Pic
   disabled = false,
   style,
   renderText = (item) => item?.label,
-  onValueChange = () => { },
-  onFocus = () => { },
-  onBlur = () => { },
+  onValueChange = () => {},
+  onFocus = () => {},
+  onBlur = () => {},
 }, forwardRef) => (
   <PickerNative
     ref={forwardRef}

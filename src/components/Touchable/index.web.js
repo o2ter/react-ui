@@ -50,7 +50,7 @@ function registerEventListener(nodeHandle, event, callback) {
   }, [nodeHandle, event, callback]);
 }
 
-const empty_function = () => { };
+const empty_function = () => {};
 
 export const Touchable = React.forwardRef(({
   onDragStart,

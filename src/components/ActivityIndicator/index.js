@@ -31,7 +31,7 @@ import uuid from 'react-native-uuid';
 import { useTheme } from '../../theme';
 
 const ActivityIndicatorContext = React.createContext({
-  setTasks: () => { },
+  setTasks: () => {},
   defaultDelay: 250,
 });
 
@@ -39,7 +39,7 @@ export function useActivity() {
 
   const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
 
-  return async (callback = async () => { }, delay) => {
+  return async (callback = async () => {}, delay) => {
 
     const id = uuid.v4();
 
