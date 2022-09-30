@@ -51,7 +51,7 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
   ...props
 }, forwardRef) => {
 
-  const { onChange, error, value } = useField(name);
+  const { value, error, onChange } = useField(name);
   const theme = useTheme();
 
   const date = _.isString(value) ? new Calendar.Date(value) : undefined;
