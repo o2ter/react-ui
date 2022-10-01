@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,13 +24,19 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import React, { ComponentRef } from 'react';
+import { Text, TextProps, StyleProp, TextStyle, StyleSheet } from 'react-native';
 import * as Icons from '../Icons';
-
+import { Modify } from '../../internals/types';
 import { text_style } from '../../internals/text_style';
 
-export const Icon = React.forwardRef(({
+type IconProps = Modify<TextProps, {
+  icon: keyof typeof Icons;
+  name: string;
+  iconStyle?: StyleProp<TextStyle>;
+}>
+
+export const Icon = React.forwardRef<ComponentRef<typeof Text>, IconProps>(({
   icon,
   name,
   style,
