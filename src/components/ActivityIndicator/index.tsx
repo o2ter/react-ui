@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -30,16 +30,21 @@ import uuid from 'react-native-uuid';
 
 import { useTheme } from '../../theme';
 
-const ActivityIndicatorContext = React.createContext({
+type TaskId = ReturnType<typeof uuid.v4>;
+
+const ActivityIndicatorContext = React.createContext<{
+  setTasks: React.Dispatch<React.SetStateAction<(string | number[])[]>>;
+  defaultDelay: number;
+}>({
   setTasks: () => {},
   defaultDelay: 250,
 });
 
-export function useActivity() {
+export const useActivity = () => {
 
   const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
 
-  return async (callback = async () => {}, delay) => {
+  return async <T extends unknown>(callback: () => T, delay: number) => {
 
     const id = uuid.v4();
 
@@ -71,7 +76,12 @@ export function useActivity() {
   };
 }
 
-export const ActivityIndicatorProvider = ({
+export const ActivityIndicatorProvider: React.FC<{
+  defaultDelay?: number;
+  backdrop?: boolean;
+  passThroughEvents?: boolean;
+  ActivityIndicator?: () => JSX.Element;
+}> = ({
   children,
   defaultDelay = 250,
   backdrop = true,
@@ -79,7 +89,7 @@ export const ActivityIndicatorProvider = ({
   ActivityIndicator = () => <RNActivityIndicator color='white' />,
 }) => {
 
-  const [tasks, setTasks] = React.useState([]);
+  const [tasks, setTasks] = React.useState<TaskId[]>([]);
   const [visible, setVisible] = React.useState(false);
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
