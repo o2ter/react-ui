@@ -1,5 +1,5 @@
 //
-//  ImageBase.web.js
+//  ImageBase.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,8 +24,24 @@
 //
 
 import _ from 'lodash';
-import { Image } from 'react-native';
+import React from 'react';
+import { Image, ImageProps, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
-export const ImageBase = Image;
+const _FastImage = FastImage as any;
+
+export const ImageBase = React.forwardRef<Image, ImageProps>((
+  props,
+  forwardRef
+) => {
+
+  const _style = StyleSheet.flatten(props.style);
+
+  if (_style.width && _style.height) {
+    if (!_.isNumber(props.blurRadius) || props.blurRadius <= 0)
+      return <_FastImage ref={forwardRef} {...props} />;
+  }
+  return <Image ref={forwardRef} {...props} />;
+});
 
 export default ImageBase;

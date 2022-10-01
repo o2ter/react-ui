@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,11 +24,16 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { Image as RNImage, StyleSheet } from 'react-native';
+import React, { ComponentRef } from 'react';
+import { Image as RNImage, ImageProps as RNImageProps, ImageURISource, ImageRequireSource, StyleSheet } from 'react-native';
 import ImageBase from './ImageBase';
+import { Modify } from '../../internals/types';
 
-export const Image = React.forwardRef(({
+type ImageProps = Modify<RNImageProps, {
+  source: ImageURISource | ImageRequireSource;
+}>
+
+export const Image = React.forwardRef<ComponentRef<typeof ImageBase>, ImageProps>(({
   source,
   style,
   ...props
@@ -44,10 +49,10 @@ export const Image = React.forwardRef(({
   const [imageSize, setImageSize] = React.useState({ width: _source?.width ?? 0, height: _source?.height ?? 0 });
 
   React.useEffect(() => {
-    if (_.isString(source?.uri)) {
+    if (!_.isNumber(source) && _.isString(source?.uri)) {
       RNImage.getSize(source.uri, (width, height) => setImageSize({ width, height }));
     }
-  }, [source?.uri]);
+  }, [!_.isNumber(source) && source?.uri]);
 
   let aspectRatio;
   let _width = width;
@@ -62,12 +67,16 @@ export const Image = React.forwardRef(({
       aspectRatio = imageSize.width / imageSize.height;
     }
 
-    if (props.blurRadius > 0 && _.isNumber(_width)) {
+    if (_.isNumber(props.blurRadius) && props.blurRadius > 0 && _.isNumber(_width)) {
       props.blurRadius = props.blurRadius * imageSize.width / _width;
     }
   }
 
-  return <ImageBase ref={forwardRef} source={source} style={[{ width: _width, height: _height, aspectRatio }, _style]} {...props} />;
+  return <ImageBase
+    ref={forwardRef}
+    source={source}
+    style={[{ width: _width, height: _height, aspectRatio }, _style]}
+    {...props} />;
 });
 
 export default Image;
