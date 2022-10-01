@@ -1,6 +1,6 @@
 
 import _ from 'lodash';
-import React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 
 import { Button } from '../src/components/Button';
 import * as colors from '../src/theme/variables/colors';
@@ -13,14 +13,18 @@ export default {
   },
 };
 
-export const Solid = (props) => <Button {...props} />;
+export const Solid = (
+  props: ComponentPropsWithoutRef<typeof Button>
+) => <Button {...props} />;
 Solid.args = {
   title: 'Button',
   variant: 'primary',
   outline: false,
 };
 
-export const Outline = (props) => <Button {...props} />;
+export const Outline = (
+  props: ComponentPropsWithoutRef<typeof Button>
+) => <Button {...props} />;
 Outline.args = {
   title: 'Button',
   variant: 'primary',
