@@ -24,22 +24,42 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { ScrollView as RNScrollView, RefreshControl as RNRefreshControl } from 'react-native';
+import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import {
+  ScrollView as RNScrollView,
+  ScrollViewProps as RNScrollViewProps,
+  ScrollViewBase as RNScrollViewBase,
+  RefreshControl as RNRefreshControl,
+  NativeScrollSize,
+  LayoutRectangle,
+  NativeScrollEvent,
+} from 'react-native';
 import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
+import { Modify } from '../../internals/types';
 import { useMergeRefs } from 'sugax';
 
-const ScrollViewBase = KeyboardAwareScrollable(RNScrollView);
+const ScrollViewBase: typeof RNScrollViewBase = KeyboardAwareScrollable(RNScrollView);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
-const ScrollViewContext = React.createContext({ current: null });
+type ScrollViewRef = ComponentRef<typeof ScrollViewBase>;
+
+const ScrollViewContext = React.createContext<React.MutableRefObject<ScrollViewRef | undefined>>({ current: undefined });
 export const useScrollView = () => React.useContext(ScrollViewContext);
 
-const ScrollLayoutContext = React.createContext({ current: null });
+const ScrollLayoutContext = React.createContext<Modify<Partial<NativeScrollEvent>, {
+  layoutMeasurement?: LayoutRectangle;
+  horizontal?: boolean | null;
+}>>({});
+
 export const useScrollLayout = () => React.useContext(ScrollLayoutContext);
 
-export const ScrollView = React.forwardRef(({
+type ScrollViewProps = Modify<RNScrollViewProps, {
+  onRefresh?: () => Promise<void>;
+  refreshControlProps: ComponentPropsWithoutRef<typeof RefreshControl>;
+}>
+
+export const ScrollView = React.forwardRef<ScrollViewRef, ScrollViewProps>(({
   onRefresh,
   onLayout,
   onContentSizeChange,
@@ -51,14 +71,19 @@ export const ScrollView = React.forwardRef(({
   ...props
 }, forwardRef) => {
 
-  const scrollViewRef = React.useRef();
+  const scrollViewRef = React.useRef<ScrollViewRef>();
   const ref = useMergeRefs(scrollViewRef, forwardRef);
 
-  const [layoutMeasurement, setLayout] = React.useState();
-  const [contentSize, setContentSize] = React.useState();
-  const [scroll, setScroll] = React.useState();
+  const [layoutMeasurement, setLayout] = React.useState<LayoutRectangle>();
+  const [contentSize, setContentSize] = React.useState<NativeScrollSize>();
+  const [scroll, setScroll] = React.useState<NativeScrollEvent>();
 
-  const scrollLayout = React.useMemo(() => ({ ...scroll, layoutMeasurement, contentSize, horizontal }), [layoutMeasurement, contentSize, scroll, horizontal])
+  const scrollLayout = React.useMemo(() => ({
+    ...scroll,
+    layoutMeasurement,
+    contentSize,
+    horizontal,
+  }), [layoutMeasurement, contentSize, scroll, horizontal])
 
   return <ScrollViewBase
     ref={ref}
@@ -67,7 +92,7 @@ export const ScrollView = React.forwardRef(({
       if (_.isFunction(onLayout)) onLayout(event);
     }}
     onContentSizeChange={(width, height) => {
-      setContentSize(width, height);
+      setContentSize({ width, height });
       if (_.isFunction(onContentSizeChange)) onContentSizeChange(width, height);
     }}
     onScroll={(event) => {
@@ -76,7 +101,7 @@ export const ScrollView = React.forwardRef(({
     }}
     horizontal={horizontal}
     scrollEventThrottle={scrollEventThrottle}
-    refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
+    refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : undefined}
     {...props}>
     <ScrollViewContext.Provider value={scrollViewRef}><ScrollLayoutContext.Provider value={scrollLayout}>
       {children}

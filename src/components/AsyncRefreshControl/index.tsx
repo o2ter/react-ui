@@ -24,15 +24,26 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
+import React, { ComponentRef } from 'react';
+import { RefreshControlBase, RefreshControlProps } from 'react-native';
+import { Modify } from '../../internals/types';
 
-async function _onRefresh(onRefresh, setRefreshing) {
+type AsyncRefreshControlProps = Modify<Omit<RefreshControlProps, 'refreshing'>, {
+  onRefresh?: () => Promise<void>;
+}>
+
+async function _onRefresh(
+  onRefresh: () => void,
+  setRefreshing: React.Dispatch<React.SetStateAction<boolean>>
+) {
   setRefreshing(true);
   try { await onRefresh() } catch { }
   setRefreshing(false);
 }
 
-export const AsyncRefreshControl = (RefreshControl) => React.forwardRef(({
+export const AsyncRefreshControl = (
+  RefreshControl: typeof RefreshControlBase
+) => React.forwardRef<ComponentRef<typeof RefreshControlBase>, AsyncRefreshControlProps>(({
   onRefresh,
   ...props
 }, forwardRef) => {
@@ -42,7 +53,7 @@ export const AsyncRefreshControl = (RefreshControl) => React.forwardRef(({
   return <RefreshControl
     ref={forwardRef}
     refreshing={refreshing}
-    onRefresh={() => _onRefresh(onRefresh, setRefreshing)}
+    onRefresh={() => { if (_.isFunction(onRefresh)) _onRefresh(onRefresh, setRefreshing) }}
     {...props} />;
 });
 

@@ -24,33 +24,36 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { FlatList as RNFlatList, RefreshControl as RNRefreshControl } from 'react-native';
+import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import {
+  FlatList as RNFlatList,
+  FlatListProps as RNFlatListProps,
+  RefreshControl as RNRefreshControl,
+} from 'react-native';
 import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
+import { Modify } from '../../internals/types';
 
 const FlatListBase = KeyboardAwareScrollable(RNFlatList);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
-function array_of(children) {
-  if (_.isNil(children)) return [];
-  if (_.isArray(children)) return children;
-  return [children];
-}
+type ScrollViewProps<ItemT = any> = Modify<Omit<RNFlatListProps<ItemT>, 'data' | 'renderItem'>, {
+  onRefresh?: () => Promise<void>;
+  refreshControlProps: ComponentPropsWithoutRef<typeof RefreshControl>;
+}>
 
-export const FlatList = React.forwardRef(({
+export const FlatList = React.forwardRef<ComponentRef<typeof FlatListBase>, ScrollViewProps>(({
   onRefresh,
   refreshControlProps,
   children,
   ...props
-}, forwardRef) => {
-
-  return <FlatListBase
+}, forwardRef) => (
+  <FlatListBase
     ref={forwardRef}
-    data={array_of(children)}
-    renderItem={({ item }) => item}
+    data={_.isNil(children) ? [] : _.castArray(children)}
+    renderItem={({ item }: { item: React.ReactNode }) => item}
     refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
     {...props} />
-});
+));
 
 export default FlatList;

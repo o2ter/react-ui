@@ -24,32 +24,43 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { Image } from 'react-native';
+import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import { Image, StyleProp, ViewStyle, ImageStyle, ImageSourcePropType, ImageResizeMode } from 'react-native';
 import { List } from '../List';
 import { StickyView } from '../StickyView';
+import { Modify } from '../../internals/types';
 
-export const SleekAnimationView = React.forwardRef(({
+type SleekAnimationViewProps = Modify<Omit<ComponentPropsWithoutRef<typeof StickyView>, 'stickyView'>, {
+  backgroundContainerStyle?: StyleProp<ViewStyle>;
+  backgroundStyle?: StyleProp<ImageStyle>;
+  backgroundImages: ImageSourcePropType[];
+  resizeMode?: ImageResizeMode;
+}>
+
+export const SleekAnimationView = React.forwardRef<ComponentRef<typeof StickyView>, SleekAnimationViewProps>(({
   backgroundContainerStyle,
   backgroundStyle,
-  backgroundImages: images = [],
+  backgroundImages = [],
   resizeMode,
   children,
   ...props
-}, forwardRef) => {
-
-  return <StickyView
+}, forwardRef) => (
+  <StickyView
     ref={forwardRef}
     stickyContainerStyle={[{ zIndex: -1 }, backgroundContainerStyle]}
     stickyView={({ factor }) => <List
-      data={images}
+      data={backgroundImages}
       renderItem={({ item, index }) => <Image
         source={item}
-        style={[{ width: '100%', height: '100%', display: index === Math.min(images.length - 1, Math.floor(factor * images.length)) ? 'flex' : 'none' }, backgroundStyle]}
+        style={[{
+          width: '100%',
+          height: '100%',
+          display: index === Math.min(backgroundImages.length - 1, Math.floor(factor * backgroundImages.length)) ? 'flex' : 'none'
+        }, backgroundStyle]}
         resizeMode={resizeMode} />} />}
     {...props}>
     {children}
-  </StickyView>;
-});
+  </StickyView>
+));
 
 export default SleekAnimationView;

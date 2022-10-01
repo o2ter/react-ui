@@ -25,16 +25,34 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View } from 'react-native';
+import { View, ViewProps, StyleProp, ViewStyle, LayoutRectangle } from 'react-native';
 import { useScrollView, useScrollLayout } from '../ScrollView';
+import { Modify } from '../../internals/types';
 import { useMergeRefs } from 'sugax';
 
-function StickyContainer({
+type StickyViewProps = Modify<ViewProps, {
+  stickyContainerStyle?: StyleProp<ViewStyle>;
+  stickyView: (x: { factor: number, offset: number }) => React.ReactNode;
+}>
+
+type Layout = {
+  left?: number;
+  top?: number;
+  width?: number;
+  height?: number;
+}
+
+const StickyContainer: React.FC<{
+  layout: Layout;
+  scrollViewLayout: ReturnType<typeof useScrollLayout>;
+  style?: StyleProp<ViewStyle>;
+  renderItem: (x: { factor: number, offset: number }) => React.ReactNode;
+}> = ({
   layout,
   scrollViewLayout,
   style,
   renderItem,
-}) {
+}) => {
 
   const left = layout.left ?? 0;
   const top = layout.top ?? 0;
@@ -62,7 +80,7 @@ function StickyContainer({
   </View>;
 }
 
-export const StickyView = React.forwardRef(({
+export const StickyView = React.forwardRef<View, StickyViewProps>(({
   onLayout,
   stickyContainerStyle,
   stickyView,
@@ -70,23 +88,23 @@ export const StickyView = React.forwardRef(({
   ...props
 }, forwardRef) => {
 
-  const containerRef = React.useRef();
+  const containerRef = React.useRef<View>();
   const ref = useMergeRefs(containerRef, forwardRef);
-  const [layout, setLayout] = React.useState({});
+  const [layout, setLayout] = React.useState<Layout>({});
 
   const scrollViewRef = useScrollView();
   const scrollViewLayout = useScrollLayout();
 
-  function _setLayout({ width, height }) {
+  function _setLayout({ width, height }: LayoutRectangle) {
 
     if (_.isNil(scrollViewRef.current)) return;
     if (_.isNil(containerRef.current)) return;
 
-    containerRef.current.measureLayout(scrollViewRef.current, (left, top) => {
+    containerRef.current.measureLayout(scrollViewRef.current as any, (left, top) => {
       const offset_x = scrollViewLayout.contentOffset?.x ?? 0;
       const offset_y = scrollViewLayout.contentOffset?.y ?? 0;
       setLayout({ left: -left - offset_x, top: -top - offset_y, width, height });
-    });
+    }, () => {});
   }
 
   return <View
