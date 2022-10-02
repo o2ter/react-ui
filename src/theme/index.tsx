@@ -27,13 +27,17 @@ import _ from 'lodash';
 import React from 'react';
 
 import { defaultVariables, ThemeVariables } from './variables';
-import { defaultStyle, ThemeStyles, _colorContrast } from './styles';
+import { defaultStyle, ThemeStyles, ThemeStylesProvider, _colorContrast } from './styles';
 
-export { ThemeVariables, ThemeStyles };
+export {
+  ThemeVariables,
+  ThemeStyles,
+  ThemeStylesProvider,
+};
 
 type ThemeProviderProps = {
   variables?: Partial<ThemeVariables>;
-  styles?: (...theme: Parameters<typeof defaultStyle>) => Partial<ThemeStyles>;
+  styles?: ThemeStylesProvider;
 }
 
 const ThemeContext = React.createContext<ThemeProviderProps>({

@@ -181,3 +181,4 @@ export const defaultStyle = (
 })
 
 export type ThemeStyles = ReturnType<typeof defaultStyle>;
+export type ThemeStylesProvider = (...theme: Parameters<typeof defaultStyle>) => Partial<ThemeStyles>;
