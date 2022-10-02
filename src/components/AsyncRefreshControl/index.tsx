@@ -33,7 +33,7 @@ type AsyncRefreshControlProps = Modify<Omit<RefreshControlProps, 'refreshing'>, 
 }>
 
 async function _onRefresh(
-  onRefresh: () => void,
+  onRefresh: () => Promise<void>,
   setRefreshing: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   setRefreshing(true);
