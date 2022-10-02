@@ -37,7 +37,7 @@ async function _onRefresh(
   setRefreshing: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   setRefreshing(true);
-  try { await onRefresh() } catch { }
+  try { await onRefresh() } catch (e) { console.error(e) }
   setRefreshing(false);
 }
 
