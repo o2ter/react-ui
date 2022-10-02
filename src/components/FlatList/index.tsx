@@ -37,12 +37,12 @@ import { Modify } from '../../internals/types';
 const FlatListBase = KeyboardAwareScrollable(RNFlatList);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
-type ScrollViewProps<ItemT = any> = Modify<Omit<RNFlatListProps<ItemT>, 'data' | 'renderItem'>, {
+type FlatListProps<ItemT = any> = Modify<Omit<RNFlatListProps<ItemT>, 'data' | 'renderItem'>, {
   onRefresh?: () => Promise<void>;
   refreshControlProps: ComponentPropsWithoutRef<typeof RefreshControl>;
 }>
 
-export const FlatList = React.forwardRef<ComponentRef<typeof FlatListBase>, ScrollViewProps>(({
+export const FlatList = React.forwardRef<ComponentRef<typeof FlatListBase>, FlatListProps>(({
   onRefresh,
   refreshControlProps,
   children,
