@@ -56,7 +56,7 @@ export const useScrollLayout = () => React.useContext(ScrollLayoutContext);
 
 type ScrollViewProps = Modify<RNScrollViewProps, {
   onRefresh?: () => Promise<void>;
-  refreshControlProps: ComponentPropsWithoutRef<typeof RefreshControl>;
+  refreshControlProps: Omit<ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
 export const ScrollView = React.forwardRef<ScrollViewRef, ScrollViewProps>(({

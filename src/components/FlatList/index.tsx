@@ -39,7 +39,7 @@ const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 type FlatListProps<ItemT = any> = Modify<Omit<RNFlatListProps<ItemT>, 'data' | 'renderItem'>, {
   onRefresh?: () => Promise<void>;
-  refreshControlProps: ComponentPropsWithoutRef<typeof RefreshControl>;
+  refreshControlProps: Omit<ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
 export const FlatList = React.forwardRef<ComponentRef<typeof FlatListBase>, FlatListProps>(({

@@ -29,7 +29,7 @@ import { RefreshControlBase, RefreshControlProps } from 'react-native';
 import { Modify } from '../../internals/types';
 
 type AsyncRefreshControlProps = Modify<Omit<RefreshControlProps, 'refreshing'>, {
-  onRefresh?: () => Promise<void>;
+  onRefresh: () => Promise<void>;
 }>
 
 async function _onRefresh(
