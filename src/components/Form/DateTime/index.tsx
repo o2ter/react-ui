@@ -63,11 +63,17 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
       text={date?.toString()}
       style={[theme.styles.formDateStyle, _.isEmpty(error) ? {} : theme.styles.formDateErrorStyle, style]}
       picker={(
-        <Calendar value={value} min={min} max={max} onChange={onChange} style={{
-          width: '80%',
-          maxWidth: 350,
-          backgroundColor: 'white',
-        }} />
+        <Calendar
+          value={value}
+          min={min}
+          max={max}
+          onChange={onChange}
+          selectable={selectable}
+          style={{
+            width: '80%',
+            maxWidth: 350,
+            backgroundColor: 'white',
+          }} />
       )}
       {...props} />
   )
