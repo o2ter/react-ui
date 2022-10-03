@@ -26,15 +26,8 @@
 import _ from 'lodash';
 import { ViewStyle, TextStyle } from 'react-native';
 import { ThemeVariables } from '../variables';
-import { ColorType, colorContrast, shiftColor, shadeColor, tintColor } from '../../color';
+import { ColorType, colorContrast, shadeColor, tintColor } from '../../color';
 import { _hex } from '../../internals/color';
-
-const createToastColor = (theme: ThemeVariables, color: string) => ({
-  color: theme.colors[color] ?? color,
-  borderColor: theme.colors[color] ?? color,
-  messageColor: shiftColor(theme.colors[color] ?? color, theme.colorWeights[800]),
-  backgroundColor: shiftColor(theme.colors[color] ?? color, theme.colorWeights[100]),
-});
 
 const memoize = <T extends (...args: any) => any>(func: T): T => _.memoize(func);
 
@@ -85,13 +78,6 @@ export const defaultStyle = (
 
   calendarWeekContainerStyle: {} as ViewStyle,
   calendarWeekdayStyle: {} as TextStyle,
-
-  toastColors: {
-    success: createToastColor(theme, 'success'),
-    info: createToastColor(theme, 'info'),
-    warning: createToastColor(theme, 'warning'),
-    error: createToastColor(theme, 'error'),
-  },
 
   toastStyle: {} as ViewStyle,
   toastTextStyle: {} as TextStyle,
