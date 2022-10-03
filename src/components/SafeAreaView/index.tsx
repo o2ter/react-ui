@@ -29,6 +29,7 @@ import { useMergeRefs } from 'sugax';
 import { View, ViewProps, ViewStyle, StyleSheet, useWindowDimensions, LayoutRectangle, ScaledSize } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Modify } from '../../internals/types';
+import { useTheme } from '../../theme';
 export { SafeAreaProvider, useSafeAreaInsets, useSafeAreaFrame, withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TOP = 0b1000,
@@ -70,6 +71,7 @@ export const SafeAreaView = React.forwardRef<View, SafeAreaViewProps>(({
 
   const viewRef = React.useRef<View>();
   const ref = useMergeRefs(viewRef, forwardRef);
+  const theme = useTheme()
 
   const insets = useSafeAreaInsets();
   const windowDimensions = useWindowDimensions();
@@ -92,7 +94,7 @@ export const SafeAreaView = React.forwardRef<View, SafeAreaViewProps>(({
     paddingBottom = paddingVertical,
     paddingLeft = paddingHorizontal,
     ..._style
-  }: ViewStyle = StyleSheet.flatten(style) ?? {};
+  }: ViewStyle = StyleSheet.flatten([theme.styles.viewStyle, style]) ?? {};
 
   return <View
     ref={ref}
