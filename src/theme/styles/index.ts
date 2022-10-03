@@ -40,6 +40,8 @@ const createToastColor = (theme: ThemeVariables, color: string) => ({
   backgroundColor: shiftColor(theme.colors[color] ?? color, theme.colorWeights[100]),
 });
 
+const memoize = <T extends (...args: any) => any>(func: T): T => _.memoize(func);
+
 export const _colorContrast = (theme: ThemeVariables) => (background: string | ColorType) => colorContrast(
   background,
   theme.colorContrastDark,
@@ -73,13 +75,13 @@ export const defaultStyle = (
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
   }),
 
-  buttonColors: _.memoize((color: string) => createNonnullableTextStyle({
+  buttonColors: memoize((color: string) => createNonnullableTextStyle({
     color: theme.colorContrast(color),
     backgroundColor: color,
     borderColor: color,
   })),
 
-  buttonFocusedColors: _.memoize((color: string) => {
+  buttonFocusedColors: memoize((color: string) => {
     const _color = theme.colorContrast(color);
     const _color2 = _color === _hex(theme.colorContrastLight) ? shadeColor(color, 0.2) : tintColor(color, 0.2);
     return createNonnullableTextStyle({
