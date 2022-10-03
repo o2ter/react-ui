@@ -30,7 +30,7 @@ import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 
-import { MaterialCommunityIcons as Icon } from '../../Icons';
+import { Icon } from '../../Icon';
 
 type FormRadioProps = Modify<TextProps, {
   name: string | string[];
@@ -54,13 +54,18 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormRadioProps>(
 
   return (
     <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange(value))}>
-      <Text style={[
-        { fontSize: theme.fontSizeLarge },
-        theme.styles.formRadioStyle,
-        style,
-      ]}>
-        <Icon name={iconName} color={theme.styles.formRadioColor(selected)} {...props} />
-      </Text>
+      <Icon
+        icon='MaterialCommunityIcons'
+        name={iconName}
+        style={[
+          {
+            fontSize: theme.fontSizeBase,
+            color: theme.styles.formRadioColor(selected),
+          },
+          theme.styles.formRadioStyle,
+          style,
+        ]}
+        {...props}>{children}</Icon>
     </Pressable>
   )
 });

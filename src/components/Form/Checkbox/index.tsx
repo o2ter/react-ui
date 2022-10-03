@@ -30,7 +30,7 @@ import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 
-import { MaterialCommunityIcons as Icon } from '../../Icons';
+import { Icon } from '../../Icon';
 
 type FormCheckboxProps = Modify<TextProps, {
   name: string | string[];
@@ -59,13 +59,18 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProp
       }
       return !value;
     }))}>
-      <Text style={[
-        { fontSize: theme.fontSizeBase },
-        theme.styles.formCheckboxStyle,
-        style,
-      ]}>
-        <Icon name={iconName} color={theme.styles.formCheckboxColor(selected)} {...props} />
-      </Text>
+      <Icon
+        icon='MaterialCommunityIcons'
+        name={iconName}
+        style={[
+          {
+            fontSize: theme.fontSizeBase,
+            color: theme.styles.formCheckboxColor(selected),
+          },
+          theme.styles.formCheckboxStyle,
+          style,
+        ]}
+        {...props}>{children}</Icon>
     </Pressable>
   )
 });
