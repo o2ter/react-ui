@@ -83,6 +83,9 @@ export const defaultStyle = (
 
   pickerStyle: {} as TextStyle,
 
+  calendarWeekContainerStyle: {} as ViewStyle,
+  calendarWeekdayStyle: {} as TextStyle,
+
   toastColors: {
     success: createToastColor(theme, 'success'),
     info: createToastColor(theme, 'info'),

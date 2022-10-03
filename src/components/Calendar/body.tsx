@@ -65,13 +65,13 @@ export const CalendarBody: React.FC<{
         current_row.push(<View key={`${id}-padding-start`} style={{ flex: weekdayStart }} />);
       }
       if (!_.isEmpty(current_row) && (day + weekdayStart - 1) % 7 == 0) {
-        rows.push(<View key={`${id}-row-${rows.length}`} style={calendarStyle.weekContainer}>{current_row}</View>);
+        rows.push(<View key={`${id}-row-${rows.length}`} style={[calendarStyle.weekContainer, theme.styles.calendarWeekContainerStyle]}>{current_row}</View>);
         current_row = [];
       }
       current_row.push(
         <Pressable
           key={`${id}-day-${day}`}
-          style={calendarStyle.weekdayContainer}
+          style={[calendarStyle.weekContainer, theme.styles.calendarWeekContainerStyle]}
           onPress={() => { if (selectable(dateToString(year, month, day))) onSelect({ year, month, day }) }}>
           {_selected && selected?.day === day && (
             <Svg viewBox='0 0 100 100' style={StyleSheet.absoluteFill}>
@@ -80,6 +80,7 @@ export const CalendarBody: React.FC<{
           )}
           <Text style={[
             calendarStyle.weekdays,
+            theme.styles.calendarWeekdayStyle,
             selectable(dateToString(year, month, day)) ? {} : { color: theme.colors.grays['500'] },
             _selected && selected?.day === day ? { color: theme.colorContrast(theme.colors.primary) } : {},
           ]}>{day}</Text>
@@ -89,7 +90,7 @@ export const CalendarBody: React.FC<{
     if ((daysInMonth + weekdayStart) % 7 != 0) {
       current_row.push(<View key={`${id}-padding-end`} style={{ flex: 7 - (daysInMonth + weekdayStart) % 7 }} />);
     }
-    rows.push(<View key={`${id}-row-${rows.length}`} style={calendarStyle.weekContainer}>{current_row}</View>);
+    rows.push(<View key={`${id}-row-${rows.length}`} style={[calendarStyle.weekContainer, theme.styles.calendarWeekContainerStyle]}>{current_row}</View>);
 
     return <React.Fragment>{rows}</React.Fragment>;
   };
