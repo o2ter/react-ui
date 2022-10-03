@@ -30,6 +30,7 @@ import { Svg, Path } from 'react-native-svg';
 import { useMount } from 'sugax';
 import uuid from 'react-native-uuid';
 import { useTheme } from '../../theme';
+import { shiftColor } from '../../color';
 import { useSafeAreaInsets } from '../SafeAreaView';
 
 type ToastMessage = string | (Error & { code?: number });
@@ -40,6 +41,7 @@ const ToastContext = React.createContext({
   showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { },
   showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { },
   showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { },
+  showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout: number) { },
 });
 
 export const useToast = () => React.useContext(ToastContext);
@@ -66,12 +68,12 @@ function toString(message: ToastMessage) {
 
 const ToastBody: React.FC<{
   message: ToastMessage;
-  type: ToastType;
+  typeOrColor: ToastType | string;
   onShow: (x: { dismiss: () => void }) => void;
   onDismiss: () => void;
 }> = ({
   message,
-  type,
+  typeOrColor,
   onShow,
   onDismiss,
 }) => {
@@ -100,7 +102,7 @@ const ToastBody: React.FC<{
       }).start(() => onShow({ dismiss() { _dismiss(); } }));
     });
 
-    const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors[type];
+    const color = theme.colors[typeOrColor] ?? typeOrColor;
 
     return <Animated.View
       style={[
@@ -113,20 +115,21 @@ const ToastBody: React.FC<{
           alignItems: 'center',
           flexDirection: 'row',
           justifyContent: 'space-between',
+          borderColor: color,
+          backgroundColor: shiftColor(color, theme.colorWeights[100]),
         },
         theme.styles.toastStyle,
-        toastColorStyle,
         { opacity: fadeAnim },
       ]}>
-      <Svg width={24} height={24}><Path fill={color} d={icons[type]} /></Svg>
+      {!_.isNil(icons[typeOrColor as ToastType]) && <Svg width={24} height={24}><Path fill={color} d={icons[typeOrColor as ToastType]} /></Svg>}
       <Text style={[
         {
           flex: 1,
           marginHorizontal: theme.spacer * 0.5,
           fontSize: theme.fontSizeBase,
+          color: shiftColor(color, theme.colorWeights[800]),
         },
         theme.styles.toastTextStyle,
-        { color: messageColor },
       ]}>{toString(message)}</Text>
       <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
     </Animated.View>
@@ -142,11 +145,11 @@ export const ToastProvider: React.FC<{
     const [elements, setElements] = React.useState({});
     const insets = useSafeAreaInsets();
 
-    function show_message(message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>, type: ToastType, timeout: number) {
+    function show_message(message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>, typeOrColor: ToastType | string, timeout: number) {
 
       if (_.isNil(message)) return;
       if (!_.isString(message) && _.isArrayLike(message)) {
-        _.forEach(message, x => show_message(x, type, timeout));
+        _.forEach(message, x => show_message(x, typeOrColor, timeout));
         return;
       }
 
@@ -154,7 +157,7 @@ export const ToastProvider: React.FC<{
 
       setElements(elements => ({
         ...elements,
-        [id]: <ToastBody key={id} message={message} type={type}
+        [id]: <ToastBody key={id} message={message} typeOrColor={typeOrColor}
           onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? defaultTimeout)}
           onDismiss={() => setElements(elements => _.pickBy(elements, (_val, key) => key != id))} />
       }));
@@ -165,6 +168,7 @@ export const ToastProvider: React.FC<{
       showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'warning', timeout); },
       showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'info', timeout); },
       showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'success', timeout); },
+      showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout: number) { show_message(message, color, timeout); },
     }), [setElements]);
 
     return <ToastContext.Provider value={provider}>
