@@ -49,15 +49,13 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProp
   const { value: state, onChange } = useField(name);
   const theme = useTheme();
 
-  const selected = !_.isNil(value) && _.isArray(state) ? state.includes(value) : !!state;
+  const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
   const iconName = value ? 'checkbox-marked' : 'checkbox-blank-outline';
 
   return (
     <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange((state: any) => {
-      if (_.isArray(state)) {
-        return state.includes(value) ? state.filter(x => x !== value) : [...state, value];
-      }
-      return !value;
+      if (_.isNil(value)) return !state;
+      return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state), value];
     }))}>
       <Icon
         icon='MaterialCommunityIcons'
