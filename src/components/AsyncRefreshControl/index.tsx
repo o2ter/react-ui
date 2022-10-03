@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React, { ComponentRef } from 'react';
 import { RefreshControlBase, RefreshControlProps } from 'react-native';
 import { Modify } from '../../internals/types';
+import { useTheme } from '../../theme';
 
 type AsyncRefreshControlProps = Modify<Omit<RefreshControlProps, 'refreshing'>, {
   onRefresh: () => Promise<void>;
@@ -44,15 +45,18 @@ async function _onRefresh(
 export const AsyncRefreshControl = (
   RefreshControl: typeof RefreshControlBase
 ) => React.forwardRef<ComponentRef<typeof RefreshControlBase>, AsyncRefreshControlProps>(({
+  style,
   onRefresh,
   ...props
 }, forwardRef) => {
 
   const [refreshing, setRefreshing] = React.useState(false);
+  const theme = useTheme();
 
   return <RefreshControl
     ref={forwardRef}
     refreshing={refreshing}
+    style={[theme.styles.refreshControlStyle, style]}
     onRefresh={() => { if (_.isFunction(onRefresh)) _onRefresh(onRefresh, setRefreshing) }}
     {...props} />;
 });

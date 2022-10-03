@@ -51,6 +51,16 @@ export const defaultStyle = (
   theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
 ) => ({
 
+  viewStyle: createViewStyle({}),
+  textStyle: createTextStyle({}),
+
+  scrollableStyle: createViewStyle({}),
+  scrollableContentContainerStyle: createViewStyle({}),
+  
+  flatlistColumnWrapperStyle: createViewStyle({}),
+
+  refreshControlStyle: createViewStyle({}),
+
   activityIndicator: createViewStyle({
     alignItems: 'center',
     alignSelf: 'center',

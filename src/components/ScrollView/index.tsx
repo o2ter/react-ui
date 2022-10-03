@@ -38,6 +38,7 @@ import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { useMergeRefs } from 'sugax';
+import { useTheme } from '../../theme';
 
 const ScrollViewBase: typeof RNScrollViewBase = KeyboardAwareScrollable(RNScrollView);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
@@ -64,6 +65,8 @@ export const ScrollView = React.forwardRef<ScrollViewRef, ScrollViewProps>(({
   onLayout,
   onContentSizeChange,
   onScroll,
+  style,
+  contentContainerStyle,
   refreshControlProps,
   scrollEventThrottle = 1,
   horizontal = false,
@@ -73,6 +76,7 @@ export const ScrollView = React.forwardRef<ScrollViewRef, ScrollViewProps>(({
 
   const scrollViewRef = React.useRef<ScrollViewRef>();
   const ref = useMergeRefs(scrollViewRef, forwardRef);
+  const theme = useTheme();
 
   const [layoutMeasurement, setLayout] = React.useState<LayoutRectangle>();
   const [contentSize, setContentSize] = React.useState<NativeScrollSize>();
@@ -87,6 +91,8 @@ export const ScrollView = React.forwardRef<ScrollViewRef, ScrollViewProps>(({
 
   return <ScrollViewBase
     ref={ref}
+    style={[theme.styles.scrollableStyle, style]}
+    contentContainerStyle={[theme.styles.scrollableContentContainerStyle, contentContainerStyle]}
     onLayout={(event) => {
       setLayout(event.nativeEvent.layout);
       if (_.isFunction(onLayout)) onLayout(event);

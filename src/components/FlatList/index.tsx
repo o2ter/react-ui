@@ -33,6 +33,7 @@ import {
 import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
+import { useTheme } from '../../theme';
 
 const FlatListBase = KeyboardAwareScrollable(RNFlatList);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
@@ -44,16 +45,27 @@ type FlatListProps<ItemT = any> = Modify<Omit<RNFlatListProps<ItemT>, 'data' | '
 
 export const FlatList = React.forwardRef<ComponentRef<typeof FlatListBase>, FlatListProps>(({
   onRefresh,
+  style,
+  contentContainerStyle,
+  columnWrapperStyle,
   refreshControlProps,
   children,
   ...props
-}, forwardRef) => (
-  <FlatListBase
-    ref={forwardRef}
-    data={_.isNil(children) ? [] : _.castArray(children)}
-    renderItem={({ item }: { item: React.ReactNode }) => item}
-    refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
-    {...props} />
-));
+}, forwardRef) => {
+
+  const theme = useTheme();
+
+  return (
+    <FlatListBase
+      ref={forwardRef}
+      style={[theme.styles.scrollableStyle, style]}
+      contentContainerStyle={[theme.styles.scrollableContentContainerStyle, contentContainerStyle]}
+      columnWrapperStyle={[theme.styles.flatlistColumnWrapperStyle, columnWrapperStyle]}
+      data={_.isNil(children) ? [] : _.castArray(children)}
+      renderItem={({ item }: { item: React.ReactNode }) => item}
+      refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : null}
+      {...props} />
+  )
+});
 
 export default FlatList;
