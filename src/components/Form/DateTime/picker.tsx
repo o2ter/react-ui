@@ -62,8 +62,9 @@ export const PickerBase = React.forwardRef<ComponentRef<typeof Pressable>, Picke
           <Pressable
             onPress={() => setShowPicker(false)}
             style={[
+              { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
               theme.styles.formPickerBackdrop,
-              StyleSheet.absoluteFill
+              StyleSheet.absoluteFill,
             ]} />
           {picker}
         </Pressable>

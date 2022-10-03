@@ -60,6 +60,7 @@ export const ModalProvider: React.FC<{
           {backdrop === true && <Pressable
             onPress={() => setModal(undefined)}
             style={[
+              { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
               theme.styles.modalBackdrop,
               StyleSheet.absoluteFill
             ]} />}

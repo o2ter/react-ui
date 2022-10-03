@@ -49,7 +49,21 @@ export default React.forwardRef<TextInput, FormTextInputProps>(({
       value={value ?? ''}
       onChangeText={onChange}
       onEndEditing={(e) => onChange(e.nativeEvent.text)}
-      style={[theme.styles.formTextFieldStyle, _.isEmpty(error) ? {} : theme.styles.formTextFieldErrorStyle, style]}
+      style={[
+        {
+          fontSize: theme.fontSizeBase,
+          backgroundColor: theme.colors.light,
+          borderColor: theme.colors.light,
+          borderWidth: theme.borderWidth,
+          borderRadius: theme.borderRadius,
+          margin: theme.spacer * 0.25,
+          padding: theme.spacer * 0.25,
+        },
+        theme.styles.formTextFieldStyle,
+        _.isEmpty(error) ? {} : { borderColor: theme.colors.danger },
+        _.isEmpty(error) ? {} : theme.styles.formTextFieldErrorStyle,
+        style,
+      ]}
       {...props} />
   );
 });

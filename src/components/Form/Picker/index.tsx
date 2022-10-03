@@ -25,6 +25,7 @@
 
 import _ from 'lodash';
 import React, { ComponentPropsWithRef, ComponentRef } from 'react';
+import { Platform } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Picker } from '../../Picker';
@@ -49,7 +50,24 @@ export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
       ref={forwardRef}
       value={value}
       onValueChange={onChange}
-      style={[theme.styles.formPickerStyle, _.isEmpty(error) ? {} : theme.styles.formPickerErrorStyle, style]}
+      style={[
+        {
+          fontSize: theme.fontSizeBase,
+          backgroundColor: theme.colors.light,
+          borderColor: theme.colors.light,
+          borderWidth: theme.borderWidth,
+          borderRadius: theme.borderRadius,
+          margin: theme.spacer * 0.25,
+        },
+        Platform.select({
+          ios: { padding: 4 },
+          default: {}
+        }),
+        theme.styles.formPickerStyle,
+        _.isEmpty(error) ? {} : { borderColor: theme.colors.danger },
+        _.isEmpty(error) ? {} : theme.styles.formPickerErrorStyle,
+        style,
+      ]}
       {...props} />
   )
 });

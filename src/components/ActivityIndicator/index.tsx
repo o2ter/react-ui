@@ -112,8 +112,31 @@ export const ActivityIndicatorProvider: React.FC<{
     {children}
     {visible && <Animated.View
       pointerEvents={passThroughEvents ? 'none' : 'auto'}
-      style={[theme.styles.activityIndicator, StyleSheet.absoluteFill, { opacity: fadeAnim }]}>
-      {backdrop === true ? <View style={theme.styles.activityIndicatorBackdrop}><ActivityIndicator /></View> : <ActivityIndicator />}
+      style={[
+        style.activityIndicator,
+        theme.styles.activityIndicator,
+        StyleSheet.absoluteFill,
+        { opacity: fadeAnim },
+      ]}>
+      {backdrop === true ? <View style={[
+        style.activityIndicatorBackdrop,
+        theme.styles.activityIndicatorBackdrop
+      ]}><ActivityIndicator /></View> : <ActivityIndicator />}
     </Animated.View>}
   </ActivityIndicatorContext.Provider>;
 };
+
+const style = StyleSheet.create({
+
+  activityIndicator: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+
+  activityIndicatorBackdrop: {
+    padding: 32,
+    borderRadius: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+  },
+});

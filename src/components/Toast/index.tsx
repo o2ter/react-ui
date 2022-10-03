@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Text, Pressable, Animated, Platform, LayoutAnimation, ColorValue, RecursiveArray } from 'react-native';
+import { View, Text, Pressable, Animated, Platform, StyleSheet, LayoutAnimation, ColorValue, RecursiveArray } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { useMount } from 'sugax';
 import uuid from 'react-native-uuid';
@@ -103,9 +103,31 @@ const ToastBody: React.FC<{
     const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors[type];
 
     return <Animated.View
-      style={[theme.styles.toastStyle, toastColorStyle, { opacity: fadeAnim }]}>
+      style={[
+        {
+          marginTop: 8,
+          minWidth: 320,
+          padding: theme.spacer,
+          borderWidth: StyleSheet.hairlineWidth,
+          borderRadius: theme.borderRadius,
+          alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        },
+        theme.styles.toastStyle,
+        toastColorStyle,
+        { opacity: fadeAnim },
+      ]}>
       <Svg width={24} height={24}><Path fill={color} d={icons[type]} /></Svg>
-      <Text style={[theme.styles.toastTextStyle, { color: messageColor }]}>{toString(message)}</Text>
+      <Text style={[
+        {
+          flex: 1,
+          marginHorizontal: theme.spacer * 0.5,
+          fontSize: theme.fontSizeBase,
+        },
+        theme.styles.toastTextStyle,
+        { color: messageColor },
+      ]}>{toString(message)}</Text>
       <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
     </Animated.View>
   }

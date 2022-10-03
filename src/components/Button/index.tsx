@@ -98,7 +98,19 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     borderColor: outline ? selectedColor : _interpolate(fromColors.borderColor, toColors.borderColor),
   };
 
-  const defaultStyle = StyleSheet.flatten([theme.styles.buttonStyle, colors]);
+  const defaultStyle = StyleSheet.flatten([
+    {
+      textAlign: 'center',
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderWidth: theme.borderWidth,
+      borderRadius: theme.borderRadius,
+      fontSize: theme.fontSizeBase,
+      fontWeight: theme.fontWeightNormal,
+    } as TextStyle,
+    theme.styles.buttonStyle,
+    colors,
+  ]);
 
   const content = _.isEmpty(children) && !_.isEmpty(title) ? (
     <Animated.Text style={[_.pick(defaultStyle, text_style), titleStyle]}>{title}</Animated.Text>

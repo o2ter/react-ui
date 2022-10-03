@@ -54,7 +54,11 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormRadioProps>(
 
   return (
     <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange(value))}>
-      <Text style={[theme.styles.formRadioStyle, style]}>
+      <Text style={[
+        { fontSize: theme.fontSizeLarge },
+        theme.styles.formRadioStyle,
+        style,
+      ]}>
         <Icon name={iconName} color={theme.styles.formRadioColor(selected)} {...props} />
       </Text>
     </Pressable>

@@ -59,7 +59,11 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProp
       }
       return !value;
     }))}>
-      <Text style={[theme.styles.formCheckboxStyle, style]}>
+      <Text style={[
+        { fontSize: theme.fontSizeBase },
+        theme.styles.formCheckboxStyle,
+        style,
+      ]}>
         <Icon name={iconName} color={theme.styles.formCheckboxColor(selected)} {...props} />
       </Text>
     </Pressable>

@@ -61,7 +61,21 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
       ref={forwardRef}
       disabled={disabled}
       text={date?.toString()}
-      style={[theme.styles.formDateStyle, _.isEmpty(error) ? {} : theme.styles.formDateErrorStyle, style]}
+      style={[
+        {
+          fontSize: theme.fontSizeBase,
+          backgroundColor: theme.colors.light,
+          borderColor: theme.colors.light,
+          borderWidth: theme.borderWidth,
+          borderRadius: theme.borderRadius,
+          margin: theme.spacer * 0.25,
+          padding: theme.spacer * 0.25,
+        },
+        theme.styles.formDateStyle, 
+        _.isEmpty(error) ? {} : { borderColor: theme.colors.danger },
+        _.isEmpty(error) ? {} : theme.styles.formDateErrorStyle,
+        style
+      ]}
       picker={(
         <Calendar
           value={value}

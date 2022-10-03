@@ -53,27 +53,18 @@ export const defaultStyle = (
   theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
 ) => ({
 
-  viewStyle: createViewStyle({}),
-  textStyle: createTextStyle({}),
+  viewStyle: {} as ViewStyle,
+  textStyle: {} as TextStyle,
 
-  scrollableStyle: createViewStyle({}),
-  scrollableContentContainerStyle: createViewStyle({}),
+  scrollableStyle: {} as ViewStyle,
+  scrollableContentContainerStyle: {} as ViewStyle,
   
-  flatlistColumnWrapperStyle: createViewStyle({}),
+  flatlistColumnWrapperStyle: {} as ViewStyle,
 
-  refreshControlStyle: createViewStyle({}),
+  refreshControlStyle: {} as ViewStyle,
 
-  activityIndicator: createViewStyle({
-    alignItems: 'center',
-    alignSelf: 'center',
-    justifyContent: 'center',
-  }),
-
-  activityIndicatorBackdrop: createViewStyle({
-    padding: 32,
-    borderRadius: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-  }),
+  activityIndicator: {} as ViewStyle,
+  activityIndicatorBackdrop: {} as ViewStyle,
 
   buttonColors: memoize((color: string) => createNonnullableTextStyle({
     color: theme.colorContrast(color),
@@ -91,19 +82,8 @@ export const defaultStyle = (
     });
   }),
 
-  buttonStyle: createTextStyle({
-    textAlign: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderWidth: theme.borderWidth,
-    borderRadius: theme.borderRadius,
-    fontSize: theme.fontSizeBase,
-    fontWeight: theme.fontWeightNormal,
-  }),
-
-  modalBackdrop: createViewStyle({
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-  }),
+  buttonStyle: {} as TextStyle,
+  modalBackdrop: {} as ViewStyle,
 
   toastColors: {
     success: createToastColor(theme, 'success'),
@@ -112,83 +92,24 @@ export const defaultStyle = (
     error: createToastColor(theme, 'error'),
   },
 
-  toastStyle: createViewStyle({
-    marginTop: 8,
-    minWidth: 320,
-    padding: theme.spacer,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: theme.borderRadius,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  }),
+  toastStyle: {} as ViewStyle,
+  toastTextStyle: {} as TextStyle,
 
-  toastTextStyle: createTextStyle({
-    flex: 1,
-    marginHorizontal: theme.spacer * 0.5,
-    fontSize: theme.fontSizeBase,
-  }),
-
-  formCheckboxStyle: createTextStyle({
-    fontSize: theme.fontSizeBase,
-  }),
-
+  formCheckboxStyle: {} as TextStyle,
   formCheckboxColor: (value: boolean) => value ? theme.colors.primary : theme.colors.grays['600'],
 
-  formRadioStyle: createTextStyle({
-    fontSize: theme.fontSizeLarge,
-  }),
-
+  formRadioStyle: {} as TextStyle,
   formRadioColor: (value: boolean) => value ? theme.colors.primary : theme.colors.grays['600'],
 
-  formPickerBackdrop: createViewStyle({
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-  }),
+  formPickerBackdrop: {} as ViewStyle,
+  formPickerStyle: {} as TextStyle,
+  formPickerErrorStyle: {} as TextStyle,
 
-  formPickerStyle: createTextStyle({
-    fontSize: theme.fontSizeBase,
-    backgroundColor: theme.colors.light,
-    borderColor: theme.colors.light,
-    borderWidth: theme.borderWidth,
-    borderRadius: theme.borderRadius,
-    margin: theme.spacer * 0.25,
-    ...Platform.select({
-      ios: { padding: 4 },
-      default: {}
-    }),
-  }),
+  formTextFieldStyle: {} as TextStyle,
+  formTextFieldErrorStyle: {} as TextStyle,
 
-  formPickerErrorStyle: createTextStyle({
-    borderColor: theme.colors.danger,
-  }),
-
-  formTextFieldStyle: createTextStyle({
-    fontSize: theme.fontSizeBase,
-    backgroundColor: theme.colors.light,
-    borderColor: theme.colors.light,
-    borderWidth: theme.borderWidth,
-    borderRadius: theme.borderRadius,
-    margin: theme.spacer * 0.25,
-    padding: theme.spacer * 0.25,
-  }),
-
-  formTextFieldErrorStyle: createTextStyle({
-    borderColor: theme.colors.danger,
-  }),
-
-  formDateStyle: createTextStyle({
-    fontSize: theme.fontSizeBase,
-    backgroundColor: theme.colors.light,
-    borderColor: theme.colors.light,
-    borderWidth: theme.borderWidth,
-    borderRadius: theme.borderRadius,
-    margin: theme.spacer * 0.25,
-    padding: theme.spacer * 0.25,
-  }),
-
-  formDateErrorStyle: createTextStyle({
-    borderColor: theme.colors.danger,
-  }),
+  formDateStyle: {} as TextStyle,
+  formDateErrorStyle: {} as TextStyle,
 
 })
 
