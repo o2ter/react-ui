@@ -68,12 +68,12 @@ function toString(message: ToastMessage) {
 
 const ToastBody: React.FC<{
   message: ToastMessage;
-  typeOrColor: ToastType | string;
+  type: ToastType | string;
   onShow: (x: { dismiss: () => void }) => void;
   onDismiss: () => void;
 }> = ({
   message,
-  typeOrColor,
+  type,
   onShow,
   onDismiss,
 }) => {
@@ -102,7 +102,7 @@ const ToastBody: React.FC<{
       }).start(() => onShow({ dismiss() { _dismiss(); } }));
     });
 
-    const color = theme.colors[typeOrColor] ?? typeOrColor;
+    const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors(type);
 
     return <Animated.View
       style={[
@@ -115,19 +115,18 @@ const ToastBody: React.FC<{
           alignItems: 'center',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          borderColor: color,
-          backgroundColor: shiftColor(color, theme.colorWeights[100]),
         },
+        toastColorStyle,
         theme.styles.toastStyle,
         { opacity: fadeAnim },
       ]}>
-      {!_.isNil(icons[typeOrColor as ToastType]) && <Svg width={24} height={24}><Path fill={color} d={icons[typeOrColor as ToastType]} /></Svg>}
+      {!_.isNil(icons[type as ToastType]) && <Svg width={24} height={24}><Path fill={color} d={icons[type as ToastType]} /></Svg>}
       <Text style={[
         {
           flex: 1,
           marginHorizontal: theme.spacer * 0.5,
           fontSize: theme.fontSizeBase,
-          color: shiftColor(color, theme.colorWeights[800]),
+          color: messageColor,
         },
         theme.styles.toastTextStyle,
       ]}>{toString(message)}</Text>
@@ -145,11 +144,11 @@ export const ToastProvider: React.FC<{
     const [elements, setElements] = React.useState({});
     const insets = useSafeAreaInsets();
 
-    function show_message(message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>, typeOrColor: ToastType | string, timeout: number) {
+    function show_message(message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>, type: ToastType | string, timeout: number) {
 
       if (_.isNil(message)) return;
       if (!_.isString(message) && _.isArrayLike(message)) {
-        _.forEach(message, x => show_message(x, typeOrColor, timeout));
+        _.forEach(message, x => show_message(x, type, timeout));
         return;
       }
 
@@ -157,7 +156,7 @@ export const ToastProvider: React.FC<{
 
       setElements(elements => ({
         ...elements,
-        [id]: <ToastBody key={id} message={message} typeOrColor={typeOrColor}
+        [id]: <ToastBody key={id} message={message} type={type}
           onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? defaultTimeout)}
           onDismiss={() => setElements(elements => _.pickBy(elements, (_val, key) => key != id))} />
       }));
