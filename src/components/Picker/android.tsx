@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { PickerNative, PickerNativeProps } from './native';
+import { useTheme } from '../../theme';
 
 export const PickerAndroid = React.forwardRef<Text, PickerNativeProps>(({
   value,
@@ -41,13 +42,15 @@ export const PickerAndroid = React.forwardRef<Text, PickerNativeProps>(({
 
   const selected = _.find(items, x => x.value === value);
 
+  const theme = useTheme();
+
   function _setShowPicker(value: boolean) {
     value ? onFocus() : onBlur();
   }
 
   return (
     <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
-      <Text ref={forwardRef} style={style}>{renderText(selected)}</Text>
+      <Text ref={forwardRef} style={[theme.styles.pickerStyle, style]}>{renderText(selected)}</Text>
       <PickerNative
         value={value}
         items={items}

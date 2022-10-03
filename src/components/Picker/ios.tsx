@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { PickerNative, PickerNativeProps } from './native';
+import { useTheme } from '../../theme';
 
 export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
   value,
@@ -43,6 +44,7 @@ export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
 
   const [showPicker, setShowPicker] = React.useState(false);
   const [orientation, setOrientation] = React.useState('portrait');
+  const theme = useTheme();
 
   function _setShowPicker(value: boolean) {
     setShowPicker(value);
@@ -52,7 +54,7 @@ export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
   return (
     <React.Fragment>
       <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
-        <Text ref={forwardRef} style={style}>{renderText(selected)}</Text>
+        <Text ref={forwardRef} style={[theme.styles.pickerStyle, style]}>{renderText(selected)}</Text>
       </TouchableOpacity>
       <Modal
         transparent

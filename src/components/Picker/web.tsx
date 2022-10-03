@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React, { ComponentRef } from 'react';
 import { StyleSheet } from 'react-native';
 import { PickerNative, PickerNativeProps } from './native';
+import { useTheme } from '../../theme';
 
 const _style = StyleSheet.create({
   picker: {
@@ -48,17 +49,22 @@ export const PickerWeb = React.forwardRef<ComponentRef<typeof PickerNative>, Pic
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}, forwardRef) => (
-  <PickerNative
-    ref={forwardRef}
-    value={value}
-    items={items}
-    disabled={disabled}
-    renderText={renderText}
-    onValueChange={onValueChange}
-    onFocus={onFocus}
-    onBlur={onBlur}
-    style={[_style.picker, style]} />
-));
+}, forwardRef) => {
+
+  const theme = useTheme();
+
+  return (
+    <PickerNative
+      ref={forwardRef}
+      value={value}
+      items={items}
+      disabled={disabled}
+      renderText={renderText}
+      onValueChange={onValueChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      style={[_style.picker, theme.styles.pickerStyle, style]} />
+  );
+});
 
 export default PickerWeb;

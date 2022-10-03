@@ -24,14 +24,10 @@
 //
 
 import _ from 'lodash';
-import { StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
+import { ViewStyle, TextStyle } from 'react-native';
 import { ThemeVariables } from '../variables';
 import { ColorType, colorContrast, shiftColor, shadeColor, tintColor } from '../../color';
 import { _hex } from '../../internals/color';
-
-const createViewStyle = (style: ViewStyle) => StyleSheet.create({ style }).style;
-const createTextStyle = (style: TextStyle) => StyleSheet.create({ style }).style;
-const createNonnullableTextStyle = <T extends TextStyle>(style: T): T & TextStyle => StyleSheet.create({ style }).style;
 
 const createToastColor = (theme: ThemeVariables, color: string) => ({
   color: theme.colors[color] ?? color,
@@ -66,7 +62,7 @@ export const defaultStyle = (
   activityIndicator: {} as ViewStyle,
   activityIndicatorBackdrop: {} as ViewStyle,
 
-  buttonColors: memoize((color: string) => createNonnullableTextStyle({
+  buttonColors: memoize((color: string) => ({
     color: theme.colorContrast(color),
     backgroundColor: color,
     borderColor: color,
@@ -75,7 +71,7 @@ export const defaultStyle = (
   buttonFocusedColors: memoize((color: string) => {
     const _color = theme.colorContrast(color);
     const _color2 = _color === _hex(theme.colorContrastLight) ? shadeColor(color, 0.2) : tintColor(color, 0.2);
-    return createNonnullableTextStyle({
+    return ({
       color: _color,
       backgroundColor: _color2,
       borderColor: _color2,
@@ -84,6 +80,8 @@ export const defaultStyle = (
 
   buttonStyle: {} as TextStyle,
   modalBackdrop: {} as ViewStyle,
+
+  pickerStyle: {} as TextStyle,
 
   toastColors: {
     success: createToastColor(theme, 'success'),
