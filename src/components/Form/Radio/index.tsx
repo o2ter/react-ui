@@ -57,12 +57,13 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormRadioProps>(
       <Icon
         icon='MaterialCommunityIcons'
         name={iconName}
-        style={[
-          {
-            fontSize: theme.fontSizeBase,
-            color: theme.styles.formRadioColor(selected),
-          },
+        iconStyle={[
+          { color: theme.styles.formRadioColor(selected) },
           theme.styles.formRadioStyle,
+        ]}
+        style={[
+          { fontSize: theme.fontSizeBase },
+          theme.styles.formRadioTextStyle,
           style,
         ]}
         {...props}>{children}</Icon>

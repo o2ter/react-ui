@@ -62,12 +62,13 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProp
       <Icon
         icon='MaterialCommunityIcons'
         name={iconName}
-        style={[
-          {
-            fontSize: theme.fontSizeBase,
-            color: theme.styles.formCheckboxColor(selected),
-          },
+        iconStyle={[
+          { color: theme.styles.formCheckboxColor(selected) },
           theme.styles.formCheckboxStyle,
+        ]}
+        style={[
+          { fontSize: theme.fontSizeBase },
+          theme.styles.formCheckboxTextStyle,
           style,
         ]}
         {...props}>{children}</Icon>

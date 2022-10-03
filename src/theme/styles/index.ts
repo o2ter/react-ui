@@ -96,9 +96,11 @@ export const defaultStyle = (
   toastTextStyle: {} as TextStyle,
 
   formCheckboxStyle: {} as TextStyle,
+  formCheckboxTextStyle: {} as TextStyle,
   formCheckboxColor: (value: boolean) => value ? theme.colors.primary : theme.colors.grays['600'],
 
   formRadioStyle: {} as TextStyle,
+  formRadioTextStyle: {} as TextStyle,
   formRadioColor: (value: boolean) => value ? theme.colors.primary : theme.colors.grays['600'],
 
   formPickerBackdrop: {} as ViewStyle,
