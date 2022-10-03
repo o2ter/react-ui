@@ -29,6 +29,7 @@ import { Text, TextProps } from 'react-native';
 import { useLocalize, ValidateError } from 'sugax';
 import { useField } from '../Form';
 import { Modify } from '../../../internals/types';
+import { useTheme } from '../../../theme';
 
 type FormErrorMessageProps = Modify<TextProps, {
   name: string | string[];
@@ -36,10 +37,12 @@ type FormErrorMessageProps = Modify<TextProps, {
 
 export default React.forwardRef<Text, FormErrorMessageProps>(({
   name,
+  style,
   ...props
 }, forwardRef) => {
 
   const { error } = useField(name);
+  const theme = useTheme();
 
   const path = _.toPath(name);
   const _error = error.find(x => x instanceof ValidateError ? _.isEqual(x.path, path) : true) ?? _.first(error);
@@ -48,7 +51,11 @@ export default React.forwardRef<Text, FormErrorMessageProps>(({
 
   return (
     <React.Fragment>
-      {!_.isNil(message) && <Text ref={forwardRef} {...props}>{message}</Text>}
+      {!_.isNil(message) && <Text ref={forwardRef} style={[
+        { borderColor: theme.colors.danger },
+        theme.styles.formErrorMessageStyle,
+        style,
+      ]} {...props}>{message}</Text>}
     </React.Fragment>
   );
 });
