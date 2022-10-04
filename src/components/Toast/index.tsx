@@ -30,7 +30,6 @@ import { Svg, Path } from 'react-native-svg';
 import { useMount } from 'sugax';
 import uuid from 'react-native-uuid';
 import { useTheme } from '../../theme';
-import { shiftColor } from '../../color';
 import { useSafeAreaInsets } from '../SafeAreaView';
 
 type ToastMessage = string | (Error & { code?: number });
@@ -78,61 +77,61 @@ const ToastBody: React.FC<{
   onDismiss,
 }) => {
 
-    const fadeAnim = React.useRef(new Animated.Value(0)).current;
-    const theme = useTheme();
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const theme = useTheme();
 
-    function _dismiss() {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: theme.toastDuration,
-        easing: theme.toastEasing,
-        useNativeDriver: Platform.OS !== 'web',
-      }).start(() => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        _.isFunction(onDismiss) && onDismiss();
-      });
-    }
-
-    useMount(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: theme.toastDuration,
-        easing: theme.toastEasing,
-        useNativeDriver: Platform.OS !== 'web',
-      }).start(() => onShow({ dismiss() { _dismiss(); } }));
+  function _dismiss() {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: theme.toastDuration,
+      easing: theme.toastEasing,
+      useNativeDriver: Platform.OS !== 'web',
+    }).start(() => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      _.isFunction(onDismiss) && onDismiss();
     });
-
-    const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors(type);
-
-    return <Animated.View
-      style={[
-        {
-          marginTop: 8,
-          minWidth: 320,
-          padding: theme.spacer,
-          borderWidth: StyleSheet.hairlineWidth,
-          borderRadius: theme.borderRadius,
-          alignItems: 'center',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        },
-        toastColorStyle,
-        theme.styles.toastStyle,
-        { opacity: fadeAnim },
-      ]}>
-      {!_.isNil(icons[type as ToastType]) && <Svg width={24} height={24}><Path fill={color} d={icons[type as ToastType]} /></Svg>}
-      <Text style={[
-        {
-          flex: 1,
-          marginHorizontal: theme.spacer * 0.5,
-          fontSize: theme.fontSizeBase,
-          color: messageColor,
-        },
-        theme.styles.toastTextStyle,
-      ]}>{toString(message)}</Text>
-      <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
-    </Animated.View>
   }
+
+  useMount(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: theme.toastDuration,
+      easing: theme.toastEasing,
+      useNativeDriver: Platform.OS !== 'web',
+    }).start(() => onShow({ dismiss() { _dismiss(); } }));
+  });
+
+  const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors(type);
+
+  return <Animated.View
+    style={[
+      {
+        marginTop: 8,
+        minWidth: 320,
+        padding: theme.spacer,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: theme.borderRadius,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      },
+      toastColorStyle,
+      theme.styles.toastStyle,
+      { opacity: fadeAnim },
+    ]}>
+    {!_.isNil(icons[type as ToastType]) && <Svg width={24} height={24}><Path fill={color} d={icons[type as ToastType]} /></Svg>}
+    <Text style={[
+      {
+        flex: 1,
+        marginHorizontal: theme.spacer * 0.5,
+        fontSize: theme.fontSizeBase,
+        color: messageColor,
+      },
+      theme.styles.toastTextStyle,
+    ]}>{toString(message)}</Text>
+    <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
+  </Animated.View>
+}
 
 export const ToastProvider: React.FC<{
   defaultTimeout?: number;
@@ -141,42 +140,42 @@ export const ToastProvider: React.FC<{
   children,
 }) => {
 
-    const [elements, setElements] = React.useState({});
-    const insets = useSafeAreaInsets();
+  const [elements, setElements] = React.useState({});
+  const insets = useSafeAreaInsets();
 
-    function show_message(message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>, type: ToastType | string, timeout: number) {
+  function show_message(message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>, type: ToastType | string, timeout: number) {
 
-      if (_.isNil(message)) return;
-      if (!_.isString(message) && _.isArrayLike(message)) {
-        _.forEach(message, x => show_message(x, type, timeout));
-        return;
-      }
-
-      const id = uuid.v4() as string;
-
-      setElements(elements => ({
-        ...elements,
-        [id]: <ToastBody key={id} message={message} type={type}
-          onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? defaultTimeout)}
-          onDismiss={() => setElements(elements => _.pickBy(elements, (_val, key) => key != id))} />
-      }));
+    if (_.isNil(message)) return;
+    if (!_.isString(message) && _.isArrayLike(message)) {
+      _.forEach(message, x => show_message(x, type, timeout));
+      return;
     }
 
-    const provider = React.useMemo(() => ({
-      showError(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'error', timeout); },
-      showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'warning', timeout); },
-      showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'info', timeout); },
-      showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'success', timeout); },
-      showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout: number) { show_message(message, color, timeout); },
-    }), [setElements]);
+    const id = uuid.v4() as string;
 
-    return <ToastContext.Provider value={provider}>
-      {children}
-      <View style={{
-        top: insets.top,
-        position: 'absolute',
-        alignItems: 'center',
-        alignSelf: 'center',
-      }}>{_.values(elements)}</View>
-    </ToastContext.Provider>;
-  };
+    setElements(elements => ({
+      ...elements,
+      [id]: <ToastBody key={id} message={message} type={type}
+        onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? defaultTimeout)}
+        onDismiss={() => setElements(elements => _.pickBy(elements, (_val, key) => key != id))} />
+    }));
+  }
+
+  const provider = React.useMemo(() => ({
+    showError(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'error', timeout); },
+    showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'warning', timeout); },
+    showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'info', timeout); },
+    showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'success', timeout); },
+    showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout: number) { show_message(message, color, timeout); },
+  }), [setElements]);
+
+  return <ToastContext.Provider value={provider}>
+    {children}
+    <View style={{
+      top: insets.top,
+      position: 'absolute',
+      alignItems: 'center',
+      alignSelf: 'center',
+    }}>{_.values(elements)}</View>
+  </ToastContext.Provider>;
+};
