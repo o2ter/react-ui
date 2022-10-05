@@ -41,12 +41,17 @@ export default [
         format: 'esm',
         sourcemap: true,
       },
+      {
+        file: 'dist/index.d.ts',
+        format: 'es',
+      },
     ],
     plugins: [
       resolve({
         extensions: ['.ts', '.tsx', '.mjs', '.js']
       }),
-      ...rollupPlugins
+      ...rollupPlugins,
+      dts()
     ],
   },
   {
@@ -62,35 +67,6 @@ export default [
         format: 'esm',
         sourcemap: true,
       },
-    ],
-    plugins: [
-      resolve({
-        extensions: [
-          '.web.ts', '.web.tsx', '.web.mjs', '.web.js',
-          '.ts', '.tsx', '.mjs', '.js',
-        ]
-      }),
-      ...rollupPlugins
-    ],
-  },
-  {
-    input: 'src/index',
-    output: [
-      {
-        file: 'dist/index.d.ts',
-        format: 'es',
-      },
-    ],
-    plugins: [
-      resolve({
-        extensions: ['.ts', '.tsx', '.mjs', '.js']
-      }),
-      dts()
-    ],
-  },
-  {
-    input: 'src/index',
-    output: [
       {
         file: 'dist/index.web.d.ts',
         format: 'es',
@@ -103,6 +79,7 @@ export default [
           '.ts', '.tsx', '.mjs', '.js',
         ]
       }),
+      ...rollupPlugins,
       dts()
     ],
   },
