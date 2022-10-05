@@ -37,7 +37,7 @@ export default [
         sourcemap: true,
       },
       {
-        file: packageJson.module + '.js',
+        file: packageJson.module + '.mjs',
         format: 'esm',
         sourcemap: true,
       },
@@ -58,7 +58,7 @@ export default [
         sourcemap: true,
       },
       {
-        file: packageJson.module + '.web.js',
+        file: packageJson.module + '.web.mjs',
         format: 'esm',
         sourcemap: true,
       },
