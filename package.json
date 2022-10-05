@@ -1,8 +1,8 @@
 {
   "name": "o2ter-ui",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index",
+  "module": "dist/index",
   "types": "dist/index.d.ts",
   "repository": "https://github.com/o2ter/o2ter-ui.git",
   "author": "Susan Cheng <susan.doggie@gmail.com>",
