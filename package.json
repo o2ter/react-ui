@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "dist/index",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
   "repository": "https://github.com/o2ter/o2ter-ui.git",
   "author": "Susan Cheng <susan.doggie@gmail.com>",
   "license": "MIT",
