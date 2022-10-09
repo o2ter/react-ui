@@ -81,7 +81,7 @@ export const CalendarBody: React.FC<{
           <Text style={[
             calendarStyle.weekdays,
             theme.styles.calendarWeekdayStyle,
-            selectable(dateToString(year, month, day)) ? {} : { color: theme.colors.grays['500'] },
+            selectable(dateToString(year, month, day)) ? {} : { color: theme.grays['500'] },
             _selected && selected?.day === day ? { color: theme.colorContrast(theme.colors.primary) } : {},
           ]}>{day}</Text>
         </Pressable>

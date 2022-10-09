@@ -93,11 +93,11 @@ export const defaultStyle = (
 
   formCheckboxStyle: {} as TextStyle,
   formCheckboxTextStyle: {} as TextStyle,
-  formCheckboxColor: (value: boolean) => value ? theme.colors.primary : theme.colors.grays['600'],
+  formCheckboxColor: (value: boolean) => value ? theme.colors.primary : theme.grays['600'],
 
   formRadioStyle: {} as TextStyle,
   formRadioTextStyle: {} as TextStyle,
-  formRadioColor: (value: boolean) => value ? theme.colors.primary : theme.colors.grays['600'],
+  formRadioColor: (value: boolean) => value ? theme.colors.primary : theme.grays['600'],
 
   formPickerBackdrop: {} as ViewStyle,
   formPickerStyle: {} as TextStyle,
