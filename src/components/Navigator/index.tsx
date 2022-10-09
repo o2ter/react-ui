@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 import { BrowserRouter, useRoutes } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 
@@ -40,28 +40,40 @@ export {
   NavLink,
 } from 'react-router-dom';
 
-const NavigatorContext = React.createContext();
+const NavigatorContext = React.createContext<Record<string, any> | undefined>(undefined);
 
-export const BrowserNavigator = ({ children }) => <BrowserRouter>{children}</BrowserRouter>;
-export const StaticNavigator = ({ location, context, children }) => <NavigatorContext.Provider value={context}>
+export const BrowserNavigator: React.FC = ({ children }) => <BrowserRouter>{children}</BrowserRouter>;
+export const StaticNavigator: React.FC<{
+  location: Partial<Location> | string;
+  context?: Record<string, any>;
+}> = ({ location, context, children }) => <NavigatorContext.Provider value={context}>
   <StaticRouter location={location}>{children}</StaticRouter>
 </NavigatorContext.Provider>;
 
 export const useNavigatorContext = () => React.useContext(NavigatorContext);
 
-function invariant(cond, message) {
+function invariant(cond: boolean, message: string): any {
   if (!cond) throw new Error(message);
 }
 
-export const Route = () => invariant(
+export const Route: React.FC<{
+  component: any;
+  statusCode?: number;
+  title?: string;
+  meta?: Record<string, string>;
+  caseSensitive?: boolean;
+  index?: boolean;
+  path?: string;
+  id?: string;
+}> = () => invariant(
   false,
   `A <Route> is only ever to be used as the child of <Navigator> element, ` +
   `never rendered directly. Please wrap your <Route> in a <Navigator>.`
 );
 
-function createRoutesFromChildren(children) {
+function createRoutesFromChildren(children: React.ReactNode) {
 
-  const routes = [];
+  const routes: any[] = [];
 
   React.Children.forEach(children, element => {
 
@@ -90,7 +102,14 @@ function createRoutesFromChildren(children) {
   return _.flattenDeep(routes);
 }
 
-function RouteObject({ component: Component, statusCode, title, meta = {}, children, ...props }) {
+const RouteObject: React.FC<ComponentPropsWithoutRef<typeof Route>> = ({
+  component: Component,
+  statusCode,
+  title,
+  meta = {},
+  children,
+  ...props
+}) => {
 
   const NavigatorContext = useNavigatorContext();
 
@@ -110,7 +129,7 @@ function RouteObject({ component: Component, statusCode, title, meta = {}, child
   return <Component {...props}>{children}</Component>;
 }
 
-function routesBuilder(routes) {
+function routesBuilder(routes: any[]): any {
 
   const result = [];
 
@@ -137,4 +156,4 @@ function routesBuilder(routes) {
   return result;
 }
 
-export const Navigator = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));
+export const Navigator: React.FC = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));
