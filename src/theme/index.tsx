@@ -88,5 +88,5 @@ export function useTheme() {
 
     return computed;
 
-  }, [variables, styles]);
+  }, [variables, styles, windowDimensions]);
 }
