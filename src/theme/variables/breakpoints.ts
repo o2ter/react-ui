@@ -1,5 +1,5 @@
 //
-//  default.ts
+//  breakpoints.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,52 +23,9 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import * as color_defaults from './colors';
-import * as font_defaults from './font';
-import * as border_defaults from './border';
-import * as breakpoint_defaults from './breakpoints';
-import * as animation_defaults from './animation';
-
-export const defaultVariables = {
-
-  colors: _.assign({}, color_defaults as Record<string, string>, {
-    grays: {
-      '100': '#f8f9fa',
-      '200': '#e9ecef',
-      '300': '#dee2e6',
-      '400': '#ced4da',
-      '500': '#adb5bd',
-      '600': '#6c757d',
-      '700': '#495057',
-      '800': '#343a40',
-      '900': '#212529',
-    },
-  }),
-
-  colorWeights: {
-    '100': -0.8,
-    '200': -0.6,
-    '300': -0.4,
-    '400': -0.2,
-    '500': 0,
-    '600': 0.2,
-    '700': 0.4,
-    '800': 0.6,
-    '900': 0.8,
-  },
-
-  minContrastRatio: 4.5,
-  colorContrastDark: 'black',
-  colorContrastLight: 'white',
-
-  spacer: 16,
-
-  breakpoints: breakpoint_defaults as Record<string, number>,
-
-  ...font_defaults,
-  ...border_defaults,
-  ...animation_defaults,
-}
-
-export type ThemeVariables = typeof defaultVariables;
+export const xs = 0;
+export const sm = 576;
+export const md = 768;
+export const lg = 992;
+export const xl = 1200;
+export const xxl = 1400;

@@ -28,6 +28,7 @@ import React from 'react';
 
 import { defaultVariables, ThemeVariables } from './variables';
 import { defaultStyle, ThemeStyles, ThemeStylesProvider, _colorContrast } from './styles';
+import { useWindowDimensions } from 'react-native';
 
 export {
   ThemeVariables,
@@ -60,6 +61,14 @@ export const ThemeProvider = ({
   );
 };
 
+const _mediaSelect = (theme: ThemeVariables) => <T extends any>(
+  breakpoint: string,
+  selector: { up: T, down: T }
+) => {
+  const windowDimensions = useWindowDimensions();
+  return windowDimensions.width < theme.breakpoints[breakpoint] ? selector.down : selector.up;
+}
+
 export function useTheme() {
 
   const { variables, styles } = React.useContext(ThemeContext);
@@ -70,10 +79,11 @@ export function useTheme() {
 
     const computed = _.assign({
       get colorContrast() { return _colorContrast(computed) },
+      get mediaSelect() { return _mediaSelect(computed) },
       get styles() {
         if (_.isNil(computed_style)) computed_style = _.assign({}, defaultStyle(computed), styles?.(computed));
         return computed_style;
-      }
+      },
     }, defaultVariables, variables);
 
     return computed;
