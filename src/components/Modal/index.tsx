@@ -44,28 +44,28 @@ export const ModalProvider: React.FC<{
   children,
 }) => {
 
-    const [modal, setModal] = React.useState<any | undefined>();
-    const theme = useTheme();
+  const [modal, setModal] = React.useState<any | undefined>();
+  const theme = useTheme();
 
-    return <ModalContext.Provider value={setModal}>
-      {children}
-      <RNModal visible={React.isValidElement(modal)} transparent animationType={animationType}>
-        <Pressable
-          onPress={() => { if (keyboardDismissMode === 'interactive') Keyboard.dismiss() }}
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          {backdrop === true && <Pressable
-            onPress={() => setModal(undefined)}
-            style={[
-              { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
-              theme.styles.modalBackdrop,
-              StyleSheet.absoluteFill
-            ]} />}
-          {modal}
-        </Pressable>
-      </RNModal>
-    </ModalContext.Provider>;
-  };
+  return <ModalContext.Provider value={setModal}>
+    {children}
+    <RNModal visible={React.isValidElement(modal)} transparent animationType={animationType}>
+      <Pressable
+        onPress={() => { if (keyboardDismissMode === 'interactive') Keyboard.dismiss() }}
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        {backdrop === true && <Pressable
+          onPress={() => setModal(undefined)}
+          style={[
+            { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
+            theme.styles.modalBackdrop,
+            StyleSheet.absoluteFill
+          ]} />}
+        {modal}
+      </Pressable>
+    </RNModal>
+  </ModalContext.Provider>;
+};
