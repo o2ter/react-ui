@@ -33,11 +33,11 @@ const ModalContext = React.createContext((element: any | undefined) => { });
 
 export const useModal = () => React.useContext(ModalContext);
 
-export const ModalProvider: React.FC<{
+export const ModalProvider: React.FC<React.PropsWithChildren<{
   backdrop?: boolean;
   keyboardDismissMode?: 'none' | 'interactive';
   animationType?: 'none' | 'slide' | 'fade';
-}> = ({
+}>> = ({
   backdrop = true,
   animationType = 'none',
   keyboardDismissMode = 'interactive',

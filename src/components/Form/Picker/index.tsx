@@ -38,7 +38,6 @@ type FormPickerProps = Modify<ComponentPropsWithRef<typeof Picker>, {
 export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
   name,
   style,
-  children,
   ...props
 }, forwardRef) => {
 

@@ -76,12 +76,12 @@ export const useActivity = () => {
   };
 }
 
-export const ActivityIndicatorProvider: React.FC<{
+export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
   defaultDelay?: number;
   backdrop?: boolean;
   passThroughEvents?: boolean;
   ActivityIndicator?: () => JSX.Element;
-}> = ({
+}>> = ({
   children,
   defaultDelay = 250,
   backdrop = true,

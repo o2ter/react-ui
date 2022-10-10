@@ -116,7 +116,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     <Animated.Text style={[_.pick(defaultStyle, text_style), titleStyle]}>{title}</Animated.Text>
   ) : children;
 
-  const callbacks = Platform.select({
+  const callbacks: any = Platform.select({
     web: {
       onHoverIn: (e: GestureResponderEvent) => {
         setFocused(state => ({ ...state, hover: true }));

@@ -30,9 +30,9 @@ const FormGroupContext = React.createContext<string[]>([]);
 
 export const useFormGroup = () => React.useContext(FormGroupContext);
 
-export const FormGroup: React.FC<{
+export const FormGroup: React.FC<React.PropsWithChildren<{
   name: string | string[];
-}> = ({
+}>> = ({
   name,
   children
 }) => (

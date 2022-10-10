@@ -46,13 +46,13 @@ const FormContext = React.createContext<FormState>({
   reset: () => {},
 });
 
-export const Form: React.FC<{
+export const Form: React.FC<React.PropsWithChildren<{
   schema?: Record<string, ISchema<any, any>>;
   initialValues?: Record<string, any>;
   validate?: (value: any, path?: string) => Error[];
   onReset?: (state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
-}> = ({
+}>> = ({
   schema = {},
   initialValues = object(schema).getDefault() ?? {},
   validate,

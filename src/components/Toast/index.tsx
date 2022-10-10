@@ -133,9 +133,9 @@ const ToastBody: React.FC<{
   </Animated.View>
 }
 
-export const ToastProvider: React.FC<{
+export const ToastProvider: React.FC<React.PropsWithChildren<{
   defaultTimeout?: number;
-}> = ({
+}>> = ({
   defaultTimeout = 5000,
   children,
 }) => {

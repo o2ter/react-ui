@@ -42,11 +42,11 @@ export {
 
 const NavigatorContext = React.createContext<Record<string, any> | undefined>(undefined);
 
-export const BrowserNavigator: React.FC = ({ children }) => <BrowserRouter>{children}</BrowserRouter>;
-export const StaticNavigator: React.FC<{
+export const BrowserNavigator: React.FC<React.PropsWithChildren> = ({ children }) => <BrowserRouter>{children}</BrowserRouter>;
+export const StaticNavigator: React.FC<React.PropsWithChildren<{
   location: Partial<Location> | string;
   context?: Record<string, any>;
-}> = ({ location, context, children }) => <NavigatorContext.Provider value={context}>
+}>> = ({ location, context, children }) => <NavigatorContext.Provider value={context}>
   <StaticRouter location={location}>{children}</StaticRouter>
 </NavigatorContext.Provider>;
 
@@ -102,7 +102,7 @@ function createRoutesFromChildren(children: React.ReactNode) {
   return _.flattenDeep(routes);
 }
 
-const RouteObject: React.FC<ComponentPropsWithoutRef<typeof Route>> = ({
+const RouteObject: React.FC<React.PropsWithChildren<ComponentPropsWithoutRef<typeof Route>>> = ({
   component: Component,
   statusCode,
   title,
@@ -156,4 +156,4 @@ function routesBuilder(routes: any[]): any {
   return result;
 }
 
-export const Navigator: React.FC = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));
+export const Navigator: React.FC<React.PropsWithChildren> = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));
