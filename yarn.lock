@@ -9345,10 +9345,13 @@ style-to-object@0.3.0, style-to-object@^0.3.0:
   dependencies:
     inline-style-parser "0.1.1"
 
-sugax@>=1.0.44:
-  version "1.0.44"
-  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.44.tgz#7fae454ca6294e1f507099074ddfe2a5a592846a"
-  integrity sha512-GPh6m/da7Qi0jPrQsQflLm1q/Y6WzRa2xe2XCG0yX8qNkjv4TG2isHfalglyd6Z0Ijq141Tx4O1rHvbA8yIj6Q==
+sugax@>=1.0.46:
+  version "1.0.46"
+  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.46.tgz#d50923f031c6bcf4cfb00d4e418939cfb6d67428"
+  integrity sha512-03EjLId5OB8lo3x/ygd6eIUQ39DV/O7cKdD1PGa/4EYDaQG0iu95dLRF4f3XQwfwD371BB+QM8mbJS9zRfMWAg==
+  dependencies:
+    events ">=3.3.0"
+    lodash ">=4.17.21"
 
 supports-color@^5.3.0:
   version "5.5.0"

@@ -22,16 +22,3 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
-
-import { Platform, UIManager } from 'react-native';
-
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
-
-export * from './color';
-export * from './theme';
-export * from './components';
-export * from './hooks';

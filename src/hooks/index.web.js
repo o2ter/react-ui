@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.web.js
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,15 +23,4 @@
 //  THE SOFTWARE.
 //
 
-import { Platform, UIManager } from 'react-native';
-
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
-
-export * from './color';
-export * from './theme';
-export * from './components';
-export * from './hooks';
+export * from './webHooks';

@@ -23,15 +23,6 @@
 //  THE SOFTWARE.
 //
 
-import { Platform, UIManager } from 'react-native';
-
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
-
-export * from './color';
-export * from './theme';
-export * from './components';
-export * from './hooks';
+export * from './index.js';
+export * from './components/index.web';
+export * from './hooks/index.web';
