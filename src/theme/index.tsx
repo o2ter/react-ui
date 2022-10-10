@@ -27,8 +27,8 @@ import _ from 'lodash';
 import React from 'react';
 
 import { defaultVariables, ThemeVariables } from './variables';
-import { defaultStyle, ThemeStyles, ThemeStylesProvider, _colorContrast } from './styles';
-import { useWindowDimensions, ScaledSize } from 'react-native';
+import { defaultStyle, _simpleStyles, ThemeStyles, ThemeStylesProvider, _colorContrast } from './styles';
+import { useWindowDimensions, ScaledSize, StyleSheet } from 'react-native';
 
 export {
   ThemeVariables,
@@ -81,7 +81,11 @@ export function useTheme() {
       get colorContrast() { return _colorContrast(computed) },
       get mediaSelect() { return _mediaSelect(computed, windowDimensions) },
       get styles() {
-        if (_.isNil(computed_style)) computed_style = _.assign({}, defaultStyle(computed), styles?.(computed));
+        if (_.isNil(computed_style)) {
+          const _computed_style = _.assign({}, defaultStyle(computed), styles?.(computed));
+          const _picked = _.pick(_computed_style, _.keys(_simpleStyles) as (keyof typeof _simpleStyles)[]);
+          computed_style = { ..._computed_style, ...StyleSheet.create(_picked) };
+        }
         return computed_style;
       },
     }, defaultVariables, variables);

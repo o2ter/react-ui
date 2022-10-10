@@ -36,24 +36,59 @@ export const _colorContrast = (theme: ThemeVariables) => (background: string | C
   theme.colorContrastDark,
   theme.colorContrastLight,
   theme.minContrastRatio
-)
+);
 
-export const defaultStyle = (
-  theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
-) => ({
+export const _simpleStyles = {
 
   viewStyle: {} as ViewStyle,
   textStyle: {} as TextStyle,
 
   scrollableStyle: {} as ViewStyle,
   scrollableContentContainerStyle: {} as ViewStyle,
-  
+
   flatlistColumnWrapperStyle: {} as ViewStyle,
 
   refreshControlStyle: {} as ViewStyle,
 
   activityIndicator: {} as ViewStyle,
   activityIndicatorBackdrop: {} as ViewStyle,
+
+  buttonStyle: {} as TextStyle,
+  modalBackdrop: {} as ViewStyle,
+
+  pickerStyle: {} as TextStyle,
+
+  calendarWeekContainerStyle: {} as ViewStyle,
+  calendarWeekdayStyle: {} as TextStyle,
+
+  toastStyle: {} as ViewStyle,
+  toastTextStyle: {} as TextStyle,
+
+  formErrorMessageStyle: {} as TextStyle,
+
+  formCheckboxStyle: {} as TextStyle,
+  formCheckboxTextStyle: {} as TextStyle,
+
+  formRadioStyle: {} as TextStyle,
+  formRadioTextStyle: {} as TextStyle,
+
+  formPickerBackdrop: {} as ViewStyle,
+  formPickerStyle: {} as TextStyle,
+  formPickerErrorStyle: {} as TextStyle,
+
+  formTextFieldStyle: {} as TextStyle,
+  formTextFieldErrorStyle: {} as TextStyle,
+
+  formDateStyle: {} as TextStyle,
+  formDateErrorStyle: {} as TextStyle,
+
+};
+
+export const defaultStyle = (
+  theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
+) => ({
+
+  ..._simpleStyles,
 
   buttonColors: memoize((color: string) => ({
     color: theme.colorContrast(color),
@@ -71,14 +106,6 @@ export const defaultStyle = (
     });
   }),
 
-  buttonStyle: {} as TextStyle,
-  modalBackdrop: {} as ViewStyle,
-
-  pickerStyle: {} as TextStyle,
-
-  calendarWeekContainerStyle: {} as ViewStyle,
-  calendarWeekdayStyle: {} as TextStyle,
-
   toastColors: memoize((color: string) => ({
     color: theme.colors[color] ?? color,
     borderColor: theme.colors[color] ?? color,
@@ -86,28 +113,9 @@ export const defaultStyle = (
     backgroundColor: shiftColor(theme.colors[color] ?? color, theme.colorWeights[100]),
   })),
 
-  toastStyle: {} as ViewStyle,
-  toastTextStyle: {} as TextStyle,
-
-  formErrorMessageStyle: {} as TextStyle,
-
-  formCheckboxStyle: {} as TextStyle,
-  formCheckboxTextStyle: {} as TextStyle,
   formCheckboxColor: (value: boolean) => value ? theme.colors.primary : theme.grays['600'],
 
-  formRadioStyle: {} as TextStyle,
-  formRadioTextStyle: {} as TextStyle,
   formRadioColor: (value: boolean) => value ? theme.colors.primary : theme.grays['600'],
-
-  formPickerBackdrop: {} as ViewStyle,
-  formPickerStyle: {} as TextStyle,
-  formPickerErrorStyle: {} as TextStyle,
-
-  formTextFieldStyle: {} as TextStyle,
-  formTextFieldErrorStyle: {} as TextStyle,
-
-  formDateStyle: {} as TextStyle,
-  formDateErrorStyle: {} as TextStyle,
 
 })
 
