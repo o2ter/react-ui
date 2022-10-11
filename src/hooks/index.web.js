@@ -23,4 +23,5 @@
 //  THE SOFTWARE.
 //
 
+export * from './index.js';
 export * from './webHooks';
