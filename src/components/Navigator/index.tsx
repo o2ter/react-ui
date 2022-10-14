@@ -122,7 +122,7 @@ const RouteObject: React.FC<React.PropsWithChildren<ComponentPropsWithoutRef<typ
     NavigatorContext.meta = meta;
   }
 
-  if (global.document && _.isString(title)) {
+  if (globalThis.document && _.isString(title)) {
     document.title = title;
   }
 
