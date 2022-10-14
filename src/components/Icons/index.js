@@ -23,18 +23,18 @@
 //  THE SOFTWARE.
 //
 
-export const AntDesign = reqiure('react-native-vector-icons/dist/AntDesign');
-export const Entypo = reqiure('react-native-vector-icons/dist/Entypo');
-export const EvilIcons = reqiure('react-native-vector-icons/dist/EvilIcons');
-export const Feather = reqiure('react-native-vector-icons/dist/Feather');
-export const FontAwesome = reqiure('react-native-vector-icons/dist/FontAwesome');
-export const FontAwesome5 = reqiure('react-native-vector-icons/dist/FontAwesome5');
-export const FontAwesome5Pro = reqiure('react-native-vector-icons/dist/FontAwesome5Pro');
-export const Fontisto = reqiure('react-native-vector-icons/dist/Fontisto');
-export const Foundation = reqiure('react-native-vector-icons/dist/Foundation');
-export const Ionicons = reqiure('react-native-vector-icons/dist/Ionicons');
-export const MaterialCommunityIcons = reqiure('react-native-vector-icons/dist/MaterialCommunityIcons');
-export const MaterialIcons = reqiure('react-native-vector-icons/dist/MaterialIcons');
-export const Octicons = reqiure('react-native-vector-icons/dist/Octicons');
-export const SimpleLineIcons = reqiure('react-native-vector-icons/dist/SimpleLineIcons');
-export const Zocial = reqiure('react-native-vector-icons/dist/Zocial');
+export const AntDesign = require('react-native-vector-icons/dist/AntDesign').default;
+export const Entypo = require('react-native-vector-icons/dist/Entypo').default;
+export const EvilIcons = require('react-native-vector-icons/dist/EvilIcons').default;
+export const Feather = require('react-native-vector-icons/dist/Feather').default;
+export const FontAwesome = require('react-native-vector-icons/dist/FontAwesome').default;
+export const FontAwesome5 = require('react-native-vector-icons/dist/FontAwesome5').default;
+export const FontAwesome5Pro = require('react-native-vector-icons/dist/FontAwesome5Pro').default;
+export const Fontisto = require('react-native-vector-icons/dist/Fontisto').default;
+export const Foundation = require('react-native-vector-icons/dist/Foundation').default;
+export const Ionicons = require('react-native-vector-icons/dist/Ionicons').default;
+export const MaterialCommunityIcons = require('react-native-vector-icons/dist/MaterialCommunityIcons').default;
+export const MaterialIcons = require('react-native-vector-icons/dist/MaterialIcons').default;
+export const Octicons = require('react-native-vector-icons/dist/Octicons').default;
+export const SimpleLineIcons = require('react-native-vector-icons/dist/SimpleLineIcons').default;
+export const Zocial = require('react-native-vector-icons/dist/Zocial').default;
