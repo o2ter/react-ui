@@ -9366,10 +9366,10 @@ style-to-object@0.3.0, style-to-object@^0.3.0:
   dependencies:
     inline-style-parser "0.1.1"
 
-sugax@>=1.0.48:
-  version "1.0.48"
-  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.48.tgz#117ba290cbcab5029acbf1fd7dd7179d3fca3695"
-  integrity sha512-xk6nL+6KU38MBmZdtMfejuuuUCO3FrGRBtEZAFVlIb5rKsm6gXs4cmNImDp4+qOFgR3Adtqk9YSgRRfQo1y2iw==
+sugax@>=1.0.49:
+  version "1.0.49"
+  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.49.tgz#ad607bc8b2e1c856ae743e215f53ff72434ce636"
+  integrity sha512-/za7jpzPFVxMuyLioumlRT/OUVpo3NOmrImrCT+R+C9b+6g8kpmDSJQOGQw2YGm+jtp+inNILioQRlBnqNpvKw==
   dependencies:
     events ">=3.3.0"
     lodash ">=4.17.21"

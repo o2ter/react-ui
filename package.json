@@ -1,8 +1,8 @@
 {
   "name": "o2ter-ui",
   "version": "1.0.0",
-  "main": "dist/index",
-  "module": "dist/index",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist/*"
@@ -35,7 +35,7 @@
     "react-native-uuid": ">=2.0.1",
     "react-native-vector-icons": ">=9.2.0",
     "react-router-dom": ">=6.4.2",
-    "sugax": ">=1.0.48"
+    "sugax": ">=1.0.49"
   },
   "peerDependencies": {
     "react": ">=18.2.0",

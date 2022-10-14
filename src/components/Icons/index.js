@@ -23,18 +23,18 @@
 //  THE SOFTWARE.
 //
 
-export { default as AntDesign } from 'react-native-vector-icons/dist/AntDesign';
-export { default as Entypo } from 'react-native-vector-icons/dist/Entypo';
-export { default as EvilIcons } from 'react-native-vector-icons/dist/EvilIcons';
-export { default as Feather } from 'react-native-vector-icons/dist/Feather';
-export { default as FontAwesome } from 'react-native-vector-icons/dist/FontAwesome';
-export { default as FontAwesome5 } from 'react-native-vector-icons/dist/FontAwesome5';
-export { default as FontAwesome5Pro } from 'react-native-vector-icons/dist/FontAwesome5Pro';
-export { default as Fontisto } from 'react-native-vector-icons/dist/Fontisto';
-export { default as Foundation } from 'react-native-vector-icons/dist/Foundation';
-export { default as Ionicons } from 'react-native-vector-icons/dist/Ionicons';
-export { default as MaterialCommunityIcons } from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-export { default as MaterialIcons } from 'react-native-vector-icons/dist/MaterialIcons';
-export { default as Octicons } from 'react-native-vector-icons/dist/Octicons';
-export { default as SimpleLineIcons } from 'react-native-vector-icons/dist/SimpleLineIcons';
-export { default as Zocial } from 'react-native-vector-icons/dist/Zocial';
+export const AntDesign = reqiure('react-native-vector-icons/dist/AntDesign');
+export const Entypo = reqiure('react-native-vector-icons/dist/Entypo');
+export const EvilIcons = reqiure('react-native-vector-icons/dist/EvilIcons');
+export const Feather = reqiure('react-native-vector-icons/dist/Feather');
+export const FontAwesome = reqiure('react-native-vector-icons/dist/FontAwesome');
+export const FontAwesome5 = reqiure('react-native-vector-icons/dist/FontAwesome5');
+export const FontAwesome5Pro = reqiure('react-native-vector-icons/dist/FontAwesome5Pro');
+export const Fontisto = reqiure('react-native-vector-icons/dist/Fontisto');
+export const Foundation = reqiure('react-native-vector-icons/dist/Foundation');
+export const Ionicons = reqiure('react-native-vector-icons/dist/Ionicons');
+export const MaterialCommunityIcons = reqiure('react-native-vector-icons/dist/MaterialCommunityIcons');
+export const MaterialIcons = reqiure('react-native-vector-icons/dist/MaterialIcons');
+export const Octicons = reqiure('react-native-vector-icons/dist/Octicons');
+export const SimpleLineIcons = reqiure('react-native-vector-icons/dist/SimpleLineIcons');
+export const Zocial = reqiure('react-native-vector-icons/dist/Zocial');
