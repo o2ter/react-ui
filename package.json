@@ -2,6 +2,7 @@
   "name": "o2ter-ui",
   "version": "1.0.0",
   "main": "dist/index",
+  "module": "dist/index",
   "types": "dist/index.d.ts",
   "files": [
     "dist/*"
