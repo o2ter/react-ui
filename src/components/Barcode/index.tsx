@@ -31,13 +31,14 @@ import { List } from '../List';
 import { Options } from 'jsbarcode';
 import { Modify } from '../../internals/types';
 
-const barcodes = require('jsbarcode/src/barcodes');
+import barcodes from 'jsbarcode/src/barcodes';
 
-export const BarcodeFormats = _.keys(barcodes);
+export type BarcodeFormat = keyof typeof barcodes;
+export const BarcodeFormats = _.keys(barcodes) as BarcodeFormat[];
 
 type BarcodeProps = Modify<SvgProps, {
   value?: string;
-  format?: string;
+  format?: BarcodeFormat;
   options?: Options;
   color?: ColorValue;
   backgroundColor?: ColorValue;
