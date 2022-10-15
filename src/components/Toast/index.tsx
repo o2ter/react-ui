@@ -28,7 +28,6 @@ import React from 'react';
 import { View, Text, Pressable, Animated, Platform, StyleSheet, LayoutAnimation, ColorValue, RecursiveArray } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { useMount } from 'sugax';
-import uuid from 'react-native-uuid';
 import { useTheme } from '../../theme';
 import { useSafeAreaInsets } from '../SafeAreaView';
 
@@ -151,7 +150,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
       return;
     }
 
-    const id = uuid.v4() as string;
+    const id = _.uniqueId();
 
     setElements(elements => ({
       ...elements,

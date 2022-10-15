@@ -29,7 +29,6 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Svg, Circle } from 'react-native-svg';
 import { useTheme } from '../../theme';
 import { DateTime } from 'luxon';
-import uuid from 'react-native-uuid';
 
 import { _Date, dateToString } from './date';
 import { calendarStyle } from './style';
@@ -48,7 +47,7 @@ export const CalendarBody: React.FC<{
   onSelect,
 }) => {
 
-    const id = React.useMemo(() => uuid.v4(), []);
+    const id = React.useId();
 
     const theme = useTheme();
 

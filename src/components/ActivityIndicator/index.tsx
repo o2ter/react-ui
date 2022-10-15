@@ -26,14 +26,11 @@
 import _ from 'lodash';
 import React from 'react';
 import { Animated, View, ActivityIndicator as RNActivityIndicator, StyleSheet, Platform } from 'react-native';
-import uuid from 'react-native-uuid';
 
 import { useTheme } from '../../theme';
 
-type TaskId = ReturnType<typeof uuid.v4>;
-
 const ActivityIndicatorContext = React.createContext<{
-  setTasks: React.Dispatch<React.SetStateAction<(string | number[])[]>>;
+  setTasks: React.Dispatch<React.SetStateAction<string[]>>;
   defaultDelay: number;
 }>({
   setTasks: () => {},
@@ -46,7 +43,7 @@ export const useActivity = () => {
 
   return async <T extends unknown>(callback: () => T, delay: number) => {
 
-    const id = uuid.v4();
+    const id = _.uniqueId();
 
     let completed = false;
     const _delay = delay ?? defaultDelay;
@@ -89,7 +86,7 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
   ActivityIndicator = () => <RNActivityIndicator color='white' />,
 }) => {
 
-  const [tasks, setTasks] = React.useState<TaskId[]>([]);
+  const [tasks, setTasks] = React.useState<string[]>([]);
   const [visible, setVisible] = React.useState(false);
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 

@@ -27,7 +27,6 @@ import _ from 'lodash';
 import React from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import { Picker as RNPicker, PickerItemProps } from '@react-native-picker/picker';
-import uuid from 'react-native-uuid';
 
 export type ItemValue = number | string;
 
@@ -52,7 +51,7 @@ export const PickerNative = React.forwardRef<RNPicker<ItemValue>, PickerNativePr
   onBlur = () => {},
 }, forwardRef) => {
 
-  const id = React.useMemo(() => uuid.v4(), []);
+  const id = React.useId();
 
   return (
     <RNPicker
