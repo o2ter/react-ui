@@ -5,8 +5,6 @@ import babel from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
 import dts from 'rollup-plugin-dts';
 
-const packageJson = require('./package.json');
-
 const rollupPlugins = [
   typescript(),
   babel({
@@ -32,12 +30,12 @@ export default [
     ...rollupConfig,
     output: [
       {
-        file: packageJson.main + '.js',
+        file: 'dist/index.js',
         format: 'cjs',
         sourcemap: true,
       },
       {
-        file: packageJson.main + '.mjs',
+        file: 'dist/index.mjs',
         format: 'esm',
         sourcemap: true,
       },
@@ -53,12 +51,12 @@ export default [
     ...rollupConfig,
     output: [
       {
-        file: packageJson.main + '.web.js',
+        file: 'dist/index.web.js',
         format: 'cjs',
         sourcemap: true,
       },
       {
-        file: packageJson.main + '.web.mjs',
+        file: 'dist/index.web.mjs',
         format: 'esm',
         sourcemap: true,
       },
