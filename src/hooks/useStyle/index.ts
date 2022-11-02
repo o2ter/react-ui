@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,4 +23,7 @@
 //  THE SOFTWARE.
 //
 
-export { useStyle } from './useStyle';
+import React from 'react';
+import { StyleSheet, ViewStyle, TextStyle, ImageStyle } from 'react-native';
+
+export const useStyle = <T extends ViewStyle | TextStyle | ImageStyle>(style: T) => React.useMemo(() => StyleSheet.create({ style }).style, [style]);
