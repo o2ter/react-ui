@@ -41,10 +41,12 @@ type ThemeProviderProps = {
   styles?: ThemeStylesProvider;
 }
 
-const ThemeContext = React.createContext<ThemeProviderProps>({
+const ThemeContext = React.createContext({
   variables: defaultVariables,
   styles: defaultStyle,
 });
+
+type ThemeContextType = typeof ThemeContext extends React.Context<infer P> ? P : any;
 
 export const ThemeProvider = ({
   variables,
@@ -52,7 +54,11 @@ export const ThemeProvider = ({
   children
 }: React.PropsWithChildren<ThemeProviderProps>) => {
 
-  const value = React.useMemo(() => ({ variables, styles }), [variables, styles]);
+  const parent = React.useContext(ThemeContext);
+  const value: ThemeContextType = React.useMemo(() => ({ 
+    variables: _.assign({}, parent.variables, variables), 
+    styles: (theme) => _.assign({}, parent.styles(theme), styles?.(theme)), 
+  }), [parent, variables, styles]);
 
   return (
     <ThemeContext.Provider value={value}>
@@ -82,13 +88,13 @@ export function useTheme() {
       get mediaSelect() { return _mediaSelect(computed, windowDimensions) },
       get styles() {
         if (_.isNil(computed_style)) {
-          const _computed_style = _.assign({}, defaultStyle(computed), styles?.(computed));
+          const _computed_style = styles(computed);
           const _picked = _.pick(_computed_style, _.keys(_simpleStyles) as (keyof typeof _simpleStyles)[]);
           computed_style = { ..._computed_style, ...StyleSheet.create(_picked) };
         }
         return computed_style;
       },
-    }, defaultVariables, variables);
+    }, variables);
 
     return computed;
 
