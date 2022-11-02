@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Text as RNText, TextProps } from 'react-native';
 import { useTheme } from '../../theme';
+import { useTextStyle } from './style';
 
 export const Text = React.forwardRef<RNText, TextProps>(({
   style,
@@ -35,11 +36,12 @@ export const Text = React.forwardRef<RNText, TextProps>(({
 }, forwardRef) => {
 
   const theme = useTheme();
+  const textStyle = useTextStyle();
 
   return (
     <RNText
       ref={forwardRef}
-      style={[theme.styles.textStyle, style]}
+      style={[theme.styles.textStyle, textStyle, style]}
       {...props}>
       {children}
     </RNText>

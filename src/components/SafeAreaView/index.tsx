@@ -71,7 +71,7 @@ export const SafeAreaView = React.forwardRef<View, SafeAreaViewProps>(({
 
   const viewRef = React.useRef<View>();
   const ref = useMergeRefs(viewRef, forwardRef);
-  const theme = useTheme()
+  const theme = useTheme();
 
   const insets = useSafeAreaInsets();
   const windowDimensions = useWindowDimensions();
@@ -94,7 +94,7 @@ export const SafeAreaView = React.forwardRef<View, SafeAreaViewProps>(({
     paddingBottom = paddingVertical,
     paddingLeft = paddingHorizontal,
     ..._style
-  }: ViewStyle = StyleSheet.flatten([theme.styles.viewStyle, style]) ?? {};
+  }: ViewStyle = StyleSheet.flatten([theme.styles.safeAreaViewStyle, style]) ?? {};
 
   return <View
     ref={ref}

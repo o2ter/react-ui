@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { View as RNView, ViewProps } from 'react-native';
 import { useTheme } from '../../theme';
+import { useViewStyle } from './style';
 
 export const View = React.forwardRef<RNView, ViewProps>(({
   style,
@@ -35,11 +36,12 @@ export const View = React.forwardRef<RNView, ViewProps>(({
 }, forwardRef) => {
 
   const theme = useTheme();
+  const viewStyle = useViewStyle();
 
   return (
     <RNView
       ref={forwardRef}
-      style={[theme.styles.viewStyle, style]}
+      style={[theme.styles.viewStyle, viewStyle, style]}
       {...props}>
       {children}
     </RNView>
