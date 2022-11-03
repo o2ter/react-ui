@@ -9361,7 +9361,7 @@ style-to-object@0.3.0, style-to-object@^0.3.0:
   dependencies:
     inline-style-parser "0.1.1"
 
-sugax@>=1.0.51:
+sugax@^1.0.51:
   version "1.0.51"
   resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.51.tgz#ab9ceaed13fc3de26808e7044957e5867e4e4c56"
   integrity sha512-BZjTpk1OOI/F9lgLLPIo5aoZFaM+kdDpt0MX8qqdONqr9cTXzVq+ugGeQTJLmouv4txIPQdODxGlKqsZxwk6Nw==
