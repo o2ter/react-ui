@@ -26,8 +26,18 @@
 export type FontWeight = 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
 
 export const fontSizeBase: number = 16;
-export const fontSizeSmall = fontSizeBase * 0.875;
-export const fontSizeLarge = fontSizeBase * 1.25;
+
+export const fontSizes: Record<string, number> = {
+  '1': fontSizeBase * 2.5,
+  '2': fontSizeBase * 2,
+  '3': fontSizeBase * 1.75,
+  '4': fontSizeBase * 1.5,
+  '5': fontSizeBase * 1.25,
+  '6': fontSizeBase,
+  'normal': fontSizeBase,
+  'small': fontSizeBase * 0.875,
+  'large': fontSizeBase * 1.25,
+};
 
 export const fontWeightLight: FontWeight = '300';
 export const fontWeightNormal: FontWeight = '400';

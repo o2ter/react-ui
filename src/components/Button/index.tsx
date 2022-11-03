@@ -48,6 +48,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 type ButtonProps = Modify<PressableProps, Partial<{
   variant: string;
   outline: boolean;
+  size: string;
   title: string;
   style: StyleProp<ViewStyle>;
   titleStyle: StyleProp<TextStyle>;
@@ -58,6 +59,7 @@ type ButtonProps = Modify<PressableProps, Partial<{
 export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   variant = 'primary',
   outline = false,
+  size = 'normal',
   title,
   style,
   titleStyle,
@@ -105,8 +107,9 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
       paddingVertical: 6,
       borderWidth: theme.borderWidth,
       borderRadius: theme.borderRadius,
-      fontSize: theme.fontSizeBase,
+      fontSize: theme.fontSizes[size] ?? theme.fontSizeBase,
       fontWeight: theme.fontWeightNormal,
+      opacity: disabled ? 0.65 : 1,
     } as TextStyle,
     theme.styles.buttonStyle,
     colors,
