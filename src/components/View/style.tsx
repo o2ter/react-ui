@@ -35,7 +35,8 @@ export const ViewStyleProvider: React.FC<React.PropsWithChildren<{
   children,
   style,
 }) => {
-  const _style = React.useMemo(() => StyleSheet.create({ style }).style, [style]);
+  const parent = useViewStyle();
+  const _style = React.useMemo(() => StyleSheet.create({ style: _.assign({}, parent, style) }).style, [parent, style]);
   return (
     <ViewStyleContext.Provider value={_style}>{children}</ViewStyleContext.Provider>
   );

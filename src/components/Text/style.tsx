@@ -35,7 +35,8 @@ export const TextStyleProvider: React.FC<React.PropsWithChildren<{
   children,
   style,
 }) => {
-  const _style = React.useMemo(() => StyleSheet.create({ style }).style, [style]);
+  const parent = useTextStyle();
+  const _style = React.useMemo(() => StyleSheet.create({ style: _.assign({}, parent, style) }).style, [parent, style]);
   return (
     <TextStyleContext.Provider value={_style}>{children}</TextStyleContext.Provider>
   );
