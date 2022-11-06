@@ -116,7 +116,7 @@ export const useField = (name: string | string[]) => {
   const { values, setValues, validate, groupPath } = useForm();
   const path = [...groupPath, ..._.toPath(name)].join('.');
 
-  const onChange = React.useMemo(() => (value: React.SetStateAction<any>) => setValues(
+  const onChange = React.useCallback((value: React.SetStateAction<any>) => setValues(
     values => _.set(_.cloneDeep(values), path, _.isFunction(value) ? value(_.get(values, path)) : value)
   ), [setValues]);
 

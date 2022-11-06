@@ -82,7 +82,7 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
     return { month: _value?.month ?? now.month, year: _value?.year ?? now.year }
   });
 
-  const _selectable = React.useMemo(() => (date: string) => {
+  const _selectable = React.useCallback((date: string) => {
     if (!_.isNil(min) && _Date.lessThan(date, min)) return false;
     if (!_.isNil(max) && _Date.lessThan(max, date)) return false;
     return selectable(date);
