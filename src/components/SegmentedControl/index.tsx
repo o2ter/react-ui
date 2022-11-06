@@ -26,6 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { Animated, View, ViewProps, StyleProp, ViewStyle, TextStyle, LayoutRectangle } from 'react-native';
+import { List } from '../List';
 import { Modify } from '../../internals/types';
 
 import { style as _style } from './style';
@@ -91,17 +92,19 @@ export const SegmentedControl = React.forwardRef<View, SegmentedControlProps>(({
     }}>
       <View style={[{ flex: 1, backgroundColor: 'white', margin: 2, borderRadius: 8, alignSelf: 'stretch' }, _style.shadow, tabStyle]} />
     </Animated.View>
-    {React.Children.map(segments, (item, index) => (
-      <Segment
-        item={item}
-        onLayout={({ nativeEvent }) => setSegmentBounds(state => ({ ...state, [index]: nativeEvent.layout }))}
-        isSelected={selected_idx === index}
-        segmentTextStyle={segmentTextStyle}
-        selectedSegmentTextStyle={selectedSegmentTextStyle}
-        segmentContainerStyle={segmentContainerStyle}
-        selectedSegmentContainerStyle={selectedSegmentContainerStyle}
-        onPress={() => { if (_.isFunction(onChange)) onChange(segment_value(segments[index])) }} />
-    ))}
+    <List
+      data={segments}
+      renderItem={({ item, index }) => (
+        <Segment
+          item={item}
+          onLayout={({ nativeEvent }) => setSegmentBounds(state => ({ ...state, [index]: nativeEvent.layout }))}
+          isSelected={selected_idx === index}
+          segmentTextStyle={segmentTextStyle}
+          selectedSegmentTextStyle={selectedSegmentTextStyle}
+          segmentContainerStyle={segmentContainerStyle}
+          selectedSegmentContainerStyle={selectedSegmentContainerStyle}
+          onPress={() => { if (_.isFunction(onChange)) onChange(segment_value(segments[index])) }} />
+      )} />
   </View>;
 });
 
@@ -126,15 +129,17 @@ export const PlainSegmentedControl = React.forwardRef<View, PlainSegmentedContro
     ref={forwardRef}
     style={[_style.plainSegmentedControlContainer, { borderColor: color }, style]}
     {...props}>
-    {React.Children.map(segments, (item, index) => (
-      <Segment
-        item={item}
-        isSelected={selected_idx === index}
-        segmentTextStyle={[{ color }, segmentTextStyle]}
-        selectedSegmentTextStyle={[{ color: 'white' }, selectedSegmentTextStyle]}
-        segmentContainerStyle={segmentContainerStyle}
-        selectedSegmentContainerStyle={[{ backgroundColor: color }, selectedSegmentContainerStyle]}
-        onPress={() => { if (_.isFunction(onChange)) onChange(segment_value(segments[index])) }} />
-    ))}
+    <List
+      data={segments}
+      renderItem={({ item, index }) => (
+        <Segment
+          item={item}
+          isSelected={selected_idx === index}
+          segmentTextStyle={[{ color }, segmentTextStyle]}
+          selectedSegmentTextStyle={[{ color: 'white' }, selectedSegmentTextStyle]}
+          segmentContainerStyle={segmentContainerStyle}
+          selectedSegmentContainerStyle={[{ backgroundColor: color }, selectedSegmentContainerStyle]}
+          onPress={() => { if (_.isFunction(onChange)) onChange(segment_value(segments[index])) }} />
+      )} />
   </View>;
 });

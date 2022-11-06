@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,32 +23,17 @@
 //  THE SOFTWARE.
 //
 
-export * from './ActivityIndicator';
-export { AsyncRefreshControl } from './AsyncRefreshControl';
-export { Barcode, BarcodeFormats } from './Barcode';
-export * from './Button';
-export { Calendar } from './Calendar';
-export { ErrorBoundary } from './ErrorBoundary';
-export { FlatList } from './FlatList';
-export * from './Form';
-export { Icon } from './Icon';
-export * from './Icons';
-export * as Icons from './Icons';
-export { Image } from './Image';
-export { List } from './List';
-export { Lottie } from './Lottie';
-export { Picker } from './Picker';
-export { QRCode } from './QRCode';
-export * from './SafeAreaView';
-export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
-export * from './SegmentedControl';
-export { SleekAnimationView } from './SleekAnimationView';
-export { StickyView } from './StickyView';
-export { SVG } from './SVG';
-export * from './Modal';
-export { Text } from './Text';
-export { TextStyleProvider } from './Text/style';
-export * from './Toast';
-export { Touchable } from './Touchable';
-export { View } from './View';
-export { ViewStyleProvider } from './View/style';
+import _ from 'lodash';
+import React from 'react';
+
+type ListProps<T> = {
+  data: T[],
+  renderItem: (x: { item: T, index: number }) => any
+}
+
+export const List = <T extends any>({
+  data,
+  renderItem = ({ item }) => item
+}: ListProps<T>) => React.createElement(React.Fragment, {}, ..._.map(data, (item, index) => renderItem({ item, index })));
+
+export default List;

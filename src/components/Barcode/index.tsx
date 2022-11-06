@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { ColorValue } from 'react-native';
 import Svg, { SvgProps, Rect } from 'react-native-svg';
+import { List } from '../List';
 import { Options } from 'jsbarcode';
 import { Modify } from '../../internals/types';
 
@@ -87,7 +88,7 @@ export const Barcode = React.forwardRef<Svg, BarcodeProps>(({
 
   return <Svg ref={forwardRef} viewBox={`0 0 ${size} 100`} preserveAspectRatio='none' {...props}>
     {backgroundColor && <Rect x={0} y={0} width={size} height={100} fill={backgroundColor} />}
-    {React.Children.map(rects, props => <Rect y={0} height={100} fill={color} {...props} />)}
+    <List data={rects} renderItem={({ item }) => <Rect y={0} height={100} fill={color} {...item} />} />
   </Svg>;
 });
 

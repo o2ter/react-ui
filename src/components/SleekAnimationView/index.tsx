@@ -26,6 +26,7 @@
 import _ from 'lodash';
 import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
 import { Image, StyleProp, ViewStyle, ImageStyle, ImageSourcePropType, ImageResizeMode } from 'react-native';
+import { List } from '../List';
 import { StickyView } from '../StickyView';
 import { Modify } from '../../internals/types';
 
@@ -47,21 +48,19 @@ export const SleekAnimationView = React.forwardRef<ComponentRef<typeof StickyVie
   <StickyView
     ref={forwardRef}
     stickyContainerStyle={[{ zIndex: -1 }, backgroundContainerStyle]}
-    stickyView={({ factor }) => (
-      React.Children.map(backgroundImages, (item, index) => (
-        <Image
-          source={item}
-          style={[{
-            width: '100%',
-            height: '100%',
-            display: index === Math.min(backgroundImages.length - 1, Math.floor(factor * backgroundImages.length)) ? 'flex' : 'none',
-          }, backgroundStyle]}
-          resizeMode={resizeMode} />
-      ))
-    )}
+    stickyView={({ factor }) => <List
+      data={backgroundImages}
+      renderItem={({ item, index }) => <Image
+        source={item}
+        style={[{
+          width: '100%',
+          height: '100%',
+          display: index === Math.min(backgroundImages.length - 1, Math.floor(factor * backgroundImages.length)) ? 'flex' : 'none'
+        }, backgroundStyle]}
+        resizeMode={resizeMode} />} />}
     {...props}>
     {children}
-  </StickyView >
+  </StickyView>
 ));
 
 export default SleekAnimationView;
