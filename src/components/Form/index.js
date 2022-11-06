@@ -24,11 +24,12 @@
 //
 
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase } from './Form';
+import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
 import { useFormGroup, FormGroup } from './Group';
 import { FormDate } from './DateTime';
 
 const Form = _.assign(FormBase, {
+  Consumer: FormConsumer,
   Group: FormGroup,
   ErrorMessage: require('./ErrorMessage').default,
   TextField: require('./TextField').default,
