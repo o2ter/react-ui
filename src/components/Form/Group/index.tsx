@@ -36,7 +36,7 @@ export const FormGroup: React.FC<React.PropsWithChildren<{
   name,
   children
 }) => (
-    <FormGroupContext.Provider value={[...useFormGroup(), ..._.toPath(name)]}>
-      {children}
-    </FormGroupContext.Provider>
-  );
+  <FormGroupContext.Provider value={[...useFormGroup(), ..._.toPath(name)]}>
+    {children}
+  </FormGroupContext.Provider>
+);

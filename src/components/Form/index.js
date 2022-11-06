@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
-import { useFormGroup, FormGroup } from './Group';
+import { FormGroup } from './Group';
 import { FormDate } from './DateTime';
 
 const Form = _.assign(FormBase, {
@@ -43,6 +43,5 @@ const Form = _.assign(FormBase, {
 export {
   useField,
   useForm,
-  useFormGroup,
   Form,
 }
