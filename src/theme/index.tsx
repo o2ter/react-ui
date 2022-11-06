@@ -46,8 +46,6 @@ const ThemeContext = React.createContext({
   styles: defaultStyle,
 });
 
-type ThemeContextType = typeof ThemeContext extends React.Context<infer P> ? P : any;
-
 export const ThemeProvider = ({
   variables,
   styles,
@@ -55,7 +53,7 @@ export const ThemeProvider = ({
 }: React.PropsWithChildren<ThemeProviderProps>) => {
 
   const parent = React.useContext(ThemeContext);
-  const value: ThemeContextType = React.useMemo(() => ({ 
+  const value: React.ContextType<typeof ThemeContext> = React.useMemo(() => ({ 
     variables: _.assign({}, parent.variables, variables), 
     styles: (theme) => _.assign({}, parent.styles(theme), styles?.(theme)), 
   }), [parent, variables, styles]);
