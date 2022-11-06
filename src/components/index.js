@@ -35,7 +35,6 @@ export { Icon } from './Icon';
 export * from './Icons';
 export * as Icons from './Icons';
 export { Image } from './Image';
-export { List } from './List';
 export { Lottie } from './Lottie';
 export { Picker } from './Picker';
 export { QRCode } from './QRCode';
