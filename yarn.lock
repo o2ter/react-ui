@@ -1422,6 +1422,14 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@o2ter/i18n@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@o2ter/i18n/-/i18n-0.0.1.tgz#20292e460d1e1b635cfdea1d263c4421bda1918f"
+  integrity sha512-QobRShyAesWNpZi3xq18XlhXQQXQUPLTtuhdNjWTH+ApGYZJpMqsQR3kWOmBtLZMORob1LRS654VWca3lMa8Ow==
+  dependencies:
+    events ">=3.3.0"
+    lodash ">=4.17.21"
+
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.8"
   resolved "https://registry.yarnpkg.com/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.5.8.tgz#da3383761e2c0c440610819f3204769022a38d12"

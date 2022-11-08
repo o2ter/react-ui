@@ -1,5 +1,5 @@
 
-import { LocalizationStrings } from 'sugax';
+import { LocalizationStrings } from '@o2ter/i18n';
 
 export default LocalizationStrings({
   'en': require('./en.json'),
