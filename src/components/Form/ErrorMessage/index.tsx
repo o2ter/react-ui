@@ -26,7 +26,8 @@
 import _ from 'lodash';
 import React from 'react';
 import { Text, TextProps } from 'react-native';
-import { useLocalize, ValidateError } from 'sugax';
+import { useLocalize } from '@o2ter/i18n';
+import { ValidateError } from 'sugax';
 import { useField } from '../Form';
 import { Modify } from '../../../internals/types';
 import { useTheme } from '../../../theme';
