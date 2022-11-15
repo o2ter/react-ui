@@ -37,8 +37,8 @@ export type PickerNativeProps<T = ItemValue> = {
   style?: StyleProp<TextStyle>;
   renderText?: (label?: PickerItemProps<T>) => any
   onValueChange?: (itemValue: T, itemIndex: number) => void;
-  onFocus?: () => void;
-  onBlur?: () => void;
+  onFocus?: VoidFunction;
+  onBlur?: VoidFunction;
 }
 
 export const PickerNative = React.forwardRef<RNPicker<ItemValue>, PickerNativeProps>(({

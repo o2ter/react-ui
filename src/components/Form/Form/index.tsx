@@ -33,8 +33,8 @@ type FormState = {
   errors: Error[];
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
   validate: (value: any, path?: string) => Error[];
-  submit: () => void;
-  reset: () => void;
+  submit: VoidFunction;
+  reset: VoidFunction;
 }
 
 const FormContext = React.createContext<FormState>({

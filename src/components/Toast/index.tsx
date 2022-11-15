@@ -67,8 +67,8 @@ function toString(message: ToastMessage) {
 const ToastBody: React.FC<{
   message: ToastMessage;
   type: ToastType | string;
-  onShow: (x: { dismiss: () => void }) => void;
-  onDismiss: () => void;
+  onShow: (x: { dismiss: VoidFunction }) => void;
+  onDismiss: VoidFunction;
 }> = ({
   message,
   type,
