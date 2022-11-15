@@ -9402,10 +9402,10 @@ style-to-object@0.3.0, style-to-object@^0.3.0:
   dependencies:
     inline-style-parser "0.1.1"
 
-sugax@^1.0.54:
-  version "1.0.54"
-  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.54.tgz#b519fcf6d12ffb0dbaafc8499d6fef3517c6e3dc"
-  integrity sha512-zRivDHz67vED5AxNJY3mBTEzAZFxLzZmyasdDAFWk/GxC0CFw1jZmCu1Y8XXPqneJ7x8qZySzSa249a+f+It/A==
+sugax@^1.0.56:
+  version "1.0.56"
+  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.56.tgz#45ede7e2bbe02715189b693dce72f820129b70d0"
+  integrity sha512-MSyQsFOWE1zA8vB25rGWafHAU/7zrzDe7FyBzZhU9czcnUO204qa4N1xGK2TImUodTBfL8LeEGelLzSWPOFVww==
   dependencies:
     axios "^1.1.3"
     lodash ">=4.17.21"

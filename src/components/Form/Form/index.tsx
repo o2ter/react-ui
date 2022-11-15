@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
-import { useCallbackRef, ISchema, object } from 'sugax';
+import { useStableRef, ISchema, object } from 'sugax';
 
 type FormState = {
   values: Record<string, any>;
@@ -64,8 +64,8 @@ export const Form: React.FC<{
 
   const [values, setValues] = React.useState(initialValues);
 
-  const onResetRef = useCallbackRef(onReset);
-  const onSubmitRef = useCallbackRef(onSubmit);
+  const onResetRef = useStableRef(onReset);
+  const onSubmitRef = useStableRef(onSubmit);
 
   const _schema = React.useMemo(() => object(schema), [schema]);
 

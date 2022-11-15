@@ -26,11 +26,11 @@
 import _ from 'lodash';
 import React from 'react';
 import { UIManager } from 'react-native';
-import { useCallbackRef } from 'sugax';
+import { useStableRef } from 'sugax';
 
 export function useDOMElementEvent(element, event, callback) {
 
-  const callbackRef = useCallbackRef(callback);
+  const callbackRef = useStableRef(callback);
 
   React.useEffect(() => {
     if (!(element instanceof EventTarget)) return;
