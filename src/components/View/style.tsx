@@ -25,20 +25,23 @@
 
 import _ from 'lodash';
 import React from 'react';
-import {  StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet, ViewStyle } from 'react-native';
+import { useEquivalent } from 'sugax';
+import { PrevState } from '../../internals/types';
 
 const ViewStyleContext = React.createContext<ViewStyle>({});
 
 export const ViewStyleProvider: React.FC<React.PropsWithChildren<{
-  style: ViewStyle;
+  style: PrevState<ViewStyle>;
 }>> = ({
   children,
   style,
 }) => {
   const parent = useViewStyle();
-  const _style = React.useMemo(() => StyleSheet.create({ style: _.assign({}, parent, style) }).style, [parent, style]);
+  const _style = useEquivalent(_.isFunction(style) ? style(parent) : style);
+  const value = React.useMemo(() => StyleSheet.create({ style: _.assign({}, parent, _style) }).style, [parent, _style]);
   return (
-    <ViewStyleContext.Provider value={_style}>{children}</ViewStyleContext.Provider>
+    <ViewStyleContext.Provider value={value}>{children}</ViewStyleContext.Provider>
   );
 }
 

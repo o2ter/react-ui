@@ -25,10 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-
 import { defaultVariables, ThemeVariables } from './variables';
 import { defaultStyle, _simpleStyles, ThemeStyles, ThemeStylesProvider, _colorContrast } from './styles';
 import { useWindowDimensions, ScaledSize, StyleSheet } from 'react-native';
+import { useEquivalent } from 'sugax';
+import { PrevState } from '../internals/types';
 
 export {
   ThemeVariables,
@@ -37,7 +38,7 @@ export {
 };
 
 type ThemeProviderProps = {
-  variables?: Partial<ThemeVariables>;
+  variables?: PrevState<Partial<ThemeVariables>>;
   styles?: ThemeStylesProvider;
 }
 
@@ -53,10 +54,11 @@ export const ThemeProvider = ({
 }: React.PropsWithChildren<ThemeProviderProps>) => {
 
   const parent = React.useContext(ThemeContext);
+  const _variables = useEquivalent(_.isFunction(variables) ? variables(parent.variables) : variables);
   const value: React.ContextType<typeof ThemeContext> = React.useMemo(() => ({ 
-    variables: _.assign({}, parent.variables, variables), 
+    variables: _.assign({}, parent.variables, _variables), 
     styles: (theme) => _.assign({}, parent.styles(theme), styles?.(theme)), 
-  }), [parent, variables, styles]);
+  }), [parent, _variables, styles]);
 
   return (
     <ThemeContext.Provider value={value}>
