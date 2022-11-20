@@ -100,28 +100,24 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     borderColor: outline ? selectedColor : _interpolate(fromColors.borderColor, toColors.borderColor),
   };
 
-  const defaultStyle = React.useMemo(() => {
+  const _defaultStyle = React.useMemo(() => StyleSheet.flatten([
+    {
+      textAlign: 'center',
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderWidth: theme.borderWidth,
+      borderRadius: theme.borderRadius,
+      fontSize: theme.fontSizes[size] ?? theme.fontSizeBase,
+      fontWeight: theme.fontWeightNormal,
+      opacity: disabled ? 0.65 : 1,
+    } as TextStyle,
+    theme.styles.buttonStyle,
+  ]), [theme, selectedColor, size, disabled]);
 
-    const style = StyleSheet.flatten([
-      {
-        textAlign: 'center',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderWidth: theme.borderWidth,
-        borderRadius: theme.borderRadius,
-        fontSize: theme.fontSizes[size] ?? theme.fontSizeBase,
-        fontWeight: theme.fontWeightNormal,
-        opacity: disabled ? 0.65 : 1,
-      } as TextStyle,
-      theme.styles.buttonStyle,
-    ]);
-
-    return StyleSheet.create({
-      text: _.pick(style, text_style),
-      button: _.omit(style, text_style),
-    });
-  
-  }, [theme, selectedColor]);
+  const defaultStyle = React.useMemo(() => StyleSheet.create({
+    text: _.pick(_defaultStyle, text_style),
+    button: _.omit(_defaultStyle, text_style),
+  }), [_defaultStyle]);
 
   const content = _.isEmpty(children) && !_.isEmpty(title) ? (
     <Animated.Text style={[defaultStyle.text, _.pick(colors, text_style), titleStyle]}>{title}</Animated.Text>
