@@ -58,6 +58,9 @@ export const defaultVariables = {
     '900': 0.8,
   },
 
+  bodyBackground: 'white',
+  bodyColor: '#212529',
+
   minContrastRatio: 4.5,
   colorContrastDark: 'black',
   colorContrastLight: 'white',

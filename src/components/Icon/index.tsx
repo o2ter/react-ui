@@ -25,7 +25,8 @@
 
 import _ from 'lodash';
 import React, { ComponentRef } from 'react';
-import { Text, TextProps, StyleProp, TextStyle, StyleSheet } from 'react-native';
+import { TextProps, StyleProp, TextStyle, StyleSheet } from 'react-native';
+import Text from '../Text';
 import * as Icons from '../Icons';
 import { Modify } from '../../internals/types';
 import { text_style } from '../../internals/text_style';
