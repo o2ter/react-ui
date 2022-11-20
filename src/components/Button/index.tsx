@@ -100,23 +100,31 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     borderColor: outline ? selectedColor : _interpolate(fromColors.borderColor, toColors.borderColor),
   };
 
-  const defaultStyle = StyleSheet.flatten([
-    {
-      textAlign: 'center',
-      paddingHorizontal: 12,
-      paddingVertical: 6,
-      borderWidth: theme.borderWidth,
-      borderRadius: theme.borderRadius,
-      fontSize: theme.fontSizes[size] ?? theme.fontSizeBase,
-      fontWeight: theme.fontWeightNormal,
-      opacity: disabled ? 0.65 : 1,
-    } as TextStyle,
-    theme.styles.buttonStyle,
-    colors,
-  ]);
+  const defaultStyle = React.useMemo(() => {
+
+    const style = StyleSheet.flatten([
+      {
+        textAlign: 'center',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderWidth: theme.borderWidth,
+        borderRadius: theme.borderRadius,
+        fontSize: theme.fontSizes[size] ?? theme.fontSizeBase,
+        fontWeight: theme.fontWeightNormal,
+        opacity: disabled ? 0.65 : 1,
+      } as TextStyle,
+      theme.styles.buttonStyle,
+    ]);
+
+    return StyleSheet.create({
+      text: _.pick(style, text_style),
+      button: _.omit(style, text_style),
+    });
+  
+  }, [theme, selectedColor]);
 
   const content = _.isEmpty(children) && !_.isEmpty(title) ? (
-    <Animated.Text style={[_.pick(defaultStyle, text_style), titleStyle]}>{title}</Animated.Text>
+    <Animated.Text style={[defaultStyle.text, _.pick(colors, text_style), titleStyle]}>{title}</Animated.Text>
   ) : children;
 
   const callbacks: any = Platform.select({
@@ -138,7 +146,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
       ref={forwardRef}
       disabled={disabled}
       focusable={!disabled && focusable !== false}
-      style={[_.omit(defaultStyle, text_style), style]}
+      style={[defaultStyle.button, _.omit(colors, text_style), style]}
       onPressIn={(e: GestureResponderEvent) => {
         setFocused(state => ({ ...state, press: true }));
         if (_.isFunction(onPressIn)) onPressIn(e);

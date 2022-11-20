@@ -37,16 +37,12 @@ export const Text = React.forwardRef<RNText, TextProps>(({
 
   const theme = useTheme();
   const textStyle = useTextStyle();
+  const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.bodyColor } }).style, [theme]);
 
   return (
     <RNText
       ref={forwardRef}
-      style={[
-        { color: theme.bodyColor },
-        theme.styles.textStyle, 
-        textStyle, 
-        style,
-      ]}
+      style={[defaultStyle, theme.styles.textStyle, textStyle, style]}
       {...props}>
       {children}
     </RNText>
