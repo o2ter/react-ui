@@ -109,15 +109,15 @@ export const defaultStyle = (
   }),
 
   toastColors: memoize((color: string) => ({
-    color: theme.colors[color] ?? color,
-    borderColor: theme.colors[color] ?? color,
-    messageColor: shiftColor(theme.colors[color] ?? color, theme.colorWeights[800]),
-    backgroundColor: shiftColor(theme.colors[color] ?? color, theme.colorWeights[100]),
+    color: theme.themeColors[color] ?? theme.colors[color] ?? color,
+    borderColor: theme.themeColors[color] ?? theme.colors[color] ?? color,
+    messageColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[800]),
+    backgroundColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[100]),
   })),
 
-  formCheckboxColor: (value: boolean) => value ? theme.colors.primary : theme.grays['600'],
+  formCheckboxColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
 
-  formRadioColor: (value: boolean) => value ? theme.colors.primary : theme.grays['600'],
+  formRadioColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
 
 })
 

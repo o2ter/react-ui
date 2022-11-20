@@ -1,5 +1,5 @@
 //
-//  color.ts
+//  colors.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,12 +23,13 @@
 //  THE SOFTWARE.
 //
 
-export const primary = '#0d6efd';
-export const secondary = '#6c757d';
-export const success = '#198754';
-export const info = '#0dcaf0';
-export const warning = '#ffc107';
-export const error = '#dc3545';
-export const danger = '#dc3545';
-export const light = '#f8f9fa';
-export const dark = '#212529';
+export const blue = '#0d6efd';
+export const indigo = '#6610f2';
+export const purple = '#6f42c1';
+export const pink = '#d63384';
+export const red = '#dc3545';
+export const orange = '#fd7e14';
+export const yellow = '#ffc107';
+export const green = '#198754';
+export const teal = '#20c997';
+export const cyan = '#0dcaf0';

@@ -25,6 +25,7 @@
 
 import _ from 'lodash';
 import * as color_defaults from './colors';
+import * as theme_color_defaults from './theme_colors';
 import * as font_defaults from './font';
 import * as border_defaults from './border';
 import * as breakpoint_defaults from './breakpoints';
@@ -33,6 +34,7 @@ import * as animation_defaults from './animation';
 export const defaultVariables = {
 
   colors: color_defaults as Record<string, string>,
+  themeColors: theme_color_defaults as Record<string, string>,
 
   grays: {
     '100': '#f8f9fa',

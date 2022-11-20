@@ -88,7 +88,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   }, [focused.hover || focused.press]);
 
   const theme = useTheme();
-  const selectedColor = theme.colors[variant];
+  const selectedColor = theme.themeColors[variant] ?? theme.colors[variant];
 
   const fromColors = theme.styles.buttonColors(selectedColor);
   const toColors = theme.styles.buttonFocusedColors(selectedColor);

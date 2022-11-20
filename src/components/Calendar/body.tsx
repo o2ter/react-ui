@@ -74,14 +74,14 @@ export const CalendarBody: React.FC<{
           onPress={() => { if (selectable(dateToString(year, month, day))) onSelect({ year, month, day }) }}>
           {_selected && selected?.day === day && (
             <Svg viewBox='0 0 100 100' style={StyleSheet.absoluteFill}>
-              <Circle cx={50} cy={50} r={40} fill={theme.colors.primary} />
+              <Circle cx={50} cy={50} r={40} fill={theme.themeColors.primary} />
             </Svg>
           )}
           <Text style={[
             calendarStyle.weekdays,
             theme.styles.calendarWeekdayStyle,
             selectable(dateToString(year, month, day)) ? {} : { color: theme.grays['500'] },
-            _selected && selected?.day === day ? { color: theme.colorContrast(theme.colors.primary) } : {},
+            _selected && selected?.day === day ? { color: theme.colorContrast(theme.themeColors.primary) } : {},
           ]}>{day}</Text>
         </Pressable>
       );

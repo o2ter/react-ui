@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  theme_colors.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,40 +23,12 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import React from 'react';
-import { Text, TextProps } from 'react-native';
-import { useLocalize } from '@o2ter/i18n';
-import { ValidateError } from 'sugax';
-import { useField } from '../Form';
-import { Modify } from '../../../internals/types';
-import { useTheme } from '../../../theme';
-
-type FormErrorMessageProps = Modify<TextProps, {
-  name: string | string[];
-}>
-
-export default React.forwardRef<Text, FormErrorMessageProps>(({
-  name,
-  style,
-  ...props
-}, forwardRef) => {
-
-  const { error } = useField(name);
-  const theme = useTheme();
-
-  const path = _.toPath(name);
-  const _error = error.find(x => x instanceof ValidateError ? _.isEqual(x.path, path) : true) ?? _.first(error);
-
-  const message = _error instanceof ValidateError ? useLocalize(_error.locales ?? {}) : _error?.message;
-
-  return (
-    <React.Fragment>
-      {!_.isNil(message) && <Text ref={forwardRef} style={[
-        { borderColor: theme.themeColors.danger },
-        theme.styles.formErrorMessageStyle,
-        style,
-      ]} {...props}>{message}</Text>}
-    </React.Fragment>
-  );
-});
+export const primary = '#0d6efd';
+export const secondary = '#6c757d';
+export const success = '#198754';
+export const info = '#0dcaf0';
+export const warning = '#ffc107';
+export const error = '#dc3545';
+export const danger = '#dc3545';
+export const light = '#f8f9fa';
+export const dark = '#212529';

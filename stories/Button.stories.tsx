@@ -3,7 +3,7 @@ import _ from 'lodash';
 import React, { ComponentPropsWithoutRef } from 'react';
 
 import { Button } from '../src/components/Button';
-import * as colors from '../src/theme/variables/colors';
+import * as colors from '../src/theme/variables/theme_colors';
 
 export default {
   title: 'Button',
