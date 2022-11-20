@@ -112,7 +112,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
       opacity: disabled ? 0.65 : 1,
     } as TextStyle,
     theme.styles.buttonStyle,
-  ]), [theme, selectedColor, size, disabled]);
+  ]), [theme, size, disabled]);
 
   const defaultStyle = React.useMemo(() => StyleSheet.create({
     text: _.pick(_defaultStyle, text_style),
