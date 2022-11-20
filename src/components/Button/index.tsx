@@ -90,15 +90,19 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   const theme = useTheme();
   const selectedColor = theme.themeColors[variant] ?? theme.colors[variant];
 
-  const fromColors = theme.styles.buttonColors(selectedColor);
-  const toColors = theme.styles.buttonFocusedColors(selectedColor);
+  const colors = React.useMemo(() => {
 
-  const _interpolate = (c1: string, c2: string) => fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
-  const colors = {
-    color: _interpolate(outline ? selectedColor : fromColors.color, toColors.color),
-    backgroundColor: outline ? _interpolate(transparent(selectedColor, 0), selectedColor) : _interpolate(fromColors.backgroundColor, toColors.backgroundColor),
-    borderColor: outline ? selectedColor : _interpolate(fromColors.borderColor, toColors.borderColor),
-  };
+    const fromColors = theme.styles.buttonColors(selectedColor);
+    const toColors = theme.styles.buttonFocusedColors(selectedColor);
+
+    const _interpolate = (c1: string, c2: string) => fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
+    return {
+      color: _interpolate(outline ? selectedColor : fromColors.color, toColors.color),
+      backgroundColor: outline ? _interpolate(transparent(selectedColor, 0), selectedColor) : _interpolate(fromColors.backgroundColor, toColors.backgroundColor),
+      borderColor: outline ? selectedColor : _interpolate(fromColors.borderColor, toColors.borderColor),
+    };
+
+  }, [theme, selectedColor, outline]);
 
   const _defaultStyle = React.useMemo(() => StyleSheet.flatten([
     {
