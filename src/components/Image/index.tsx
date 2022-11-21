@@ -68,7 +68,7 @@ export const Image = React.forwardRef<ComponentRef<typeof ImageBase>, ImageProps
     }
   }
 
-  if (_.isNumber(props.blurRadius) && props.blurRadius > 0 && _.isNumber(imageSize.width) && _.isNumber(_width)) {
+  if (_.isNumber(props.blurRadius) && props.blurRadius > 0 && _.isNumber(imageSize.width) && _.isNumber(_width) && _width > 0) {
     props.blurRadius = props.blurRadius * imageSize.width / _width;
   }
 
