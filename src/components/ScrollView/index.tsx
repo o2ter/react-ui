@@ -40,7 +40,7 @@ import { Modify } from '../../internals/types';
 import { useMergeRefs } from 'sugax';
 import { useTheme } from '../../theme';
 
-const ScrollViewBase: typeof RNScrollViewBase = KeyboardAwareScrollable(RNScrollView);
+const ScrollViewBase: typeof RNScrollView = KeyboardAwareScrollable(RNScrollView);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 type ScrollViewRef = ComponentRef<typeof ScrollViewBase>;
