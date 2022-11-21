@@ -58,7 +58,7 @@ export const Image = React.forwardRef<ComponentRef<typeof ImageBase>, ImageProps
   let _width = width;
   let _height = height;
 
-  if (imageSize.width && imageSize.height) {
+  if ((_.isNil(width) || _.isNil(height)) && imageSize.width && imageSize.height) {
 
     if (!_.isNil(_width) && !_.isNil(_height)) {
       _width = imageSize.width;
@@ -66,10 +66,10 @@ export const Image = React.forwardRef<ComponentRef<typeof ImageBase>, ImageProps
     } else if (!_.isNil(_width) || !_.isNil(_height)) {
       aspectRatio = imageSize.width / imageSize.height;
     }
+  }
 
-    if (_.isNumber(props.blurRadius) && props.blurRadius > 0 && _.isNumber(_width)) {
-      props.blurRadius = props.blurRadius * imageSize.width / _width;
-    }
+  if (_.isNumber(props.blurRadius) && props.blurRadius > 0 && _.isNumber(imageSize.width) && _.isNumber(_width)) {
+    props.blurRadius = props.blurRadius * imageSize.width / _width;
   }
 
   return <ImageBase
