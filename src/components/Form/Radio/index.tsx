@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React, { ComponentRef } from 'react';
-import { Pressable, Text, TextProps } from 'react-native';
+import { Pressable, TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
