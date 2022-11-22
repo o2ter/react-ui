@@ -56,7 +56,7 @@ const ScrollLayoutContext = React.createContext<Modify<Partial<NativeScrollEvent
 export const useScrollLayout = () => React.useContext(ScrollLayoutContext);
 
 type ScrollViewProps = Modify<RNScrollViewProps, {
-  onRefresh?: () => Promise<void>;
+  onRefresh?: () => PromiseLike<void>;
   refreshControlProps?: Omit<ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 

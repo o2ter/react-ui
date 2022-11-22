@@ -39,7 +39,7 @@ const FlatListBase: typeof RNFlatList = KeyboardAwareScrollable(RNFlatList);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
-  onRefresh?: () => Promise<void>;
+  onRefresh?: () => PromiseLike<void>;
   refreshControlProps?: Omit<ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 

@@ -30,11 +30,11 @@ import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
 
 type AsyncRefreshControlProps = Modify<Omit<RefreshControlProps, 'refreshing'>, {
-  onRefresh: () => Promise<void>;
+  onRefresh: () => PromiseLike<void>;
 }>
 
 async function _onRefresh(
-  onRefresh: () => Promise<void>,
+  onRefresh: () => PromiseLike<void>,
   setRefreshing: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   setRefreshing(true);
