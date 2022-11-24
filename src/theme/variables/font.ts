@@ -39,8 +39,10 @@ export const fontSizes: Record<string, number> = {
   'large': fontSizeBase * 1.25,
 };
 
-export const fontWeightLight: FontWeight = '300';
-export const fontWeightNormal: FontWeight = '400';
-export const fontWeightBold: FontWeight = '700';
-
-export const fontWeightBase = fontWeightNormal;
+export const fontWeightBase: FontWeight = '400';
+export const fontWeights: Record<string, FontWeight> = {
+  light: '300',
+  normal: '400',
+  semibold: '600',
+  bold: '700',
+}

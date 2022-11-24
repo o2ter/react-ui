@@ -112,7 +112,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
       borderWidth: theme.borderWidth,
       borderRadius: theme.borderRadiusBase,
       fontSize: theme.fontSizes[size] ?? theme.fontSizeBase,
-      fontWeight: theme.fontWeightNormal,
+      fontWeight: theme.fontWeights['normal'] ?? theme.fontWeightBase,
       opacity: disabled ? 0.65 : 1,
     } as TextStyle,
     theme.styles.buttonStyle,
