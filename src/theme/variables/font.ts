@@ -45,4 +45,4 @@ export const fontWeights: Record<string, FontWeight> = {
   normal: '400',
   semibold: '600',
   bold: '700',
-}
+};
