@@ -33,8 +33,8 @@ import * as animation_defaults from './animation';
 
 export const defaultVariables = {
 
-  colors: color_defaults as Record<string, string>,
-  themeColors: theme_color_defaults as Record<string, string>,
+  colors: color_defaults as Record<keyof typeof color_defaults, string> & Record<string, string>,
+  themeColors: theme_color_defaults as Record<keyof typeof theme_color_defaults, string> & Record<string, string>,
 
   grays: {
     '100': '#f8f9fa',
