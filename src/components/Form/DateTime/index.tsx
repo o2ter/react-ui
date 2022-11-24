@@ -67,7 +67,7 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
           backgroundColor: theme.themeColors.light,
           borderColor: theme.themeColors.light,
           borderWidth: theme.borderWidth,
-          borderRadius: theme.borderRadius,
+          borderRadius: theme.borderRadiusBase,
           margin: theme.spacer * 0.25,
           padding: theme.spacer * 0.25,
         },

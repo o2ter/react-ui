@@ -109,7 +109,7 @@ const ToastBody: React.FC<{
         minWidth: 320,
         padding: theme.spacer,
         borderWidth: StyleSheet.hairlineWidth,
-        borderRadius: theme.borderRadius,
+        borderRadius: theme.borderRadiusBase,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',

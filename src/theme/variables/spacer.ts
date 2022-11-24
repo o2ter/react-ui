@@ -1,5 +1,5 @@
 //
-//  border.ts
+//  spacer.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,19 +23,12 @@
 //  THE SOFTWARE.
 //
 
-export const borderWidth: number = 1;
-export const borderWidths: Record<string, number> = {
-  '1': 1,
-  '2': 2,
-  '3': 3,
-  '4': 4,
-  '5': 5,
-};
-
-export const borderRadiusBase: number = 6;
-export const borderRadius: Record<string, number> = {
-  'sm': 4,
-  'lg': 8,
-  'xl': 16,
-  'xxl': 32,
+export const spacer: number = 16;
+export const spacers: Record<string, number> = {
+  '0': 0,
+  '1': spacer * 0.25,
+  '2': spacer * 0.5,
+  '3': spacer,
+  '4': spacer * 1.5,
+  '5': spacer * 3,
 };

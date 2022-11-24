@@ -28,6 +28,7 @@ import * as color_defaults from './colors';
 import * as theme_color_defaults from './theme_colors';
 import * as font_defaults from './font';
 import * as border_defaults from './border';
+import * as spacer_defaults from './spacer';
 import * as breakpoint_defaults from './breakpoints';
 import * as animation_defaults from './animation';
 
@@ -67,12 +68,11 @@ export const defaultVariables = {
   colorContrastDark: 'black',
   colorContrastLight: 'white',
 
-  spacer: 16,
-
   breakpoints: breakpoint_defaults as Record<string, number>,
 
   ...font_defaults,
   ...border_defaults,
+  ...spacer_defaults,
   ...animation_defaults,
 }
 
