@@ -25,13 +25,15 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle, ViewProps } from 'react-native';
+import { View, StyleSheet, ViewProps } from 'react-native';
 import { SvgCss, SvgCssUri } from 'react-native-svg';
+import { Modify } from '../../internals/types';
 
-export const SVG: React.FC<{
-  source?: { content?: string, uri?: string };
-  style?: StyleProp<ViewStyle>;
-} & ViewProps> = ({
+type SVGProps = Modify<ViewProps, Partial<{
+  source: { content?: string, uri?: string };
+}>>
+
+export const SVG: React.FC<SVGProps> = ({
   source,
   style,
   ...props
