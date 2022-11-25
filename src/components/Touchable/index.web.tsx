@@ -1,5 +1,5 @@
 //
-//  index.web.js
+//  index.web.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -27,32 +27,33 @@ import _ from 'lodash';
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { NodeHandleProvider } from '../NodeHandleProvider';
+import { TouchableProps } from './types';
 
 const supportsPointerEvent = () => typeof window !== 'undefined' && window.PointerEvent != null;
 const options = { passive: true };
 
-function normalizeEvent(event) {
+function normalizeEvent(event: any) {
   event.nativeEvent = event;
   return event;
 }
 
-function registerEventListener(nodeHandle, event, callback) {
+function registerEventListener(nodeHandle: EventTarget | undefined, event: string, callback: ((event: any) => void) | undefined) {
 
   React.useEffect(() => {
 
     if (!(nodeHandle instanceof EventTarget) || !_.isFunction(callback)) return;
 
-    const _callback = (e) => { e.preventDefault(); e.stopPropagation(); callback(normalizeEvent(e)); }
+    const _callback = (e: any) => { e.preventDefault(); e.stopPropagation(); callback(normalizeEvent(e)); }
     nodeHandle.addEventListener(event, _callback, options);
 
-    return () => nodeHandle.removeEventListener(event, _callback, options);
+    return () => nodeHandle.removeEventListener(event, _callback);
 
   }, [nodeHandle, event, callback]);
 }
 
 const empty_function = () => {};
 
-export const Touchable = React.forwardRef(({
+export const Touchable = React.forwardRef<TouchableWithoutFeedback, TouchableProps>(({
   onDragStart,
   onDragEnd,
   onDrop,
@@ -65,7 +66,7 @@ export const Touchable = React.forwardRef(({
   ...props
 }, forwardRef) => {
 
-  const [nodeHandle, setNodeHandle] = React.useState();
+  const [nodeHandle, setNodeHandle] = React.useState<Element & EventTarget>();
 
   const _supportsPointerEvent = supportsPointerEvent();
   registerEventListener(nodeHandle, 'drop', onDrop);
@@ -81,13 +82,13 @@ export const Touchable = React.forwardRef(({
     if (!(nodeHandle instanceof EventTarget) || !_.isFunction(onDragStart)) return;
 
     const originalDraggableValue = nodeHandle.getAttribute('draggable');
-    const _onDrag = (e) => { e.preventDefault(); e.stopPropagation(); onDragStart(normalizeEvent(e)); }
+    const _onDrag = (e: Event) => { e.preventDefault(); e.stopPropagation(); onDragStart(normalizeEvent(e)); }
 
     nodeHandle.addEventListener('dragstart', _onDrag, options);
     nodeHandle.setAttribute('draggable', 'true');
 
     return () => {
-      nodeHandle.removeEventListener('dragstart', _onDrag, options);
+      nodeHandle.removeEventListener('dragstart', _onDrag);
       if (_.isNil(originalDraggableValue)) {
         nodeHandle.removeAttribute('draggable');
       } else {
