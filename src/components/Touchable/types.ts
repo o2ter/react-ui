@@ -34,6 +34,6 @@ export type TouchableProps = Modify<TouchableWithoutFeedbackProps, {
   onDragIn?: (event: DragEvent) => void;
   onDragOver?: (event: DragEvent) => void;
   onDragOut?: (event: DragEvent) => void;
-  onHoverIn?: (event: PointerEvent) => void;
-  onHoverOut?: (event: PointerEvent) => void;
+  onHoverIn?: (event: MouseEvent) => void;
+  onHoverOut?: (event: MouseEvent) => void;
 }>;
