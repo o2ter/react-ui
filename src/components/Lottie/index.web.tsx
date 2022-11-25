@@ -1,5 +1,5 @@
 //
-//  index.web.js
+//  index.web.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -26,10 +26,20 @@
 import _ from 'lodash';
 import React from 'react';
 import { useMergeRefs } from 'sugax';
-import { View, StyleSheet, Animated } from 'react-native';
-import LottieWeb from 'lottie-web';
+import { View, StyleSheet, Animated, ViewProps, LayoutRectangle } from 'react-native';
+import LottieWeb, { AnimationItem, RendererType } from 'lottie-web';
+import { Modify } from '../../internals/types';
 
-const LottieBase = React.forwardRef(({
+type LottieProps = Modify<ViewProps, {
+  source: any;
+  duration?: number;
+  renderer?: RendererType;
+  loop?: boolean | number;
+  autoPlay?: boolean;
+  preserveAspectRatio?: string;
+}>
+
+const LottieBase = React.forwardRef<View, LottieProps>(({
   source,
   style,
   onLayout,
@@ -41,10 +51,10 @@ const LottieBase = React.forwardRef(({
   ...props
 }, forwardRef) => {
 
-  const handleRef = React.useRef();
-  const containerRef = React.useRef();
+  const handleRef = React.useRef<AnimationItem>();
+  const containerRef = React.useRef<View>();
   const ref = useMergeRefs(containerRef, forwardRef);
-  const [layout, setLayout] = React.useState({});
+  const [layout, setLayout] = React.useState<Partial<LayoutRectangle>>({});
 
   React.useImperativeHandle(forwardRef, () => ({
     get currentFrame() { return handleRef.current?.currentFrame },
@@ -53,7 +63,7 @@ const LottieBase = React.forwardRef(({
     get playCount() { return handleRef.current?.playCount },
     get isPaused() { return handleRef.current?.isPaused },
     get duration() { return handleRef.current?.getDuration(false) },
-  }));
+  }) as any);
 
   const _style = StyleSheet.flatten(style) ?? {};
 
@@ -73,7 +83,7 @@ const LottieBase = React.forwardRef(({
   React.useEffect(() => {
 
     const handle = LottieWeb.loadAnimation({
-      container: containerRef.current,
+      container: containerRef.current as any,
       animationData: source,
       renderer: renderer,
       rendererSettings: { preserveAspectRatio },
