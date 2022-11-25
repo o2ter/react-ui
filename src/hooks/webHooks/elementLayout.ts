@@ -1,5 +1,5 @@
 //
-//  useElementLayout.js
+//  elementLayout.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -26,24 +26,25 @@
 import _ from 'lodash';
 import React from 'react';
 import { UIManager } from 'react-native';
-import { useStableRef } from 'sugax';
 
-export function useDOMElementEvent(element, event, callback) {
+type LayoutValue = {
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  left: number,
+  top: number,
+};
 
-  const callbackRef = useStableRef(callback);
+type LayoutEvent = {
+  nativeEvent: {
+    layout: LayoutValue,
+    target: any,
+  },
+  timeStamp: number,
+};
 
-  React.useEffect(() => {
-    if (!(element instanceof EventTarget)) return;
-    const listener = (event) => _.isFunction(callbackRef.current) && callbackRef.current(event);
-    element.addEventListener(event, listener);
-    return () => { element.removeEventListener(event, listener); };
-  }, [element, event]);
-}
-
-export const useWindowEvent = (event, callback) => useDOMElementEvent(window, event, callback);
-export const useDocumentEvent = (event, callback) => useDOMElementEvent(document, event, callback);
-
-const onLayoutCallbackMap = new WeakMap();
+const onLayoutCallbackMap = new WeakMap<object, (event: LayoutEvent) => void>();
 
 const resizeObserver = (() => {
 
@@ -58,17 +59,14 @@ const resizeObserver = (() => {
 
       if (_.isFunction(onLayout)) {
 
-        UIManager.measure(node, (x, y, width, height, left, top) => {
-          const event = {
+        UIManager.measure(node as any, (x, y, width, height, left, top) => {
+          const event: LayoutEvent = {
             nativeEvent: {
-              layout: { x, y, width, height, left, top }
+              layout: { x, y, width, height, left, top },
+              get target() { return entry.target },
             },
             timeStamp: Date.now(),
           };
-          Object.defineProperty(event.nativeEvent, 'target', {
-            enumerable: true,
-            get: () => entry.target
-          });
           onLayout(event);
         });
       }
@@ -76,7 +74,10 @@ const resizeObserver = (() => {
   });
 })();
 
-export function useElementLayout(ref, onLayout) {
+export const useElementLayout = <T extends Element>(
+  ref: React.RefObject<T>,
+  onLayout: (event: LayoutEvent) => void
+) => {
 
   if (_.isNil(resizeObserver)) return;
 
