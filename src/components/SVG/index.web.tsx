@@ -1,5 +1,5 @@
 //
-//  index.web.js
+//  index.web.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -25,9 +25,12 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle, ViewProps } from 'react-native';
 
-export const SVG = React.forwardRef(({
+export const SVG = React.forwardRef<View, {
+  source?: { content?: string, uri?: string };
+  style?: StyleProp<ViewStyle>;
+} & ViewProps>(({
   source,
   style,
   ...props
@@ -40,23 +43,26 @@ export const SVG = React.forwardRef(({
     ..._style
   } = StyleSheet.flatten(style) ?? {};
 
-  if (_.isString(source?.content)) {
+  const { content, uri } = source ?? {};
+  const dataStr = React.useMemo(() => _.isString(content) ? `data:image/svg+xml,${encodeURIComponent(content)}` : '', [content]);
+
+  if (_.isString(content)) {
     return <View ref={forwardRef} style={[{ width, height, aspectRatio }, _style]} {...props}>
       <img
         draggable={false}
         width={_.isNil(width) && (_.isNil(height) || _.isNil(aspectRatio)) ? undefined : '100%'}
         height={_.isNil(height) && (_.isNil(width) || _.isNil(aspectRatio)) ? undefined : '100%'}
-        src={`data:image/svg+xml,${encodeURIComponent(source.content)}`} />
+        src={dataStr} />
     </View>;
   }
 
-  if (_.isString(source?.uri)) {
+  if (_.isString(uri)) {
     return <View ref={forwardRef} style={[{ width, height, aspectRatio }, _style]} {...props}>
       <img
         draggable={false}
         width={_.isNil(width) && (_.isNil(height) || _.isNil(aspectRatio)) ? undefined : '100%'}
         height={_.isNil(height) && (_.isNil(width) || _.isNil(aspectRatio)) ? undefined : '100%'}
-        src={source.uri} />
+        src={uri} />
     </View>;
   }
 

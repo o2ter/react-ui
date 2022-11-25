@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -25,14 +25,17 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle, ViewProps } from 'react-native';
 import { SvgCss, SvgCssUri } from 'react-native-svg';
 
-export const SVG = React.forwardRef(({
+export const SVG: React.FC<{
+  source?: { content?: string, uri?: string };
+  style?: StyleProp<ViewStyle>;
+} & ViewProps> = ({
   source,
   style,
   ...props
-}, forwardRef) => {
+}) => {
 
   const {
     width,
@@ -40,15 +43,17 @@ export const SVG = React.forwardRef(({
     ..._style
   } = StyleSheet.flatten(style) ?? {};
 
-  if (_.isString(source?.content)) {
-    return <SvgCss ref={forwardRef} width={width} height={height} xml={source.content} style={_style} {...props} />;
+  const { content, uri } = source ?? {};
+
+  if (_.isString(content)) {
+    return <SvgCss width={width} height={height} xml={content} style={_style} {...props} />;
   }
 
-  if (_.isString(source?.uri)) {
-    return <SvgCssUri ref={forwardRef} width={width} height={height} uri={source.uri} style={_style} {...props} />;
+  if (_.isString(uri)) {
+    return <SvgCssUri width={width} height={height} uri={uri} style={_style} {...props} />;
   }
 
-  return <View ref={forwardRef} style={[{ width, height }, _style]} {...props} />
-});
+  return <View style={[{ width, height }, _style]} {...props} />
+};
 
 export default SVG;
