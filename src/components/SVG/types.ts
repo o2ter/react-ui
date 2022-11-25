@@ -24,34 +24,9 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { SvgCss, SvgCssUri } from 'react-native-svg';
-import { SVGProps } from './types';
+import { ViewProps } from 'react-native';
+import { Modify } from '../../internals/types';
 
-export const SVG: React.FC<SVGProps> = ({
-  source,
-  style,
-  ...props
-}) => {
-
-  const {
-    width,
-    height,
-    ..._style
-  } = StyleSheet.flatten(style) ?? {};
-
-  const { content, uri } = source ?? {};
-
-  if (_.isString(content)) {
-    return <SvgCss width={width} height={height} xml={content} style={_style} {...props} />;
-  }
-
-  if (_.isString(uri)) {
-    return <SvgCssUri width={width} height={height} uri={uri} style={_style} {...props} />;
-  }
-
-  return <View style={[{ width, height }, _style]} {...props} />
-};
-
-export default SVG;
+export type SVGProps = Modify<ViewProps, Partial<{
+  source: { content?: string, uri?: string };
+}>>

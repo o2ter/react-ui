@@ -25,12 +25,8 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, StyleSheet, ViewProps } from 'react-native';
-import { Modify } from '../../internals/types';
-
-type SVGProps = Modify<ViewProps, Partial<{
-  source: { content?: string, uri?: string };
-}>>
+import { View, StyleSheet } from 'react-native';
+import { SVGProps } from './types';
 
 export const SVG = React.forwardRef<View, SVGProps>(({
   source,
