@@ -36,15 +36,15 @@ type LayoutValue = {
   top: number,
 };
 
-type LayoutEvent = {
+type LayoutEvent<T> = {
   nativeEvent: {
     layout: LayoutValue,
-    target: any,
+    target: T,
   },
   timeStamp: number,
 };
 
-const onLayoutCallbackMap = new WeakMap<object, (event: LayoutEvent) => void>();
+const onLayoutCallbackMap = new WeakMap<object, (event: LayoutEvent<any>) => void>();
 
 const resizeObserver = (() => {
 
@@ -60,7 +60,7 @@ const resizeObserver = (() => {
       if (_.isFunction(onLayout)) {
 
         UIManager.measure(node as any, (x, y, width, height, left, top) => {
-          const event: LayoutEvent = {
+          const event: LayoutEvent<any> = {
             nativeEvent: {
               layout: { x, y, width, height, left, top },
               get target() { return entry.target },
@@ -76,7 +76,7 @@ const resizeObserver = (() => {
 
 export const useElementLayout = <T extends Element>(
   ref: React.RefObject<T>,
-  onLayout: (event: LayoutEvent) => void
+  onLayout: (event: LayoutEvent<T>) => void
 ) => {
 
   if (_.isNil(resizeObserver)) return;
