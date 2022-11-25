@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.web.js
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,22 +24,16 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedbackProps } from 'react-native';
+import { Modify } from '../../internals/types';
 
-export const Touchable = React.forwardRef(({
-  onDragStart,
-  onDragEnd,
-  onDrop,
-  onDragIn,
-  onDragOver,
-  onDragOut,
-  onHoverIn,
-  onHoverOut,
-  children,
-  ...props
-}, forwardRef) => {
-  return <TouchableWithoutFeedback ref={forwardRef} {...props}>{children}</TouchableWithoutFeedback>;
-});
-
-export default Touchable;
+export type TouchableProps = Modify<TouchableWithoutFeedbackProps, {
+  onDragStart?: (event: DragEvent) => void;
+  onDragEnd?: (event: DragEvent) => void;
+  onDrop?: (event: DragEvent) => void;
+  onDragIn?: (event: DragEvent) => void;
+  onDragOver?: (event: DragEvent) => void;
+  onDragOut?: (event: DragEvent) => void;
+  onHoverIn?: (event: PointerEvent) => void;
+  onHoverOut?: (event: PointerEvent) => void;
+}>;

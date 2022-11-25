@@ -24,9 +24,23 @@
 //
 
 import _ from 'lodash';
-import { ViewProps } from 'react-native';
-import { Modify } from '../../internals/types';
+import React from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
+import { TouchableProps } from './types';
 
-export type SVGProps = Modify<ViewProps, {
-  source?: { content?: string, uri?: string };
-}>;
+export const Touchable = React.forwardRef<TouchableWithoutFeedback, TouchableProps>(({
+  onDragStart,
+  onDragEnd,
+  onDrop,
+  onDragIn,
+  onDragOver,
+  onDragOut,
+  onHoverIn,
+  onHoverOut,
+  children,
+  ...props
+}, forwardRef) => {
+  return <TouchableWithoutFeedback ref={forwardRef} {...props}>{children}</TouchableWithoutFeedback>;
+});
+
+export default Touchable;

@@ -45,16 +45,16 @@ import { Modify } from '../../internals/types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-type ButtonProps = Modify<PressableProps, Partial<{
-  variant: string;
-  outline: boolean;
-  size: string;
-  title: string;
-  style: StyleProp<ViewStyle>;
-  titleStyle: StyleProp<TextStyle>;
-  onHoverIn: (event: GestureResponderEvent) => void;
-  onHoverOut: (event: GestureResponderEvent) => void;
-}>>
+type ButtonProps = Modify<PressableProps, {
+  variant?: string;
+  outline?: boolean;
+  size?: string;
+  title?: string;
+  style?: StyleProp<ViewStyle>;
+  titleStyle?: StyleProp<TextStyle>;
+  onHoverIn?: (event: GestureResponderEvent) => void;
+  onHoverOut?: (event: GestureResponderEvent) => void;
+}>;
 
 export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   variant = 'primary',
