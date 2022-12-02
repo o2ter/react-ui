@@ -53,7 +53,7 @@ export default React.forwardRef<Text, FormErrorMessageProps>(({
   return (
     <React.Fragment>
       {!_.isNil(message) && <Text ref={forwardRef} style={[
-        { borderColor: theme.themeColors.danger },
+        { color: theme.themeColors.danger },
         theme.styles.formErrorMessageStyle,
         style,
       ]} {...props}>{message}</Text>}
