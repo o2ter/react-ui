@@ -46,6 +46,7 @@ import { Modify } from '../../internals/types';
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type ButtonProps = Modify<PressableProps, {
+  color?: string;
   variant?: string;
   outline?: boolean;
   size?: string;
@@ -57,6 +58,7 @@ type ButtonProps = Modify<PressableProps, {
 }>;
 
 export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
+  color,
   variant = 'primary',
   outline = false,
   size = 'normal',
@@ -88,7 +90,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   }, [focused.hover || focused.press]);
 
   const theme = useTheme();
-  const selectedColor = theme.themeColors[variant] ?? theme.colors[variant];
+  const selectedColor = color ?? theme.themeColors[variant] ?? theme.colors[variant];
 
   const colors = React.useMemo(() => {
 
