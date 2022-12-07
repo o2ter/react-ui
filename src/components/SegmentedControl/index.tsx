@@ -65,7 +65,9 @@ export const SegmentedControl = React.forwardRef<View, SegmentedControlProps>(({
 
   const [tabTranslate, setTabTranslate] = React.useState(new Animated.ValueXY({ x: selected_bounds.x ?? 0, y: selected_bounds.width ?? 0 }));
 
-  React.useEffect(() => { setTabTranslate(new Animated.ValueXY({ x: selected_bounds.x ?? 0, y: selected_bounds.width ?? 0 })); }, [segmentBounds]);
+  React.useEffect(() => {
+    setTabTranslate(new Animated.ValueXY({ x: selected_bounds.x ?? 0, y: selected_bounds.width ?? 0 }));
+  }, [segmentBounds]);
 
   React.useEffect(() => {
     if (!_.isNil(selected_bounds.x) && !_.isNil(selected_bounds.width)) {

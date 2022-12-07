@@ -43,7 +43,11 @@ function registerEventListener(nodeHandle: EventTarget | undefined, event: strin
 
     if (!(nodeHandle instanceof EventTarget) || !_.isFunction(callback)) return;
 
-    const _callback = (e: any) => { e.preventDefault(); e.stopPropagation(); callback(normalizeEvent(e)); }
+    const _callback = (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
+      callback(normalizeEvent(e));
+    }
     nodeHandle.addEventListener(event, _callback, options);
 
     return () => nodeHandle.removeEventListener(event, _callback);
@@ -51,7 +55,7 @@ function registerEventListener(nodeHandle: EventTarget | undefined, event: strin
   }, [nodeHandle, event, callback]);
 }
 
-const empty_function = () => {};
+const empty_function = () => { };
 
 export const Touchable = React.forwardRef<TouchableWithoutFeedback, TouchableProps>(({
   onDragStart,
@@ -82,7 +86,11 @@ export const Touchable = React.forwardRef<TouchableWithoutFeedback, TouchablePro
     if (!(nodeHandle instanceof EventTarget) || !_.isFunction(onDragStart)) return;
 
     const originalDraggableValue = nodeHandle.getAttribute('draggable');
-    const _onDrag = (e: Event) => { e.preventDefault(); e.stopPropagation(); onDragStart(normalizeEvent(e)); }
+    const _onDrag = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onDragStart(normalizeEvent(e));
+    }
 
     nodeHandle.addEventListener('dragstart', _onDrag, options);
     nodeHandle.setAttribute('draggable', 'true');

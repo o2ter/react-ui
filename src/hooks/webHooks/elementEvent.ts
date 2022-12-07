@@ -35,7 +35,7 @@ export function useDOMElementEvent(element: EventTarget, event: string, callback
     if (!(element instanceof EventTarget)) return;
     const listener = (event: Event) => { if (_.isFunction(callbackRef.current)) callbackRef.current(event); };
     element.addEventListener(event, listener);
-    return () => { element.removeEventListener(event, listener); };
+    return () => void element.removeEventListener(event, listener);
   }, [element, event]);
 }
 

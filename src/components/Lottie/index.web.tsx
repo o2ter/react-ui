@@ -106,7 +106,7 @@ const LottieBase = React.forwardRef<View, LottieProps>(({
 
   }, [duration]);
 
-  React.useEffect(() => { handleRef.current?.resize(); }, [layout.width, layout.height]);
+  React.useEffect(() => void handleRef.current?.resize(), [layout.width, layout.height]);
 
   return <View
     ref={ref}
