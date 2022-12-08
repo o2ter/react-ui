@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
-import { useStableRef, ISchema, object } from 'sugax';
+import { useStableRef, ISchema, object, ValidateError } from 'sugax';
 
 type FormState = {
   values: Record<string, any>;
@@ -76,10 +76,18 @@ export const Form: React.FC<{
   const onSubmitRef = useStableRef(onSubmit);
 
   const _schema = React.useMemo(() => object(schema), [schema]);
+  const cachedValidate = React.useMemo(() => {
+    let cache: [any, ValidateError[]] = [null, []];
+    return (value: any) => {
+      if (cache[0] === value) return cache[1];
+      cache = [value, _schema.validate(value)];
+      return cache[1];
+    };
+  }, [_schema]);
 
   const _validate = React.useMemo(() => validate ?? ((value: any, path?: string) => {
 
-    const errors = _schema.validate(value);
+    const errors = cachedValidate(value);
 
     if (_.isString(path)) {
       const prefix = _.toPath(path).join('.');
