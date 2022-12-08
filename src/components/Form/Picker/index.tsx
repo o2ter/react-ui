@@ -50,7 +50,7 @@ export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
     <Picker
       ref={forwardRef}
       value={value}
-      onValueChange={onChange}
+      onValueChange={_onChange}
       style={[
         {
           fontSize: theme.fontSizeBase,
