@@ -79,7 +79,7 @@ export const Form: React.FC<{
 
   const _validate = React.useMemo(() => validate ?? ((value: any, path?: string) => {
 
-    const errors = _.memoize(_schema.validate)(value);
+    const errors = _schema.validate(value);
 
     if (_.isString(path)) {
       const prefix = _.toPath(path).join('.');
