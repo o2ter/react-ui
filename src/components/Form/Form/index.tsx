@@ -70,7 +70,10 @@ export const Form: React.FC<{
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>({});
 
   const onResetRef = useStableRef(onReset);
-  const onSubmitRef = useStableRef(onSubmit);
+  const onSubmitRef = useStableRef((values: Record<string, any>, state: FormState) => {
+    setTouched(true);
+    onSubmit(values, state);
+  });
 
   const _schema = React.useMemo(() => object(schema), [schema]);
 
