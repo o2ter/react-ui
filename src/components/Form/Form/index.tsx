@@ -71,6 +71,7 @@ export const Form: React.FC<{
   const [values, setValues] = React.useState(initialValues);
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
 
+  const initialValuesRef = useStableRef(initialValues);
   const onResetRef = useStableRef(onReset);
   const onSubmitRef = useStableRef(onSubmit);
 
@@ -97,7 +98,7 @@ export const Form: React.FC<{
     },
 
     reset: () => {
-      setValues(initialValues);
+      setValues(initialValuesRef.current);
       if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
     },
 
