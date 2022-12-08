@@ -91,7 +91,10 @@ export const Form: React.FC<{
 
     if (_.isString(path)) {
       const prefix = _.toPath(path).join('.');
-      return errors.filter(e => e.path.join('.').startsWith(prefix));
+      return errors.filter(e => {
+        const path = e.path.join('.');
+        return path === prefix || path.startsWith(`${prefix}.`);
+      });
     }
 
     return errors;
