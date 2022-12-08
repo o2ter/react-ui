@@ -36,7 +36,7 @@ type FormState = {
   submit: VoidFunction;
   reset: VoidFunction;
   touched: (path: string) => boolean;
-  setTouched: (path: string) => void;
+  setTouched: (path?: string) => void;
 }
 
 const FormContext = React.createContext<FormState>({
@@ -101,7 +101,7 @@ export const Form: React.FC<{
       if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
     },
 
-    setTouched: (path: string) => { setTouched(touched => _.isBoolean(touched) ? touched : { ...touched, [path]: true }) },
+    setTouched: (path?: string) => { setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }) },
 
   }), []);
 
