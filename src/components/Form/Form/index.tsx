@@ -35,15 +35,19 @@ type FormState = {
   validate: (value: any, path?: string) => Error[];
   submit: VoidFunction;
   reset: VoidFunction;
+  touched: (path: string) => boolean;
+  setTouched: (path: string) => void;
 }
 
 const FormContext = React.createContext<FormState>({
   values: {},
   errors: [],
-  setValues: () => {},
+  setValues: () => { },
   validate: () => [],
-  submit: () => {},
-  reset: () => {},
+  submit: () => { },
+  reset: () => { },
+  touched: () => false,
+  setTouched: () => { },
 });
 
 export const Form: React.FC<{
@@ -57,12 +61,13 @@ export const Form: React.FC<{
   schema = {},
   initialValues = object(schema).getDefault() ?? {},
   validate,
-  onReset = () => {},
-  onSubmit = () => {},
+  onReset = () => { },
+  onSubmit = () => { },
   children
 }) => {
 
   const [values, setValues] = React.useState(initialValues);
+  const [touched, setTouched] = React.useState<true | Record<string, boolean>>({});
 
   const onResetRef = useStableRef(onReset);
   const onSubmitRef = useStableRef(onSubmit);
@@ -97,7 +102,11 @@ export const Form: React.FC<{
       if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
     },
 
-  }), [values, setValues, _validate]);
+    touched: (path: string) => { return _.isBoolean(touched) ? touched : touched[path] ?? false },
+
+    setTouched: (path: string) => { setTouched(touched => _.isBoolean(touched) ? touched : { ...touched, [path]: true }) },
+
+  }), [values, touched, _validate]);
 
   return <FormContext.Provider value={formState}>
     {_.isFunction(children) ? children(formState) : children}
@@ -113,16 +122,20 @@ export const useForm = () => ({
 
 export const useField = (name: string | string[]) => {
 
-  const { values, setValues, validate, groupPath } = useForm();
+  const { values, setValues, validate, touched, setTouched, groupPath } = useForm();
   const path = [...groupPath, ..._.toPath(name)].join('.');
 
   const onChange = React.useCallback((value: React.SetStateAction<any>) => setValues(
     values => _.set(_.cloneDeep(values), path, _.isFunction(value) ? value(_.get(values, path)) : value)
-  ), [setValues]);
+  ), []);
+
+  const _setTouched = React.useCallback(() => setTouched(path), []);
 
   return {
     value: _.get(values, path),
     get error() { return validate(values, path) },
+    get touched() { return touched(path) },
+    setTouched: _setTouched,
     onChange,
   };
 }

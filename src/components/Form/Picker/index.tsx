@@ -41,8 +41,10 @@ export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
   ...props
 }, forwardRef) => {
 
-  const { value, error, onChange } = useField(name);
+  const { value, error, touched, setTouched, onChange } = useField(name);
   const theme = useTheme();
+
+  const _onChange = React.useCallback((value: any) => { onChange(value); setTouched(); }, []);
 
   return (
     <Picker
@@ -63,8 +65,8 @@ export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
           default: {}
         }),
         theme.styles.formPickerStyle,
-        _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
-        _.isEmpty(error) ? {} : theme.styles.formPickerErrorStyle,
+        !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
+        !touched || _.isEmpty(error) ? {} : theme.styles.formPickerErrorStyle,
         style,
       ]}
       {...props} />

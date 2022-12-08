@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextInput, TextInputProps } from 'react-native';
+import { TextInput, TextInputProps, NativeSyntheticEvent, TextInputEndEditingEventData } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
@@ -40,15 +40,17 @@ export default React.forwardRef<TextInput, FormTextInputProps>(({
   ...props
 }, forwardRef) => {
 
-  const { value, error, onChange } = useField(name);
+  const { value, error, touched, setTouched, onChange } = useField(name);
   const theme = useTheme();
+
+  const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => { onChange(e.nativeEvent.text); setTouched(); }, []);
 
   return (
     <TextInput
       ref={forwardRef}
       value={value ?? ''}
       onChangeText={onChange}
-      onEndEditing={(e) => onChange(e.nativeEvent.text)}
+      onEndEditing={onEndEditing}
       style={[
         {
           fontSize: theme.fontSizeBase,
@@ -60,8 +62,8 @@ export default React.forwardRef<TextInput, FormTextInputProps>(({
           padding: theme.spacer * 0.25,
         },
         theme.styles.formTextFieldStyle,
-        _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
-        _.isEmpty(error) ? {} : theme.styles.formTextFieldErrorStyle,
+        !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
+        !touched || _.isEmpty(error) ? {} : theme.styles.formTextFieldErrorStyle,
         style,
       ]}
       {...props} />
