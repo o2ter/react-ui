@@ -99,30 +99,30 @@ export const Form: React.FC<{
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
 
   const stableRef = useStableRef({
-    values,
-    initialValues,
-    touched,
-    validate: _validate,
-    onReset,
-    onSubmit,
-  });
-
-  const formState = React.useMemo(() => ({
-    setValues,
-    get values() { return stableRef.current.values },
-    get validate() { return stableRef.current.validate },
-    get errors() { return stableRef.current.validate(values) },
+    reset: () => {
+      setValues(initialValues);
+      if (_.isFunction(onReset)) onReset(formState);
+    },
     submit: () => {
       setTouched(true);
-      if (_.isFunction(stableRef.current.onSubmit)) stableRef.current.onSubmit(_schema.cast(stableRef.current.values), formState);
+      if (_.isFunction(onSubmit)) onSubmit(_schema.cast(values), formState);
     },
-    reset: () => {
-      setValues(stableRef.current.initialValues);
-      if (_.isFunction(stableRef.current.onReset)) stableRef.current.onReset(formState);
-    },
-    touched: (path: string) => { return _.isBoolean(stableRef.current.touched) ? stableRef.current.touched : stableRef.current.touched[path] ?? false },
-    setTouched: (path?: string) => { setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }) },
+  });
+
+  const formAction = React.useMemo(() => ({
+    setValues,
+    submit: () => stableRef.current.submit(),
+    reset: () => stableRef.current.reset(),
+    setTouched: (path?: string) => setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }),
   }), []);
+
+  const formState = React.useMemo(() => ({
+    values,
+    validate: _validate,
+    get errors() { return _validate(values) },
+    touched: (path: string) => _.isBoolean(touched) ? touched : touched[path] ?? false,
+    ...formAction,
+  }), [values, _validate, touched]);
 
   return <FormContext.Provider value={formState}>
     {_.isFunction(children) ? children(formState) : children}
