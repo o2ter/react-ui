@@ -90,13 +90,7 @@ export const Form: React.FC<{
 
   }), [_schema, validate]);
 
-  const formState = React.useMemo(() => ({
-
-    values, setValues,
-
-    validate: _validate,
-
-    get errors() { return _validate(values) },
+  const formAction = React.useMemo(() => ({
 
     submit: () => { onSubmitRef.current(_schema.cast(values), formState); },
 
@@ -105,9 +99,21 @@ export const Form: React.FC<{
       if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
     },
 
+    setTouched: (path: string) => { setTouched(touched => _.isBoolean(touched) ? touched : { ...touched, [path]: true }) },
+
+  }), []);
+
+  const formState = React.useMemo(() => ({
+
+    values, setValues,
+
+    validate: _validate,
+
+    get errors() { return _validate(values) },
+
     touched: (path: string) => { return _.isBoolean(touched) ? touched : touched[path] ?? false },
 
-    setTouched: (path: string) => { setTouched(touched => _.isBoolean(touched) ? touched : { ...touched, [path]: true }) },
+    ...formAction,
 
   }), [values, touched, _validate]);
 
