@@ -50,6 +50,30 @@ const FormContext = React.createContext<FormState>({
   setTouched: () => { },
 });
 
+const defaultValidation = (validate: (value: any) => ValidateError[]) => {
+
+  let cache: [any, ValidateError[]] = [null, []];
+
+  const _validate = (value: any) => {
+    if (cache[0] === value) return cache[1];
+    cache = [value, validate(value)];
+    return cache[1];
+  };
+
+  return (value: any, path?: string) => {
+
+    const errors = _validate(value);
+
+    if (!_.isString(path)) return errors;
+
+    const prefix = _.toPath(path).join('.');
+    return errors.filter(e => {
+      const path = e.path.join('.');
+      return path === prefix || path.startsWith(`${prefix}.`);
+    });
+  };
+};
+
 export const Form: React.FC<{
   schema?: Record<string, ISchema<any, any>>;
   initialValues?: Record<string, any>;
@@ -76,30 +100,7 @@ export const Form: React.FC<{
   const onSubmitRef = useStableRef(onSubmit);
 
   const _schema = React.useMemo(() => object(schema), [schema]);
-  const cachedValidate = React.useMemo(() => {
-    let cache: [any, ValidateError[]] = [null, []];
-    return (value: any) => {
-      if (cache[0] === value) return cache[1];
-      cache = [value, _schema.validate(value)];
-      return cache[1];
-    };
-  }, [_schema]);
-
-  const _validate = React.useMemo(() => validate ?? ((value: any, path?: string) => {
-
-    const errors = cachedValidate(value);
-
-    if (_.isString(path)) {
-      const prefix = _.toPath(path).join('.');
-      return errors.filter(e => {
-        const path = e.path.join('.');
-        return path === prefix || path.startsWith(`${prefix}.`);
-      });
-    }
-
-    return errors;
-
-  }), [_schema, validate]);
+  const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
 
   const formAction = React.useMemo(() => ({
 
