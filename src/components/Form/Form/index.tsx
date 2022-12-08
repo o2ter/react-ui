@@ -54,6 +54,7 @@ export const Form: React.FC<{
   schema?: Record<string, ISchema<any, any>>;
   initialValues?: Record<string, any>;
   validate?: (value: any, path?: string) => Error[];
+  validateOnMount?: boolean;
   onReset?: (state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
   children: React.ReactNode | ((state: FormState) => React.ReactNode);
@@ -61,13 +62,14 @@ export const Form: React.FC<{
   schema = {},
   initialValues = object(schema).getDefault() ?? {},
   validate,
+  validateOnMount,
   onReset = () => { },
   onSubmit = () => { },
   children
 }) => {
 
   const [values, setValues] = React.useState(initialValues);
-  const [touched, setTouched] = React.useState<true | Record<string, boolean>>({});
+  const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
 
   const onResetRef = useStableRef(onReset);
   const onSubmitRef = useStableRef(onSubmit);
