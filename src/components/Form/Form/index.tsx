@@ -95,42 +95,34 @@ export const Form: React.FC<{
   const [values, setValues] = React.useState(initialValues);
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
 
-  const initialValuesRef = useStableRef(initialValues);
-  const onResetRef = useStableRef(onReset);
-  const onSubmitRef = useStableRef(onSubmit);
-
   const _schema = React.useMemo(() => object(schema), [schema]);
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
 
-  const formAction = React.useMemo(() => ({
-
-    submit: () => {
-      setTouched(true);
-      if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(_schema.cast(values), formState);
-    },
-
-    reset: () => {
-      setValues(initialValuesRef.current);
-      if (_.isFunction(onResetRef.current)) onResetRef.current(formState);
-    },
-
-    setTouched: (path?: string) => { setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }) },
-
-  }), []);
+  const stableRef = useStableRef({
+    values,
+    initialValues,
+    touched,
+    validate: _validate,
+    onReset,
+    onSubmit,
+  });
 
   const formState = React.useMemo(() => ({
-
-    values, setValues,
-
-    validate: _validate,
-
-    get errors() { return _validate(values) },
-
-    touched: (path: string) => { return _.isBoolean(touched) ? touched : touched[path] ?? false },
-
-    ...formAction,
-
-  }), [values, touched, _validate]);
+    setValues,
+    get values() { return stableRef.current.values },
+    get validate() { return stableRef.current.validate },
+    get errors() { return stableRef.current.validate(values) },
+    submit: () => {
+      setTouched(true);
+      if (_.isFunction(stableRef.current.onSubmit)) stableRef.current.onSubmit(_schema.cast(stableRef.current.values), formState);
+    },
+    reset: () => {
+      setValues(stableRef.current.initialValues);
+      if (_.isFunction(stableRef.current.onReset)) stableRef.current.onReset(formState);
+    },
+    touched: (path: string) => { return _.isBoolean(stableRef.current.touched) ? stableRef.current.touched : stableRef.current.touched[path] ?? false },
+    setTouched: (path?: string) => { setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }) },
+  }), []);
 
   return <FormContext.Provider value={formState}>
     {_.isFunction(children) ? children(formState) : children}
