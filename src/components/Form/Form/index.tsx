@@ -72,7 +72,7 @@ export const Form: React.FC<{
   const onResetRef = useStableRef(onReset);
   const onSubmitRef = useStableRef((values: Record<string, any>, state: FormState) => {
     setTouched(true);
-    onSubmit(values, state);
+    if (_.isFunction(onSubmit)) onSubmit(values, state);
   });
 
   const _schema = React.useMemo(() => object(schema), [schema]);
@@ -98,7 +98,7 @@ export const Form: React.FC<{
 
     get errors() { return _validate(values) },
 
-    submit: () => { if (_.isFunction(onSubmitRef.current)) onSubmitRef.current(_schema.cast(values), formState); },
+    submit: () => { onSubmitRef.current(_schema.cast(values), formState); },
 
     reset: () => {
       setValues(initialValues);
