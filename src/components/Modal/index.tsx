@@ -29,7 +29,7 @@ import { Modal as RNModal, Pressable, StyleSheet, Keyboard } from 'react-native'
 
 import { useTheme } from '../../theme';
 
-const ModalContext = React.createContext((element: any | undefined) => { });
+const ModalContext = React.createContext((element?: React.ReactElement) => { });
 
 export const useModal = () => React.useContext(ModalContext);
 
@@ -44,7 +44,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
   children,
 }) => {
 
-  const [modal, setModal] = React.useState<any | undefined>();
+  const [modal, setModal] = React.useState<React.ReactElement>();
   const theme = useTheme();
 
   return <ModalContext.Provider value={setModal}>
