@@ -42,7 +42,7 @@ export default React.forwardRef<Text, FormErrorMessageProps>(({
   ...props
 }, forwardRef) => {
 
-  const { error } = useField(name);
+  const { error, touched } = useField(name);
   const theme = useTheme();
 
   const path = _.toPath(name);
@@ -52,7 +52,7 @@ export default React.forwardRef<Text, FormErrorMessageProps>(({
 
   return (
     <React.Fragment>
-      {!_.isNil(message) && <Text ref={forwardRef} style={[
+      {touched && !_.isNil(message) && <Text ref={forwardRef} style={[
         { color: theme.themeColors.danger },
         theme.styles.formErrorMessageStyle,
         style,
