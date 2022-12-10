@@ -34,5 +34,5 @@ export const defaultInputStyle = (theme: ReturnType<typeof useTheme>) => ({
   borderWidth: theme.borderWidth,
   borderRadius: theme.borderRadiusBase,
   paddingVertical: theme.spacer * 0.375,
-  paddingHorizontal: theme.spacer * 2.25,
+  paddingHorizontal: theme.spacer * 0.75,
 });
