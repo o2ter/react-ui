@@ -28,6 +28,7 @@ import React from 'react';
 import { TextInput, TextInputProps, NativeSyntheticEvent, TextInputEndEditingEventData } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
+import { defaultInputStyle } from '../style';
 import { Modify } from '../../../internals/types';
 
 type FormTextInputProps = Modify<TextInputProps, {
@@ -52,15 +53,7 @@ export default React.forwardRef<TextInput, FormTextInputProps>(({
       onChangeText={onChange}
       onEndEditing={onEndEditing}
       style={[
-        {
-          fontSize: theme.fontSizeBase,
-          backgroundColor: theme.themeColors.light,
-          borderColor: theme.themeColors.light,
-          borderWidth: theme.borderWidth,
-          borderRadius: theme.borderRadiusBase,
-          margin: theme.spacer * 0.25,
-          padding: theme.spacer * 0.25,
-        },
+        defaultInputStyle(theme),
         theme.styles.formTextFieldStyle,
         !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
         !touched || _.isEmpty(error) ? {} : theme.styles.formTextFieldErrorStyle,

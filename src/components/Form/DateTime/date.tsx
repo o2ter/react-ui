@@ -30,6 +30,7 @@ import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Calendar } from '../../Calendar';
 import { PickerBase } from './picker';
+import { defaultInputStyle } from '../style';
 import { Modify } from '../../../internals/types';
 
 type FormDateProps = Modify<TextProps, {
@@ -64,15 +65,7 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
       disabled={disabled}
       text={date?.toString()}
       style={[
-        {
-          fontSize: theme.fontSizeBase,
-          backgroundColor: theme.themeColors.light,
-          borderColor: theme.themeColors.light,
-          borderWidth: theme.borderWidth,
-          borderRadius: theme.borderRadiusBase,
-          margin: theme.spacer * 0.25,
-          padding: theme.spacer * 0.25,
-        },
+        defaultInputStyle(theme),
         theme.styles.formDateStyle, 
         !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
         !touched || _.isEmpty(error) ? {} : theme.styles.formDateErrorStyle,

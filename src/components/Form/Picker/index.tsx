@@ -29,6 +29,7 @@ import { Platform } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Picker } from '../../Picker';
+import { defaultInputStyle } from '../style';
 import { Modify } from '../../../internals/types';
 
 type FormPickerProps = Modify<ComponentPropsWithRef<typeof Picker>, {
@@ -52,14 +53,7 @@ export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
       value={value}
       onValueChange={_onChange}
       style={[
-        {
-          fontSize: theme.fontSizeBase,
-          backgroundColor: theme.themeColors.light,
-          borderColor: theme.themeColors.light,
-          borderWidth: theme.borderWidth,
-          borderRadius: theme.borderRadiusBase,
-          margin: theme.spacer * 0.25,
-        },
+        defaultInputStyle(theme),
         Platform.select({
           ios: { padding: 4 },
           default: {}
