@@ -54,10 +54,6 @@ export default React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
       onValueChange={_onChange}
       style={[
         defaultInputStyle(theme),
-        Platform.select({
-          ios: { padding: 4 },
-          default: {}
-        }),
         theme.styles.formPickerStyle,
         !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
         !touched || _.isEmpty(error) ? {} : theme.styles.formPickerErrorStyle,
