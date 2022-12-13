@@ -28,7 +28,7 @@ import React from 'react';
 import { Form } from '../../Form';
 import { useAsyncResource } from 'sugax';
 
-type ListState = ReturnType<typeof useAsyncResource<any>>;
+type ListState = ReturnType<typeof useAsyncResource<any[]>>;
 
 const ListContext = React.createContext<ListState>({
   loading: false,
@@ -38,7 +38,7 @@ const ListContext = React.createContext<ListState>({
 });
 
 const ListContent: React.FC<{
-  resource: () => PromiseLike<any>;
+  resource: () => PromiseLike<any[]>;
   debounce?: _.ThrottleSettings & { wait?: number };
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
 }> = ({
@@ -66,7 +66,7 @@ const ListContent: React.FC<{
 export const useList = () => React.useContext(ListContext);
 
 export const List: React.FC<{
-  resource: (state: Record<string, any>) => PromiseLike<any>;
+  resource: (state: Record<string, any>) => PromiseLike<any[]>;
   debounce?: _.ThrottleSettings & { wait?: number };
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
 }> = ({ resource, ...props }) => <Form>{state => <ListContent resource={() => resource(state.values)} {...props} />}</Form>;

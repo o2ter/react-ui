@@ -27,7 +27,11 @@ import _ from 'lodash';
 import React from 'react';
 import { useList } from '../List';
 
-export const ListTable = ({
+export const ListTable: React.FC<{
+  attributes: (string | { label: string })[];
+  keyExtractor?: (item: any, index: number) => string;
+  renderItem: (item: any, attr: string | { label: string }) => React.ReactNode;
+}> = ({
   attributes,
   keyExtractor = (item) => item.key ?? item.id,
   renderItem,
@@ -37,7 +41,7 @@ export const ListTable = ({
   const tableId = React.useId();
 
   const attrs = _.map(attributes, attr => ({
-    label: _.isString(attr?.label) ? attr.label : attr,
+    label: _.isString(attr) ? attr : attr.label,
     attr,
   }));
 
@@ -51,7 +55,7 @@ export const ListTable = ({
       </thead>
       <tbody>
         {_.map(resource, (item, i) => {
-          const id = keyExtractor(item) ?? `${tableId}_${i}`;
+          const id = keyExtractor(item, i) ?? `${tableId}_${i}`;
           return (
             <tr key={id}>
               <td>{i + 1}</td>
