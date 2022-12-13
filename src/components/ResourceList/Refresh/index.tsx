@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,24 +24,17 @@
 //
 
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
-import { FormGroup } from './Group';
-import { FormDate } from './DateTime';
+import React from 'react';
+import { Button } from '../../Button';
+import { useList } from '../List';
 
-const Form = _.assign(FormBase, {
-  Consumer: FormConsumer,
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-  Date: FormDate,
-});
+export const ListRefresh = () => {
 
-export {
-  useField,
-  useForm,
-  Form,
+  const { refresh } = useList();
+
+  return (
+    <Button onPress={refresh} />
+  );
 }
+
+export default ListRefresh;

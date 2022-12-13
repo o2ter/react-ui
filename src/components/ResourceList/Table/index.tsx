@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,24 +24,44 @@
 //
 
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
-import { FormGroup } from './Group';
-import { FormDate } from './DateTime';
+import React from 'react';
+import { useList } from '../List';
 
-const Form = _.assign(FormBase, {
-  Consumer: FormConsumer,
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-  Date: FormDate,
-});
+export const ListTable = ({
+  attributes,
+  keyExtractor = (item) => item.key ?? item.id,
+  renderItem,
+}) => {
 
-export {
-  useField,
-  useForm,
-  Form,
+  const { resource } = useList();
+  const tableId = React.useId();
+
+  const attrs = _.map(attributes, attr => ({
+    label: _.isString(attr?.label) ? attr.label : attr,
+    attr,
+  }));
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          {_.map(attrs, ({ label }) => <th key={`${tableId}_th_${label}`}>{label}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {_.map(resource, (item, i) => {
+          const id = keyExtractor(item) ?? `${tableId}_${i}`;
+          return (
+            <tr key={id}>
+              <td>{i + 1}</td>
+              {_.map(attrs, ({ label, attr }) => <td key={`${id}_${label}`}>{renderItem(item, attr)}</td>)}
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+  );
 }
+
+export default ListTable;

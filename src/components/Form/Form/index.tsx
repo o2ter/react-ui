@@ -28,7 +28,7 @@ import React from 'react';
 import { useFormGroup } from '../Group';
 import { useStableRef, ISchema, object, ValidateError } from 'sugax';
 
-type FormState = {
+export type FormState = {
   values: Record<string, any>;
   errors: Error[];
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
