@@ -39,7 +39,7 @@ type ListAttributeType = string | { label: string };
 export const ListTable: React.FC<{
   attributes: ListAttributeType[];
   keyExtractor?: (item: any, index: number) => string;
-  renderItem: (info: { item: any, index: number, attribute: ListAttributeType }) => React.ReactNode;
+  renderItem: (info: { item: any, index: number, attr: ListAttributeType }) => React.ReactNode;
   ListComponent?: React.ComponentType<any>;
   HeaderComponent?: React.ComponentType<any>;
   HeaderColumnComponent?: React.ComponentType<any>;
@@ -81,7 +81,7 @@ export const ListTable: React.FC<{
           return (
             <BodyRowComponent key={id}>
               <BodyColumnComponent>{i + 1}</BodyColumnComponent>
-              {_.map(attrs, ({ label, attr }) => <BodyColumnComponent key={`${id}_${label}`}>{renderItem({ item, index: i, attribute })}</BodyColumnComponent>)}
+              {_.map(attrs, ({ label, attr }) => <BodyColumnComponent key={`${id}_${label}`}>{renderItem({ item, index: i, attr })}</BodyColumnComponent>)}
             </BodyRowComponent>
           )
         })}
