@@ -37,7 +37,7 @@ const defaultBodyColumnComponent: React.FC<React.PropsWithChildren<{}>> = ({ chi
 export const ListTable: React.FC<{
   attributes: (string | { label: string })[];
   keyExtractor?: (item: any, index: number) => string;
-  renderItem: (item: any, attr: string | { label: string }) => React.ReactNode;
+  renderItem: (info: { item: any, index: number, attribute: string | { label: string } }) => React.ReactNode;
   ListComponent?: React.ComponentType<any>;
   HeaderComponent?: React.ComponentType<any>;
   HeaderColumnComponent?: React.ComponentType<any>;
@@ -46,7 +46,10 @@ export const ListTable: React.FC<{
   BodyColumnComponent?: React.ComponentType<any>;
 }> = ({
   attributes,
-  keyExtractor = (item) => item.key ?? item.id,
+  keyExtractor = (item) => {
+    if (_.isString(item.key)) return item.key;
+    if (_.isString(item.id)) return item.id;
+  },
   renderItem,
   ListComponent = defaultListComponent,
   HeaderComponent = defaultHeaderComponent,
@@ -76,7 +79,7 @@ export const ListTable: React.FC<{
           return (
             <BodyRowComponent key={id}>
               <BodyColumnComponent>{i + 1}</BodyColumnComponent>
-              {_.map(attrs, ({ label, attr }) => <BodyColumnComponent key={`${id}_${label}`}>{renderItem(item, attr)}</BodyColumnComponent>)}
+              {_.map(attrs, ({ label, attr }) => <BodyColumnComponent key={`${id}_${label}`}>{renderItem({ item, index: i, attribute })}</BodyColumnComponent>)}
             </BodyRowComponent>
           )
         })}
