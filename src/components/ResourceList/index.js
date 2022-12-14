@@ -26,10 +26,9 @@
 import _ from 'lodash';
 import { Form } from '../Form';
 import { List as ListBase, useList as useResourceList } from './List';
-import ListRefresh from './Refresh';
 
 const ResourceList = _.assign(ListBase, {
-  Refresh: ListRefresh,
+  Refresh: require('./Refresh').default,
   Group: Form.Group,
   TextField: Form.TextField,
   Picker: Form.Picker,

@@ -35,7 +35,7 @@ type FormTextInputProps = Modify<TextInputProps, {
   name: string | string[];
 }>
 
-export default React.forwardRef<TextInput, FormTextInputProps>(({
+export const FormTextInput = React.forwardRef<TextInput, FormTextInputProps>(({
   name,
   style,
   ...props
@@ -62,3 +62,5 @@ export default React.forwardRef<TextInput, FormTextInputProps>(({
       {...props} />
   );
 });
+
+export default FormTextInput;

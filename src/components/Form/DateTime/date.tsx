@@ -87,3 +87,5 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
       {...props} />
   )
 });
+
+export default FormDate;

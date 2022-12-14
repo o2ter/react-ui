@@ -37,7 +37,7 @@ type FormRadioProps = Modify<TextProps, {
   value: any;
 }>
 
-export default React.forwardRef<ComponentRef<typeof Pressable>, FormRadioProps>(({
+export const FormRadio = React.forwardRef<ComponentRef<typeof Pressable>, FormRadioProps>(({
   name,
   value,
   style,
@@ -70,3 +70,5 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormRadioProps>(
     </Pressable>
   )
 });
+
+export default FormRadio;
