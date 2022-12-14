@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 
 import {
   Platform,
@@ -58,6 +58,14 @@ type ButtonProps = Modify<PressableProps, {
   onHoverIn?: (event: GestureResponderEvent) => void;
   onHoverOut?: (event: GestureResponderEvent) => void;
 }>;
+
+const ButtonText = Animated.createAnimatedComponent(({
+  style,
+  children
+}: {
+  style: TextStyle;
+  children: React.ReactNode;
+}) => <TextStyleProvider style={(prev) => StyleSheet.flatten([prev, style])}>{children}</TextStyleProvider>);
 
 export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   color,
@@ -127,13 +135,13 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     button: _.omit(_defaultStyle, text_style),
   }), [_defaultStyle]);
 
-  const _style = [defaultStyle.text, _.pick(colors, text_style) as Partial<TextStyle>, titleStyle];
-  const _wrapped = (children: React.ReactNode) => <TextStyleProvider style={(prev) => StyleSheet.flatten([prev, ..._style])}>{children}</TextStyleProvider>;
+  const _style = StyleSheet.flatten([defaultStyle.text, _.pick(colors, text_style) as Partial<TextStyle>, titleStyle]);
+  const _wrapped = (children: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
 
-  const content = _.isEmpty(children) && !_.isEmpty(title) ? (
-    <Animated.Text style={_style}>{title}</Animated.Text>
-  ) : _.isFunction(children) ? (state: PressableStateCallbackType) => _wrapped(children(state)) : _wrapped(children);
-  
+  const content = _.isEmpty(children) && !_.isEmpty(title)
+    ? <Animated.Text style={_style}>{title}</Animated.Text>
+    : _.isFunction(children) ? (state: PressableStateCallbackType) => _wrapped(children(state)) : _wrapped(children);
+
   const callbacks: any = Platform.select({
     web: {
       onHoverIn: (e: GestureResponderEvent) => {
