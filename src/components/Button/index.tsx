@@ -59,13 +59,16 @@ type ButtonProps = Modify<PressableProps, {
   onHoverOut?: (event: GestureResponderEvent) => void;
 }>;
 
-const ButtonText = Animated.createAnimatedComponent(({
-  style,
-  children
-}: {
+const ButtonText = Animated.createAnimatedComponent(class extends React.PureComponent<{
   style: TextStyle;
   children: React.ReactNode;
-}) => <TextStyleProvider style={(prev) => StyleSheet.flatten([prev, style])}>{children}</TextStyleProvider>);
+}> {
+  render() {
+    return (
+      <TextStyleProvider style={(prev) => StyleSheet.flatten([prev, this.props.style])}>{this.props.children}</TextStyleProvider>
+    );
+  }
+});
 
 export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   color,
