@@ -36,12 +36,14 @@ import {
   ViewStyle,
   TextStyle,
   GestureResponderEvent,
+  PressableStateCallbackType,
 } from 'react-native';
 
 import { useTheme } from '../../theme';
 import { transparent } from '../../color';
 import { text_style } from '../../internals/text_style';
 import { Modify } from '../../internals/types';
+import { TextStyleProvider } from '../Text/style';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -125,10 +127,13 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     button: _.omit(_defaultStyle, text_style),
   }), [_defaultStyle]);
 
-  const content = _.isEmpty(children) && !_.isEmpty(title) ? (
-    <Animated.Text style={[defaultStyle.text, _.pick(colors, text_style), titleStyle]}>{title}</Animated.Text>
-  ) : children;
+  const _style = [defaultStyle.text, _.pick(colors, text_style) as Partial<TextStyle>, titleStyle];
+  const _wrapped = (children: React.ReactNode) => <TextStyleProvider style={(prev) => StyleSheet.flatten([prev, ..._style])}>{children}</TextStyleProvider>;
 
+  const content = _.isEmpty(children) && !_.isEmpty(title) ? (
+    <Animated.Text style={_style}>{title}</Animated.Text>
+  ) : _.isFunction(children) ? (state: PressableStateCallbackType) => _wrapped(children(state)) : _wrapped(children);
+  
   const callbacks: any = Platform.select({
     web: {
       onHoverIn: (e: GestureResponderEvent) => {
