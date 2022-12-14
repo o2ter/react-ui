@@ -34,10 +34,12 @@ const defaultBodyComponent: React.FC<React.PropsWithChildren<{}>> = ({ children 
 const defaultBodyRowComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <tr>{children}</tr>;
 const defaultBodyColumnComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <td>{children}</td>;
 
+type ListAttributeType = string | { label: string };
+
 export const ListTable: React.FC<{
-  attributes: (string | { label: string })[];
+  attributes: ListAttributeType[];
   keyExtractor?: (item: any, index: number) => string;
-  renderItem: (info: { item: any, index: number, attribute: string | { label: string } }) => React.ReactNode;
+  renderItem: (info: { item: any, index: number, attribute: ListAttributeType }) => React.ReactNode;
   ListComponent?: React.ComponentType<any>;
   HeaderComponent?: React.ComponentType<any>;
   HeaderColumnComponent?: React.ComponentType<any>;
