@@ -27,14 +27,33 @@ import _ from 'lodash';
 import React from 'react';
 import { useList } from '../List';
 
+const defaultListComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <table>{children}</table>;
+const defaultHeaderComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <thead><tr>{children}</tr></thead>;
+const defaultHeaderColumnComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <th>{children}</th>;
+const defaultBodyComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <tbody>{children}</tbody>;
+const defaultBodyRowComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <tr>{children}</tr>;
+const defaultBodyColumnComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <td>{children}</td>;
+
 export const ListTable: React.FC<{
   attributes: (string | { label: string })[];
   keyExtractor?: (item: any, index: number) => string;
   renderItem: (item: any, attr: string | { label: string }) => React.ReactNode;
+  ListComponent?: React.ComponentType<any>;
+  HeaderComponent?: React.ComponentType<any>;
+  HeaderColumnComponent?: React.ComponentType<any>;
+  BodyComponent?: React.ComponentType<any>;
+  BodyRowComponent?: React.ComponentType<any>;
+  BodyColumnComponent?: React.ComponentType<any>;
 }> = ({
   attributes,
   keyExtractor = (item) => item.key ?? item.id,
   renderItem,
+  ListComponent = defaultListComponent,
+  HeaderComponent = defaultHeaderComponent,
+  HeaderColumnComponent = defaultHeaderColumnComponent,
+  BodyComponent = defaultBodyComponent,
+  BodyRowComponent = defaultBodyRowComponent,
+  BodyColumnComponent = defaultBodyColumnComponent,
 }) => {
 
   const { resource } = useList();
@@ -46,25 +65,23 @@ export const ListTable: React.FC<{
   }));
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          {_.map(attrs, ({ label }) => <th key={`${tableId}_th_${label}`}>{label}</th>)}
-        </tr>
-      </thead>
-      <tbody>
+    <ListComponent>
+      <HeaderComponent>
+        <HeaderColumnComponent>#</HeaderColumnComponent>
+        {_.map(attrs, ({ label }) => <HeaderColumnComponent key={`${tableId}_th_${label}`}>{label}</HeaderColumnComponent>)}
+      </HeaderComponent>
+      <BodyComponent>
         {_.map(resource, (item, i) => {
           const id = keyExtractor(item, i) ?? `${tableId}_${i}`;
           return (
-            <tr key={id}>
-              <td>{i + 1}</td>
-              {_.map(attrs, ({ label, attr }) => <td key={`${id}_${label}`}>{renderItem(item, attr)}</td>)}
-            </tr>
+            <BodyRowComponent key={id}>
+              <BodyColumnComponent>{i + 1}</BodyColumnComponent>
+              {_.map(attrs, ({ label, attr }) => <BodyColumnComponent key={`${id}_${label}`}>{renderItem(item, attr)}</BodyColumnComponent>)}
+            </BodyRowComponent>
           )
         })}
-      </tbody>
-    </table>
+      </BodyComponent>
+    </ListComponent>
   );
 }
 
