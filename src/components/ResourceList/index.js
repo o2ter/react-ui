@@ -24,11 +24,18 @@
 //
 
 import _ from 'lodash';
+import { Form } from '../Form';
 import { List as ListBase, useList as useResourceList } from './List';
 import ListRefresh from './Refresh';
 
 const ResourceList = _.assign(ListBase, {
   Refresh: ListRefresh,
+  Group: Form.Group,
+  TextField: Form.TextField,
+  Picker: Form.Picker,
+  Checkbox: Form.Checkbox,
+  Radio: Form.Radio,
+  Date: Form.Date,
 });
 
 export {
