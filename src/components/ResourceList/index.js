@@ -26,11 +26,9 @@
 import _ from 'lodash';
 import { List as ListBase, useList as useResourceList } from './List';
 import ListRefresh from './Refresh';
-import ListTable from './Table';
 
 const ResourceList = _.assign(ListBase, {
   Refresh: ListRefresh,
-  Table: ListTable,
 });
 
 export {
