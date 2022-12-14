@@ -29,6 +29,8 @@ import { TextProps, StyleProp, TextStyle, StyleSheet } from 'react-native';
 import Text from '../Text';
 import * as Icons from '../Icons';
 import { Modify } from '../../internals/types';
+import { useTheme } from '../../theme';
+import { useTextStyle } from '../Text/style';
 import { text_style } from '../../internals/text_style';
 
 type IconProps = Modify<TextProps, {
@@ -48,7 +50,11 @@ export const Icon = React.forwardRef<ComponentRef<typeof Text>, IconProps>(({
 
   const _Icon = Icons[icon];
 
-  const _iconStyle = StyleSheet.flatten([style, iconStyle]);
+  const theme = useTheme();
+  const textStyle = useTextStyle();
+  const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.bodyColor } }).style, [theme]) as TextStyle;
+
+  const _iconStyle = StyleSheet.flatten([defaultStyle, theme.styles.textStyle, textStyle, style, iconStyle]);
   const { fontSize, color } = _iconStyle ?? {};
 
   return <Text ref={forwardRef} style={style} {...props}>

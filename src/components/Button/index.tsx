@@ -138,7 +138,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     button: _.omit(_defaultStyle, text_style),
   }), [_defaultStyle]);
 
-  const _style = StyleSheet.flatten([defaultStyle.text, _.pick(colors, text_style) as Partial<TextStyle>, titleStyle]);
+  const _style = StyleSheet.flatten([defaultStyle.text, _.pick(colors, text_style) as TextStyle, titleStyle]);
   const _wrapped = (children: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
 
   const content = _.isEmpty(children) && !_.isEmpty(title)
