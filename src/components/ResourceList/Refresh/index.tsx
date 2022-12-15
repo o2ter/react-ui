@@ -26,16 +26,19 @@
 import _ from 'lodash';
 import React, { ComponentPropsWithRef, ComponentRef } from 'react';
 import { Button } from '../../Button';
+import Icon from '../../Icon';
 import { useList } from '../List';
 
 export const ListRefresh = React.forwardRef<ComponentRef<typeof Button>, ComponentPropsWithRef<typeof Button>>(({
+  title,
+  children,
   ...props
 }, forwardRef) => {
-
   const { refresh } = useList();
-
   return (
-    <Button ref={forwardRef} onPress={refresh} {...props} />
+    <Button ref={forwardRef} onPress={refresh} title={title} {...props}>
+      {_.isEmpty(children) && _.isEmpty(title) ? <Icon icon='FontAwesome' name='refresh' /> : children}
+    </Button>
   );
 });
 
