@@ -32,7 +32,6 @@ export const text_style = [
   'fontVariant',
   'fontWeight',
   'includeFontPadding',
-  'fontVariant',
   'letterSpacing',
   'lineHeight',
   'textAlign',
