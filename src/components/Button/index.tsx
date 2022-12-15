@@ -110,7 +110,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     const fromColors = theme.styles.buttonColors(selectedColor);
     const toColors = theme.styles.buttonFocusedColors(selectedColor);
 
-    const _interpolate = (c1: string, c2: string) => fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
+    const _interpolate = (c1: string, c2: string) => c1 === c2 ? c1 : fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
     return {
       color: _interpolate(outline ? selectedColor : fromColors.color, toColors.color),
       backgroundColor: outline ? _interpolate(transparent(selectedColor, 0), selectedColor) : _interpolate(fromColors.backgroundColor, toColors.backgroundColor),
