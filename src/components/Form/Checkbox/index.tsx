@@ -37,7 +37,7 @@ type FormCheckboxProps = Modify<TextProps, {
   value?: string
 }>
 
-export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProps>(({
+export const FormCheckbox = React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProps>(({
   name,
   value,
   style,
@@ -73,3 +73,5 @@ export default React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProp
     </Pressable>
   )
 });
+
+export default FormCheckbox;

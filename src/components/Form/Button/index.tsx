@@ -33,7 +33,7 @@ type FormButtonProps = Modify<ComponentPropsWithRef<typeof Button>, {
   action?: 'submit' | 'reset';
 }>
 
-export default React.forwardRef<ComponentRef<typeof Button>, FormButtonProps>(({
+export const FormButton = React.forwardRef<ComponentRef<typeof Button>, FormButtonProps>(({
   action = 'submit',
   ...props
 }, forwardRef) => {
@@ -59,3 +59,5 @@ export default React.forwardRef<ComponentRef<typeof Button>, FormButtonProps>(({
       {...props} />
   );
 });
+
+export default FormButton;

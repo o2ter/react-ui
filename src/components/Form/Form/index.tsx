@@ -28,7 +28,7 @@ import React from 'react';
 import { useFormGroup } from '../Group';
 import { useStableRef, ISchema, object, ValidateError } from 'sugax';
 
-type FormState = {
+export type FormState = {
   values: Record<string, any>;
   errors: Error[];
   setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
@@ -80,6 +80,7 @@ export const Form: React.FC<{
   validate?: (value: any, path?: string) => Error[];
   validateOnMount?: boolean;
   onReset?: (state: FormState) => void;
+  onChange?: (state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
   children: React.ReactNode | ((state: FormState) => React.ReactNode);
 }> = ({
@@ -88,6 +89,7 @@ export const Form: React.FC<{
   validate,
   validateOnMount,
   onReset = () => { },
+  onChange = () => { },
   onSubmit = () => { },
   children
 }) => {
@@ -123,6 +125,11 @@ export const Form: React.FC<{
     touched: (path: string) => _.isBoolean(touched) ? touched : touched[path] ?? false,
     ...formAction,
   }), [values, _validate, touched]);
+
+  const [initState] = React.useState(formState);
+  React.useEffect(() => {
+    if (initState !== formState && _.isFunction(onChange)) onChange(formState);
+  }, [formState]);
 
   return <FormContext.Provider value={formState}>
     {_.isFunction(children) ? children(formState) : children}

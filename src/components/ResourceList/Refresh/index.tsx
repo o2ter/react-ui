@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,24 +24,22 @@
 //
 
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
-import { FormGroup } from './Group';
-import { FormDate } from './DateTime';
+import React, { ComponentPropsWithRef, ComponentRef } from 'react';
+import { Button } from '../../Button';
+import Icon from '../../Icon';
+import { useList } from '../List';
 
-const Form = _.assign(FormBase, {
-  Consumer: FormConsumer,
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-  Date: FormDate,
+export const ListRefresh = React.forwardRef<ComponentRef<typeof Button>, ComponentPropsWithRef<typeof Button>>(({
+  title,
+  children,
+  ...props
+}, forwardRef) => {
+  const { refresh } = useList();
+  return (
+    <Button ref={forwardRef} onPress={refresh} title={title} {...props}>
+      {_.isEmpty(children) && _.isEmpty(title) ? <Icon icon='FontAwesome' name='refresh' /> : children}
+    </Button>
+  );
 });
 
-export {
-  useField,
-  useForm,
-  Form,
-}
+export default ListRefresh;

@@ -24,24 +24,20 @@
 //
 
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
-import { FormGroup } from './Group';
-import { FormDate } from './DateTime';
+import { Form } from '../Form';
+import { List as ListBase, useList as useResourceList } from './List';
 
-const Form = _.assign(FormBase, {
-  Consumer: FormConsumer,
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-  Date: FormDate,
+const ResourceList = _.assign(ListBase, {
+  Refresh: require('./Refresh').default,
+  Group: Form.Group,
+  TextField: Form.TextField,
+  Picker: Form.Picker,
+  Checkbox: Form.Checkbox,
+  Radio: Form.Radio,
+  Date: Form.Date,
 });
 
 export {
-  useField,
-  useForm,
-  Form,
+  useResourceList,
+  ResourceList,
 }

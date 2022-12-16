@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.web.js
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,24 +24,14 @@
 //
 
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
-import { FormGroup } from './Group';
-import { FormDate } from './DateTime';
+import { ResourceList as ListBase, useResourceList } from './index.js';
+import ListTable from './Table';
 
-const Form = _.assign(FormBase, {
-  Consumer: FormConsumer,
-  Group: FormGroup,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-  Date: FormDate,
+const ResourceList = _.assign(ListBase, {
+  Table: ListTable,
 });
 
 export {
-  useField,
-  useForm,
-  Form,
+  useResourceList,
+  ResourceList,
 }

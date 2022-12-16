@@ -36,7 +36,7 @@ type FormErrorMessageProps = Modify<TextProps, {
   name: string | string[];
 }>
 
-export default React.forwardRef<Text, FormErrorMessageProps>(({
+export const FormErrorMessage = React.forwardRef<Text, FormErrorMessageProps>(({
   name,
   style,
   ...props
@@ -60,3 +60,5 @@ export default React.forwardRef<Text, FormErrorMessageProps>(({
     </React.Fragment>
   );
 });
+
+export default FormErrorMessage;

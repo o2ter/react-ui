@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 
 import {
   Platform,
@@ -36,12 +36,14 @@ import {
   ViewStyle,
   TextStyle,
   GestureResponderEvent,
+  PressableStateCallbackType,
 } from 'react-native';
 
 import { useTheme } from '../../theme';
 import { transparent } from '../../color';
 import { text_style } from '../../internals/text_style';
 import { Modify } from '../../internals/types';
+import { TextStyleProvider } from '../Text/style';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -56,6 +58,17 @@ type ButtonProps = Modify<PressableProps, {
   onHoverIn?: (event: GestureResponderEvent) => void;
   onHoverOut?: (event: GestureResponderEvent) => void;
 }>;
+
+const ButtonText = Animated.createAnimatedComponent(class extends React.PureComponent<{
+  style: TextStyle;
+  children: React.ReactNode;
+}> {
+  render() {
+    return (
+      <TextStyleProvider style={(prev) => StyleSheet.flatten([prev, this.props.style])}>{this.props.children}</TextStyleProvider>
+    );
+  }
+});
 
 export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   color,
@@ -97,7 +110,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     const fromColors = theme.styles.buttonColors(selectedColor);
     const toColors = theme.styles.buttonFocusedColors(selectedColor);
 
-    const _interpolate = (c1: string, c2: string) => fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
+    const _interpolate = (c1: string, c2: string) => c1 === c2 ? c1 : fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
     return {
       color: _interpolate(outline ? selectedColor : fromColors.color, toColors.color),
       backgroundColor: outline ? _interpolate(transparent(selectedColor, 0), selectedColor) : _interpolate(fromColors.backgroundColor, toColors.backgroundColor),
@@ -125,9 +138,12 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     button: _.omit(_defaultStyle, text_style),
   }), [_defaultStyle]);
 
-  const content = _.isEmpty(children) && !_.isEmpty(title) ? (
-    <Animated.Text style={[defaultStyle.text, _.pick(colors, text_style), titleStyle]}>{title}</Animated.Text>
-  ) : children;
+  const _style = StyleSheet.flatten([defaultStyle.text, _.pick(colors, text_style) as TextStyle, titleStyle]);
+  const _wrapped = (children: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
+
+  const content = _.isEmpty(children) && !_.isEmpty(title)
+    ? <Animated.Text style={_style}>{title}</Animated.Text>
+    : _.isFunction(children) ? (state: PressableStateCallbackType) => _wrapped(children(state)) : _wrapped(children);
 
   const callbacks: any = Platform.select({
     web: {
