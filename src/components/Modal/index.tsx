@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Modal as RNModal, Pressable, StyleSheet, Keyboard } from 'react-native';
+import { Modal as RNModal, Pressable, StyleSheet } from 'react-native';
 
 import { useTheme } from '../../theme';
 
@@ -35,12 +35,10 @@ export const useModal = () => React.useContext(ModalContext);
 
 export const ModalProvider: React.FC<React.PropsWithChildren<{
   backdrop?: boolean;
-  keyboardDismissMode?: 'none' | 'interactive';
   animationType?: 'none' | 'slide' | 'fade';
 }>> = ({
   backdrop = true,
   animationType = 'none',
-  keyboardDismissMode = 'interactive',
   children,
 }) => {
 
@@ -51,7 +49,6 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
     {children}
     <RNModal visible={React.isValidElement(modal)} transparent animationType={animationType}>
       <Pressable
-        onPress={() => { if (keyboardDismissMode === 'interactive') Keyboard.dismiss() }}
         style={{
           flex: 1,
           alignItems: 'center',
