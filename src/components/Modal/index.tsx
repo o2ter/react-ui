@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Modal as RNModal, View, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 
 import { useTheme } from '../../theme';
 
@@ -35,10 +35,8 @@ export const useModal = () => React.useContext(ModalContext);
 
 export const ModalProvider: React.FC<React.PropsWithChildren<{
   backdrop?: boolean;
-  animationType?: 'none' | 'slide' | 'fade';
 }>> = ({
   backdrop = true,
-  animationType = 'none',
   children,
 }) => {
 
@@ -47,25 +45,24 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
 
   return <ModalContext.Provider value={setModal}>
     {children}
-    <RNModal
-      transparent
-      animationType={animationType}
-      visible={React.isValidElement(modal)}
-    >
-      <View style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        {backdrop === true && <Pressable
-          onPress={() => setModal(undefined)}
-          style={[
-            { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
-            theme.styles.modalBackdrop,
-            StyleSheet.absoluteFill
-          ]} />}
-        {modal}
-      </View>
-    </RNModal>
+    {React.isValidElement(modal) && <View
+      pointerEvents='box-none'
+      style={[
+        {
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        StyleSheet.absoluteFill
+      ]}>
+      {backdrop === true && <Pressable
+        onPress={() => setModal(undefined)}
+        style={[
+          { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
+          theme.styles.modalBackdrop,
+          StyleSheet.absoluteFill
+        ]} />}
+      {modal}
+    </View>}
   </ModalContext.Provider>;
 };
