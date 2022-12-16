@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Modal as RNModal, Pressable, StyleSheet } from 'react-native';
+import { Modal as RNModal, View, Pressable, StyleSheet } from 'react-native';
 
 import { useTheme } from '../../theme';
 
@@ -47,13 +47,16 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
 
   return <ModalContext.Provider value={setModal}>
     {children}
-    <RNModal visible={React.isValidElement(modal)} transparent animationType={animationType}>
-      <Pressable
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+    <RNModal
+      transparent
+      animationType={animationType}
+      visible={React.isValidElement(modal)}
+    >
+      <View style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
         {backdrop === true && <Pressable
           onPress={() => setModal(undefined)}
           style={[
@@ -62,7 +65,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
             StyleSheet.absoluteFill
           ]} />}
         {modal}
-      </Pressable>
+      </View>
     </RNModal>
   </ModalContext.Provider>;
 };
