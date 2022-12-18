@@ -141,6 +141,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
 
   const [elements, setElements] = React.useState({});
   const insets = useSafeAreaInsets();
+  const theme = useTheme();
 
   function show_message(message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>, type: ToastType | string, timeout: number) {
 
@@ -175,6 +176,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
       position: 'absolute',
       alignItems: 'center',
       alignSelf: 'center',
+      zIndex: theme.zIndex.toast,
     }}>{_.values(elements)}</View>
   </ToastContext.Provider>;
 };

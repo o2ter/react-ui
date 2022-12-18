@@ -110,10 +110,13 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
     {visible && <Animated.View
       pointerEvents={passThroughEvents ? 'none' : 'auto'}
       style={[
+        {
+          opacity: fadeAnim,
+          zIndex: theme.zIndex.modal,
+        },
         style.activityIndicator,
-        theme.styles.activityIndicator,
         StyleSheet.absoluteFill,
-        { opacity: fadeAnim },
+        theme.styles.activityIndicator,
       ]}>
       {backdrop === true ? <View style={[
         style.activityIndicatorBackdrop,

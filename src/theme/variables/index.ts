@@ -30,6 +30,7 @@ import * as font_defaults from './font';
 import * as border_defaults from './border';
 import * as spacer_defaults from './spacer';
 import * as breakpoint_defaults from './breakpoints';
+import * as zindex_defaults from './zindex';
 import * as animation_defaults from './animation';
 
 export const defaultVariables = {
@@ -69,6 +70,7 @@ export const defaultVariables = {
   colorContrastLight: 'white',
 
   breakpoints: breakpoint_defaults as Record<string, number>,
+  zIndex: zindex_defaults,
 
   ...font_defaults,
   ...border_defaults,

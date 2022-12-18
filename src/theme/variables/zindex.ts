@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  zindex.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,47 +23,13 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import React from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
-
-import { useTheme } from '../../theme';
-
-const ModalContext = React.createContext((element?: React.ReactElement) => { });
-
-export const useModal = () => React.useContext(ModalContext);
-
-export const ModalProvider: React.FC<React.PropsWithChildren<{
-  backdrop?: boolean;
-}>> = ({
-  backdrop = true,
-  children,
-}) => {
-
-  const [modal, setModal] = React.useState<React.ReactElement>();
-  const theme = useTheme();
-
-  return <ModalContext.Provider value={setModal}>
-    {children}
-    {React.isValidElement(modal) && <View
-      pointerEvents='box-none'
-      style={[
-        {
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: theme.zIndex.modal,
-        },
-        StyleSheet.absoluteFill
-      ]}>
-      {backdrop === true && <Pressable
-        onPress={() => setModal(undefined)}
-        style={[
-          { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
-          StyleSheet.absoluteFill,
-          theme.styles.modalBackdrop,
-        ]} />}
-      {modal}
-    </View>}
-  </ModalContext.Provider>;
-};
+export const dropdown = 1000;
+export const sticky = 1020;
+export const fixed = 1030;
+export const offcanvasBackdrop = 1040;
+export const offcanvas = 1045;
+export const modalBackdrop = 1050;
+export const modal = 1055;
+export const popover = 1070;
+export const tooltip = 1080;
+export const toast = 1090;
