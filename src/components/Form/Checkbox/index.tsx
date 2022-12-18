@@ -55,7 +55,7 @@ export const FormCheckbox = React.forwardRef<ComponentRef<typeof Pressable>, For
   return (
     <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange((state: any) => {
       if (_.isNil(value)) return !state;
-      return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state), value];
+      return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state ?? []), value];
     }))}>
       <Icon
         icon='MaterialCommunityIcons'
