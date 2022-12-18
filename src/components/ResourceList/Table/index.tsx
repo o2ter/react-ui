@@ -34,21 +34,21 @@ const defaultBodyComponent: React.FC<React.PropsWithChildren<{}>> = ({ children 
 const defaultBodyRowComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <tr>{children}</tr>;
 const defaultBodyColumnComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <td>{children}</td>;
 
-type ListAttributeType = string | { label: string };
-
-export const ListTable: React.FC<{
-  attributes: ListAttributeType[];
-  keyExtractor?: (item: any, index: number) => string;
-  renderItem: (info: { item: any, index: number, attr: ListAttributeType }) => React.ReactNode;
+type ListTableProps<T, A> = {
+  attributes: A[];
+  keyExtractor?: (item: T, index: number) => string;
+  renderItem: (info: { item: T, index: number, attr: A }) => React.ReactNode;
   ListComponent?: React.ComponentType<any>;
   HeaderComponent?: React.ComponentType<any>;
   HeaderColumnComponent?: React.ComponentType<any>;
   BodyComponent?: React.ComponentType<any>;
   BodyRowComponent?: React.ComponentType<any>;
   BodyColumnComponent?: React.ComponentType<any>;
-}> = ({
+}
+
+export const ListTable = <Item = any, Attr extends string | { label: string } = any>({
   attributes,
-  keyExtractor = (item) => {
+  keyExtractor = (item: any) => {
     if (_.isString(item.key)) return item.key;
     if (_.isString(item.id)) return item.id;
   },
@@ -59,7 +59,7 @@ export const ListTable: React.FC<{
   BodyComponent = defaultBodyComponent,
   BodyRowComponent = defaultBodyRowComponent,
   BodyColumnComponent = defaultBodyColumnComponent,
-}) => {
+}: ListTableProps<Item, Attr>) => {
 
   const { resource } = useList();
   const tableId = React.useId();
