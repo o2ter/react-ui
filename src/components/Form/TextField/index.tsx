@@ -41,7 +41,7 @@ export const FormTextInput = React.forwardRef<TextInput, FormTextInputProps>(({
   ...props
 }, forwardRef) => {
 
-  const { value, error, touched, setTouched, onChange } = useField(name);
+  const { value, error, touched, setTouched, onChange, submit } = useField(name);
   const theme = useTheme();
 
   const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => { onChange(e.nativeEvent.text); setTouched(); }, []);
@@ -52,6 +52,7 @@ export const FormTextInput = React.forwardRef<TextInput, FormTextInputProps>(({
       value={value ?? ''}
       onChangeText={onChange}
       onEndEditing={onEndEditing}
+      onSubmitEditing={submit}
       style={[
         defaultInputStyle(theme),
         theme.styles.formTextFieldStyle,

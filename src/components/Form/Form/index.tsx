@@ -145,7 +145,7 @@ export const useForm = () => ({
 
 export const useField = (name: string | string[]) => {
 
-  const { values, setValues, validate, touched, setTouched, groupPath } = useForm();
+  const { values, setValues, validate, touched, setTouched, submit, reset, groupPath } = useForm();
   const path = [...groupPath, ..._.toPath(name)].join('.');
 
   const onChange = React.useCallback((value: React.SetStateAction<any>) => setValues(
@@ -160,5 +160,7 @@ export const useField = (name: string | string[]) => {
     get touched() { return touched(path) },
     setTouched: _setTouched,
     onChange,
+    submit,
+    reset,
   };
 }
