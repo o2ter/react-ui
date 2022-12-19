@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 
 import {
   Platform,
@@ -43,6 +43,7 @@ import { useTheme } from '../../theme';
 import { transparent } from '../../color';
 import { text_style } from '../../internals/text_style';
 import { Modify } from '../../internals/types';
+import { Text } from '../Text';
 import { TextStyleProvider } from '../Text/style';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -65,7 +66,9 @@ const ButtonText = Animated.createAnimatedComponent(class extends React.PureComp
 }> {
   render() {
     return (
-      <TextStyleProvider style={(prev) => StyleSheet.flatten([prev, this.props.style])}>{this.props.children}</TextStyleProvider>
+      <TextStyleProvider style={(prev) => StyleSheet.flatten([prev, this.props.style])}>
+        <Text>{this.props.children}</Text>
+      </TextStyleProvider>
     );
   }
 });
