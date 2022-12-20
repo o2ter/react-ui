@@ -37,6 +37,7 @@ type FormDateProps = Modify<TextProps, {
   name: string | string[];
   min?: string;
   max?: string;
+  multiple?: boolean;
   disabled?: boolean;
   selectable?: (x: string) => boolean;
 }>
@@ -45,6 +46,7 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
   name,
   min,
   max,
+  multiple,
   style,
   disabled = false,
   selectable = () => true,
@@ -55,15 +57,15 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
   const { value, error, touched, setTouched, onChange } = useField(name);
   const theme = useTheme();
 
-  const _onChange = React.useCallback((value: any) => { onChange(value); setTouched(); }, []);
+  const _onChange = React.useCallback((value: any) => { onChange(multiple ? value : _.first(value)); setTouched(); }, []);
 
-  const date = _.isString(value) ? new Calendar.Date(value) : undefined;
+  const date = _.castArray(value ?? []).map(x => new Calendar.Date(x));
 
   return (
     <PickerBase
       ref={forwardRef}
       disabled={disabled}
-      text={date?.toString()}
+      text={date.map(x => x.toString()).join(', ')}
       style={[
         defaultInputStyle(theme),
         theme.styles.formDateStyle, 
@@ -76,6 +78,7 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
           value={value}
           min={min}
           max={max}
+          multiple={multiple}
           onChange={_onChange}
           selectable={selectable}
           style={{

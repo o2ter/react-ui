@@ -34,7 +34,7 @@ import { _Date, dateToString } from './date';
 import { calendarStyle } from './style';
 
 export const CalendarBody: React.FC<{
-  selected?: _Date;
+  selected: _Date[];
   month: number;
   year: number;
   selectable: (date: string) => boolean;
@@ -55,7 +55,7 @@ export const CalendarBody: React.FC<{
     const daysInMonth = monthObj.daysInMonth;
     const weekdayStart = monthObj.weekday % 7;
 
-    const _selected = selected?.year === year && selected?.month === month;
+    const _selected = selected.filter(x => x.year === year && x.month === month);
 
     const rows = [];
     let current_row = [];
@@ -67,13 +67,14 @@ export const CalendarBody: React.FC<{
         rows.push(<View key={`${id}-row-${rows.length}`} style={[calendarStyle.weekContainer, theme.styles.calendarWeekContainerStyle]}>{current_row}</View>);
         current_row = [];
       }
+      const selected = _selected.find(x => x.day === day);
       current_row.push(
         <Pressable
           key={`${id}-day-${day}`}
-          style={[calendarStyle.weekContainer, theme.styles.calendarWeekContainerStyle]}
+          style={[calendarStyle.weekdayContainer, theme.styles.calendarWeekdayContainerStyle]}
           onPress={() => { if (selectable(dateToString(year, month, day))) onSelect({ year, month, day }) }}>
-          {_selected && selected?.day === day && (
-            <Svg viewBox='0 0 100 100' style={StyleSheet.absoluteFill}>
+          {selected && (
+            <Svg viewBox='0 0 100 100' style={[{ zIndex: -1 }, StyleSheet.absoluteFill]}>
               <Circle cx={50} cy={50} r={40} fill={theme.themeColors.primary} />
             </Svg>
           )}
@@ -81,7 +82,7 @@ export const CalendarBody: React.FC<{
             calendarStyle.weekdays,
             theme.styles.calendarWeekdayStyle,
             selectable(dateToString(year, month, day)) ? {} : { color: theme.grays['500'] },
-            _selected && selected?.day === day ? { color: theme.colorContrast(theme.themeColors.primary) } : {},
+            selected ? { color: theme.colorContrast(theme.themeColors.primary) } : {},
           ]}>{day}</Text>
         </Pressable>
       );

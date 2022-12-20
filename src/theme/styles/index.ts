@@ -61,6 +61,7 @@ export const _simpleStyles = {
   pickerStyle: {} as TextStyle,
 
   calendarWeekContainerStyle: {} as ViewStyle,
+  calendarWeekdayContainerStyle: {} as ViewStyle,
   calendarWeekdayStyle: {} as TextStyle,
 
   toastStyle: {} as ViewStyle,

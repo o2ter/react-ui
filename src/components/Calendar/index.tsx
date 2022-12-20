@@ -55,18 +55,22 @@ const month_name = [
   'december',
 ]
 
+type CalendarValue = string | Date | DateTime;
+
 type CalendarProps = Modify<ViewProps, {
-  value?: string | Date | DateTime;
-  min?: string | Date | DateTime;
-  max?: string | Date | DateTime;
+  value?: CalendarValue | CalendarValue[];
+  min?: CalendarValue;
+  max?: CalendarValue;
+  multiple?: boolean;
   selectable?: (date: string) => boolean;
-  onChange: (date: string) => void;
+  onChange: (date: string[]) => void;
 }>
 
 const CalendarBase = React.forwardRef<View, CalendarProps>(({
   value,
   min,
   max,
+  multiple,
   style,
   selectable = () => true,
   onChange
@@ -75,11 +79,12 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
   const theme = useTheme();
   const locale = Localization.useLocalize();
 
-  const _value = React.useMemo(() => _.isNil(value) ? undefined : new _Date(value), [value]);
+  const _value = _.sortBy(_.castArray(value ?? []).map(x => new _Date(x)), 'year', 'month', 'day');
 
   const [current, setCurrent] = React.useState(() => {
     const now = DateTime.now();
-    return { month: _value?.month ?? now.month, year: _value?.year ?? now.year }
+    const first = _.first(_value);
+    return { month: first?.month ?? now.month, year: first?.year ?? now.year }
   });
 
   const _selectable = React.useCallback((date: string) => {
@@ -91,7 +96,7 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
   return (
     <View ref={forwardRef} style={style}>
       <View style={{ padding: 8, flexDirection: 'row', justifyContent: 'space-between' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-end', flexBasis: 0 }}>
           <Picker
             value={month_name[current.month - 1]}
             items={month_name.map(x => ({ label: locale.string(`calendar.months.${x}`), value: x }))}
@@ -136,7 +141,30 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
         <Text style={[calendarStyle.weekdays, theme.styles.calendarWeekdayStyle]}>{locale.string('calendar.weekdays.saturday')}</Text>
       </View>
       <CalendarBody selected={_value} selectable={_selectable} onSelect={({ year, month, day }) => {
-        onChange(dateToString(year, month, day));
+
+        if (multiple) {
+
+          const index = _value.findIndex(x => x.year === year && x.month === month && x.day === day);
+
+          if (index === -1) {
+
+            onChange([
+              ..._value.map(x => dateToString(x.year, x.month, x.day)),
+              dateToString(year, month, day),
+            ].sort());
+
+          } else {
+
+            const result = [..._value];
+            result.splice(index, 1);
+            onChange(result.map(x => dateToString(x.year, x.month, x.day)));
+          }
+
+        } else {
+          
+          onChange([dateToString(year, month, day)]);
+        }
+
       }} {...current} />
     </View>
   )
