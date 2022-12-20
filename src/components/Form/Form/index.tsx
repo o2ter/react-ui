@@ -31,7 +31,7 @@ import { useStableRef, ISchema, object, ValidateError } from 'sugax';
 export type FormState = {
   values: Record<string, any>;
   errors: Error[];
-  setValues: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+  setValue:  (path: string, value: React.SetStateAction<any>) => void;
   validate: (value: any, path?: string) => Error[];
   submit: VoidFunction;
   reset: VoidFunction;
@@ -42,7 +42,7 @@ export type FormState = {
 const FormContext = React.createContext<FormState>({
   values: {},
   errors: [],
-  setValues: () => { },
+  setValue: () => { },
   validate: () => [],
   submit: () => { },
   reset: () => { },
@@ -112,7 +112,9 @@ export const Form: React.FC<{
   });
 
   const formAction = React.useMemo(() => ({
-    setValues,
+    setValue: (path: string, value: React.SetStateAction<any>) => setValues(
+      values => _.set(_.cloneDeep(values), path, _.isFunction(value) ? value(_.get(values, path)) : value)
+    ),
     submit: () => stableRef.current.submit(),
     reset: () => stableRef.current.reset(),
     setTouched: (path?: string) => setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }),
@@ -145,14 +147,11 @@ export const useForm = () => ({
 
 export const useField = (name: string | string[]) => {
 
-  const { values, setValues, validate, touched, setTouched, submit, reset, groupPath } = useForm();
+  const { values, setValue, validate, touched, setTouched, submit, reset, groupPath } = useForm();
   const path = [...groupPath, ..._.toPath(name)].join('.');
 
-  const onChange = React.useCallback((value: React.SetStateAction<any>) => setValues(
-    values => _.set(_.cloneDeep(values), path, _.isFunction(value) ? value(_.get(values, path)) : value)
-  ), []);
-
-  const _setTouched = React.useCallback(() => setTouched(path), []);
+  const onChange = React.useCallback((value: React.SetStateAction<any>) => setValue(path, value), [path]);
+  const _setTouched = React.useCallback(() => setTouched(path), [path]);
 
   return {
     value: _.get(values, path),
