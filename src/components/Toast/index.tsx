@@ -35,11 +35,11 @@ type ToastMessage = string | (Error & { code?: number });
 type ToastType = 'success' | 'info' | 'warning' | 'error';
 
 const ToastContext = React.createContext({
-  showError(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { },
-  showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { },
-  showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { },
-  showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { },
-  showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout: number) { },
+  showError(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { },
+  showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { },
+  showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { },
+  showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { },
+  showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout?: number) { },
 });
 
 export const useToast = () => React.useContext(ToastContext);
@@ -143,7 +143,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
   const insets = useSafeAreaInsets();
   const theme = useTheme();
 
-  function show_message(message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>, type: ToastType | string, timeout: number) {
+  function show_message(message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>, type: ToastType | string, timeout?: number) {
 
     if (_.isNil(message)) return;
     if (!_.isString(message) && _.isArrayLike(message)) {
@@ -162,11 +162,11 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
   }
 
   const provider = React.useMemo(() => ({
-    showError(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'error', timeout); },
-    showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'warning', timeout); },
-    showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'info', timeout); },
-    showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout: number) { show_message(message, 'success', timeout); },
-    showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout: number) { show_message(message, color, timeout); },
+    showError(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { show_message(message, 'error', timeout); },
+    showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { show_message(message, 'warning', timeout); },
+    showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { show_message(message, 'info', timeout); },
+    showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { show_message(message, 'success', timeout); },
+    showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout?: number) { show_message(message, color, timeout); },
   }), [setElements]);
 
   return <ToastContext.Provider value={provider}>

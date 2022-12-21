@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
 import { useStableRef, ISchema, object, ValidateError } from 'sugax';
+import { useToast } from '../../Toast';
 
 export type FormState = {
   values: Record<string, any>;
@@ -102,14 +103,21 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   const _schema = React.useMemo(() => object(schema), [schema]);
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
 
+  const { showError } = useToast();
+  const _showError = React.useCallback((resolve: any) => {
+    (async () => {
+      try { await resolve; } catch (e) { showError(e as Error); }
+    })();
+  }, [showError]);
+
   const stableRef = useStableRef({
     reset: () => {
       setValues(initialValues);
-      if (_.isFunction(onReset)) onReset(formState);
+      if (_.isFunction(onReset)) _showError(onReset(formState));
     },
     submit: () => {
       setTouched(true);
-      if (_.isFunction(onSubmit)) onSubmit(_schema.cast(values), formState);
+      if (_.isFunction(onSubmit)) _showError(onSubmit(_schema.cast(values), formState));
     },
   });
 
@@ -132,8 +140,8 @@ export const Form = React.forwardRef<FormState, FormProps>(({
 
   const [initState] = React.useState(formState);
   React.useEffect(() => {
-    if (initState !== formState && _.isFunction(onChange)) onChange(formState);
-  }, [formState]);
+    if (initState !== formState && _.isFunction(onChange)) _showError(onChange(formState));
+  }, [formState, _showError]);
 
   React.useImperativeHandle(forwardRef, () => formState, [formState]);
 
