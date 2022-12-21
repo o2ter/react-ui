@@ -43,7 +43,7 @@ export const useFormList = () => React.useContext(FormListContext);
 type FormListProps = Modify<_.Omit<ComponentPropsWithRef<typeof List<any>>, 'data'>, {
   name: string | string[];
   onCreate?: () => any;
-  renderItem: (x: { item: any, index: number, actions: ReturnType<typeof useFormList> }) => any
+  renderItem: (x: { item: any, index: number, actions: ReturnType<typeof useFormList> }) => any;
 }>
 
 export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormListProps>(({
@@ -64,7 +64,7 @@ export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormLis
       if (_.isFunction(onCreate)) onChange((x: any) => [..._.castArray(x ?? []), onCreate()]);
     },
     onRemove: (index: number) => {
-      onChange((x: any) => _.castArray(x ?? []).filter((v, i) => i !== index))
+      onChange((x: any) => _.castArray(x ?? []).filter((v, i) => i !== index));
     },
   }), []);
 
