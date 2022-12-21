@@ -74,7 +74,7 @@ const defaultValidation = (validate: (value: any) => ValidateError[]) => {
   };
 };
 
-export const Form: React.FC<{
+type FormProps = {
   schema?: Record<string, ISchema<any, any>>;
   initialValues?: Record<string, any>;
   validate?: (value: any, path?: string) => Error[];
@@ -83,7 +83,9 @@ export const Form: React.FC<{
   onChange?: (state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
   children: React.ReactNode | ((state: FormState) => React.ReactNode);
-}> = ({
+};
+
+export const Form = React.forwardRef<FormState, FormProps>(({
   schema = {},
   initialValues = object(schema).getDefault() ?? {},
   validate,
@@ -92,7 +94,7 @@ export const Form: React.FC<{
   onChange = () => { },
   onSubmit = () => { },
   children
-}) => {
+}, forwardRef) => {
 
   const [values, setValues] = React.useState(initialValues);
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
@@ -133,10 +135,12 @@ export const Form: React.FC<{
     if (initState !== formState && _.isFunction(onChange)) onChange(formState);
   }, [formState]);
 
+  React.useImperativeHandle(forwardRef, () => formState, [formState]);
+
   return <FormContext.Provider value={formState}>
     {_.isFunction(children) ? children(formState) : children}
   </FormContext.Provider>;
-};
+});
 
 export const FormConsumer = FormContext.Consumer;
 

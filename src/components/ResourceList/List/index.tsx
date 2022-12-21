@@ -37,15 +37,17 @@ const ListContext = React.createContext<ListState>({
   refresh: async () => { },
 });
 
-const ListContent: React.FC<{
+type ListContentProps = {
   resource: () => PromiseLike<ArrayLike<any>>;
   debounce?: _.ThrottleSettings & { wait?: number };
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
-}> = ({
+};
+
+const ListContent = React.forwardRef<ListState, ListContentProps>(({
   resource: query,
   debounce,
   children
-}) => {
+}, forwardRef) => {
 
   const {
     loading,
@@ -56,12 +58,14 @@ const ListContent: React.FC<{
 
   const state = React.useMemo(() => ({ loading, resource, error, refresh }), [loading, resource, error, refresh]);
 
+  React.useImperativeHandle(forwardRef, () => state, [state]);
+
   return (
     <ListContext.Provider value={state}>
       {_.isFunction(children) ? children(state) : children}
     </ListContext.Provider>
   );
-}
+});
 
 export const useList = () => React.useContext(ListContext);
 
