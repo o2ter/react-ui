@@ -43,18 +43,20 @@ export const useFormList = () => React.useContext(FormListContext);
 type FormListProps = Modify<_.Omit<ComponentPropsWithRef<typeof List<any>>, 'data'>, {
   name: string | string[];
   onCreate?: () => any;
+  renderItem: (x: { item: any, index: number, actions: ReturnType<typeof useFormList> }) => any
 }>
 
 export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormListProps>(({
   name,
   onCreate,
+  renderItem,
   ...props
 }, forwardRef) => {
 
   const { value, onChange } = useField(name);
   const data = React.useMemo(() => _.castArray(value ?? []), [value]);
 
-  const stableRef = useStableRef({ onCreate });
+  const stableRef = useStableRef({ onCreate, renderItem });
 
   const actions = React.useMemo(() => ({
     onCreate: () => {
@@ -66,11 +68,13 @@ export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormLis
     },
   }), []);
 
+  const _renderItem = React.useCallback((x: { item: any, index: number }) => stableRef.current.renderItem({ ...x, actions }), [actions]);
+
   React.useImperativeHandle(forwardRef, () => actions, [actions]);
 
   return (
     <FormListContext.Provider value={actions}>
-      <List data={data} {...props} />
+      <List data={data} renderItem={_renderItem} {...props} />
     </FormListContext.Provider>
   );
 });
