@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithRef, ComponentRef } from 'react';
+import React, { ComponentPropsWithRef } from 'react';
 import { useField } from '../Form';
 import List from '../../List';
 import { Modify } from '../../../internals/types';
