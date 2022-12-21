@@ -69,10 +69,14 @@ const ListContent = React.forwardRef<ListState, ListContentProps>(({
 
 export const useList = () => React.useContext(ListContext);
 
-export const List: React.FC<{
+type ListProps = {
   resource: (state: Record<string, any>) => PromiseLike<ArrayLike<any>>;
   debounce?: _.ThrottleSettings & { wait?: number };
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
-}> = ({ resource, ...props }) => <Form>{state => <ListContent resource={() => resource(state.values)} {...props} />}</Form>;
+};
+
+export const List = React.forwardRef<ListState, ListProps>(({ resource, ...props }, forwardRef) => (
+  <Form>{state => <ListContent ref={forwardRef} resource={() => resource(state.values)} {...props} />}</Form>
+));
 
 export default List;
