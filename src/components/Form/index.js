@@ -26,11 +26,13 @@
 import _ from 'lodash';
 import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
 import { FormGroup } from './Group';
+import { FormList, useFormList } from './List';
 import { FormDate } from './DateTime';
 
 const Form = _.assign(FormBase, {
   Consumer: FormConsumer,
   Group: FormGroup,
+  List: FormList,
   ErrorMessage: require('./ErrorMessage').default,
   TextField: require('./TextField').default,
   Button: require('./Button').default,
@@ -43,5 +45,6 @@ const Form = _.assign(FormBase, {
 export {
   useField,
   useForm,
+  useFormList,
   Form,
 }

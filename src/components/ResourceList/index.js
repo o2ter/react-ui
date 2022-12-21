@@ -30,6 +30,7 @@ import { List as ListBase, useList as useResourceList } from './List';
 const ResourceList = _.assign(ListBase, {
   Refresh: require('./Refresh').default,
   Group: Form.Group,
+  List: Form.List,
   TextField: Form.TextField,
   Picker: Form.Picker,
   Checkbox: Form.Checkbox,

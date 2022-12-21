@@ -25,23 +25,54 @@
 
 import _ from 'lodash';
 import React, { ComponentPropsWithRef } from 'react';
+import { useStableRef } from 'sugax';
 import { useField } from '../Form';
 import List from '../../List';
 import { Modify } from '../../../internals/types';
 
+const FormListContext = React.createContext<{
+  onCreate: () => void;
+  onRemove: (index: number) => void;
+}>({
+  onCreate: () => { },
+  onRemove: () => { },
+});
+
+export const useFormList = () => React.useContext(FormListContext);
+
 type FormListProps = Modify<_.Omit<ComponentPropsWithRef<typeof List>, 'data'>, {
   name: string | string[];
+  onCreate?: () => any;
 }>
 
-export const FormList: React.FC<FormListProps> = ({
+export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormListProps>(({
   name,
+  onCreate,
   ...props
-}) => {
+}, forwardRef) => {
 
-  const { value } = useField(name);
+  const { value, onChange } = useField(name);
   const data = React.useMemo(() => _.castArray(value ?? []), [value]);
 
-  return <List data={data} {...props} />;
-};
+  const stableRef = useStableRef({ onCreate });
+
+  const actions = React.useMemo(() => ({
+    onCreate: () => {
+      const { onCreate } = stableRef.current;
+      if (_.isFunction(onCreate)) onChange((x: any) => [..._.castArray(x ?? []), onCreate()]);
+    },
+    onRemove: (index: number) => {
+      onChange((x: any) => _.isArray(x) ? x.filter((v, i) => i !== index) : x)
+    },
+  }), []);
+
+  React.useImperativeHandle(forwardRef, () => actions, [actions]);
+
+  return (
+    <FormListContext.Provider value={actions}>
+      <List data={data} {...props} />
+    </FormListContext.Provider>
+  );
+});
 
 export default FormList;
