@@ -28,12 +28,25 @@ import React from 'react';
 
 type ListProps<T> = {
   data: T[],
+  keyExtractor?: (item: any, index: number) => string;
   renderItem: (x: { item: T, index: number }) => any
 }
 
 export const List = <T extends any>({
   data,
-  renderItem = ({ item }) => item
-}: ListProps<T>) => React.createElement(React.Fragment, {}, ..._.map(data, (item, index) => renderItem({ item, index })));
+  keyExtractor,
+  renderItem,
+}: ListProps<T>) => {
+
+  const elements = React.useMemo(() => _.map(data, (item, index) => {
+    const element = renderItem({ item, index });
+    if (_.isFunction(keyExtractor) && React.isValidElement(element) && _.isNil(element.key)) {
+      return React.cloneElement(element, { key: keyExtractor(item, index) });
+    }
+    return element;
+  }), [data, keyExtractor, renderItem]);
+
+  return React.createElement(React.Fragment, {}, ...elements);
+};
 
 export default List;

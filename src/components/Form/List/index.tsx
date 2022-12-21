@@ -26,40 +26,22 @@
 import _ from 'lodash';
 import React, { ComponentPropsWithRef, ComponentRef } from 'react';
 import { useField } from '../Form';
-import { useTheme } from '../../../theme';
-import { Picker } from '../../Picker';
-import { defaultInputStyle } from '../style';
+import List from '../../List';
 import { Modify } from '../../../internals/types';
 
-type FormPickerProps = Modify<ComponentPropsWithRef<typeof Picker>, {
+type FormListProps = Modify<_.Omit<ComponentPropsWithRef<typeof List>, 'data'>, {
   name: string | string[];
 }>
 
-export const FormPicker = React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
+export const FormList: React.FC<FormListProps> = ({
   name,
-  style,
   ...props
-}, forwardRef) => {
+}) => {
 
-  const { value, error, touched, setTouched, onChange } = useField(name);
-  const theme = useTheme();
+  const { value } = useField(name);
+  const data = React.useMemo(() => _.castArray(value ?? []), [value]);
 
-  const _onChange = React.useCallback((value: any) => { onChange(value); setTouched(); }, []);
+  return <List data={data} {...props} />;
+};
 
-  return (
-    <Picker
-      ref={forwardRef}
-      value={value}
-      onValueChange={_onChange}
-      style={[
-        defaultInputStyle(theme),
-        theme.styles.formPickerStyle,
-        !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
-        !touched || _.isEmpty(error) ? {} : theme.styles.formPickerErrorStyle,
-        style,
-      ]}
-      {...props} />
-  )
-});
-
-export default FormPicker;
+export default FormList;
