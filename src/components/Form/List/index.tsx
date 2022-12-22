@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithRef } from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 import { useStableRef } from 'sugax';
 import { useField } from '../Form';
 import List from '../../List';
@@ -40,7 +40,7 @@ const FormListContext = React.createContext<{
 
 export const useFormList = () => React.useContext(FormListContext);
 
-type FormListProps = Modify<_.Omit<ComponentPropsWithRef<typeof List<any>>, 'data'>, {
+type FormListProps = Modify<_.Omit<ComponentPropsWithoutRef<typeof List<any>>, 'data'>, {
   name: string | string[];
   onCreate?: () => any;
   renderItem: (x: { item: any, index: number, actions: ReturnType<typeof useFormList> }) => any;

@@ -63,7 +63,7 @@ type CalendarProps = Modify<ViewProps, {
   max?: CalendarValue;
   multiple?: boolean;
   selectable?: (date: string) => boolean;
-  onChange: (date: string[]) => void;
+  onChange?: (date: string[]) => void;
 }>
 
 const CalendarBase = React.forwardRef<View, CalendarProps>(({
@@ -141,6 +141,8 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
         <Text style={[calendarStyle.weekdays, theme.styles.calendarWeekdayStyle]}>{locale.string('calendar.weekdays.saturday')}</Text>
       </View>
       <CalendarBody selected={_value} selectable={_selectable} onSelect={({ year, month, day }) => {
+
+        if (!_.isFunction(onChange)) return;
 
         if (multiple) {
 

@@ -44,6 +44,7 @@ export const _simpleStyles = {
   textStyle: {} as TextStyle,
 
   textInputStyle: {} as TextStyle,
+  datePickerStyle: {} as TextStyle,
 
   safeAreaViewStyle: {} as ViewStyle,
 

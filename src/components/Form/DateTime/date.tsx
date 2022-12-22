@@ -28,10 +28,8 @@ import React, { ComponentRef } from 'react';
 import { TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
-import { Calendar } from '../../Calendar';
-import { PickerBase } from './picker';
-import { defaultInputStyle } from '../style';
 import { Modify } from '../../../internals/types';
+import { DatePicker } from '../../DateTime';
 
 type FormDateProps = Modify<TextProps, {
   name: string | string[];
@@ -42,7 +40,7 @@ type FormDateProps = Modify<TextProps, {
   selectable?: (x: string) => boolean;
 }>
 
-export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDateProps>(({
+export const FormDate = React.forwardRef<ComponentRef<typeof DatePicker>, FormDateProps>(({
   name,
   min,
   max,
@@ -59,34 +57,22 @@ export const FormDate = React.forwardRef<ComponentRef<typeof PickerBase>, FormDa
 
   const _onChange = React.useCallback((value: any) => { onChange(multiple ? value : _.first(value)); setTouched(); }, []);
 
-  const date = _.castArray(value ?? []).map(x => new Calendar.Date(x));
-
   return (
-    <PickerBase
+    <DatePicker
       ref={forwardRef}
+      value={value}
+      min={min}
+      max={max}
+      multiple={multiple}
+      onChange={_onChange}
+      selectable={selectable}
       disabled={disabled}
-      text={date.map(x => x.toString()).join(', ')}
       style={[
-        defaultInputStyle(theme),
-        theme.styles.formDateStyle, 
+        theme.styles.formDateStyle,
         !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
         !touched || _.isEmpty(error) ? {} : theme.styles.formDateErrorStyle,
         style
       ]}
-      picker={(
-        <Calendar
-          value={value}
-          min={min}
-          max={max}
-          multiple={multiple}
-          onChange={_onChange}
-          selectable={selectable}
-          style={{
-            width: '80%',
-            maxWidth: 350,
-            backgroundColor: 'white',
-          }} />
-      )}
       {...props} />
   )
 });

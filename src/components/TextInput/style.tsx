@@ -24,22 +24,19 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
-import { Button } from '../../Button';
-import Icon from '../../Icon';
-import { useList } from '../List';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { useTheme } from '../../theme';
 
-export const ListRefresh = React.forwardRef<ComponentRef<typeof Button>, ComponentPropsWithoutRef<typeof Button>>(({
-  title,
-  children,
-  ...props
-}, forwardRef) => {
-  const { refresh } = useList();
-  return (
-    <Button ref={forwardRef} onPress={refresh} title={title} {...props}>
-      {_.isEmpty(children) && _.isEmpty(title) ? <Icon icon='FontAwesome' name='refresh' /> : children}
-    </Button>
-  );
-});
-
-export default ListRefresh;
+export const useDefaultInputStyle = (theme: ReturnType<typeof useTheme>) => React.useMemo(() => StyleSheet.create({
+  style: {
+    color: theme.bodyColor,
+    backgroundColor: theme.bodyBackground,
+    fontSize: theme.fontSizeBase,
+    borderColor: theme.grays['400'],
+    borderWidth: theme.borderWidth,
+    borderRadius: theme.borderRadiusBase,
+    paddingVertical: theme.spacer * 0.375,
+    paddingHorizontal: theme.spacer * 0.75,
+  }
+}).style, [theme]);

@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { TextInput as RNTextInput, TextInputProps, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme';
+import { useDefaultInputStyle } from './style';
 
 export const TextInput = React.forwardRef<RNTextInput, TextInputProps>(({
   style,
@@ -34,19 +35,7 @@ export const TextInput = React.forwardRef<RNTextInput, TextInputProps>(({
 }, forwardRef) => {
 
   const theme = useTheme();
-
-  const defaultStyle = React.useMemo(() => StyleSheet.create({
-    style: {
-      color: theme.bodyColor,
-      backgroundColor: theme.bodyBackground,
-      fontSize: theme.fontSizeBase,
-      borderColor: theme.grays['400'],
-      borderWidth: theme.borderWidth,
-      borderRadius: theme.borderRadiusBase,
-      paddingVertical: theme.spacer * 0.375,
-      paddingHorizontal: theme.spacer * 0.75,
-    }
-  }).style, [theme]);
+  const defaultStyle = useDefaultInputStyle(theme);
 
   return (
     <TextInput

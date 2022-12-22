@@ -1,5 +1,5 @@
 //
-//  style.ts
+//  index.js
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -23,16 +23,4 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import { useTheme } from '../../theme';
-
-export const defaultInputStyle = (theme: ReturnType<typeof useTheme>) => ({
-  color: theme.bodyColor,
-  backgroundColor: theme.bodyBackground,
-  fontSize: theme.fontSizeBase,
-  borderColor: theme.grays['400'],
-  borderWidth: theme.borderWidth,
-  borderRadius: theme.borderRadiusBase,
-  paddingVertical: theme.spacer * 0.375,
-  paddingHorizontal: theme.spacer * 0.75,
-});
+export { DatePicker } from './date';

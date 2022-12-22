@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  date.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -25,42 +25,60 @@
 
 import _ from 'lodash';
 import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
-import { NativeSyntheticEvent, TextInputEndEditingEventData } from 'react-native';
-import TextInput from '../../TextInput';
-import { useField } from '../Form';
-import { useTheme } from '../../../theme';
-import { Modify } from '../../../internals/types';
+import { TextProps } from 'react-native';
+import { useTheme } from '../../theme';
+import { Calendar } from '../Calendar';
+import { PickerBase } from './picker';
+import { Modify } from '../../internals/types';
+import { useDefaultInputStyle } from '../TextInput/style';
 
-type FormTextFieldProps = Modify<ComponentPropsWithoutRef<typeof TextInput>, {
-  name: string | string[];
-}>
+export type DatePickerBaseProps = Pick<ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
+type DatePickerProps = Modify<TextProps, DatePickerBaseProps>
 
-export const FormTextField = React.forwardRef<ComponentRef<typeof TextInput>, FormTextFieldProps>(({
-  name,
+export const DatePicker = React.forwardRef<ComponentRef<typeof PickerBase>, DatePickerProps>(({
+  value,
+  min,
+  max,
+  multiple,
+  onChange,
+  disabled = false,
+  selectable = () => true,
   style,
+  children,
   ...props
 }, forwardRef) => {
 
-  const { value, error, touched, setTouched, onChange, submit } = useField(name);
   const theme = useTheme();
+  const defaultStyle = useDefaultInputStyle(theme);
 
-  const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => { onChange(e.nativeEvent.text); setTouched(); }, []);
+  const date = _.castArray(value ?? []).map(x => new Calendar.Date(x));
 
   return (
-    <TextInput
+    <PickerBase
       ref={forwardRef}
-      value={value ?? ''}
-      onChangeText={onChange}
-      onEndEditing={onEndEditing}
-      onSubmitEditing={submit}
+      disabled={disabled}
+      text={date.map(x => x.toString()).join(', ')}
       style={[
-        theme.styles.formTextFieldStyle,
-        !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
-        !touched || _.isEmpty(error) ? {} : theme.styles.formTextFieldErrorStyle,
-        style,
+        defaultStyle,
+        theme.styles.datePickerStyle, 
+        style
       ]}
+      picker={(
+        <Calendar
+          value={value}
+          min={min}
+          max={max}
+          multiple={multiple}
+          onChange={onChange}
+          selectable={selectable}
+          style={{
+            width: '80%',
+            maxWidth: 350,
+            backgroundColor: 'white',
+          }} />
+      )}
       {...props} />
-  );
+  )
 });
 
-export default FormTextField;
+export default DatePicker;

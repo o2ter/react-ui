@@ -24,14 +24,14 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithRef, ComponentRef } from 'react';
+import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Picker } from '../../Picker';
-import { defaultInputStyle } from '../style';
 import { Modify } from '../../../internals/types';
+import { useDefaultInputStyle } from '../../TextInput/style';
 
-type FormPickerProps = Modify<ComponentPropsWithRef<typeof Picker>, {
+type FormPickerProps = Modify<ComponentPropsWithoutRef<typeof Picker>, {
   name: string | string[];
 }>
 
@@ -43,6 +43,7 @@ export const FormPicker = React.forwardRef<ComponentRef<typeof Picker>, FormPick
 
   const { value, error, touched, setTouched, onChange } = useField(name);
   const theme = useTheme();
+  const defaultStyle = useDefaultInputStyle(theme);
 
   const _onChange = React.useCallback((value: any) => { onChange(value); setTouched(); }, []);
 
@@ -52,7 +53,7 @@ export const FormPicker = React.forwardRef<ComponentRef<typeof Picker>, FormPick
       value={value}
       onValueChange={_onChange}
       style={[
-        defaultInputStyle(theme),
+        defaultStyle,
         theme.styles.formPickerStyle,
         !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
         !touched || _.isEmpty(error) ? {} : theme.styles.formPickerErrorStyle,

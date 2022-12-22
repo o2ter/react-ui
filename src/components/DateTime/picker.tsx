@@ -26,8 +26,8 @@
 import _ from 'lodash';
 import React, { ComponentRef } from 'react';
 import { Text, TextProps, Pressable, Modal, StyleSheet, Keyboard } from 'react-native';
-import { useTheme } from '../../../theme';
-import { Modify } from '../../../internals/types';
+import { useTheme } from '../../theme';
+import { Modify } from '../../internals/types';
 
 type PickerBaseProps = Modify<TextProps, {
   text?: string;

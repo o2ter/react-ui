@@ -24,12 +24,12 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithRef, ComponentRef } from 'react';
+import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
 import { useForm } from '../Form';
 import { Button } from '../../Button';
 import { Modify } from '../../../internals/types';
 
-type FormButtonProps = Modify<ComponentPropsWithRef<typeof Button>, {
+type FormButtonProps = Modify<ComponentPropsWithoutRef<typeof Button>, {
   action?: 'submit' | 'reset';
 }>
 
