@@ -1,5 +1,5 @@
 {
-  "name": "o2ter-ui",
+  "name": "@o2ter/react-ui",
   "version": "1.0.0",
   "main": "dist/index",
   "module": "dist/index",
@@ -7,7 +7,7 @@
   "files": [
     "dist/*"
   ],
-  "repository": "https://github.com/o2ter/o2ter-ui.git",
+  "repository": "https://github.com/o2ter/react-ui.git",
   "author": "Susan Cheng <susan.doggie@gmail.com>",
   "license": "MIT",
   "scripts": {
