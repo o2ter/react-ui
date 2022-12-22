@@ -38,7 +38,7 @@ export const TextInput = React.forwardRef<RNTextInput, TextInputProps>(({
   const defaultStyle = useDefaultInputStyle(theme);
 
   return (
-    <TextInput
+    <RNTextInput
       ref={forwardRef}
       style={[
         defaultStyle,
