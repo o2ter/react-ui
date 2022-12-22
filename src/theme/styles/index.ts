@@ -43,6 +43,8 @@ export const _simpleStyles = {
   viewStyle: {} as ViewStyle,
   textStyle: {} as TextStyle,
 
+  textInputStyle: {} as TextStyle,
+
   safeAreaViewStyle: {} as ViewStyle,
 
   scrollableStyle: {} as ViewStyle,

@@ -46,6 +46,7 @@ export * from './SegmentedControl';
 export { SleekAnimationView } from './SleekAnimationView';
 export { StickyView } from './StickyView';
 export { SVG } from './SVG';
+export { TextInput } from './TextInput';
 export * from './Modal';
 export { Text } from './Text';
 export { TextStyleProvider } from './Text/style';

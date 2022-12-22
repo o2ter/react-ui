@@ -24,45 +24,40 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithRef, ComponentRef } from 'react';
-import { NativeSyntheticEvent, TextInputEndEditingEventData } from 'react-native';
-import TextInput from '../../TextInput';
-import { useField } from '../Form';
-import { useTheme } from '../../../theme';
-import { defaultInputStyle } from '../style';
-import { Modify } from '../../../internals/types';
+import React from 'react';
+import { TextInput as RNTextInput, TextInputProps, StyleSheet } from 'react-native';
+import { useTheme } from '../../theme';
 
-type FormTextFieldProps = Modify<ComponentPropsWithRef<typeof TextInput>, {
-  name: string | string[];
-}>
-
-export const FormTextField = React.forwardRef<ComponentRef<typeof TextInput>, FormTextFieldProps>(({
-  name,
+export const TextInput = React.forwardRef<RNTextInput, TextInputProps>(({
   style,
   ...props
 }, forwardRef) => {
 
-  const { value, error, touched, setTouched, onChange, submit } = useField(name);
   const theme = useTheme();
 
-  const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => { onChange(e.nativeEvent.text); setTouched(); }, []);
+  const defaultStyle = React.useMemo(() => StyleSheet.create({
+    style: {
+      color: theme.bodyColor,
+      backgroundColor: theme.bodyBackground,
+      fontSize: theme.fontSizeBase,
+      borderColor: theme.grays['400'],
+      borderWidth: theme.borderWidth,
+      borderRadius: theme.borderRadiusBase,
+      paddingVertical: theme.spacer * 0.375,
+      paddingHorizontal: theme.spacer * 0.75,
+    }
+  }).style, [theme]);
 
   return (
     <TextInput
       ref={forwardRef}
-      value={value ?? ''}
-      onChangeText={onChange}
-      onEndEditing={onEndEditing}
-      onSubmitEditing={submit}
       style={[
-        defaultInputStyle(theme),
-        theme.styles.formTextFieldStyle,
-        !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
-        !touched || _.isEmpty(error) ? {} : theme.styles.formTextFieldErrorStyle,
+        defaultStyle,
+        theme.styles.textInputStyle,
         style,
       ]}
       {...props} />
   );
 });
 
-export default FormTextField;
+export default TextInput;
