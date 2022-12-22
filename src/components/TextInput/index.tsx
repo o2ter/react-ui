@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextInput as RNTextInput, TextInputProps, StyleSheet } from 'react-native';
+import { TextInput as RNTextInput, TextInputProps } from 'react-native';
 import { useTheme } from '../../theme';
 import { useDefaultInputStyle } from './style';
 
