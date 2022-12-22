@@ -28,6 +28,7 @@ export { AsyncRefreshControl } from './AsyncRefreshControl';
 export { Barcode, BarcodeFormats } from './Barcode';
 export * from './Button';
 export { Calendar } from './Calendar';
+export * from './DateTime';
 export { ErrorBoundary } from './ErrorBoundary';
 export { FlatList } from './FlatList';
 export * from './Form';
