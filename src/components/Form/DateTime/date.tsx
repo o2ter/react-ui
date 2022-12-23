@@ -24,21 +24,16 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef } from 'react';
+import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
 import { TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { DatePicker } from '../../DateTime';
 
-type FormDateProps = Modify<TextProps, {
+type FormDateProps = Modify<ComponentPropsWithoutRef<typeof DatePicker>, {
   name: string | string[];
-  min?: string;
-  max?: string;
-  multiple?: boolean;
-  disabled?: boolean;
-  selectable?: (x: string) => boolean;
-}>
+}>;
 
 export const FormDate = React.forwardRef<ComponentRef<typeof DatePicker>, FormDateProps>(({
   name,
