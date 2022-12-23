@@ -104,20 +104,20 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
 
   const { showError } = useToast();
-  const _showError = React.useCallback((resolve: any) => {
+  const _showError = React.useCallback((resolve: () => any) => {
     (async () => {
-      try { await resolve; } catch (e) { showError(e as Error); }
+      try { await resolve(); } catch (e) { showError(e as Error); }
     })();
   }, [showError]);
 
   const stableRef = useStableRef({
     reset: () => {
       setValues(initialValues);
-      if (_.isFunction(onReset)) _showError(onReset(formState));
+      if (_.isFunction(onReset)) _showError(() => onReset(formState));
     },
     submit: () => {
       setTouched(true);
-      if (_.isFunction(onSubmit)) _showError(onSubmit(_schema.cast(values), formState));
+      if (_.isFunction(onSubmit)) _showError(() => onSubmit(_schema.cast(values), formState));
     },
   });
 
@@ -140,7 +140,7 @@ export const Form = React.forwardRef<FormState, FormProps>(({
 
   const [initState] = React.useState(formState);
   React.useEffect(() => {
-    if (initState !== formState && _.isFunction(onChange)) _showError(onChange(formState));
+    if (initState !== formState && _.isFunction(onChange)) _showError(() => onChange(formState));
   }, [formState, _showError]);
 
   React.useImperativeHandle(forwardRef, () => formState, [formState]);
