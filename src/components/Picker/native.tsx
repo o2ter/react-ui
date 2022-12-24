@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { StyleProp, TextStyle } from 'react-native';
+import { StyleProp, TextStyle, StyleSheet } from 'react-native';
 import { Picker as RNPicker, PickerItemProps } from '@react-native-picker/picker';
 
 export type ItemValue = number | string;
@@ -52,11 +52,12 @@ export const PickerNative = React.forwardRef<RNPicker<ItemValue>, PickerNativePr
 }, forwardRef) => {
 
   const id = React.useId();
+  const _style = React.useMemo(() => StyleSheet.flatten(style), [style]);
 
   return (
     <RNPicker
       ref={forwardRef}
-      style={style}
+      style={_style}
       enabled={!disabled}
       onValueChange={onValueChange}
       selectedValue={value}
