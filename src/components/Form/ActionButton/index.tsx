@@ -1,5 +1,5 @@
 //
-//  index.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2022 O2ter Limited. All rights reserved.
@@ -24,28 +24,29 @@
 //
 
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
-import { FormGroup } from './Group';
-import { FormList, useFormList } from './List';
-import { FormDate } from './DateTime';
+import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import { useForm } from '../Form';
+import { Button } from '../../Button';
+import { Modify } from '../../../internals/types';
 
-const Form = _.assign(FormBase, {
-  Consumer: FormConsumer,
-  Group: FormGroup,
-  List: FormList,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  ActionButton: require('./ActionButton').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
-  Date: FormDate,
+type FormActionButtonProps = Modify<ComponentPropsWithoutRef<typeof Button>, {
+  action: string;
+}>
+
+export const FormActionButton = React.forwardRef<ComponentRef<typeof Button>, FormActionButtonProps>(({
+  action,
+  ...props
+}, forwardRef) => {
+
+  const { action: _action } = useForm();
+
+  return (
+    <Button
+      ref={forwardRef}
+      title={_.upperCase(action)}
+      onPress={() => _action(action)}
+      {...props} />
+  );
 });
 
-export {
-  useField,
-  useForm,
-  useFormList,
-  Form,
-}
+export default FormActionButton;

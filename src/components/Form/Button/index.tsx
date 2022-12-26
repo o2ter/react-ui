@@ -54,7 +54,7 @@ export const FormButton = React.forwardRef<ComponentRef<typeof Button>, FormButt
   return (
     <Button
       ref={forwardRef}
-      title={_.upperFirst(action)}
+      title={_.upperCase(action)}
       {..._.get(defaultProps, action, {})}
       {...props} />
   );

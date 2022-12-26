@@ -36,6 +36,7 @@ export type FormState = {
   validate: (value: any, path?: string) => Error[];
   submit: VoidFunction;
   reset: VoidFunction;
+  action: (action: string) => void;
   touched: (path: string) => boolean;
   setTouched: (path?: string) => void;
 }
@@ -47,6 +48,7 @@ const FormContext = React.createContext<FormState>({
   validate: () => [],
   submit: () => { },
   reset: () => { },
+  action: () => { },
   touched: () => false,
   setTouched: () => { },
 });
@@ -82,6 +84,7 @@ type FormProps = {
   validateOnMount?: boolean;
   onReset?: (state: FormState) => void;
   onChange?: (state: FormState) => void;
+  onAction?: (action: string, state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
   children: React.ReactNode | ((state: FormState) => React.ReactNode);
 };
@@ -93,6 +96,7 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   validateOnMount,
   onReset = () => { },
   onChange = () => { },
+  onAction = () => { },
   onSubmit = () => { },
   children
 }, forwardRef) => {
@@ -119,6 +123,9 @@ export const Form = React.forwardRef<FormState, FormProps>(({
       setTouched(true);
       if (_.isFunction(onSubmit)) _showError(() => onSubmit(_schema.cast(values), formState));
     },
+    action: (action: string) => {
+      if (_.isFunction(onAction)) _showError(() => onAction(action, formState));
+    },
   });
 
   const formAction = React.useMemo(() => ({
@@ -127,6 +134,7 @@ export const Form = React.forwardRef<FormState, FormProps>(({
     ),
     submit: () => stableRef.current.submit(),
     reset: () => stableRef.current.reset(),
+    action: (action: string) => stableRef.current.action(action),
     setTouched: (path?: string) => setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }),
   }), []);
 
