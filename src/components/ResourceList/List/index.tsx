@@ -26,11 +26,12 @@
 import _ from 'lodash';
 import React from 'react';
 import { Form } from '../../Form';
-import { useAsyncResource } from 'sugax';
+import { useAsyncResource, useMergeRefs } from 'sugax';
 
 type ListState = ReturnType<typeof useAsyncResource<ArrayLike<any>>>;
 
 const ListContext = React.createContext<ListState>({
+  count: 0,
   loading: false,
   resource: undefined,
   error: undefined,
@@ -50,13 +51,14 @@ const ListContent = React.forwardRef<ListState, ListContentProps>(({
 }, forwardRef) => {
 
   const {
+    count,
     loading,
     resource,
     error,
     refresh,
   } = useAsyncResource(query, debounce);
 
-  const state = React.useMemo(() => ({ loading, resource, error, refresh }), [loading, resource, error, refresh]);
+  const state = React.useMemo(() => ({ count, loading, resource, error, refresh }), [count, loading, resource, error, refresh]);
 
   React.useImperativeHandle(forwardRef, () => state, [state]);
 
@@ -70,13 +72,30 @@ const ListContent = React.forwardRef<ListState, ListContentProps>(({
 export const useList = () => React.useContext(ListContext);
 
 type ListProps = {
+  autoRefresh?: boolean;
   resource: (state: Record<string, any>) => PromiseLike<ArrayLike<any>>;
   debounce?: _.ThrottleSettings & { wait?: number };
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
 };
 
-export const List = React.forwardRef<ListState, ListProps>(({ resource, ...props }, forwardRef) => (
-  <Form>{state => <ListContent ref={forwardRef} resource={() => resource(state.values)} {...props} />}</Form>
-));
+export const List = React.forwardRef<ListState, ListProps>(({
+  autoRefresh,
+  resource,
+  ...props
+}, forwardRef) => {
+
+  const listRef = React.useRef<ListState>();
+  const ref = useMergeRefs(listRef, forwardRef);
+
+  const onChangeValues = React.useCallback(() => {
+    if (autoRefresh) listRef.current?.refresh();
+  }, [autoRefresh]);
+
+  return (
+    <Form onChangeValues={onChangeValues}>
+      {state => <ListContent ref={ref} resource={() => resource(state.values)} {...props} />}
+    </Form>
+  );
+});
 
 export default List;

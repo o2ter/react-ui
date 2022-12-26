@@ -2612,11 +2612,12 @@ strip-ansi@^6.0.0, strip-ansi@^6.0.1:
 
 "style-inject@link:./src/styleInject":
   version "0.0.0"
+  uid ""
 
-sugax@^1.0.61:
-  version "1.0.61"
-  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.61.tgz#bf25d3fbb20b906299173a2ebc39fa981d275431"
-  integrity sha512-TpdqtYAce6EYhsuUX2g1E6qdFUILAJKLzFBa6vLj1IVQ9JovZvgNJ1C4IBpH7Gd+7uAd6oE9f4d4rcJSsoPlQQ==
+sugax@^1.0.67:
+  version "1.0.67"
+  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.67.tgz#0e4dc69a9cdc21dcb1de7100cd4923183df4a950"
+  integrity sha512-KY5nhOD+yx08cILCG1rRmvttjNFp2L4bJG7ioy1TpzQ5KiM3lGvtUO/Ks3n/o3umcRh3xZf+oW/hscTBM1r4jA==
   dependencies:
     axios "^1.1.3"
     lodash ">=4.17.21"

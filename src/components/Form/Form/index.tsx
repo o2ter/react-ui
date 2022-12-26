@@ -84,6 +84,7 @@ type FormProps = {
   validateOnMount?: boolean;
   onReset?: (state: FormState) => void;
   onChange?: (state: FormState) => void;
+  onChangeValues?: (state: FormState) => void;
   onAction?: (action: string, state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
   children: React.ReactNode | ((state: FormState) => React.ReactNode);
@@ -96,6 +97,7 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   validateOnMount,
   onReset = () => { },
   onChange = () => { },
+  onChangeValues = () => { },
   onAction = () => { },
   onSubmit = () => { },
   children
@@ -150,6 +152,9 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   React.useEffect(() => {
     if (initState !== formState && _.isFunction(onChange)) _showError(() => onChange(formState));
   }, [formState, _showError]);
+  React.useEffect(() => {
+    if (initState !== formState && _.isFunction(onChangeValues)) _showError(() => onChangeValues(formState));
+  }, [values]);
 
   React.useImperativeHandle(forwardRef, () => formState, [formState]);
 
