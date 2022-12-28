@@ -62,7 +62,7 @@ export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormLis
     create: (item: any, index?: number) => {
       onChange((x: any) => {
         const result = [..._.castArray(x ?? [])];
-        result.splice(index ?? -1, 0, item)
+        result.splice(index ?? result.length, 0, item);
         return result;
       });
     },
