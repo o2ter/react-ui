@@ -31,25 +31,23 @@ import List from '../../List';
 import { Modify } from '../../../internals/types';
 
 const FormListContext = React.createContext<{
-  onCreate: () => void;
-  onRemove: (index: number) => void;
+  create: (item: any, index?: number) => void;
+  remove: (index: number) => void;
 }>({
-  onCreate: () => { },
-  onRemove: () => { },
+  create: () => { },
+  remove: () => { },
 });
 
 export const useFormList = () => React.useContext(FormListContext);
 
 type FormListProps = Modify<_.Omit<ComponentPropsWithoutRef<typeof List<any>>, 'data'>, {
   name: string | string[];
-  onCreate?: () => any;
   renderItem: (x: { item: any, index: number, actions: ReturnType<typeof useFormList> }) => any;
   ListComponent?: React.ComponentType<React.PropsWithChildren<{ actions: ReturnType<typeof useFormList> }>>;
 }>
 
 export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormListProps>(({
   name,
-  onCreate,
   renderItem,
   ListComponent = ({ children }) => <>{children}</>,
   ...props
@@ -58,14 +56,17 @@ export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormLis
   const { value, onChange } = useField(name);
   const data = React.useMemo(() => _.castArray(value ?? []), [value]);
 
-  const stableRef = useStableRef({ onCreate, renderItem });
+  const stableRef = useStableRef({ renderItem });
 
   const actions = React.useMemo(() => ({
-    onCreate: () => {
-      const { onCreate } = stableRef.current;
-      if (_.isFunction(onCreate)) onChange((x: any) => [..._.castArray(x ?? []), onCreate()]);
+    create: (item: any, index?: number) => {
+      onChange((x: any) => {
+        const result = [..._.castArray(x ?? [])];
+        result.splice(index ?? -1, 0, item)
+        return result;
+      });
     },
-    onRemove: (index: number) => {
+    remove: (index: number) => {
       onChange((x: any) => _.castArray(x ?? []).filter((v, i) => i !== index));
     },
   }), []);
