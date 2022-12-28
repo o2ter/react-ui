@@ -25,7 +25,6 @@
 
 import _ from 'lodash';
 import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
-import { TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
