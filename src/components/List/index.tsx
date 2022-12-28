@@ -29,7 +29,7 @@ import React from 'react';
 type ListProps<T> = {
   data: T[],
   keyExtractor?: (item: any, index: number) => string;
-  renderItem: (x: { item: T, index: number }) => any
+  renderItem: (x: { item: T, index: number }) => any;
 }
 
 export const List = <T extends any>({

@@ -24,8 +24,9 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 import { useList } from '../List';
+import { useStableRef } from 'sugax';
 
 const defaultListComponent: React.FC<React.PropsWithChildren> = ({ children }) => <table>{children}</table>;
 const defaultHeaderComponent: React.FC<React.PropsWithChildren> = ({ children }) => <thead><tr>{children}</tr></thead>;
@@ -69,24 +70,46 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
     attr,
   }));
 
+  const stableRef = useStableRef({ renderItem });
+
+  const {
+    renderItem: _renderItem,
+    ListComponent: _ListComponent,
+    HeaderComponent: _HeaderComponent,
+    HeaderColumnComponent: _HeaderColumnComponent,
+    BodyComponent: _BodyComponent,
+    BodyRowComponent: _BodyRowComponent,
+    BodyColumnComponent: _BodyColumnComponent,
+  } = React.useMemo(() => ({
+    renderItem: (x => stableRef.current.renderItem(x)) as typeof renderItem,
+    ListComponent,
+    HeaderComponent,
+    HeaderColumnComponent,
+    BodyComponent,
+    BodyRowComponent,
+    BodyColumnComponent,
+  }), []);
+
   return (
-    <ListComponent>
-      <HeaderComponent>
-        <HeaderColumnComponent>#</HeaderColumnComponent>
-        {_.map(attrs, ({ label }) => <HeaderColumnComponent key={`${tableId}_th_${label}`}>{label}</HeaderColumnComponent>)}
-      </HeaderComponent>
-      <BodyComponent>
+    <_ListComponent>
+      <_HeaderComponent>
+        <_HeaderColumnComponent>#</_HeaderColumnComponent>
+        {_.map(attrs, ({ label }) => <_HeaderColumnComponent key={`${tableId}_th_${label}`}>{label}</_HeaderColumnComponent>)}
+      </_HeaderComponent>
+      <_BodyComponent>
         {_.map(resource, (item, i) => {
           const id = keyExtractor(item, i) ?? `${tableId}_${i}`;
           return (
-            <BodyRowComponent key={id}>
-              <BodyColumnComponent>{i + 1}</BodyColumnComponent>
-              {_.map(attrs, ({ label, attr }) => <BodyColumnComponent key={`${id}_${label}`}>{renderItem({ item, index: i, attr })}</BodyColumnComponent>)}
-            </BodyRowComponent>
+            <_BodyRowComponent key={id}>
+              <_BodyColumnComponent>{i + 1}</_BodyColumnComponent>
+              {_.map(attrs, ({ label, attr }) => <_BodyColumnComponent key={`${id}_${label}`}>
+                {_renderItem({ item, index: i, attr })}
+              </_BodyColumnComponent>)}
+            </_BodyRowComponent>
           )
         })}
-      </BodyComponent>
-    </ListComponent>
+      </_BodyComponent>
+    </_ListComponent>
   );
 }
 

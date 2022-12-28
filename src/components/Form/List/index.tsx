@@ -56,8 +56,6 @@ export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormLis
   const { value, onChange } = useField(name);
   const data = React.useMemo(() => _.castArray(value ?? []), [value]);
 
-  const stableRef = useStableRef({ renderItem });
-
   const actions = React.useMemo(() => ({
     create: (item: any, index?: number) => {
       onChange((x: any) => {
@@ -71,15 +69,18 @@ export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormLis
     },
   }), []);
 
+  const stableRef = useStableRef({ renderItem });
+
+  const _ListComponent = React.useMemo(() => ListComponent, []);
   const _renderItem = React.useCallback((x: { item: any, index: number }) => stableRef.current.renderItem({ ...x, actions }), [actions]);
 
   React.useImperativeHandle(forwardRef, () => actions, [actions]);
 
   return (
     <FormListContext.Provider value={actions}>
-      <ListComponent actions={actions}>
+      <_ListComponent actions={actions}>
         <List data={data} renderItem={_renderItem} {...props} />
-      </ListComponent>
+      </_ListComponent>
     </FormListContext.Provider>
   );
 });
