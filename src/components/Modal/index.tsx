@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet, Platform } from 'react-native';
 
 import { useTheme } from '../../theme';
 
@@ -54,7 +54,11 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
           justifyContent: 'center',
           zIndex: theme.zIndex.modal,
         },
-        StyleSheet.absoluteFill
+        StyleSheet.absoluteFill,
+        Platform.select({
+          web: { position: 'fixed' } as any,
+          default: {},
+        }),
       ]}>
       {backdrop === true && <Pressable
         onPress={() => setModal(undefined)}

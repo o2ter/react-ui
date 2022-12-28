@@ -171,12 +171,17 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
 
   return <ToastContext.Provider value={provider}>
     {children}
-    <View style={{
-      top: insets.top,
-      position: 'absolute',
-      alignItems: 'center',
-      alignSelf: 'center',
-      zIndex: theme.zIndex.toast,
-    }}>{_.values(elements)}</View>
+    <View style={[
+      {
+        top: insets.top,
+        alignItems: 'center',
+        alignSelf: 'center',
+        zIndex: theme.zIndex.toast,
+      },
+      Platform.select({
+        web: { position: 'fixed' } as any,
+        default: { position: 'absolute' },
+      }),
+    ]}>{_.values(elements)}</View>
   </ToastContext.Provider>;
 };

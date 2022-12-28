@@ -116,6 +116,10 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
         },
         style.activityIndicator,
         StyleSheet.absoluteFill,
+        Platform.select({
+          web: { position: 'fixed' } as any,
+          default: {},
+        }),
         theme.styles.activityIndicator,
       ]}>
       {backdrop === true ? <View style={[

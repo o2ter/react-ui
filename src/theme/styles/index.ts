@@ -78,7 +78,6 @@ export const _simpleStyles = {
   formRadioStyle: {} as TextStyle,
   formRadioTextStyle: {} as TextStyle,
 
-  formPickerBackdrop: {} as ViewStyle,
   formPickerStyle: {} as TextStyle,
   formPickerErrorStyle: {} as TextStyle,
 

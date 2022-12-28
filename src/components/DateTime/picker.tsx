@@ -25,9 +25,9 @@
 
 import _ from 'lodash';
 import React, { ComponentRef } from 'react';
-import { Text, TextProps, Pressable, Modal, StyleSheet, Keyboard } from 'react-native';
-import { useTheme } from '../../theme';
+import { Text, TextProps, Pressable } from 'react-native';
 import { Modify } from '../../internals/types';
+import { useModal } from '../Modal';
 
 type PickerBaseProps = Modify<TextProps, {
   text?: string;
@@ -43,32 +43,11 @@ export const PickerBase = React.forwardRef<ComponentRef<typeof Pressable>, Picke
   ...props
 }, forwardRef) => {
 
-  const [showPicker, setShowPicker] = React.useState(false);
-  const theme = useTheme();
+  const showModal = useModal();
 
   return (
-    <>
-      <Pressable ref={forwardRef} onPress={() => { if (!disabled) setShowPicker(true) }}>
-        <Text style={style} {...props}>{_.isEmpty(text) ? ' ' : text}</Text>
-      </Pressable>
-      <Modal visible={showPicker} transparent animationType='fade'>
-        <Pressable
-          onPress={() => Keyboard.dismiss()}
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Pressable
-            onPress={() => setShowPicker(false)}
-            style={[
-              { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
-              theme.styles.formPickerBackdrop,
-              StyleSheet.absoluteFill,
-            ]} />
-          {picker}
-        </Pressable>
-      </Modal>
-    </>
+    <Pressable ref={forwardRef} onPress={() => { if (!disabled) showModal(picker) }}>
+      <Text style={style} {...props}>{_.isEmpty(text) ? ' ' : text}</Text>
+    </Pressable>
   )
 });
