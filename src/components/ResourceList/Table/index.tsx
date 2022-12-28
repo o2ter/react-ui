@@ -24,16 +24,9 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { useList } from '../List';
 import { useStableRef } from 'sugax';
-
-const defaultListComponent: React.FC<React.PropsWithChildren> = ({ children }) => <table>{children}</table>;
-const defaultHeaderComponent: React.FC<React.PropsWithChildren> = ({ children }) => <thead><tr>{children}</tr></thead>;
-const defaultHeaderColumnComponent: React.FC<React.PropsWithChildren> = ({ children }) => <th>{children}</th>;
-const defaultBodyComponent: React.FC<React.PropsWithChildren> = ({ children }) => <tbody>{children}</tbody>;
-const defaultBodyRowComponent: React.FC<React.PropsWithChildren> = ({ children }) => <tr>{children}</tr>;
-const defaultBodyColumnComponent: React.FC<React.PropsWithChildren> = ({ children }) => <td>{children}</td>;
 
 type ListTableProps<T, A> = {
   attributes: A[];
@@ -54,12 +47,12 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
     if (_.isString(item.id)) return item.id;
   },
   renderItem,
-  ListComponent = defaultListComponent,
-  HeaderComponent = defaultHeaderComponent,
-  HeaderColumnComponent = defaultHeaderColumnComponent,
-  BodyComponent = defaultBodyComponent,
-  BodyRowComponent = defaultBodyRowComponent,
-  BodyColumnComponent = defaultBodyColumnComponent,
+  ListComponent = ({ children }) => <table>{children}</table>,
+  HeaderComponent = ({ children }) => <thead><tr>{children}</tr></thead>,
+  HeaderColumnComponent = ({ children }) => <th>{children}</th>,
+  BodyComponent = ({ children }) => <tbody>{children}</tbody>,
+  BodyRowComponent = ({ children }) => <tr>{children}</tr>,
+  BodyColumnComponent = ({ children }) => <td>{children}</td>,
 }: ListTableProps<Item, Attr>) => {
 
   const { resource } = useList();
