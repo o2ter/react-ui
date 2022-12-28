@@ -27,23 +27,23 @@ import _ from 'lodash';
 import React from 'react';
 import { useList } from '../List';
 
-const defaultListComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <table>{children}</table>;
-const defaultHeaderComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <thead><tr>{children}</tr></thead>;
-const defaultHeaderColumnComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <th>{children}</th>;
-const defaultBodyComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <tbody>{children}</tbody>;
-const defaultBodyRowComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <tr>{children}</tr>;
-const defaultBodyColumnComponent: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <td>{children}</td>;
+const defaultListComponent: React.FC<React.PropsWithChildren> = ({ children }) => <table>{children}</table>;
+const defaultHeaderComponent: React.FC<React.PropsWithChildren> = ({ children }) => <thead><tr>{children}</tr></thead>;
+const defaultHeaderColumnComponent: React.FC<React.PropsWithChildren> = ({ children }) => <th>{children}</th>;
+const defaultBodyComponent: React.FC<React.PropsWithChildren> = ({ children }) => <tbody>{children}</tbody>;
+const defaultBodyRowComponent: React.FC<React.PropsWithChildren> = ({ children }) => <tr>{children}</tr>;
+const defaultBodyColumnComponent: React.FC<React.PropsWithChildren> = ({ children }) => <td>{children}</td>;
 
 type ListTableProps<T, A> = {
   attributes: A[];
   keyExtractor?: (item: T, index: number) => string;
   renderItem: (info: { item: T, index: number, attr: A }) => React.ReactNode;
-  ListComponent?: React.ComponentType<any>;
-  HeaderComponent?: React.ComponentType<any>;
-  HeaderColumnComponent?: React.ComponentType<any>;
-  BodyComponent?: React.ComponentType<any>;
-  BodyRowComponent?: React.ComponentType<any>;
-  BodyColumnComponent?: React.ComponentType<any>;
+  ListComponent?: React.ComponentType<React.PropsWithChildren>;
+  HeaderComponent?: React.ComponentType<React.PropsWithChildren>;
+  HeaderColumnComponent?: React.ComponentType<React.PropsWithChildren>;
+  BodyComponent?: React.ComponentType<React.PropsWithChildren>;
+  BodyRowComponent?: React.ComponentType<React.PropsWithChildren>;
+  BodyColumnComponent?: React.ComponentType<React.PropsWithChildren>;
 }
 
 export const ListTable = <Item = any, Attr extends string | { label: string } = any>({

@@ -44,12 +44,14 @@ type FormListProps = Modify<_.Omit<ComponentPropsWithoutRef<typeof List<any>>, '
   name: string | string[];
   onCreate?: () => any;
   renderItem: (x: { item: any, index: number, actions: ReturnType<typeof useFormList> }) => any;
+  ListComponent?: React.ComponentType<React.PropsWithChildren<{ actions: ReturnType<typeof useFormList> }>>;
 }>
 
 export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormListProps>(({
   name,
   onCreate,
   renderItem,
+  ListComponent = ({ children }) => <>{children}</>,
   ...props
 }, forwardRef) => {
 
@@ -74,7 +76,9 @@ export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormLis
 
   return (
     <FormListContext.Provider value={actions}>
-      <List data={data} renderItem={_renderItem} {...props} />
+      <ListComponent actions={actions}>
+        <List data={data} renderItem={_renderItem} {...props} />
+      </ListComponent>
     </FormListContext.Provider>
   );
 });
