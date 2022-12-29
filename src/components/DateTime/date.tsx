@@ -53,6 +53,25 @@ export const DatePicker = React.forwardRef<ComponentRef<typeof PickerBase>, Date
 
   const date = _.castArray(value ?? []).map(x => new Calendar.Date(x));
 
+  const _Calendar = React.useCallback(() => {
+    const [_value, setValue] = React.useState(value);
+    React.useEffect(() => { if (_value !== value) onChange?.(_value as any); }, [_value]);
+    return (
+      <Calendar
+          value={_value}
+          min={min}
+          max={max}
+          multiple={multiple}
+          onChange={setValue}
+          selectable={selectable}
+          style={{
+            width: '80%',
+            maxWidth: 350,
+            backgroundColor: 'white',
+          }} />
+    );
+  }, []);
+
   return (
     <PickerBase
       ref={forwardRef}
@@ -63,20 +82,7 @@ export const DatePicker = React.forwardRef<ComponentRef<typeof PickerBase>, Date
         theme.styles.datePickerStyle, 
         style
       ]}
-      picker={(
-        <Calendar
-          value={value}
-          min={min}
-          max={max}
-          multiple={multiple}
-          onChange={onChange}
-          selectable={selectable}
-          style={{
-            width: '80%',
-            maxWidth: 350,
-            backgroundColor: 'white',
-          }} />
-      )}
+      picker={<_Calendar />}
       {...props} />
   )
 });
