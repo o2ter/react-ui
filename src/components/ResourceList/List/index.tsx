@@ -73,6 +73,7 @@ export const useList = () => React.useContext(ListContext);
 
 type ListProps = {
   autoRefresh?: boolean;
+  initialState?: Record<string, any>;
   resource: (state: Record<string, any>) => PromiseLike<ArrayLike<any>>;
   debounce?: _.ThrottleSettings & { wait?: number };
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
@@ -80,6 +81,7 @@ type ListProps = {
 
 export const List = React.forwardRef<ListState, ListProps>(({
   autoRefresh,
+  initialState,
   resource,
   ...props
 }, forwardRef) => {
@@ -92,7 +94,7 @@ export const List = React.forwardRef<ListState, ListProps>(({
   }, [autoRefresh]);
 
   return (
-    <Form onChangeValues={onChangeValues}>
+    <Form initialValues={initialState} onChangeValues={onChangeValues}>
       {state => <ListContent ref={ref} resource={() => resource(state.values)} {...props} />}
     </Form>
   );
