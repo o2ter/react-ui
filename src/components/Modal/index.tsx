@@ -63,7 +63,11 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
       {backdrop === true && <Pressable
         onPress={() => setModal(undefined)}
         style={[
-          { backgroundColor: 'rgba(0, 0, 0, 0.75)' },
+          { backgroundColor: 'rgba(0, 0, 0, 0.75)' } as any,
+          Platform.select({
+            web: { cursor: 'default' } as any,
+            default: {},
+          }),
           StyleSheet.absoluteFill,
           theme.styles.modalBackdrop,
         ]} />}

@@ -67,7 +67,7 @@ const ButtonText = Animated.createAnimatedComponent(class extends React.PureComp
   render() {
     return (
       <TextStyleProvider style={(prev) => StyleSheet.flatten([prev, this.props.style])}>
-        <Text>{this.props.children}</Text>
+        <Text selectable={false}>{this.props.children}</Text>
       </TextStyleProvider>
     );
   }
@@ -145,7 +145,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   const _wrapped = (children: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
 
   const content = _.isEmpty(children) && !_.isEmpty(title)
-    ? <Animated.Text style={_style}>{title}</Animated.Text>
+    ? <Animated.Text selectable={false} style={_style}>{title}</Animated.Text>
     : _.isFunction(children) ? (state: PressableStateCallbackType) => _wrapped(children(state)) : _wrapped(children);
 
   const callbacks: any = Platform.select({
