@@ -29,6 +29,7 @@ import { useList } from '../List';
 import { useStableRef } from 'sugax';
 
 type ListTableProps<T, A> = {
+  path?: string | string[];
   attributes: A[];
   keyExtractor?: (item: T, index: number) => string;
   renderItem: (info: { item: T, index: number, attr: A }) => React.ReactNode;
@@ -41,6 +42,7 @@ type ListTableProps<T, A> = {
 }
 
 export const ListTable = <Item = any, Attr extends string | { label: string } = any>({
+  path,
   attributes,
   keyExtractor = (item: any) => {
     if (_.isString(item.key)) return item.key;
@@ -83,7 +85,8 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
     BodyColumnComponent,
   }), []);
 
-  const _resource: ArrayLike<any> = _.isArrayLike(resource) ? resource : _.castArray(resource ?? []);
+  let _resource = _.isEmpty(path) ? resource : _.get(resource, path as any);
+  _resource = _.isArrayLike(_resource) ? _resource : _.castArray(_resource ?? []);
 
   return (
     <_ListComponent>
@@ -92,7 +95,7 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
         {_.map(attrs, ({ label }) => <_HeaderColumnComponent key={`${tableId}_th_${label}`}>{label}</_HeaderColumnComponent>)}
       </_HeaderComponent>
       <_BodyComponent>
-        {_.map(_resource, (item, i) => {
+        {_.map(_resource as ArrayLike<any>, (item, i) => {
           const id = keyExtractor(item, i) ?? `${tableId}_${i}`;
           return (
             <_BodyRowComponent key={id}>
