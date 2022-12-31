@@ -83,6 +83,8 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
     BodyColumnComponent,
   }), []);
 
+  const _resource: ArrayLike<any> = _.isArrayLike(resource) ? resource : _.castArray(resource ?? []);
+
   return (
     <_ListComponent>
       <_HeaderComponent>
@@ -90,7 +92,7 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
         {_.map(attrs, ({ label }) => <_HeaderColumnComponent key={`${tableId}_th_${label}`}>{label}</_HeaderColumnComponent>)}
       </_HeaderComponent>
       <_BodyComponent>
-        {_.map(resource, (item, i) => {
+        {_.map(_resource, (item, i) => {
           const id = keyExtractor(item, i) ?? `${tableId}_${i}`;
           return (
             <_BodyRowComponent key={id}>

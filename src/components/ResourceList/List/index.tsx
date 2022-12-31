@@ -28,7 +28,7 @@ import React from 'react';
 import { Form } from '../../Form';
 import { useAsyncResource, useMergeRefs } from 'sugax';
 
-type ListState = ReturnType<typeof useAsyncResource<ArrayLike<any>>>;
+type ListState = ReturnType<typeof useAsyncResource<any>>;
 
 const ListContext = React.createContext<ListState>({
   count: 0,
@@ -39,7 +39,7 @@ const ListContext = React.createContext<ListState>({
 });
 
 type ListContentProps = {
-  resource: () => PromiseLike<ArrayLike<any>>;
+  resource: () => PromiseLike<any>;
   debounce?: _.ThrottleSettings & { wait?: number };
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
 };
@@ -74,7 +74,7 @@ export const useList = () => React.useContext(ListContext);
 type ListProps = {
   autoRefresh?: boolean;
   initialState?: Record<string, any>;
-  resource: (state: Record<string, any>) => PromiseLike<ArrayLike<any>>;
+  resource: (state: Record<string, any>) => PromiseLike<any>;
   debounce?: _.ThrottleSettings & { wait?: number };
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
 };
