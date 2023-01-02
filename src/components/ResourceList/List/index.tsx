@@ -25,10 +25,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Form } from '../../Form';
+import { Form, useForm } from '../../Form';
 import { useAsyncResource, useMergeRefs } from 'sugax';
 
-type ListState = ReturnType<typeof useAsyncResource<any>>;
+type ListState = ReturnType<typeof useAsyncResource<any>> & { state: Record<string, any>; };
 
 const ListContext = React.createContext<ListState>({
   count: 0,
@@ -36,15 +36,18 @@ const ListContext = React.createContext<ListState>({
   resource: undefined,
   error: undefined,
   refresh: async () => { },
+  state: {},
 });
 
 type ListContentProps = {
-  resource: () => PromiseLike<any>;
+  values: Record<string, any>;
+  resource: (state: Record<string, any>) => PromiseLike<any>;
   debounce?: _.ThrottleSettings & { wait?: number };
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
 };
 
 const ListContent = React.forwardRef<ListState, ListContentProps>(({
+  values,
   resource: query,
   debounce,
   children
@@ -56,9 +59,9 @@ const ListContent = React.forwardRef<ListState, ListContentProps>(({
     resource,
     error,
     refresh,
-  } = useAsyncResource(query, debounce);
+  } = useAsyncResource(() => query(values), debounce);
 
-  const state = React.useMemo(() => ({ count, loading, resource, error, refresh }), [count, loading, resource, error, refresh]);
+  const state = React.useMemo(() => ({ count, loading, resource, error, refresh, state: values }), [count, loading, resource, error, refresh, values]);
 
   React.useImperativeHandle(forwardRef, () => state, [state]);
 
@@ -69,7 +72,10 @@ const ListContent = React.forwardRef<ListState, ListContentProps>(({
   );
 });
 
-export const useList = () => React.useContext(ListContext);
+export const useList = () => ({
+  ...React.useContext(ListContext),
+  state: useForm().values,
+});
 
 type ListProps = {
   autoRefresh?: boolean;
@@ -82,7 +88,6 @@ type ListProps = {
 export const List = React.forwardRef<ListState, ListProps>(({
   autoRefresh,
   initialState,
-  resource,
   ...props
 }, forwardRef) => {
 
@@ -95,7 +100,7 @@ export const List = React.forwardRef<ListState, ListProps>(({
 
   return (
     <Form initialValues={initialState} onChangeValues={onChangeValues}>
-      {state => <ListContent ref={ref} resource={() => resource(state.values)} {...props} />}
+      {state => <ListContent ref={ref} values={state.values} {...props} />}
     </Form>
   );
 });

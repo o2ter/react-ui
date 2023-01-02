@@ -29,7 +29,7 @@ import { useList } from '../List';
 import { useStableRef } from 'sugax';
 
 type ListTableProps<T, A> = {
-  path?: string | string[];
+  filter?: (resource: any, state: ReturnType<typeof useList>) => any;
   attributes: A[];
   keyExtractor?: (item: T, index: number) => string;
   renderItem: (info: { item: T, index: number, attr: A }) => React.ReactNode;
@@ -42,7 +42,7 @@ type ListTableProps<T, A> = {
 }
 
 export const ListTable = <Item = any, Attr extends string | { label: string } = any>({
-  path,
+  filter,
   attributes,
   keyExtractor = (item: any) => {
     if (_.isString(item.key)) return item.key;
@@ -57,7 +57,7 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
   BodyColumnComponent = ({ children }) => <td>{children}</td>,
 }: ListTableProps<Item, Attr>) => {
 
-  const { resource } = useList();
+  const state = useList();
   const tableId = React.useId();
 
   const attrs = _.map(attributes, attr => ({
@@ -85,8 +85,10 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
     BodyColumnComponent,
   }), []);
 
-  let _resource = _.isEmpty(path) ? resource : _.get(resource, path as any);
-  _resource = _.isArrayLike(_resource) ? _resource : _.castArray(_resource ?? []);
+  const _resource = React.useMemo(() => {
+    const _resource = _.isFunction(filter) ? filter(state.resource, state) : state.resource;
+    return _.isArrayLike(_resource) ? _resource : _.castArray(_resource ?? []);
+  }, [state]);
 
   return (
     <_ListComponent>
