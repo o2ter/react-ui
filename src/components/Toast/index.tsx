@@ -27,9 +27,10 @@ import _ from 'lodash';
 import React from 'react';
 import { View, Text, Pressable, Animated, Platform, StyleSheet, LayoutAnimation, ColorValue, RecursiveArray } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
-import { useMount } from 'sugax';
+import { ValidateError, useMount } from 'sugax';
 import { useTheme } from '../../theme';
 import { useSafeAreaInsets } from '../SafeAreaView';
+import { useLocalize, useUserLocales } from '@o2ter/i18n';
 
 type ToastMessage = string | (Error & { code?: number });
 type ToastType = 'success' | 'info' | 'warning' | 'error';
@@ -102,6 +103,8 @@ const ToastBody: React.FC<{
 
   const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors(type);
 
+  const _message = useLocalize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);
+
   return <Animated.View
     style={[
       {
@@ -127,7 +130,7 @@ const ToastBody: React.FC<{
         color: messageColor,
       },
       theme.styles.toastTextStyle,
-    ]}>{toString(message)}</Text>
+    ]}>{_message}</Text>
     <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
   </Animated.View>
 }
