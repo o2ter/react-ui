@@ -31,8 +31,8 @@ import { useStableRef } from 'sugax';
 type ListTableProps<T, A> = {
   filter?: (resource: any, state: ReturnType<typeof useList>) => any;
   attributes: A[];
-  keyExtractor?: (item: T, index: number) => string;
-  renderItem: (info: { item: T, index: number, attr: A }) => React.ReactNode;
+  keyExtractor?: (item: T, index: number, data: ArrayLike<any>) => string;
+  renderItem: (info: { item: T, index: number, data: ArrayLike<any>, attr: A }) => React.ReactNode;
   ListComponent?: React.ComponentType<React.PropsWithChildren>;
   HeaderComponent?: React.ComponentType<React.PropsWithChildren>;
   HeaderColumnComponent?: React.ComponentType<React.PropsWithChildren>;
@@ -87,7 +87,7 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
 
   const _resource = React.useMemo(() => {
     const _resource = _.isFunction(filter) ? filter(state.resource, state) : state.resource;
-    return _.isArrayLike(_resource) ? _resource : _.castArray(_resource ?? []);
+    return _.isArrayLike(_resource) ? _resource as ArrayLike<any> : _.castArray(_resource ?? []);
   }, [state]);
 
   return (
@@ -97,13 +97,13 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
         {_.map(attrs, ({ label }) => <_HeaderColumnComponent key={`${tableId}_th_${label}`}>{label}</_HeaderColumnComponent>)}
       </_HeaderComponent>
       <_BodyComponent>
-        {_.map(_resource as ArrayLike<any>, (item, i) => {
-          const id = keyExtractor(item, i) ?? `${tableId}_${i}`;
+        {_.map(_resource, (item, i, data) => {
+          const id = keyExtractor(item, i, data) ?? `${tableId}_${i}`;
           return (
             <_BodyRowComponent key={id}>
               <_BodyColumnComponent>{i + 1}</_BodyColumnComponent>
               {_.map(attrs, ({ label, attr }) => <_BodyColumnComponent key={`${id}_${label}`}>
-                {_renderItem({ item, index: i, attr })}
+                {_renderItem({ item, index: i, data, attr })}
               </_BodyColumnComponent>)}
             </_BodyRowComponent>
           )

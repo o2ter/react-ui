@@ -40,14 +40,16 @@ const FormListContext = React.createContext<{
 
 export const useFormList = () => React.useContext(FormListContext);
 
-type FormListProps = Modify<_.Omit<ComponentPropsWithoutRef<typeof List<any>>, 'data'>, {
+type FormListProps = Modify<_.Omit<ComponentPropsWithoutRef<typeof List<any[]>>, 'data'>, {
   name: string | string[];
-  renderItem: (x: { item: any, index: number, actions: ReturnType<typeof useFormList> }) => any;
+  keyExtractor?: (item: any, index: number, data: any[]) => string;
+  renderItem: (x: { item: any, index: number, data: any[], actions: ReturnType<typeof useFormList> }) => any;
   ListComponent?: React.ComponentType<React.PropsWithChildren<{ actions: ReturnType<typeof useFormList> }>>;
 }>
 
 export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormListProps>(({
   name,
+  keyExtractor,
   renderItem,
   ListComponent = ({ children }) => <>{children}</>,
   ...props
@@ -72,14 +74,14 @@ export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormLis
   const stableRef = useStableRef({ renderItem });
 
   const _ListComponent = React.useMemo(() => ListComponent, []);
-  const _renderItem = React.useCallback((x: { item: any, index: number }) => stableRef.current.renderItem({ ...x, actions }), [actions]);
+  const _renderItem = React.useCallback((x: { item: any, index: number, data: any[] }) => stableRef.current.renderItem({ ...x, actions }), [actions]);
 
   React.useImperativeHandle(forwardRef, () => actions, [actions]);
 
   return (
     <FormListContext.Provider value={actions}>
       <_ListComponent actions={actions}>
-        <List data={data} renderItem={_renderItem} {...props} />
+        <List data={data} keyExtractor={keyExtractor} renderItem={_renderItem} {...props} />
       </_ListComponent>
     </FormListContext.Provider>
   );

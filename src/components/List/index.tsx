@@ -26,22 +26,23 @@
 import _ from 'lodash';
 import React from 'react';
 
-type ListProps<T> = {
-  data: T[],
-  keyExtractor?: (item: any, index: number) => string;
-  renderItem: (x: { item: T, index: number }) => any;
+type ListItem<L extends ArrayLike<any>> = L extends ArrayLike<infer T> ? T : never;
+type ListProps<D extends ArrayLike<any>> = {
+  data: D,
+  keyExtractor?: (item: any, index: number, data: D) => string;
+  renderItem: (x: { item: ListItem<D>, index: number, data: D }) => any;
 }
 
-export const List = <T extends any>({
+export const List = <D extends ArrayLike<any>>({
   data,
   keyExtractor,
   renderItem,
-}: ListProps<T>) => {
+}: ListProps<D>) => {
 
   const elements = React.useMemo(() => _.map(data, (item, index) => {
-    const element = renderItem({ item, index });
+    const element = renderItem({ item, index, data });
     if (_.isFunction(keyExtractor) && React.isValidElement(element) && _.isNil(element.key)) {
-      return React.cloneElement(element, { key: keyExtractor(item, index) });
+      return React.cloneElement(element, { key: keyExtractor(item, index, data) });
     }
     return element;
   }), [data, keyExtractor, renderItem]);
