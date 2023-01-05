@@ -103,7 +103,8 @@ const ToastBody: React.FC<{
 
   const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors(type);
 
-  const _message = useLocalize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);
+  const localize = useLocalize();
+  const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);
 
   return <Animated.View
     style={[

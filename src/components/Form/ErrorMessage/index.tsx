@@ -48,7 +48,8 @@ export const FormErrorMessage = React.forwardRef<Text, FormErrorMessageProps>(({
   const path = _.toPath(name);
   const _error = error.find(x => x instanceof ValidateError ? _.isEqual(x.path, path) : true) ?? _.first(error);
 
-  const message = _error instanceof ValidateError ? useLocalize(_error.locales ?? {}) : _error?.message;
+  const localize = useLocalize();
+  const message = _error instanceof ValidateError ? localize(_error.locales ?? {}) : _error?.message;
 
   return (
     <React.Fragment>
