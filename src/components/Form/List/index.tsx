@@ -44,7 +44,10 @@ type FormListProps = Modify<_.Omit<ComponentPropsWithoutRef<typeof List<any[]>>,
   name: string | string[];
   keyExtractor?: (item: any, index: number, data: any[]) => string;
   renderItem: (x: { item: any, index: number, data: any[], actions: ReturnType<typeof useFormList> }) => any;
-  ListComponent?: React.ComponentType<React.PropsWithChildren<{ actions: ReturnType<typeof useFormList> }>>;
+  ListComponent?: React.ComponentType<React.PropsWithChildren<{
+    data: any[];
+    actions: ReturnType<typeof useFormList>;
+  }>>;
 }>
 
 export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormListProps>(({
@@ -80,7 +83,7 @@ export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormLis
 
   return (
     <FormListContext.Provider value={actions}>
-      <_ListComponent actions={actions}>
+      <_ListComponent data={data} actions={actions}>
         <List data={data} keyExtractor={keyExtractor} renderItem={_renderItem} {...props} />
       </_ListComponent>
     </FormListContext.Provider>

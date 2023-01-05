@@ -33,12 +33,12 @@ type ListTableProps<T, A> = {
   attributes: A[];
   keyExtractor?: (item: T, index: number, data: ArrayLike<any>) => string;
   renderItem: (info: { item: T, index: number, data: ArrayLike<any>, attr: A }) => React.ReactNode;
-  ListComponent?: React.ComponentType<React.PropsWithChildren>;
-  HeaderComponent?: React.ComponentType<React.PropsWithChildren>;
-  HeaderColumnComponent?: React.ComponentType<React.PropsWithChildren>;
-  BodyComponent?: React.ComponentType<React.PropsWithChildren>;
-  BodyRowComponent?: React.ComponentType<React.PropsWithChildren>;
-  BodyColumnComponent?: React.ComponentType<React.PropsWithChildren>;
+  ListComponent?: React.ComponentType<React.PropsWithChildren<{ data: ArrayLike<any>; }>>;
+  HeaderComponent?: React.ComponentType<React.PropsWithChildren<{ data: ArrayLike<any>; }>>;
+  HeaderColumnComponent?: React.ComponentType<React.PropsWithChildren<{ data: ArrayLike<any>; }>>;
+  BodyComponent?: React.ComponentType<React.PropsWithChildren<{ data: ArrayLike<any>; }>>;
+  BodyRowComponent?: React.ComponentType<React.PropsWithChildren<{ item: T; index: number; data: ArrayLike<any>; }>>;
+  BodyColumnComponent?: React.ComponentType<React.PropsWithChildren<{ item: T; index: number; data: ArrayLike<any>; }>>;
 }
 
 export const ListTable = <Item = any, Attr extends string | { label: string } = any>({
@@ -91,18 +91,18 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
   }, [state]);
 
   return (
-    <_ListComponent>
-      <_HeaderComponent>
-        <_HeaderColumnComponent>#</_HeaderColumnComponent>
-        {_.map(attrs, ({ label }) => <_HeaderColumnComponent key={`${tableId}_th_${label}`}>{label}</_HeaderColumnComponent>)}
+    <_ListComponent data={_resource}>
+      <_HeaderComponent data={_resource}>
+        <_HeaderColumnComponent data={_resource}>#</_HeaderColumnComponent>
+        {_.map(attrs, ({ label }) => <_HeaderColumnComponent key={`${tableId}_th_${label}`} data={_resource}>{label}</_HeaderColumnComponent>)}
       </_HeaderComponent>
-      <_BodyComponent>
+      <_BodyComponent data={_resource}>
         {_.map(_resource, (item, i, data) => {
           const id = keyExtractor(item, i, data) ?? `${tableId}_${i}`;
           return (
-            <_BodyRowComponent key={id}>
-              <_BodyColumnComponent>{i + 1}</_BodyColumnComponent>
-              {_.map(attrs, ({ label, attr }) => <_BodyColumnComponent key={`${id}_${label}`}>
+            <_BodyRowComponent key={id} item={item} index={i} data={_resource}>
+              <_BodyColumnComponent item={item} index={i} data={_resource}>{i + 1}</_BodyColumnComponent>
+              {_.map(attrs, ({ label, attr }) => <_BodyColumnComponent key={`${id}_${label}`} item={item} index={i} data={_resource}>
                 {_renderItem({ item, index: i, data, attr })}
               </_BodyColumnComponent>)}
             </_BodyRowComponent>
