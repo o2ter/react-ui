@@ -53,7 +53,7 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
   renderItem,
   ListComponent = ({ children }) => <table>{children}</table>,
   HeaderComponent = ({ children }) => <thead><tr>{children}</tr></thead>,
-  HeaderColumnComponent = ({ children }) => <th>{children}</th>,
+  HeaderColumnComponent = ({ children }) => <th className='text-nowrap'>{children}</th>,
   BodyComponent = ({ children }) => <tbody>{children}</tbody>,
   BodyRowComponent = ({ children }) => <tr>{children}</tr>,
   BodyColumnComponent = ({ children }) => <td>{children}</td>,
