@@ -31,6 +31,7 @@ import { useStableRef } from 'sugax';
 type ListTableProps<T, A> = {
   filter?: (resource: any, state: ReturnType<typeof useList>) => any;
   attributes: A[];
+  hideRowIndex?: boolean;
   keyExtractor?: (item: T, index: number, data: ArrayLike<any>) => string;
   renderItem: (info: { item: T, index: number, data: ArrayLike<any>, attr: A }) => React.ReactNode;
   ListComponent?: React.ComponentType<React.PropsWithChildren<{ data: ArrayLike<any>; }>>;
@@ -44,6 +45,7 @@ type ListTableProps<T, A> = {
 export const ListTable = <Item = any, Attr extends string | { label: string } = any>({
   filter,
   attributes,
+  hideRowIndex,
   keyExtractor = (item: any) => {
     if (_.isString(item.key)) return item.key;
     if (_.isString(item.id)) return item.id;
@@ -93,7 +95,7 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
   return (
     <_ListComponent data={_resource}>
       <_HeaderComponent data={_resource}>
-        <_HeaderColumnComponent data={_resource}>#</_HeaderColumnComponent>
+        {!hideRowIndex && <_HeaderColumnComponent data={_resource}>#</_HeaderColumnComponent>}
         {_.map(attrs, ({ label }) => <_HeaderColumnComponent key={`${tableId}_th_${label}`} data={_resource}>{label}</_HeaderColumnComponent>)}
       </_HeaderComponent>
       <_BodyComponent data={_resource}>
@@ -101,7 +103,7 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
           const id = keyExtractor(item, i, data) ?? `${tableId}_${i}`;
           return (
             <_BodyRowComponent key={id} item={item} index={i} data={_resource}>
-              <_BodyColumnComponent item={item} index={i} data={_resource}>{i + 1}</_BodyColumnComponent>
+              {!hideRowIndex && <_BodyColumnComponent item={item} index={i} data={_resource}>{i + 1}</_BodyColumnComponent>}
               {_.map(attrs, ({ label, attr }) => <_BodyColumnComponent key={`${id}_${label}`} item={item} index={i} data={_resource}>
                 {_renderItem({ item, index: i, data, attr })}
               </_BodyColumnComponent>)}
