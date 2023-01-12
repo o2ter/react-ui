@@ -25,21 +25,20 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { StyleSheet, TextStyle } from 'react-native';
+import { StyleSheet, StyleProp, TextStyle } from 'react-native';
 import { useEquivalent } from 'sugax';
-import { PrevState } from '../../internals/types';
 
 const TextStyleContext = React.createContext<TextStyle>({});
 
 export const TextStyleProvider: React.FC<React.PropsWithChildren<{
-  style: PrevState<TextStyle>;
+  style: StyleProp<TextStyle> | ((prev: TextStyle) => StyleProp<TextStyle>);
 }>> = ({
   children,
   style,
 }) => {
   const parent = useTextStyle();
   const _style = useEquivalent(_.isFunction(style) ? style(parent) : style);
-  const value = React.useMemo(() => StyleSheet.create({ style: _.assign({}, parent, _style) }).style, [parent, _style]);
+  const value = React.useMemo(() => StyleSheet.create({ style: StyleSheet.flatten([parent, _style]) }).style, [parent, _style]);
   return (
     <TextStyleContext.Provider value={value}>{children}</TextStyleContext.Provider>
   );
