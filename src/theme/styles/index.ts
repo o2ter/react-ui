@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import { ViewStyle, TextStyle } from 'react-native';
+import { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { ThemeVariables } from '../variables';
 import { ColorType, colorContrast, shiftColor, shadeColor, tintColor } from '../../color';
 import { _hex } from '../../internals/color';
@@ -40,52 +40,52 @@ export const _colorContrast = (theme: ThemeVariables) => (background: string | C
 
 export const _simpleStyles = {
 
-  viewStyle: {} as ViewStyle,
-  textStyle: {} as TextStyle,
+  viewStyle: {} as StyleProp<ViewStyle>,
+  textStyle: {} as StyleProp<TextStyle>,
 
-  textInputStyle: {} as TextStyle,
-  datePickerStyle: {} as TextStyle,
+  textInputStyle: {} as StyleProp<TextStyle>,
+  datePickerStyle: {} as StyleProp<TextStyle>,
 
-  safeAreaViewStyle: {} as ViewStyle,
+  safeAreaViewStyle: {} as StyleProp<ViewStyle>,
 
-  scrollableStyle: {} as ViewStyle,
-  scrollableContentContainerStyle: {} as ViewStyle,
+  scrollableStyle: {} as StyleProp<ViewStyle>,
+  scrollableContentContainerStyle: {} as StyleProp<ViewStyle>,
 
-  flatlistColumnWrapperStyle: {} as ViewStyle,
+  flatlistColumnWrapperStyle: {} as StyleProp<ViewStyle>,
 
-  refreshControlStyle: {} as ViewStyle,
+  refreshControlStyle: {} as StyleProp<ViewStyle>,
 
-  activityIndicator: {} as ViewStyle,
-  activityIndicatorBackdrop: {} as ViewStyle,
+  activityIndicator: {} as StyleProp<ViewStyle>,
+  activityIndicatorBackdrop: {} as StyleProp<ViewStyle>,
 
-  buttonStyle: {} as TextStyle,
-  modalBackdrop: {} as ViewStyle,
+  buttonStyle: {} as StyleProp<TextStyle>,
+  modalBackdrop: {} as StyleProp<ViewStyle>,
 
-  pickerStyle: {} as TextStyle,
+  pickerStyle: {} as StyleProp<TextStyle>,
 
-  calendarWeekContainerStyle: {} as ViewStyle,
-  calendarWeekdayContainerStyle: {} as ViewStyle,
-  calendarWeekdayStyle: {} as TextStyle,
+  calendarWeekContainerStyle: {} as StyleProp<ViewStyle>,
+  calendarWeekdayContainerStyle: {} as StyleProp<ViewStyle>,
+  calendarWeekdayStyle: {} as StyleProp<TextStyle>,
 
-  toastStyle: {} as ViewStyle,
-  toastTextStyle: {} as TextStyle,
+  toastStyle: {} as StyleProp<ViewStyle>,
+  toastTextStyle: {} as StyleProp<TextStyle>,
 
-  formErrorMessageStyle: {} as TextStyle,
+  formErrorMessageStyle: {} as StyleProp<TextStyle>,
 
-  formCheckboxStyle: {} as TextStyle,
-  formCheckboxTextStyle: {} as TextStyle,
+  formCheckboxStyle: {} as StyleProp<TextStyle>,
+  formCheckboxTextStyle: {} as StyleProp<TextStyle>,
 
-  formRadioStyle: {} as TextStyle,
-  formRadioTextStyle: {} as TextStyle,
+  formRadioStyle: {} as StyleProp<TextStyle>,
+  formRadioTextStyle: {} as StyleProp<TextStyle>,
 
-  formPickerStyle: {} as TextStyle,
-  formPickerErrorStyle: {} as TextStyle,
+  formPickerStyle: {} as StyleProp<TextStyle>,
+  formPickerErrorStyle: {} as StyleProp<TextStyle>,
 
-  formTextFieldStyle: {} as TextStyle,
-  formTextFieldErrorStyle: {} as TextStyle,
+  formTextFieldStyle: {} as StyleProp<TextStyle>,
+  formTextFieldErrorStyle: {} as StyleProp<TextStyle>,
 
-  formDateStyle: {} as TextStyle,
-  formDateErrorStyle: {} as TextStyle,
+  formDateStyle: {} as StyleProp<TextStyle>,
+  formDateErrorStyle: {} as StyleProp<TextStyle>,
 
 };
 

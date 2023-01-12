@@ -107,7 +107,7 @@ export function useTheme() {
         if (_.isNil(computed_style)) {
           const _computed_style = styles(computed);
           const _picked = _.pick(_computed_style, _.keys(_simpleStyles) as _simpleStylesKeys[]);
-          computed_style = { ..._computed_style, ...StyleSheet.create(_picked) };
+          computed_style = { ..._computed_style, ...StyleSheet.create(_.mapValues(_picked, x => StyleSheet.flatten(x))) };
         }
         return computed_style;
       },
