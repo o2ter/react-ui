@@ -47,6 +47,8 @@ const ThemeContext = React.createContext({
   styles: defaultStyle,
 });
 
+type _simpleStylesKeys = keyof typeof _simpleStyles;
+
 export const ThemeProvider = ({
   variables,
   styles,
@@ -60,7 +62,19 @@ export const ThemeProvider = ({
       colors: _.assign({}, parent.variables.colors, _variables?.colors),
       themeColors: _.assign({}, parent.variables.themeColors, _variables?.themeColors),
     }),
-    styles: (theme) => _.assign({}, parent.styles(theme), styles?.(theme)),
+    styles: (theme) => {
+      const parent_style = parent.styles(theme);
+      const current_style = styles?.(theme) ?? {};
+      return {
+        ...parent_style,
+        ...current_style,
+        ..._.mapValues(_simpleStyles, (v, k) => StyleSheet.flatten([
+          v,
+          parent_style[k as _simpleStylesKeys],
+          current_style[k as _simpleStylesKeys],
+        ].filter(Boolean))),
+      };
+    },
   }), [parent, _variables, styles]);
 
   return (
@@ -92,7 +106,7 @@ export function useTheme() {
       get styles() {
         if (_.isNil(computed_style)) {
           const _computed_style = styles(computed);
-          const _picked = _.pick(_computed_style, _.keys(_simpleStyles) as (keyof typeof _simpleStyles)[]);
+          const _picked = _.pick(_computed_style, _.keys(_simpleStyles) as _simpleStylesKeys[]);
           computed_style = { ..._computed_style, ...StyleSheet.create(_picked) };
         }
         return computed_style;
