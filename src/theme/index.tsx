@@ -68,8 +68,7 @@ export const ThemeProvider = ({
       return {
         ...parent_style,
         ...current_style,
-        ..._.mapValues(_simpleStyles, (v, k) => StyleSheet.flatten([
-          v,
+        ..._.mapValues(_simpleStyles, (_v, k) => StyleSheet.flatten([
           parent_style[k as _simpleStylesKeys],
           current_style[k as _simpleStylesKeys],
         ].filter(Boolean))),
