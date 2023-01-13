@@ -105,7 +105,9 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
 
   }, [_.isEmpty(tasks)]);
 
-  return <ActivityIndicatorContext.Provider value={{ setTasks, defaultDelay }}>
+  const value = React.useMemo(() => ({ setTasks, defaultDelay }), [defaultDelay]);
+
+  return <ActivityIndicatorContext.Provider value={value}>
     {children}
     {visible && <Animated.View
       pointerEvents={passThroughEvents ? 'none' : 'auto'}

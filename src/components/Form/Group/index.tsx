@@ -35,8 +35,12 @@ export const FormGroup: React.FC<React.PropsWithChildren<{
 }>> = ({
   name,
   children
-}) => (
-  <FormGroupContext.Provider value={[...useFormGroup(), ..._.toPath(name)]}>
-    {children}
-  </FormGroupContext.Provider>
-);
+}) => {
+  const parent = useFormGroup();
+  const value = React.useMemo(() => [...parent, ..._.toPath(name)], [parent, name]);
+  return (
+    <FormGroupContext.Provider value={value}>
+      {children}
+    </FormGroupContext.Provider>
+  )
+};
