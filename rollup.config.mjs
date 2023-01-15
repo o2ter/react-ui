@@ -21,7 +21,9 @@ const rollupPlugins = [
 const rollupConfig = {
   input: 'src/index',
   external: [
-    /node_modules/
+    /node_modules/,
+    /^react$/,
+    /^react-native$/,
   ],
 };
 
