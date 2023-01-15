@@ -39,5 +39,5 @@ export function useDOMElementEvent(element: EventTarget, event: string, callback
   }, [element, event]);
 }
 
-export const useWindowEvent = (event: string, callback: (event: Event) => void) => useDOMElementEvent(window, event, callback);
-export const useDocumentEvent = (event: string, callback: (event: Event) => void) => useDOMElementEvent(document, event, callback);
+export const useWindowEvent = (event: string, callback: (event: Event) => void) => void (typeof window !== 'undefined' && useDOMElementEvent(window, event, callback));
+export const useDocumentEvent = (event: string, callback: (event: Event) => void) => void (typeof document !== 'undefined' && useDOMElementEvent(document, event, callback));
