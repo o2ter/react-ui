@@ -41,7 +41,7 @@ export const useActivity = () => {
 
   const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
 
-  return async <T extends unknown>(callback: () => T, delay: number) => {
+  return async <T extends unknown>(callback: () => T | PromiseLike<T>, delay: number) => {
 
     const id = _.uniqueId();
 
