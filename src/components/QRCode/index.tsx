@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { ColorValue } from 'react-native';
-import Svg, { SvgProps, Rect, Path } from 'react-native-svg';
+import { Svg, SvgProps, Rect, Path } from 'react-native-svg';
 import { Modify } from '../../internals/types';
 import qrcode from 'qrcode';
 
