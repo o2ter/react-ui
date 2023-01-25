@@ -45,6 +45,7 @@ type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
 
 export const FlatList = React.forwardRef<ComponentRef<typeof FlatListBase>, FlatListProps>(({
   onRefresh,
+  numColumns = 1,
   style,
   contentContainerStyle,
   columnWrapperStyle,
@@ -58,9 +59,10 @@ export const FlatList = React.forwardRef<ComponentRef<typeof FlatListBase>, Flat
   return (
     <FlatListBase
       ref={forwardRef}
+      numColumns={numColumns}
       style={[theme.styles.scrollableStyle, style]}
       contentContainerStyle={[theme.styles.scrollableContentContainerStyle, contentContainerStyle]}
-      columnWrapperStyle={[theme.styles.flatlistColumnWrapperStyle, columnWrapperStyle]}
+      columnWrapperStyle={numColumns > 1 ? [theme.styles.flatlistColumnWrapperStyle, columnWrapperStyle] : undefined}
       refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : undefined}
       {...props} />
   )
