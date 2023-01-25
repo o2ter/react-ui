@@ -5,16 +5,17 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { View, ViewProps } from 'react-native';
+import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import { View } from '../View';
+import { Modify } from '../../internals/types';
+import { useMergeRefs, useStableRef } from 'sugax';
 import { EditorState } from '@codemirror/state';
 import { lineNumbers as _lineNumbers, ViewUpdate } from '@codemirror/view';
 import { EditorView, keymap, highlightSpecialChars, drawSelection } from '@codemirror/view';
 import { standardKeymap, history, historyKeymap } from '@codemirror/commands';
 import { defaultHighlightStyle, syntaxHighlighting, codeFolding as _codeFolding, foldGutter as _foldGutter } from '@codemirror/language';
-import { useMergeRefs, useStableRef } from 'sugax';
 
-type CodeMirrorProps = ViewProps & {
+type CodeMirrorProps = Modify<ComponentPropsWithoutRef<typeof View>, {
   initialValue?: string;
   autoFocus?: boolean;
   onChange?: (e: ViewUpdate) => void;
@@ -29,9 +30,9 @@ type CodeMirrorProps = ViewProps & {
   allowMultipleSelections?: boolean;
   tabSize?: number;
   keymaps?: any[];
-}
+}>
 
-export const CodeMirror = React.forwardRef<View, CodeMirrorProps>(({
+export const CodeMirror = React.forwardRef<ComponentRef<typeof View>, CodeMirrorProps>(({
   initialValue,
   autoFocus,
   onChange,
@@ -50,8 +51,8 @@ export const CodeMirror = React.forwardRef<View, CodeMirrorProps>(({
 }, forwardRef) => {
 
   const codeMirror = React.useRef<EditorView>();
-  const divRef = React.useRef<View>();
-  const ref = useMergeRefs(divRef, forwardRef);
+  const containerRef = React.useRef<ComponentRef<typeof View>>();
+  const ref = useMergeRefs(containerRef, forwardRef);
 
   const onChangeRef = useStableRef(onChange);
   const onChangeValueRef = useStableRef(onChangeValue);
@@ -61,11 +62,11 @@ export const CodeMirror = React.forwardRef<View, CodeMirrorProps>(({
 
   React.useEffect(() => {
 
-    if (_.isNil(divRef.current)) return;
+    if (_.isNil(containerRef.current)) return;
 
     const editor = new EditorView({
       doc: initialValue,
-      parent: divRef.current as any,
+      parent: containerRef.current as any,
       extensions: [
         highlightSpecialChars(),
         history(),
