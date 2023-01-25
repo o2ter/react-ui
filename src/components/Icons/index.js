@@ -23,18 +23,6 @@
 //  THE SOFTWARE.
 //
 
-export const AntDesign = require('react-native-vector-icons/dist/AntDesign').default;
-export const Entypo = require('react-native-vector-icons/dist/Entypo').default;
-export const EvilIcons = require('react-native-vector-icons/dist/EvilIcons').default;
-export const Feather = require('react-native-vector-icons/dist/Feather').default;
-export const FontAwesome = require('react-native-vector-icons/dist/FontAwesome').default;
-export const FontAwesome5 = require('react-native-vector-icons/dist/FontAwesome5').default;
-export const FontAwesome5Pro = require('react-native-vector-icons/dist/FontAwesome5Pro').default;
-export const Fontisto = require('react-native-vector-icons/dist/Fontisto').default;
-export const Foundation = require('react-native-vector-icons/dist/Foundation').default;
-export const Ionicons = require('react-native-vector-icons/dist/Ionicons').default;
-export const MaterialCommunityIcons = require('react-native-vector-icons/dist/MaterialCommunityIcons').default;
-export const MaterialIcons = require('react-native-vector-icons/dist/MaterialIcons').default;
-export const Octicons = require('react-native-vector-icons/dist/Octicons').default;
-export const SimpleLineIcons = require('react-native-vector-icons/dist/SimpleLineIcons').default;
-export const Zocial = require('react-native-vector-icons/dist/Zocial').default;
+export { GLYPH_MAPS } from './glyphmaps';
+export * as ICON_SETS from './icons';
+export * from './icons';

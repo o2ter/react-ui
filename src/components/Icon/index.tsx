@@ -27,14 +27,14 @@ import _ from 'lodash';
 import React, { ComponentRef } from 'react';
 import { TextProps, StyleProp, TextStyle, StyleSheet } from 'react-native';
 import Text from '../Text';
-import * as Icons from '../Icons';
+import { ICON_SETS } from '../Icons';
 import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
 import { useTextStyle } from '../Text/style';
 import { text_style } from '../../internals/text_style';
 
 type IconProps = Modify<TextProps, {
-  icon: keyof typeof Icons;
+  icon: keyof typeof ICON_SETS;
   name: string;
   iconStyle?: StyleProp<TextStyle>;
 }>
@@ -48,7 +48,7 @@ export const Icon = React.forwardRef<ComponentRef<typeof Text>, IconProps>(({
   ...props
 }, forwardRef) => {
 
-  const _Icon = Icons[icon];
+  const _Icon = ICON_SETS[icon];
 
   const theme = useTheme();
   const textStyle = useTextStyle();
