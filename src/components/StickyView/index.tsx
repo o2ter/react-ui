@@ -28,7 +28,7 @@ import React from 'react';
 import { View, ViewProps, StyleProp, ViewStyle, LayoutRectangle } from 'react-native';
 import { useScrollView, useScrollLayout } from '../ScrollView';
 import { Modify } from '../../internals/types';
-import { useMergeRefs } from 'sugax';
+import { useMergeRefs, useStableCallback } from 'sugax';
 
 type StickyViewProps = Modify<ViewProps, {
   stickyContainerStyle?: StyleProp<ViewStyle>;
@@ -75,8 +75,10 @@ const StickyContainer: React.FC<{
   displayment.left = Math.max(0, Math.min(maxX, displayment.left));
   displayment.top = Math.max(0, Math.min(maxY, displayment.top));
 
+  const _renderItem = useStableCallback(renderItem);
+
   return <View style={[{ position: 'absolute' }, displayment, style]}>
-    {renderItem({ factor, offset })}
+    {_renderItem({ factor, offset })}
   </View>;
 }
 

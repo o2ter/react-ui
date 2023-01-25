@@ -25,6 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
+import { useStableCallback } from 'sugax';
 
 type ListItem<L extends ArrayLike<any>> = L extends ArrayLike<infer T> ? T : never;
 type ListProps<D extends ArrayLike<any>> = {
@@ -39,13 +40,15 @@ export const List = <D extends ArrayLike<any>>({
   renderItem,
 }: ListProps<D>) => {
 
+  const _renderItem = useStableCallback(renderItem);
+
   const elements = React.useMemo(() => _.map(data, (item, index) => {
-    const element = renderItem({ item, index, data });
+    const element = _renderItem({ item, index, data });
     if (_.isFunction(keyExtractor) && React.isValidElement(element) && _.isNil(element.key)) {
       return React.cloneElement(element, { key: keyExtractor(item, index, data) });
     }
     return element;
-  }), [data, keyExtractor, renderItem]);
+  }), [data]);
 
   return React.createElement(React.Fragment, {}, ...elements);
 };
