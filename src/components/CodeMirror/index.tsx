@@ -91,7 +91,6 @@ export const CodeMirror = React.forwardRef<ComponentRef<typeof View>, CodeMirror
       doc: initialValue,
       parent: containerRef.current as any,
       extensions: [
-        EditorView.theme(_.merge({ '&': { width: '100%', height: '100%' } }, theme), { dark: darkMode }),
         highlightSpecialChars(),
         history(),
         drawSelection(),
@@ -116,6 +115,7 @@ export const CodeMirror = React.forwardRef<ComponentRef<typeof View>, CodeMirror
             onSelectionChangeRef.current?.(e);
           }
         }),
+        EditorView.theme(_.merge({ '&': { width: '100%', height: '100%' } }, theme), { dark: darkMode }),
         ...extensions
       ].filter(Boolean),
     });
