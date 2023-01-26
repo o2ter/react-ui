@@ -35,6 +35,8 @@ import { standardKeymap, history, historyKeymap } from '@codemirror/commands';
 import { defaultHighlightStyle, syntaxHighlighting, codeFolding as _codeFolding, foldGutter as _foldGutter } from '@codemirror/language';
 
 type CodeMirrorProps = Modify<ComponentPropsWithoutRef<typeof View>, {
+  theme?: Parameters<typeof EditorView.theme>[0],
+  darkMode?: boolean,
   initialValue?: string;
   autoFocus?: boolean;
   onChange?: (e: ViewUpdate) => void;
@@ -52,6 +54,8 @@ type CodeMirrorProps = Modify<ComponentPropsWithoutRef<typeof View>, {
 }>
 
 export const CodeMirror = React.forwardRef<ComponentRef<typeof View>, CodeMirrorProps>(({
+  theme,
+  darkMode = false,
   initialValue,
   autoFocus,
   onChange,
@@ -87,6 +91,7 @@ export const CodeMirror = React.forwardRef<ComponentRef<typeof View>, CodeMirror
       doc: initialValue,
       parent: containerRef.current as any,
       extensions: [
+        EditorView.theme(_.merge({ '&': { width: '100%', height: '100%' } }, theme), { dark: darkMode }),
         highlightSpecialChars(),
         history(),
         drawSelection(),
