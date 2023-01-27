@@ -30,12 +30,10 @@ import {
   FlatListProps as RNFlatListProps,
   RefreshControl as RNRefreshControl,
 } from 'react-native';
-import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
 
-const FlatListBase: typeof RNFlatList = KeyboardAwareScrollable(RNFlatList);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
@@ -43,7 +41,7 @@ type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
   refreshControlProps?: Omit<ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const FlatList = React.forwardRef<ComponentRef<typeof FlatListBase>, FlatListProps>(({
+export const FlatList = React.forwardRef<ComponentRef<typeof RNFlatList>, FlatListProps>(({
   data,
   extraData,
   onRefresh,
@@ -61,7 +59,7 @@ export const FlatList = React.forwardRef<ComponentRef<typeof FlatListBase>, Flat
   const _renderItem = React.useCallback(renderItem ?? (() => <></>), [data, extraData]);
 
   return (
-    <FlatListBase
+    <RNFlatList
       ref={forwardRef}
       data={data}
       extraData={extraData}

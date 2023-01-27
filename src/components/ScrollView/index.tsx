@@ -28,13 +28,12 @@ import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
 import {
   ScrollView as RNScrollView,
   ScrollViewProps as RNScrollViewProps,
-  ScrollViewBase as RNScrollViewBase,
   RefreshControl as RNRefreshControl,
   NativeScrollSize,
   LayoutRectangle,
   NativeScrollEvent,
 } from 'react-native';
-import { KeyboardAwareScrollable } from '../KeyboardAwareScrollable';
+import { KeyboardAwareScrollable } from './KeyboardAwareScrollable';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { useMergeRefs } from 'sugax';
