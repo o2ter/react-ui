@@ -108,7 +108,7 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
             value={`${current.year}`}
             onChangeText={(text) => {
               try {
-                const year = parseInt(text);
+                const year = parseInt(text, 10);
                 if (year >= 1970 && year < 9999) setCurrent(current => ({ ...current, year }));
               } catch { }
             }}

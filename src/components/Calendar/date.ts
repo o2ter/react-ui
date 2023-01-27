@@ -42,9 +42,9 @@ export class _Date {
     if (!_.isString(date)) date = DateTime.now().toISODate();
     const matched = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
     if (matched) {
-      this.year = parseInt(matched[1]);
-      this.month = parseInt(matched[2]);
-      this.day = parseInt(matched[3]);
+      this.year = parseInt(matched[1], 10);
+      this.month = parseInt(matched[2], 10);
+      this.day = parseInt(matched[3], 10);
     } else {
       const today = DateTime.now();
       this.year = today.year;
