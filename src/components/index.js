@@ -44,6 +44,7 @@ export * from './ResourceList';
 export * from './SafeAreaView';
 export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
 export * from './SegmentedControl';
+export { SectionList } from './SectionList';
 export { SleekAnimationView } from './SleekAnimationView';
 export { StickyView } from './StickyView';
 export { SVG } from './SVG';
