@@ -96,7 +96,7 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
   return (
     <View ref={forwardRef} style={style}>
       <View style={{ padding: 8, flexDirection: 'row', justifyContent: 'space-between' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', flexBasis: 0 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
           <Picker
             value={month_name[current.month - 1]}
             items={month_name.map(x => ({ label: locale.string(`calendar.months.${x}`), value: x }))}
@@ -112,7 +112,12 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
                 if (year >= 1970 && year < 9999) setCurrent(current => ({ ...current, year }));
               } catch { }
             }}
-            style={{ paddingLeft: 8, fontSize: theme.fontSizeBase * 1.5 }} />
+            style={{
+              flex: 1,
+              minWidth: 0,
+              paddingLeft: 8,
+              fontSize: theme.fontSizeBase * 1.5,
+            }} />
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Pressable onPress={() => {
@@ -163,7 +168,7 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
           }
 
         } else {
-          
+
           onChange([dateToString(year, month, day)]);
         }
 
