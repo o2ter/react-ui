@@ -38,6 +38,7 @@ type FormPickerProps = Modify<ComponentPropsWithoutRef<typeof Picker>, {
 export const FormPicker = React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
   name,
   style,
+  items,
   ...props
 }, forwardRef) => {
 
@@ -45,12 +46,17 @@ export const FormPicker = React.forwardRef<ComponentRef<typeof Picker>, FormPick
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme);
 
+  React.useEffect(() => {
+    if (_.isNil(_.find(items, x => x.value === value))) onChange(_.first(items)?.value);
+  }, []);
+
   const _onChange = React.useCallback((value: any) => { onChange(value); setTouched(); }, []);
 
   return (
     <Picker
       ref={forwardRef}
       value={value}
+      items={items}
       onValueChange={_onChange}
       style={[
         defaultStyle,
