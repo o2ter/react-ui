@@ -30,6 +30,7 @@ import { useTheme } from '../../../theme';
 import { Picker } from '../../Picker';
 import { Modify } from '../../../internals/types';
 import { useDefaultInputStyle } from '../../TextInput/style';
+import { useEquivalent } from 'sugax';
 
 type FormPickerProps = Modify<ComponentPropsWithoutRef<typeof Picker>, {
   name: string | string[];
@@ -47,8 +48,10 @@ export const FormPicker = React.forwardRef<ComponentRef<typeof Picker>, FormPick
   const defaultStyle = useDefaultInputStyle(theme);
 
   React.useEffect(() => {
+
     if (_.isNil(_.find(items, x => x.value === value))) onChange(_.first(items)?.value);
-  }, []);
+
+  }, [useEquivalent(_.map(items, x => x.value))]);
 
   const _onChange = React.useCallback((value: any) => { onChange(value); setTouched(); }, []);
 
