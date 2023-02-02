@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useList } from '../List';
-import { useStableRef } from 'sugax';
+import { useStableCallback, useStableRef } from 'sugax';
 import { ListTableContext } from './provider';
 
 type ListTableProps<T, A> = {
@@ -68,12 +68,11 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
     attr,
   }));
 
-  const stableRef = useStableRef({ renderItem });
-
+  const _renderItem = useStableCallback(renderItem);
+  
   const components = React.useContext(ListTableContext);
 
   const {
-    renderItem: _renderItem,
     ListComponent: _ListComponent,
     HeaderComponent: _HeaderComponent,
     HeaderColumnComponent: _HeaderColumnComponent,
@@ -81,7 +80,6 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
     BodyRowComponent: _BodyRowComponent,
     BodyColumnComponent: _BodyColumnComponent,
   } = React.useMemo(() => ({
-    renderItem: (x => stableRef.current.renderItem(x)) as typeof renderItem,
     ListComponent: ListComponent ?? components.ListComponent,
     HeaderComponent: HeaderComponent ?? components.HeaderComponent,
     HeaderColumnComponent: HeaderColumnComponent ?? components.HeaderColumnComponent,
