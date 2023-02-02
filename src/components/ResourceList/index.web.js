@@ -26,9 +26,11 @@
 import _ from 'lodash';
 import { ResourceList as ListBase, useResourceList } from './index.js';
 import ListTable from './Table';
+import { ListTableProvider } from './Table/provider';
 
 const ResourceList = _.assign(ListBase, {
   Table: ListTable,
+  TableProvider: ListTableProvider,
 });
 
 export {

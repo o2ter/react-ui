@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { useList } from '../List';
 import { useStableRef } from 'sugax';
+import { ListTableContext } from './provider';
 
 type ListTableProps<T, A> = {
   filter?: (resource: any, state: ReturnType<typeof useList>) => any;
@@ -51,12 +52,12 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
     if (_.isString(item.id)) return item.id;
   },
   renderItem,
-  ListComponent = ({ children }) => <table>{children}</table>,
-  HeaderComponent = ({ children }) => <thead><tr>{children}</tr></thead>,
-  HeaderColumnComponent = ({ children }) => <th className='text-nowrap'>{children}</th>,
-  BodyComponent = ({ children }) => <tbody>{children}</tbody>,
-  BodyRowComponent = ({ children }) => <tr>{children}</tr>,
-  BodyColumnComponent = ({ children }) => <td>{children}</td>,
+  ListComponent,
+  HeaderComponent,
+  HeaderColumnComponent,
+  BodyComponent,
+  BodyRowComponent,
+  BodyColumnComponent,
 }: ListTableProps<Item, Attr>) => {
 
   const state = useList();
@@ -69,6 +70,8 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
 
   const stableRef = useStableRef({ renderItem });
 
+  const components = React.useContext(ListTableContext);
+
   const {
     renderItem: _renderItem,
     ListComponent: _ListComponent,
@@ -79,13 +82,13 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
     BodyColumnComponent: _BodyColumnComponent,
   } = React.useMemo(() => ({
     renderItem: (x => stableRef.current.renderItem(x)) as typeof renderItem,
-    ListComponent,
-    HeaderComponent,
-    HeaderColumnComponent,
-    BodyComponent,
-    BodyRowComponent,
-    BodyColumnComponent,
-  }), []);
+    ListComponent: ListComponent ?? components.ListComponent,
+    HeaderComponent: HeaderComponent ?? components.HeaderComponent,
+    HeaderColumnComponent: HeaderColumnComponent ?? components.HeaderColumnComponent,
+    BodyComponent: BodyComponent ?? components.BodyComponent,
+    BodyRowComponent: BodyRowComponent ?? components.BodyRowComponent,
+    BodyColumnComponent: BodyColumnComponent ?? components.BodyColumnComponent,
+  }), [components]);
 
   const _resource = React.useMemo(() => {
     const _resource = _.isFunction(filter) ? filter(state.resource, state) : state.resource;
