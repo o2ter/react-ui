@@ -183,7 +183,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
 
   return <ToastContext.Provider value={provider}>
     {children}
-    <View style={[
+    {!_.isEmpty(elements) && <View style={[
       {
         top: insets.top,
         alignItems: 'center',
@@ -194,6 +194,6 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
         web: { position: 'fixed' } as any,
         default: { position: 'absolute' },
       }),
-    ]}>{_.values(elements)}</View>
+    ]}>{_.values(elements)}</View>}
   </ToastContext.Provider>;
 };
