@@ -46,7 +46,7 @@ class _ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   reset() {
-    this.setState({});
+    this.setState({ error: undefined });
   }
 
   render() {
