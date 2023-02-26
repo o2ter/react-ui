@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { TextProps } from 'react-native';
 import { useTheme } from '../../theme';
 import { Calendar } from '../Calendar';
@@ -32,10 +32,10 @@ import { PickerBase } from './picker';
 import { Modify } from '../../internals/types';
 import { useDefaultInputStyle } from '../TextInput/style';
 
-type DatePickerBaseProps = Pick<ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
+type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
 type DatePickerProps = Modify<TextProps, DatePickerBaseProps>;
 
-export const DatePicker = React.forwardRef<ComponentRef<typeof PickerBase>, DatePickerProps>(({
+export const DatePicker = React.forwardRef<React.ComponentRef<typeof PickerBase>, DatePickerProps>(({
   value,
   min,
   max,

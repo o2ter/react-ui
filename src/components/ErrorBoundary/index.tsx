@@ -24,11 +24,11 @@
 //
 
 import _ from 'lodash';
-import React, { PropsWithChildren, ErrorInfo } from 'react';
+import React from 'react';
 
-type ErrorBoundaryProps = PropsWithChildren<{
+type ErrorBoundaryProps = React.PropsWithChildren<{
   fallback: React.ReactNode | ((error: Error) => React.ReactNode);
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }>;
 
 type ErrorBoundaryState = { error?: Error; };
@@ -41,8 +41,12 @@ class _ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySt
     return { error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     this.props.onError?.(error, errorInfo);
+  }
+
+  reset() {
+    this.setState({});
   }
 
   render() {
@@ -54,6 +58,6 @@ class _ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 }
 
-export const ErrorBoundary: React.FC<ErrorBoundaryProps> = (props) => <_ErrorBoundary {...props} />;
+export const ErrorBoundary = React.forwardRef<React.ComponentRef<typeof _ErrorBoundary>, ErrorBoundaryProps>((props, forwardRef) => <_ErrorBoundary ref={forwardRef} {...props} />);
 
 export default ErrorBoundary;

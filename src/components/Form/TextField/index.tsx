@@ -24,18 +24,18 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { NativeSyntheticEvent, TextInputEndEditingEventData } from 'react-native';
 import TextInput from '../../TextInput';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 
-type FormTextFieldProps = Modify<ComponentPropsWithoutRef<typeof TextInput>, {
+type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput>, {
   name: string | string[];
 }>
 
-export const FormTextField = React.forwardRef<ComponentRef<typeof TextInput>, FormTextFieldProps>(({
+export const FormTextField = React.forwardRef<React.ComponentRef<typeof TextInput>, FormTextFieldProps>(({
   name,
   style,
   ...props

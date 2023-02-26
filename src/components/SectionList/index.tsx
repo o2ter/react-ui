@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import {
   SectionList as RNSectionList,
   SectionListProps as RNSectionListProps,
@@ -39,10 +39,10 @@ const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 type SectionListProps<ItemT = any> = Modify<RNSectionListProps<ItemT>, {
   onRefresh?: () => PromiseLike<void>;
-  refreshControlProps?: Omit<ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
+  refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const SectionList = React.forwardRef<ComponentRef<typeof RNSectionList<any, DefaultSectionT>>, SectionListProps>(({
+export const SectionList = React.forwardRef<React.ComponentRef<typeof RNSectionList<any, DefaultSectionT>>, SectionListProps>(({
   data,
   extraData,
   onRefresh,

@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef } from 'react';
+import React from 'react';
 import { TextProps, StyleProp, TextStyle, StyleSheet } from 'react-native';
 import Text from '../Text';
 import { ICON_SETS } from '../Icons';
@@ -39,7 +39,7 @@ type IconProps = Modify<TextProps, {
   iconStyle?: StyleProp<TextStyle>;
 }>
 
-export const Icon = React.forwardRef<ComponentRef<typeof Text>, IconProps>(({
+export const Icon = React.forwardRef<React.ComponentRef<typeof Text>, IconProps>(({
   icon,
   name,
   style,

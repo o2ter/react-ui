@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import {
   FlatList as RNFlatList,
   FlatListProps as RNFlatListProps,
@@ -38,10 +38,10 @@ const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
   onRefresh?: () => PromiseLike<void>;
-  refreshControlProps?: Omit<ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
+  refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const FlatList = React.forwardRef<ComponentRef<typeof RNFlatList>, FlatListProps>(({
+export const FlatList = React.forwardRef<React.ComponentRef<typeof RNFlatList>, FlatListProps>(({
   data,
   extraData,
   onRefresh,

@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef } from 'react';
+import React from 'react';
 import { Text, TextProps, Pressable } from 'react-native';
 import { Modify } from '../../internals/types';
 import { useModal } from '../Modal';
@@ -35,7 +35,7 @@ type PickerBaseProps = Modify<TextProps, {
   disabled?: boolean;
 }>
 
-export const PickerBase = React.forwardRef<ComponentRef<typeof Pressable>, PickerBaseProps>(({
+export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>, PickerBaseProps>(({
   style,
   text,
   picker,

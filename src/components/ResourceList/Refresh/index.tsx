@@ -24,12 +24,12 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { Button } from '../../Button';
 import Icon from '../../Icon';
 import { useList } from '../List';
 
-export const ListRefresh = React.forwardRef<ComponentRef<typeof Button>, ComponentPropsWithoutRef<typeof Button>>(({
+export const ListRefresh = React.forwardRef<React.ComponentRef<typeof Button>, React.ComponentPropsWithoutRef<typeof Button>>(({
   title,
   children,
   ...props

@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { useStableRef } from 'sugax';
 import { useField } from '../Form';
 import List from '../../List';
@@ -40,7 +40,7 @@ const FormListContext = React.createContext<{
 
 export const useFormList = () => React.useContext(FormListContext);
 
-type FormListProps = Modify<_.Omit<ComponentPropsWithoutRef<typeof List<any[]>>, 'data'>, {
+type FormListProps = Modify<_.Omit<React.ComponentPropsWithoutRef<typeof List<any[]>>, 'data'>, {
   name: string | string[];
   keyExtractor?: (item: any, index: number, data: any[]) => string;
   renderItem: (x: { item: any, index: number, data: any[], actions: ReturnType<typeof useFormList> }) => any;

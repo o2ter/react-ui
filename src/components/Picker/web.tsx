@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { PickerNative, PickerNativeProps } from './native';
 import { useTheme } from '../../theme';
@@ -40,7 +40,7 @@ const _style = StyleSheet.create({
   }
 });
 
-export const PickerWeb = React.forwardRef<ComponentRef<typeof PickerNative>, PickerNativeProps>(({
+export const PickerWeb = React.forwardRef<React.ComponentRef<typeof PickerNative>, PickerNativeProps>(({
   value,
   items = [],
   disabled = false,

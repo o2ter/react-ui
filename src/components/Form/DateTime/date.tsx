@@ -24,17 +24,17 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { DatePicker } from '../../DateTime';
 
-type FormDateProps = Modify<ComponentPropsWithoutRef<typeof DatePicker>, {
+type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   name: string | string[];
 }>;
 
-export const FormDate = React.forwardRef<ComponentRef<typeof DatePicker>, FormDateProps>(({
+export const FormDate = React.forwardRef<React.ComponentRef<typeof DatePicker>, FormDateProps>(({
   name,
   min,
   max,

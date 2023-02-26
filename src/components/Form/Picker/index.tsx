@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Picker } from '../../Picker';
@@ -32,11 +32,11 @@ import { Modify } from '../../../internals/types';
 import { useDefaultInputStyle } from '../../TextInput/style';
 import { useEquivalent } from 'sugax';
 
-type FormPickerProps = Modify<ComponentPropsWithoutRef<typeof Picker>, {
+type FormPickerProps = Modify<React.ComponentPropsWithoutRef<typeof Picker>, {
   name: string | string[];
 }>
 
-export const FormPicker = React.forwardRef<ComponentRef<typeof Picker>, FormPickerProps>(({
+export const FormPicker = React.forwardRef<React.ComponentRef<typeof Picker>, FormPickerProps>(({
   name,
   style,
   items,

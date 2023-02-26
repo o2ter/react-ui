@@ -24,16 +24,16 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { useForm } from '../Form';
 import { Button } from '../../Button';
 import { Modify } from '../../../internals/types';
 
-type FormActionButtonProps = Modify<ComponentPropsWithoutRef<typeof Button>, {
+type FormActionButtonProps = Modify<React.ComponentPropsWithoutRef<typeof Button>, {
   action: string;
 }>
 
-export const FormActionButton = React.forwardRef<ComponentRef<typeof Button>, FormActionButtonProps>(({
+export const FormActionButton = React.forwardRef<React.ComponentRef<typeof Button>, FormActionButtonProps>(({
   action,
   ...props
 }, forwardRef) => {

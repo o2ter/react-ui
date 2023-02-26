@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { BrowserRouter, useRoutes } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 
@@ -102,7 +102,7 @@ function createRoutesFromChildren(children: React.ReactNode) {
   return _.flattenDeep(routes);
 }
 
-const RouteObject: React.FC<React.PropsWithChildren<ComponentPropsWithoutRef<typeof Route>>> = ({
+const RouteObject: React.FC<React.PropsWithChildren<React.ComponentPropsWithoutRef<typeof Route>>> = ({
   component: Component,
   statusCode,
   title,

@@ -24,20 +24,20 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { Image, StyleProp, ViewStyle, ImageStyle, ImageSourcePropType, ImageResizeMode } from 'react-native';
 import { List } from '../List';
 import { StickyView } from '../StickyView';
 import { Modify } from '../../internals/types';
 
-type SleekAnimationViewProps = Modify<Omit<ComponentPropsWithoutRef<typeof StickyView>, 'stickyView'>, {
+type SleekAnimationViewProps = Modify<Omit<React.ComponentPropsWithoutRef<typeof StickyView>, 'stickyView'>, {
   backgroundContainerStyle?: StyleProp<ViewStyle>;
   backgroundStyle?: StyleProp<ImageStyle>;
   backgroundImages: ImageSourcePropType[];
   resizeMode?: ImageResizeMode;
 }>
 
-export const SleekAnimationView = React.forwardRef<ComponentRef<typeof StickyView>, SleekAnimationViewProps>(({
+export const SleekAnimationView = React.forwardRef<React.ComponentRef<typeof StickyView>, SleekAnimationViewProps>(({
   backgroundContainerStyle,
   backgroundStyle,
   backgroundImages = [],

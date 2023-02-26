@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef } from 'react';
+import React from 'react';
 import { RefreshControlBase, RefreshControlProps } from 'react-native';
 import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
@@ -44,7 +44,7 @@ async function _onRefresh(
 
 export const AsyncRefreshControl = (
   RefreshControl: typeof RefreshControlBase
-) => React.forwardRef<ComponentRef<typeof RefreshControlBase>, AsyncRefreshControlProps>(({
+) => React.forwardRef<React.ComponentRef<typeof RefreshControlBase>, AsyncRefreshControlProps>(({
   style,
   onRefresh,
   ...props

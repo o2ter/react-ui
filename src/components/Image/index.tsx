@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef } from 'react';
+import React from 'react';
 import { Image as RNImage, ImageProps as RNImageProps, ImageURISource, ImageRequireSource, StyleSheet } from 'react-native';
 import ImageBase from './ImageBase';
 import { Modify } from '../../internals/types';
@@ -33,7 +33,7 @@ type ImageProps = Modify<RNImageProps, {
   source: ImageURISource | ImageRequireSource;
 }>
 
-export const Image = React.forwardRef<ComponentRef<typeof ImageBase>, ImageProps>(({
+export const Image = React.forwardRef<React.ComponentRef<typeof ImageBase>, ImageProps>(({
   source,
   style,
   ...props

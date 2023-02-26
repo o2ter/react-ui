@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef } from 'react';
+import React from 'react';
 import { Pressable, TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
@@ -37,7 +37,7 @@ type FormCheckboxProps = Modify<TextProps, {
   value?: string
 }>
 
-export const FormCheckbox = React.forwardRef<ComponentRef<typeof Pressable>, FormCheckboxProps>(({
+export const FormCheckbox = React.forwardRef<React.ComponentRef<typeof Pressable>, FormCheckboxProps>(({
   name,
   value,
   style,

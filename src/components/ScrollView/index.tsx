@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import {
   ScrollView as RNScrollView,
   ScrollViewProps as RNScrollViewProps,
@@ -42,7 +42,7 @@ import { useTheme } from '../../theme';
 const ScrollViewBase: typeof RNScrollView = KeyboardAwareScrollable(RNScrollView);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
-type ScrollViewRef = ComponentRef<typeof ScrollViewBase>;
+type ScrollViewRef = React.ComponentRef<typeof ScrollViewBase>;
 
 const ScrollViewContext = React.createContext<React.MutableRefObject<ScrollViewRef | undefined>>({ current: undefined });
 export const useScrollView = () => React.useContext(ScrollViewContext);
@@ -56,7 +56,7 @@ export const useScrollLayout = () => React.useContext(ScrollLayoutContext);
 
 type ScrollViewProps = Modify<RNScrollViewProps, {
   onRefresh?: () => PromiseLike<void>;
-  refreshControlProps?: Omit<ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
+  refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
 export const ScrollView = React.forwardRef<ScrollViewRef, ScrollViewProps>(({

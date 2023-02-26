@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef, ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { View } from '../View';
 import { Modify } from '../../internals/types';
 import { useMergeRefs, useStableRef } from 'sugax';
@@ -34,7 +34,7 @@ import { EditorView, keymap, highlightSpecialChars, drawSelection } from '@codem
 import { standardKeymap, history, historyKeymap } from '@codemirror/commands';
 import { defaultHighlightStyle, syntaxHighlighting, codeFolding as _codeFolding, foldGutter as _foldGutter } from '@codemirror/language';
 
-type CodeMirrorProps = Modify<ComponentPropsWithoutRef<typeof View>, {
+type CodeMirrorProps = Modify<React.ComponentPropsWithoutRef<typeof View>, {
   theme?: Parameters<typeof EditorView.theme>[0],
   darkMode?: boolean,
   initialValue?: string;
@@ -53,7 +53,7 @@ type CodeMirrorProps = Modify<ComponentPropsWithoutRef<typeof View>, {
   keymaps?: any[];
 }>
 
-export const CodeMirror = React.forwardRef<ComponentRef<typeof View>, CodeMirrorProps>(({
+export const CodeMirror = React.forwardRef<React.ComponentRef<typeof View>, CodeMirrorProps>(({
   theme,
   darkMode = false,
   initialValue,
@@ -74,7 +74,7 @@ export const CodeMirror = React.forwardRef<ComponentRef<typeof View>, CodeMirror
 }, forwardRef) => {
 
   const codeMirror = React.useRef<EditorView>();
-  const containerRef = React.useRef<ComponentRef<typeof View>>();
+  const containerRef = React.useRef<React.ComponentRef<typeof View>>();
   const ref = useMergeRefs(containerRef, forwardRef);
 
   const onChangeRef = useStableRef(onChange);

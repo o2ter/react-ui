@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React, { ComponentRef } from 'react';
+import React from 'react';
 import { Pressable, TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
@@ -37,7 +37,7 @@ type FormRadioProps = Modify<TextProps, {
   value: any;
 }>
 
-export const FormRadio = React.forwardRef<ComponentRef<typeof Pressable>, FormRadioProps>(({
+export const FormRadio = React.forwardRef<React.ComponentRef<typeof Pressable>, FormRadioProps>(({
   name,
   value,
   style,
