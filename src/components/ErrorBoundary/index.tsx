@@ -23,30 +23,34 @@
 //  THE SOFTWARE.
 //
 
+import _ from 'lodash';
 import React, { PropsWithChildren, ErrorInfo } from 'react';
 
 type ErrorBoundaryProps = PropsWithChildren<{
-  fallback: React.ReactNode;
-  onError?: (error: Error, info: ErrorInfo) => void;
+  fallback: React.ReactNode | ((error: Error) => React.ReactNode);
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }>;
 
-class _ErrorBoundary extends React.Component<ErrorBoundaryProps, { hasError: boolean; }> {
+type ErrorBoundaryState = { error?: Error; };
 
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false };
+class _ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+
+  state: ErrorBoundaryState = {};
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
   }
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error, info: ErrorInfo) {
-    this.props.onError?.(error, info);
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    this.props.onError?.(error, errorInfo);
   }
 
   render() {
-    return this.state.hasError ? this.props.fallback : this.props.children;
+    const { fallback, children } = this.props;
+    if (!_.isNil(this.state.error)) {
+      return _.isFunction(fallback) ? fallback(this.state.error) : fallback;
+    }
+    return children;
   }
 }
 
