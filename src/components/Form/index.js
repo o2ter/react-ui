@@ -29,6 +29,8 @@ import { FormGroup } from './Group';
 import { FormList, useFormList } from './List';
 import { FormDate } from './DateTime';
 
+export { FormState } from './Form';
+
 const Form = _.assign(FormBase, {
   Consumer: FormConsumer,
   Group: FormGroup,

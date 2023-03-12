@@ -32,7 +32,7 @@ import { useToast } from '../../Toast';
 export type FormState = {
   values: Record<string, any>;
   errors: Error[];
-  setValue:  (path: string, value: React.SetStateAction<any>) => void;
+  setValue: (path: string, value: React.SetStateAction<any>) => void;
   validate: (value: any, path?: string) => Error[];
   submit: VoidFunction;
   reset: VoidFunction;
@@ -87,6 +87,7 @@ type FormProps = {
   onChangeValues?: (state: FormState) => void;
   onAction?: (action: string, state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
+  onError?: (error: Error, state: FormState & { preventDefault: VoidFunction }) => void;
   children: React.ReactNode | ((state: FormState) => React.ReactNode);
 };
 
@@ -100,6 +101,7 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   onChangeValues = () => { },
   onAction = () => { },
   onSubmit = () => { },
+  onError = () => { },
   children
 }, forwardRef) => {
 
@@ -112,11 +114,18 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   const { showError } = useToast();
   const _showError = React.useCallback((resolve: () => any) => {
     (async () => {
-      try { await resolve(); } catch (e) { showError(e as Error); }
+      try { await resolve(); } catch (e) {
+        let defaultPrevented = false;
+        await stableRef.current.error(e as Error, { ...formState, preventDefault: () => void (defaultPrevented = true) });
+        if (!defaultPrevented) showError(e as Error);
+      }
     })();
   }, [showError]);
 
   const stableRef = useStableRef({
+    error: async (error: Error, state: FormState & { preventDefault: VoidFunction }) => {
+      if (_.isFunction(onError)) await onError(error, state);
+    },
     reset: () => {
       setValues(initialValues);
       if (_.isFunction(onReset)) _showError(() => onReset(formState));
