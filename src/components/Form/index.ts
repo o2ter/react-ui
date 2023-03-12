@@ -28,6 +28,13 @@ import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
 import { FormGroup } from './Group';
 import { FormList, useFormList } from './List';
 import { FormDate } from './DateTime';
+import ErrorMessage from './ErrorMessage';
+import TextField from './TextField';
+import ActionButton from './ActionButton';
+import Button from './Button';
+import Picker from './Picker';
+import Checkbox from './Checkbox';
+import Radio from './Radio';
 
 export { FormState } from './Form';
 
@@ -35,13 +42,13 @@ const Form = _.assign(FormBase, {
   Consumer: FormConsumer,
   Group: FormGroup,
   List: FormList,
-  ErrorMessage: require('./ErrorMessage').default,
-  TextField: require('./TextField').default,
-  ActionButton: require('./ActionButton').default,
-  Button: require('./Button').default,
-  Picker: require('./Picker').default,
-  Checkbox: require('./Checkbox').default,
-  Radio: require('./Radio').default,
+  ErrorMessage,
+  TextField,
+  ActionButton,
+  Button,
+  Picker,
+  Checkbox,
+  Radio,
   Date: FormDate,
 });
 
