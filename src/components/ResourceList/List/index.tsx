@@ -35,6 +35,7 @@ const ListContext = React.createContext<ListState>({
   loading: false,
   resource: undefined,
   error: undefined,
+  cancel: () => { },
   refresh: async () => { },
   state: {},
 });
@@ -58,10 +59,11 @@ const ListContent = React.forwardRef<ListState, ListContentProps>(({
     loading,
     resource,
     error,
+    cancel,
     refresh,
   } = useAsyncResource(() => query(values), debounce);
 
-  const state = React.useMemo(() => ({ count, loading, resource, error, refresh, state: values }), [count, loading, resource, error, refresh, values]);
+  const state = React.useMemo(() => ({ count, loading, resource, error, cancel, refresh, state: values }), [count, loading, resource, error, cancel, refresh, values]);
 
   React.useImperativeHandle(forwardRef, () => state, [state]);
 

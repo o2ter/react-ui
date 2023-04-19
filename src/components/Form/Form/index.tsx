@@ -26,7 +26,8 @@
 import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
-import { useStableRef, ISchema, object, ValidateError } from 'sugax';
+import { useStableRef } from 'sugax';
+import { ISchema, object, ValidateError } from '@o2ter/valid.js';
 import { useToast } from '../../Toast';
 
 export type FormState = {

@@ -35,9 +35,10 @@
   },
   "peerDependencies": {
     "@o2ter/i18n": ">=0.0.5",
+    "@o2ter/valid.js": ">=1.0.0",
     "react": ">=18.2.0",
     "react-native": ">=0.70.2",
-    "sugax": ">=1.0.67"
+    "sugax": ">=1.0.79"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
@@ -46,6 +47,7 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
     "@o2ter/i18n": "^0.0.9",
+    "@o2ter/valid.js": "^1.0.0",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^24.0.0",
     "@rollup/plugin-json": "^6.0.0",
@@ -58,7 +60,7 @@
     "rollup": "^3.10.0",
     "rollup-plugin-dts": "^5.1.1",
     "style-inject": "link:./src/styleInject",
-    "sugax": "^1.0.69",
+    "sugax": "^1.0.79",
     "tslib": "^2.4.1",
     "typescript": "^4.9.4",
     "webpack": "^5.76.0"
