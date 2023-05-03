@@ -48,16 +48,21 @@ import { TextStyleProvider } from '../Text/style';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
+type ButtonStateCallbackType = PressableStateCallbackType & {
+  hovered: boolean;
+};
+
 type ButtonProps = Modify<PressableProps, {
   color?: string;
   variant?: string;
   outline?: boolean;
   size?: string;
   title?: string;
-  style?: StyleProp<ViewStyle>;
-  titleStyle?: StyleProp<TextStyle>;
+  style?: StyleProp<ViewStyle> | ((state: ButtonStateCallbackType) => StyleProp<ViewStyle>);
+  titleStyle?: StyleProp<TextStyle> | ((state: ButtonStateCallbackType) => StyleProp<TextStyle>);
   onHoverIn?: (event: GestureResponderEvent) => void;
   onHoverOut?: (event: GestureResponderEvent) => void;
+  children?: React.ReactNode | ((state: ButtonStateCallbackType) => React.ReactNode);
 }>;
 
 const ButtonText = Animated.createAnimatedComponent(class extends React.PureComponent<{
@@ -91,19 +96,19 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   ...props
 }, forwardRef) => {
 
-  const [focused, setFocused] = React.useState({ hover: false, press: false });
+  const [focused, setFocused] = React.useState({ hovered: false, pressed: false });
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
 
     Animated.timing(fadeAnim, {
-      toValue: focused.hover || focused.press ? 1 : 0,
+      toValue: focused.hovered || focused.pressed ? 1 : 0,
       duration: theme.buttonDuration,
       easing: theme.buttonEasing,
       useNativeDriver: false,
     }).start();
 
-  }, [focused.hover || focused.press]);
+  }, [focused.hovered || focused.pressed]);
 
   const theme = useTheme();
   const selectedColor = color ?? theme.themeColors[variant] ?? theme.colors[variant];
@@ -141,21 +146,25 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
     button: _.omit(_defaultStyle, text_style),
   }), [_defaultStyle]);
 
-  const _style = StyleSheet.flatten([defaultStyle.text, _.pick(colors, text_style) as TextStyle, titleStyle]);
+  const _style = StyleSheet.flatten([
+    defaultStyle.text,
+    _.pick(colors, text_style) as TextStyle,
+    _.isFunction(titleStyle) ? titleStyle(focused) : titleStyle,
+  ]);
   const _wrapped = (children: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
 
   const content = _.isEmpty(children) && !_.isEmpty(title)
     ? <Animated.Text selectable={false} style={_style}>{title}</Animated.Text>
-    : _.isFunction(children) ? (state: PressableStateCallbackType) => _wrapped(children(state)) : _wrapped(children);
+    : _.isFunction(children) ? () => _wrapped(children(focused)) : _wrapped(children);
 
   const callbacks: any = Platform.select({
     web: {
       onHoverIn: (e: GestureResponderEvent) => {
-        setFocused(state => ({ ...state, hover: true }));
+        setFocused(state => ({ ...state, hovered: true }));
         if (_.isFunction(onHoverIn)) onHoverIn(e);
       },
       onHoverOut: (e: GestureResponderEvent) => {
-        setFocused(state => ({ ...state, hover: false }));
+        setFocused(state => ({ ...state, hovered: false }));
         if (_.isFunction(onHoverOut)) onHoverOut(e);
       },
     },
@@ -167,13 +176,17 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
       ref={forwardRef}
       disabled={disabled}
       focusable={!disabled && focusable !== false}
-      style={[defaultStyle.button, _.omit(colors, text_style), style]}
+      style={[
+        defaultStyle.button,
+        _.omit(colors, text_style),
+        _.isFunction(style) ? style(focused) : style,
+      ]}
       onPressIn={(e: GestureResponderEvent) => {
-        setFocused(state => ({ ...state, press: true }));
+        setFocused(state => ({ ...state, pressed: true }));
         if (_.isFunction(onPressIn)) onPressIn(e);
       }}
       onPressOut={(e: GestureResponderEvent) => {
-        setFocused(state => ({ ...state, press: false }));
+        setFocused(state => ({ ...state, pressed: false }));
         if (_.isFunction(onPressOut)) onPressOut(e);
       }}
       {...callbacks} {...props}>
