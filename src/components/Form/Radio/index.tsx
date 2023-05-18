@@ -25,14 +25,14 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Pressable, TextProps } from 'react-native';
+import { Pressable, TextProps, PressableProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 
 import { Icon } from '../../Icon';
 
-type FormRadioProps = Modify<TextProps, {
+type FormRadioProps = Modify<TextProps, Pick<PressableProps, 'children' | 'style'> & {
   name: string | string[];
   value: any;
 }>
@@ -54,19 +54,21 @@ export const FormRadio = React.forwardRef<React.ComponentRef<typeof Pressable>, 
 
   return (
     <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange(value))}>
-      <Icon
-        icon='MaterialCommunityIcons'
-        name={iconName}
-        iconStyle={[
-          { color: theme.styles.formRadioColor(selected) },
-          theme.styles.formRadioStyle,
-        ]}
-        style={[
-          { fontSize: theme.fontSizeBase },
-          theme.styles.formRadioTextStyle,
-          style,
-        ]}
-        {...props}>{children}</Icon>
+      {(state) => (
+        <Icon
+          icon='MaterialCommunityIcons'
+          name={iconName}
+          iconStyle={[
+            { color: theme.styles.formRadioColor(selected) },
+            theme.styles.formRadioStyle,
+          ]}
+          style={[
+            { fontSize: theme.fontSizeBase },
+            theme.styles.formRadioTextStyle,
+            _.isFunction(style) ? style(state) : style,
+          ]}
+          {...props}>{_.isFunction(children) ? children(state) : children}</Icon>
+      )}
     </Pressable>
   )
 });

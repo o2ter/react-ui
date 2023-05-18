@@ -25,16 +25,16 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Pressable, TextProps } from 'react-native';
+import { Pressable, TextProps, PressableProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 
 import { Icon } from '../../Icon';
 
-type FormCheckboxProps = Modify<TextProps, {
+type FormCheckboxProps = Modify<TextProps, Pick<PressableProps, 'children' | 'style'> & {
   name: string | string[];
-  value?: string
+  value?: string;
 }>
 
 export const FormCheckbox = React.forwardRef<React.ComponentRef<typeof Pressable>, FormCheckboxProps>(({
@@ -57,19 +57,21 @@ export const FormCheckbox = React.forwardRef<React.ComponentRef<typeof Pressable
       if (_.isNil(value)) return !state;
       return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state ?? []), value];
     }))}>
-      <Icon
-        icon='MaterialCommunityIcons'
-        name={iconName}
-        iconStyle={[
-          { color: theme.styles.formCheckboxColor(selected) },
-          theme.styles.formCheckboxStyle,
-        ]}
-        style={[
-          { fontSize: theme.fontSizeBase },
-          theme.styles.formCheckboxTextStyle,
-          style,
-        ]}
-        {...props}>{children}</Icon>
+      {(state) => (
+        <Icon
+          icon='MaterialCommunityIcons'
+          name={iconName}
+          iconStyle={[
+            { color: theme.styles.formCheckboxColor(selected) },
+            theme.styles.formCheckboxStyle,
+          ]}
+          style={[
+            { fontSize: theme.fontSizeBase },
+            theme.styles.formCheckboxTextStyle,
+            _.isFunction(style) ? style(state) : style,
+          ]}
+          {...props}>{_.isFunction(children) ? children(state) : children}</Icon>
+      )}
     </Pressable>
   )
 });
