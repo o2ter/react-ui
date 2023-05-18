@@ -33,6 +33,9 @@ import { useToast } from '../../Toast';
 export type FormState = {
   values: Record<string, any>;
   errors: Error[];
+  submitCount: number;
+  resetCount: number;
+  actionCounts: Record<string, number>;
   setValue: (path: string, value: React.SetStateAction<any>) => void;
   validate: (value: any, path?: string) => Error[];
   submit: VoidFunction;
@@ -45,6 +48,9 @@ export type FormState = {
 const FormContext = React.createContext<FormState>({
   values: {},
   errors: [],
+  submitCount: 0,
+  resetCount: 0,
+  actionCounts: {},
   setValue: () => { },
   validate: () => [],
   submit: () => { },
@@ -106,6 +112,7 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   children
 }, forwardRef) => {
 
+  const [counts, setCounts] = React.useState({ submit: 0, reset: 0, actions: {} as Record<string, number> });
   const [values, setValues] = React.useState(initialValues);
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
 
@@ -130,13 +137,16 @@ export const Form = React.forwardRef<FormState, FormProps>(({
     reset: () => {
       setValues(initialValues);
       if (_.isFunction(onReset)) _showError(() => onReset(formState));
+      setCounts(c => ({ ...c, reset: c.reset + 1 }));
     },
     submit: () => {
       setTouched(true);
       if (_.isFunction(onSubmit)) _showError(() => onSubmit(_schema.cast(values), formState));
+      setCounts(c => ({ ...c, submit: c.submit + 1 }));
     },
     action: (action: string) => {
       if (_.isFunction(onAction)) _showError(() => onAction(action, formState));
+      setCounts(c => ({ ...c, actions: { ...c.actions, [action]: (c.actions[action] ?? 0) + 1 } }));
     },
   });
 
@@ -153,10 +163,13 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   const formState = React.useMemo(() => ({
     values,
     validate: _validate,
+    get submitCount() { return counts.submit },
+    get resetCount() { return counts.reset },
+    get actionCounts() { return counts.actions },
     get errors() { return _validate(values) },
     touched: (path: string) => _.isBoolean(touched) ? touched : touched[path] ?? false,
     ...formAction,
-  }), [values, _validate, touched]);
+  }), [counts, values, _validate, touched]);
 
   const [initState] = React.useState(formState);
   React.useEffect(() => {
@@ -182,13 +195,15 @@ export const useForm = () => ({
 
 export const useField = (name: string | string[]) => {
 
-  const { values, setValue, validate, touched, setTouched, submit, reset, groupPath } = useForm();
+  const formState = useForm();
+  const { values, setValue, validate, touched, setTouched, submit, reset, groupPath } = formState;
   const path = [...groupPath, ..._.toPath(name)].join('.');
 
   const onChange = React.useCallback((value: React.SetStateAction<any>) => setValue(path, value), [path]);
   const _setTouched = React.useCallback(() => setTouched(path), [path]);
 
   return {
+    form: formState,
     value: _.get(values, path),
     get error() { return validate(values, path) },
     get touched() { return touched(path) },
