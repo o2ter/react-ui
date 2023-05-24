@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextProps } from 'react-native';
+import { TextProps, Platform } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
@@ -35,6 +35,7 @@ import { Icon } from '../../Icon';
 type FormRadioProps = TextProps & {
   name: string | string[];
   value: any;
+  tabIndex?: number;
 }
 
 export const FormRadio = React.forwardRef<React.ComponentRef<typeof Icon>, FormRadioProps>(({
@@ -52,6 +53,14 @@ export const FormRadio = React.forwardRef<React.ComponentRef<typeof Icon>, FormR
   const selected = value === _value;
   const iconName = selected ? 'radiobox-marked' : 'radiobox-blank';
 
+  const _props = Platform.select({
+    web: {
+      ...props,
+      tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0),
+    },
+    default: props,
+  });
+  
   return (
     <Icon
       ref={forwardRef}
@@ -67,7 +76,7 @@ export const FormRadio = React.forwardRef<React.ComponentRef<typeof Icon>, FormR
         theme.styles.formRadioTextStyle,
         _.isFunction(style) ? style({ selected }) : style,
       ]}
-      {...props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>
+      {..._props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>
   )
 });
 

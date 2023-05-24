@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextProps } from 'react-native';
+import { TextProps, Platform } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
@@ -35,6 +35,7 @@ import { Icon } from '../../Icon';
 type FormCheckboxProps = TextProps & {
   name: string | string[];
   value?: string;
+  tabIndex?: number;
 }
 
 export const FormCheckbox = React.forwardRef<React.ComponentRef<typeof Icon>, FormCheckboxProps>(({
@@ -52,6 +53,14 @@ export const FormCheckbox = React.forwardRef<React.ComponentRef<typeof Icon>, Fo
   const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
   const iconName = selected ? 'checkbox-marked' : 'checkbox-blank-outline';
 
+  const _props = Platform.select({
+    web: {
+      ...props,
+      tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0),
+    },
+    default: props,
+  });
+  
   return (
     <Icon
       ref={forwardRef}
@@ -70,7 +79,7 @@ export const FormCheckbox = React.forwardRef<React.ComponentRef<typeof Icon>, Fo
         theme.styles.formCheckboxTextStyle,
         _.isFunction(style) ? style({ selected }) : style,
       ]}
-      {...props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>
+      {..._props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>
   )
 });
 
