@@ -25,17 +25,17 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TouchableWithoutFeedback, TextProps, TouchableWithoutFeedbackProps } from 'react-native';
+import { TextProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 
 import { Icon } from '../../Icon';
 
-type FormCheckboxProps = Modify<TextProps, Pick<TouchableWithoutFeedbackProps, 'children' | 'style'> & {
+type FormCheckboxProps = TextProps & {
   name: string | string[];
   value?: string;
-}>
+}
 
 export const FormCheckbox = React.forwardRef<React.ComponentRef<typeof Icon>, FormCheckboxProps>(({
   name,
@@ -53,25 +53,24 @@ export const FormCheckbox = React.forwardRef<React.ComponentRef<typeof Icon>, Fo
   const iconName = selected ? 'checkbox-marked' : 'checkbox-blank-outline';
 
   return (
-    <TouchableWithoutFeedback onPress={onPress ?? (() => onChange((state: any) => {
-      if (_.isNil(value)) return !state;
-      return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state ?? []), value];
-    }))}>
-      <Icon
-        ref={forwardRef}
-        icon='MaterialCommunityIcons'
-        name={iconName}
-        iconStyle={[
-          { color: theme.styles.formCheckboxColor(selected) },
-          theme.styles.formCheckboxStyle,
-        ]}
-        style={[
-          { fontSize: theme.fontSizeBase },
-          theme.styles.formCheckboxTextStyle,
-          _.isFunction(style) ? style({ selected }) : style,
-        ]}
-        {...props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>
-    </TouchableWithoutFeedback>
+    <Icon
+      ref={forwardRef}
+      icon='MaterialCommunityIcons'
+      name={iconName}
+      onPress={onPress ?? (() => onChange((state: any) => {
+        if (_.isNil(value)) return !state;
+        return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state ?? []), value];
+      }))}
+      iconStyle={[
+        { color: theme.styles.formCheckboxColor(selected) },
+        theme.styles.formCheckboxStyle,
+      ]}
+      style={[
+        { fontSize: theme.fontSizeBase },
+        theme.styles.formCheckboxTextStyle,
+        _.isFunction(style) ? style({ selected }) : style,
+      ]}
+      {...props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>
   )
 });
 
