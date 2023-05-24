@@ -25,19 +25,19 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Pressable, TextProps, PressableProps } from 'react-native';
+import { TouchableWithoutFeedback, TextProps, TouchableWithoutFeedbackProps } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 
 import { Icon } from '../../Icon';
 
-type FormRadioProps = Modify<TextProps, Pick<PressableProps, 'children' | 'style'> & {
+type FormRadioProps = Modify<TextProps, Pick<TouchableWithoutFeedbackProps, 'children' | 'style'> & {
   name: string | string[];
   value: any;
 }>
 
-export const FormRadio = React.forwardRef<React.ComponentRef<typeof Pressable>, FormRadioProps>(({
+export const FormRadio = React.forwardRef<React.ComponentRef<typeof TouchableWithoutFeedback>, FormRadioProps>(({
   name,
   value,
   style,
@@ -53,23 +53,21 @@ export const FormRadio = React.forwardRef<React.ComponentRef<typeof Pressable>, 
   const iconName = selected ? 'radiobox-marked' : 'radiobox-blank';
 
   return (
-    <Pressable ref={forwardRef} onPress={onPress ?? (() => onChange(value))}>
-      {(state) => (
-        <Icon
-          icon='MaterialCommunityIcons'
-          name={iconName}
-          iconStyle={[
-            { color: theme.styles.formRadioColor(selected) },
-            theme.styles.formRadioStyle,
-          ]}
-          style={[
-            { fontSize: theme.fontSizeBase },
-            theme.styles.formRadioTextStyle,
-            _.isFunction(style) ? style(state) : style,
-          ]}
-          {...props}>{_.isFunction(children) ? children(state) : children}</Icon>
-      )}
-    </Pressable>
+    <TouchableWithoutFeedback ref={forwardRef} onPress={onPress ?? (() => onChange(value))}>
+      <Icon
+        icon='MaterialCommunityIcons'
+        name={iconName}
+        iconStyle={[
+          { color: theme.styles.formRadioColor(selected) },
+          theme.styles.formRadioStyle,
+        ]}
+        style={[
+          { fontSize: theme.fontSizeBase },
+          theme.styles.formRadioTextStyle,
+          _.isFunction(style) ? style({ selected }) : style,
+        ]}
+        {...props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>
+    </TouchableWithoutFeedback>
   )
 });
 
