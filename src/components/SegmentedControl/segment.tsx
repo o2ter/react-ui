@@ -30,7 +30,7 @@ import { Text, TextStyle, ViewStyle, Pressable, StyleSheet, StyleProp, LayoutCha
 import { style as _style } from './style';
 
 export const Segment: React.FC<{
-  item: string | { label: any };
+  item: { label: string };
   isSelected?: boolean;
   segmentTextStyle?: StyleProp<TextStyle>;
   selectedSegmentTextStyle?: StyleProp<TextStyle>;
@@ -56,6 +56,6 @@ export const Segment: React.FC<{
       onPress={onPress}
       onLayout={onLayout}
       style={[{ paddingVertical: 8, paddingHorizontal: 16 }, _segmentContainerStyle]}>
-      <Text style={_segmentTextStyle}>{_.isString(item) ? item : item.label}</Text>
+      <Text style={_segmentTextStyle}>{item.label}</Text>
     </Pressable>
   }

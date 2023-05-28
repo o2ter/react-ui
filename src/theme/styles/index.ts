@@ -81,6 +81,12 @@ export const _simpleStyles = {
   formPickerStyle: {} as StyleProp<TextStyle>,
   formPickerErrorStyle: {} as StyleProp<TextStyle>,
 
+  formPlainSegmentedControlStyle: {} as StyleProp<ViewStyle>,
+  formPlainSegmentedControlErrorStyle: {} as StyleProp<ViewStyle>,
+
+  formSegmentedControlStyle: {} as StyleProp<ViewStyle>,
+  formSegmentedControlErrorStyle: {} as StyleProp<ViewStyle>,
+
   formTextFieldStyle: {} as StyleProp<TextStyle>,
   formTextFieldErrorStyle: {} as StyleProp<TextStyle>,
 

@@ -32,19 +32,17 @@ import { Modify } from '../../internals/types';
 import { style as _style } from './style';
 import { Segment } from './segment';
 
-const segment_value = (item: string | { value: string }) => _.isString(item) ? item : item.value;
-
-type SegmentedControlBaseProps = Modify<ViewProps, {
-  value?: string;
-  onChange?: (value: string) => void;
-  segments?: (string | { label: any, value: string })[];
+type SegmentedControlBaseProps<T = any> = Modify<ViewProps, {
+  value?: T;
+  onChange?: (value: T) => void;
+  segments?: { label: string, value: T }[];
   segmentTextStyle?: StyleProp<TextStyle>;
   selectedSegmentTextStyle?: StyleProp<TextStyle>;
   segmentContainerStyle?: StyleProp<ViewStyle>;
   selectedSegmentContainerStyle?: StyleProp<ViewStyle>;
 }>
 
-type SegmentedControlProps = Modify<SegmentedControlBaseProps, { tabStyle?: StyleProp<ViewStyle>; }>
+type SegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { tabStyle?: StyleProp<ViewStyle>; }>
 
 export const SegmentedControl = React.forwardRef<View, SegmentedControlProps>(({
   value,
@@ -60,7 +58,7 @@ export const SegmentedControl = React.forwardRef<View, SegmentedControlProps>(({
 }, forwardRef) => {
 
   const [segmentBounds, setSegmentBounds] = React.useState<Record<number, LayoutRectangle>>({});
-  const selected_idx = Math.max(0, _.findIndex(segments, x => segment_value(x) === value));
+  const selected_idx = Math.max(0, _.findIndex(segments, x => x.value === value));
   const selected_bounds = segmentBounds[selected_idx] ?? {};
 
   const tabTranslate = React.useMemo(() => new Animated.ValueXY({ x: selected_bounds.x ?? 0, y: selected_bounds.width ?? 0 }), [segmentBounds]);
@@ -101,12 +99,12 @@ export const SegmentedControl = React.forwardRef<View, SegmentedControlProps>(({
           selectedSegmentTextStyle={selectedSegmentTextStyle}
           segmentContainerStyle={segmentContainerStyle}
           selectedSegmentContainerStyle={selectedSegmentContainerStyle}
-          onPress={() => { if (_.isFunction(onChange)) onChange(segment_value(segments[index])) }} />
+          onPress={() => { if (_.isFunction(onChange)) onChange(item.value) }} />
       )} />
   </View>;
 });
 
-type PlainSegmentedControlProps = Modify<SegmentedControlBaseProps, { color?: string; }>
+type PlainSegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { color?: string; }>
 
 export const PlainSegmentedControl = React.forwardRef<View, PlainSegmentedControlProps>(({
   value,
@@ -121,7 +119,7 @@ export const PlainSegmentedControl = React.forwardRef<View, PlainSegmentedContro
   ...props
 }, forwardRef) => {
 
-  const selected_idx = Math.max(0, _.findIndex(segments, x => segment_value(x) === value));
+  const selected_idx = Math.max(0, _.findIndex(segments, x => x.value === value));
 
   return <View
     ref={forwardRef}
@@ -137,7 +135,7 @@ export const PlainSegmentedControl = React.forwardRef<View, PlainSegmentedContro
           selectedSegmentTextStyle={[{ color: 'white' }, selectedSegmentTextStyle]}
           segmentContainerStyle={segmentContainerStyle}
           selectedSegmentContainerStyle={[{ backgroundColor: color }, selectedSegmentContainerStyle]}
-          onPress={() => { if (_.isFunction(onChange)) onChange(segment_value(segments[index])) }} />
+          onPress={() => { if (_.isFunction(onChange)) onChange(item.value) }} />
       )} />
   </View>;
 });
