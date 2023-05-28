@@ -35,10 +35,11 @@ const _style = StyleSheet.create({
     backgroundColor: 'transparent',
     border: '0 solid black',
     borderRadius: 0,
+    lineHeight: 'normal',
     margin: 0,
     padding: 0,
   }
-});
+}) as any;
 
 export const PickerWeb = React.forwardRef<React.ComponentRef<typeof PickerNative>, PickerNativeProps>(({
   value,
