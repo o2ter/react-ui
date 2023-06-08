@@ -75,7 +75,7 @@ export const Image = React.forwardRef(_.assign(({
   return <ImageBase
     ref={forwardRef}
     source={source}
-    style={[{ width: _width, height: _height, aspectRatio }, _style]}
+    style={[_.pickBy({ width: _width, height: _height, aspectRatio }, v => !_.isNil(v)), _style]}
     {...props} />;
 }, {
   displayName: 'Image',
