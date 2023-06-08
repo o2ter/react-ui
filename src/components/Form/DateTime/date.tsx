@@ -34,7 +34,7 @@ type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   name: string | string[];
 }>;
 
-export const FormDate = React.forwardRef<React.ComponentRef<typeof DatePicker>, FormDateProps>(({
+export const FormDate = React.forwardRef(_.assign(({
   name,
   min,
   max,
@@ -44,7 +44,7 @@ export const FormDate = React.forwardRef<React.ComponentRef<typeof DatePicker>, 
   selectable = () => true,
   children,
   ...props
-}, forwardRef) => {
+}: FormDateProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>) => {
 
   const { value, error, touched, setTouched, onChange } = useField(name);
   const theme = useTheme();
@@ -69,6 +69,8 @@ export const FormDate = React.forwardRef<React.ComponentRef<typeof DatePicker>, 
       ]}
       {...props} />
   )
-});
+}, {
+  displayName: 'Form.Date'
+}));
 
 export default FormDate;

@@ -44,6 +44,8 @@ const ToastContext = React.createContext({
   showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout?: number) { },
 });
 
+ToastContext.displayName = 'ToastContext';
+
 export const useToast = () => React.useContext(ToastContext);
 
 const icons = {
@@ -78,64 +80,66 @@ const ToastBody: React.FC<{
   onDismiss,
 }) => {
 
-    const fadeAnim = React.useRef(new Animated.Value(0)).current;
-    const theme = useTheme();
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const theme = useTheme();
 
-    function _dismiss() {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: theme.toastDuration,
-        easing: theme.toastEasing,
-        useNativeDriver: Platform.OS !== 'web',
-      }).start(() => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        _.isFunction(onDismiss) && onDismiss();
-      });
-    }
-
-    useMount(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: theme.toastDuration,
-        easing: theme.toastEasing,
-        useNativeDriver: Platform.OS !== 'web',
-      }).start(() => onShow({ dismiss() { _dismiss(); } }));
+  function _dismiss() {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: theme.toastDuration,
+      easing: theme.toastEasing,
+      useNativeDriver: Platform.OS !== 'web',
+    }).start(() => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      _.isFunction(onDismiss) && onDismiss();
     });
-
-    const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors(type);
-
-    const localize = useLocalize();
-    const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);
-
-    return <Animated.View
-      style={[
-        {
-          marginTop: 8,
-          minWidth: 320,
-          padding: theme.spacer,
-          borderWidth: StyleSheet.hairlineWidth,
-          borderRadius: theme.borderRadiusBase,
-          alignItems: 'center',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        },
-        toastColorStyle,
-        theme.styles.toastStyle,
-        { opacity: fadeAnim },
-      ]}>
-      {!_.isNil(icons[type as ToastType]) && <Svg width={24} height={24}><Path fill={color} d={icons[type as ToastType]} /></Svg>}
-      <Text style={[
-        {
-          flex: 1,
-          marginHorizontal: theme.spacer * 0.5,
-          fontSize: theme.fontSizeBase,
-          color: messageColor,
-        },
-        theme.styles.toastTextStyle,
-      ]}>{_message}</Text>
-      <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
-    </Animated.View>
   }
+
+  useMount(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: theme.toastDuration,
+      easing: theme.toastEasing,
+      useNativeDriver: Platform.OS !== 'web',
+    }).start(() => onShow({ dismiss() { _dismiss(); } }));
+  });
+
+  const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors(type);
+
+  const localize = useLocalize();
+  const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);
+
+  return <Animated.View
+    style={[
+      {
+        marginTop: 8,
+        minWidth: 320,
+        padding: theme.spacer,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: theme.borderRadiusBase,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      },
+      toastColorStyle,
+      theme.styles.toastStyle,
+      { opacity: fadeAnim },
+    ]}>
+    {!_.isNil(icons[type as ToastType]) && <Svg width={24} height={24}><Path fill={color} d={icons[type as ToastType]} /></Svg>}
+    <Text style={[
+      {
+        flex: 1,
+        marginHorizontal: theme.spacer * 0.5,
+        fontSize: theme.fontSizeBase,
+        color: messageColor,
+      },
+      theme.styles.toastTextStyle,
+    ]}>{_message}</Text>
+    <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
+  </Animated.View>
+}
+
+ToastBody.displayName = 'ToastBody';
 
 export const ToastProvider: React.FC<React.PropsWithChildren<{
   defaultTimeout?: number;
@@ -198,3 +202,5 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
     ]}>{_.values(elements)}</View>}
   </ToastContext.Provider>;
 };
+
+ToastProvider.displayName = 'ToastProvider';

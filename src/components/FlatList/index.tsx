@@ -41,7 +41,7 @@ type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const FlatList = React.forwardRef<React.ComponentRef<typeof RNFlatList>, FlatListProps>(({
+export const FlatList = React.forwardRef(_.assign(({
   data,
   extraData,
   onRefresh,
@@ -53,7 +53,7 @@ export const FlatList = React.forwardRef<React.ComponentRef<typeof RNFlatList>, 
   renderItem,
   children,
   ...props
-}, forwardRef) => {
+}: FlatListProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNFlatList>>) => {
 
   const theme = useTheme();
   const _renderItem = React.useCallback(renderItem ?? (() => <></>), [data, extraData]);
@@ -71,6 +71,8 @@ export const FlatList = React.forwardRef<React.ComponentRef<typeof RNFlatList>, 
       refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : undefined}
       {...props} />
   )
-});
+}, {
+  displayName: 'FlatList',
+}));
 
 export default FlatList;

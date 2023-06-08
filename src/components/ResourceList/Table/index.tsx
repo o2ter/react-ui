@@ -116,4 +116,6 @@ export const ListTable = <Item = any, Attr extends string | { label: string } = 
   );
 }
 
+ListTable.displayName = 'List.Table';
+
 export default ListTable;

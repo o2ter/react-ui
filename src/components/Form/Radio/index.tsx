@@ -38,14 +38,14 @@ type FormRadioProps = TextProps & {
   tabIndex?: number;
 }
 
-export const FormRadio = React.forwardRef<React.ComponentRef<typeof Icon>, FormRadioProps>(({
+export const FormRadio = React.forwardRef(_.assign(({
   name,
   value,
   style,
   onPress,
   children,
   ...props
-}, forwardRef) => {
+}: FormRadioProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Icon>>) => {
 
   const { value: _value, onChange } = useField(name);
   const theme = useTheme();
@@ -78,6 +78,8 @@ export const FormRadio = React.forwardRef<React.ComponentRef<typeof Icon>, FormR
       ]}
       {..._props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>
   )
-});
+}, {
+  displayName: 'Form.Radio'
+}));
 
 export default FormRadio;

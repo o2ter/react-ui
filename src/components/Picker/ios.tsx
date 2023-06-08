@@ -29,7 +29,7 @@ import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { PickerNative, PickerNativeProps } from './native';
 import { useTheme } from '../../theme';
 
-export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
+export const PickerIOS = React.forwardRef(_.assign(({
   value,
   items = [],
   disabled = false,
@@ -38,7 +38,7 @@ export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}, forwardRef) => {
+}: PickerNativeProps, forwardRef: React.ForwardedRef<Text>) => {
 
   const selected = _.find(items, x => x.value === value);
 
@@ -98,6 +98,8 @@ export const PickerIOS = React.forwardRef<Text, PickerNativeProps>(({
       </Modal>
     </React.Fragment>
   )
-});
+}, {
+  displayName: 'Picker',
+}));
 
 export default PickerIOS;

@@ -60,6 +60,8 @@ const FormContext = React.createContext<FormState>({
   setTouched: () => { },
 });
 
+FormContext.displayName = 'FormContext';
+
 const defaultValidation = (validate: (value: any) => ValidateError[]) => {
 
   let cache: [any, ValidateError[]] = [null, []];
@@ -98,7 +100,7 @@ type FormProps = {
   children: React.ReactNode | ((state: FormState) => React.ReactNode);
 };
 
-export const Form = React.forwardRef<FormState, FormProps>(({
+export const Form = React.forwardRef(_.assign(({
   schema = {},
   initialValues = object(schema).getDefault() ?? {},
   validate,
@@ -110,7 +112,7 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   onSubmit = () => { },
   onError = () => { },
   children
-}, forwardRef) => {
+}: FormProps, forwardRef: React.ForwardedRef<FormState>) => {
 
   const [counts, setCounts] = React.useState({ submit: 0, reset: 0, actions: {} as Record<string, number> });
   const [values, setValues] = React.useState(initialValues);
@@ -184,7 +186,9 @@ export const Form = React.forwardRef<FormState, FormProps>(({
   return <FormContext.Provider value={formState}>
     {_.isFunction(children) ? children(formState) : children}
   </FormContext.Provider>;
-});
+}, {
+  displayName: 'Form',
+}));
 
 export const FormConsumer = FormContext.Consumer;
 

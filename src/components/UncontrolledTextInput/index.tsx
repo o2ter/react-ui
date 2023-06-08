@@ -27,11 +27,11 @@ import _ from 'lodash';
 import React from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 
-export const UncontrolledTextInput = React.forwardRef<TextInput, TextInputProps>(({
+export const UncontrolledTextInput = React.forwardRef(_.assign(({
   value,
   onChangeText,
   ...props
-}, forwardRef) => {
+}: TextInputProps, forwardRef: React.ForwardedRef<TextInput>) => {
 
   const [text, setText] = React.useState<string | null>(null);
 
@@ -50,6 +50,8 @@ export const UncontrolledTextInput = React.forwardRef<TextInput, TextInputProps>
       onSubmitEditing={() => submit()}
       {...props} />
   );
-});
+}, {
+  displayName: 'UncontrolledTextInput',
+}));
 
 export default UncontrolledTextInput;

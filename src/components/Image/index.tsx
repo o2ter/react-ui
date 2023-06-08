@@ -33,11 +33,11 @@ type ImageProps = Modify<RNImageProps, {
   source: ImageURISource | ImageRequireSource;
 }>
 
-export const Image = React.forwardRef<React.ComponentRef<typeof ImageBase>, ImageProps>(({
+export const Image = React.forwardRef(_.assign(({
   source,
   style,
   ...props
-}, forwardRef) => {
+}: ImageProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof ImageBase>>) => {
 
   const {
     width,
@@ -77,6 +77,8 @@ export const Image = React.forwardRef<React.ComponentRef<typeof ImageBase>, Imag
     source={source}
     style={[{ width: _width, height: _height, aspectRatio }, _style]}
     {...props} />;
-});
+}, {
+  displayName: 'Image',
+}));
 
 export default Image;

@@ -40,6 +40,8 @@ const ListContext = React.createContext<ListState>({
   state: {},
 });
 
+ListContext.displayName = 'ListContext';
+
 type ListContentProps = {
   values: Record<string, any>;
   resource: (state: Record<string, any>) => PromiseLike<any>;
@@ -47,12 +49,12 @@ type ListContentProps = {
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
 };
 
-const ListContent = React.forwardRef<ListState, ListContentProps>(({
+const ListContent = React.forwardRef(_.assign(({
   values,
   resource: query,
   debounce,
   children
-}, forwardRef) => {
+}: ListContentProps, forwardRef: React.ForwardedRef<ListState>) => {
 
   const {
     count,
@@ -72,7 +74,9 @@ const ListContent = React.forwardRef<ListState, ListContentProps>(({
       {_.isFunction(children) ? children(state) : children}
     </ListContext.Provider>
   );
-});
+}, {
+  displayName: 'List.Content',
+}));
 
 export const useList = () => ({
   ...React.useContext(ListContext),
@@ -87,11 +91,11 @@ type ListProps = {
   children: React.ReactNode | ((state: ListState) => React.ReactNode);
 };
 
-export const List = React.forwardRef<ListState, ListProps>(({
+export const List = React.forwardRef(_.assign(({
   autoRefresh,
   initialState,
   ...props
-}, forwardRef) => {
+}: ListProps, forwardRef: React.ForwardedRef<ListState>) => {
 
   const listRef = React.useRef<ListState>();
   const ref = useMergeRefs(listRef, forwardRef);
@@ -105,6 +109,8 @@ export const List = React.forwardRef<ListState, ListProps>(({
       {state => <ListContent ref={ref} values={state.values} {...props} />}
     </Form>
   );
-});
+}, {
+  displayName: 'List',
+}));
 
 export default List;

@@ -35,11 +35,11 @@ type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput
   name: string | string[];
 }>
 
-export const FormTextField = React.forwardRef<React.ComponentRef<typeof TextInput>, FormTextFieldProps>(({
+export const FormTextField = React.forwardRef(_.assign(({
   name,
   style,
   ...props
-}, forwardRef) => {
+}: FormTextFieldProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>) => {
 
   const { value, error, touched, setTouched, onChange, submit } = useField(name);
   const theme = useTheme();
@@ -61,6 +61,8 @@ export const FormTextField = React.forwardRef<React.ComponentRef<typeof TextInpu
       ]}
       {...props} />
   );
-});
+}, {
+  displayName: 'Form.TextField'
+}));
 
 export default FormTextField;

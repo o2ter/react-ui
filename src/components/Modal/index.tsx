@@ -30,6 +30,7 @@ import { View, Pressable, StyleSheet, Platform } from 'react-native';
 import { useTheme } from '../../theme';
 
 const ModalContext = React.createContext((element?: React.ReactElement) => { });
+ModalContext.displayName = 'ModalContext';
 
 export const useModal = () => React.useContext(ModalContext);
 
@@ -75,3 +76,5 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
     </View>}
   </ModalContext.Provider>;
 };
+
+ModalProvider.displayName = 'ModalProvider';

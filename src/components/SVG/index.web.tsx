@@ -28,11 +28,11 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SVGProps } from './types';
 
-export const SVG = React.forwardRef<View, SVGProps>(({
+export const SVG = React.forwardRef(_.assign(({
   source,
   style,
   ...props
-}, forwardRef) => {
+}: SVGProps, forwardRef: React.ForwardedRef<View>) => {
 
   const {
     width,
@@ -65,6 +65,8 @@ export const SVG = React.forwardRef<View, SVGProps>(({
   }
 
   return <View ref={forwardRef} style={[{ width, height, aspectRatio }, _style]} {...props} />;
-});
+}, {
+  displayName: 'SVG',
+}));
 
 export default SVG;

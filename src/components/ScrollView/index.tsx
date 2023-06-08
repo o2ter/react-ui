@@ -59,7 +59,7 @@ type ScrollViewProps = Modify<RNScrollViewProps, {
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const ScrollView = React.forwardRef<ScrollViewRef, ScrollViewProps>(({
+export const ScrollView = React.forwardRef(_.assign(({
   onRefresh,
   onLayout,
   onContentSizeChange,
@@ -71,7 +71,7 @@ export const ScrollView = React.forwardRef<ScrollViewRef, ScrollViewProps>(({
   horizontal = false,
   children,
   ...props
-}, forwardRef) => {
+}: ScrollViewProps, forwardRef: React.ForwardedRef<ScrollViewRef>) => {
 
   const scrollViewRef = React.useRef<ScrollViewRef>();
   const ref = useMergeRefs(scrollViewRef, forwardRef);
@@ -112,6 +112,8 @@ export const ScrollView = React.forwardRef<ScrollViewRef, ScrollViewProps>(({
       {children}
     </ScrollLayoutContext.Provider></ScrollViewContext.Provider>
   </ScrollViewBase>;
-});
+}, {
+  displayName: 'ScrollView',
+}));
 
 export default ScrollView;

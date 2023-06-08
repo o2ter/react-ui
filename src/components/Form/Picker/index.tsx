@@ -36,12 +36,12 @@ type FormPickerProps = Modify<React.ComponentPropsWithoutRef<typeof Picker>, {
   name: string | string[];
 }>
 
-export const FormPicker = React.forwardRef<React.ComponentRef<typeof Picker>, FormPickerProps>(({
+export const FormPicker = React.forwardRef(_.assign(({
   name,
   style,
   items,
   ...props
-}, forwardRef) => {
+}: FormPickerProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Picker>>) => {
 
   const { value, error, touched, setTouched, onChange } = useField(name);
   const theme = useTheme();
@@ -70,6 +70,8 @@ export const FormPicker = React.forwardRef<React.ComponentRef<typeof Picker>, Fo
       ]}
       {...props} />
   )
-});
+}, {
+  displayName: 'Form.Picker'
+}));
 
 export default FormPicker;

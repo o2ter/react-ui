@@ -38,14 +38,14 @@ type FormCheckboxProps = TextProps & {
   tabIndex?: number;
 }
 
-export const FormCheckbox = React.forwardRef<React.ComponentRef<typeof Icon>, FormCheckboxProps>(({
+export const FormCheckbox = React.forwardRef(_.assign(({
   name,
   value,
   style,
   onPress,
   children,
   ...props
-}, forwardRef) => {
+}: FormCheckboxProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Icon>>) => {
 
   const { value: state, onChange } = useField(name);
   const theme = useTheme();
@@ -81,6 +81,8 @@ export const FormCheckbox = React.forwardRef<React.ComponentRef<typeof Icon>, Fo
       ]}
       {..._props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>
   )
-});
+}, {
+  displayName: 'Form.Checkbox'
+}));
 
 export default FormCheckbox;

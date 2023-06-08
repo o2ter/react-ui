@@ -45,6 +45,8 @@ export const ListTableContext = React.createContext<Required<ListTableProviderPr
   BodyColumnComponent: ({ children }) => <td>{children}</td>,
 });
 
+ListTableContext.displayName = 'List.TableContext';
+
 export const ListTableProvider: React.FC<React.PropsWithChildren<ListTableProviderProps>> = ({
   children,
   ...props
@@ -53,3 +55,5 @@ export const ListTableProvider: React.FC<React.PropsWithChildren<ListTableProvid
   const value = React.useMemo(() => ({ ...parent, ...props }), [parent, useEquivalent(props)]);
   return <ListTableContext.Provider value={value}>{children}</ListTableContext.Provider>;
 }
+
+ListTableProvider.displayName = 'List.TableProvider';

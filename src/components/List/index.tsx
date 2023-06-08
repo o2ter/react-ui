@@ -53,4 +53,6 @@ export const List = <D extends ArrayLike<any>>({
   return React.createElement(React.Fragment, {}, ...elements);
 };
 
+List.displayName = 'List';
+
 export default List;

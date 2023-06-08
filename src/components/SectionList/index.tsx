@@ -42,7 +42,7 @@ type SectionListProps<ItemT = any> = Modify<RNSectionListProps<ItemT>, {
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const SectionList = React.forwardRef<React.ComponentRef<typeof RNSectionList<any, DefaultSectionT>>, SectionListProps>(({
+export const SectionList = React.forwardRef(_.assign(({
   data,
   extraData,
   onRefresh,
@@ -52,7 +52,7 @@ export const SectionList = React.forwardRef<React.ComponentRef<typeof RNSectionL
   renderItem,
   children,
   ...props
-}, forwardRef) => {
+}: SectionListProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNSectionList<any, DefaultSectionT>>>) => {
 
   const theme = useTheme();
   const _renderItem = React.useCallback(renderItem ?? (() => <></>), [data, extraData]);
@@ -68,6 +68,8 @@ export const SectionList = React.forwardRef<React.ComponentRef<typeof RNSectionL
       refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : undefined}
       {...props} />
   )
-});
+}, {
+  displayName: 'SectionList',
+}));
 
 export default SectionList;

@@ -66,7 +66,7 @@ type CalendarProps = Modify<ViewProps, {
   onChange?: (date: string[]) => void;
 }>
 
-const CalendarBase = React.forwardRef<View, CalendarProps>(({
+const CalendarBase = React.forwardRef(_.assign(({
   value,
   min,
   max,
@@ -74,7 +74,7 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
   style,
   selectable = () => true,
   onChange
-}, forwardRef) => {
+}: CalendarProps, forwardRef: React.ForwardedRef<View>) => {
 
   const theme = useTheme();
   const locale = Localization.useLocalize();
@@ -175,7 +175,9 @@ const CalendarBase = React.forwardRef<View, CalendarProps>(({
       }} {...current} />
     </View>
   )
-});
+}, {
+  displayName: 'Calendar',
+}));
 
 export const Calendar = _.assign(CalendarBase, { Date: _Date });
 

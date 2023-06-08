@@ -53,7 +53,7 @@ type CodeMirrorProps = Modify<React.ComponentPropsWithoutRef<typeof View>, {
   keymaps?: any[];
 }>
 
-export const CodeMirror = React.forwardRef<React.ComponentRef<typeof View>, CodeMirrorProps>(({
+export const CodeMirror = React.forwardRef(_.assign(({
   theme,
   darkMode = false,
   initialValue,
@@ -71,7 +71,7 @@ export const CodeMirror = React.forwardRef<React.ComponentRef<typeof View>, Code
   tabSize = 4,
   keymaps = [],
   ...props
-}, forwardRef) => {
+}: CodeMirrorProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>) => {
 
   const codeMirror = React.useRef<EditorView>();
   const containerRef = React.useRef<React.ComponentRef<typeof View>>();
@@ -128,6 +128,8 @@ export const CodeMirror = React.forwardRef<React.ComponentRef<typeof View>, Code
   }, []);
 
   return <View ref={ref} {...props} />;
-});
+}, {
+  displayName: 'CodeMirror',
+}));
 
 export default CodeMirror;

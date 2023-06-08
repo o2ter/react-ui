@@ -37,6 +37,8 @@ const ActivityIndicatorContext = React.createContext<{
   defaultDelay: 250,
 });
 
+ActivityIndicatorContext.displayName = 'ActivityIndicatorContext';
+
 export const useActivity = () => {
 
   const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
@@ -131,6 +133,8 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
     </Animated.View>}
   </ActivityIndicatorContext.Provider>;
 };
+
+ActivityIndicatorProvider.displayName = 'ActivityIndicatorProvider';
 
 const style = StyleSheet.create({
 

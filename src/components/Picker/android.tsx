@@ -29,7 +29,7 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { PickerNative, PickerNativeProps } from './native';
 import { useTheme } from '../../theme';
 
-export const PickerAndroid = React.forwardRef<Text, PickerNativeProps>(({
+export const PickerAndroid = React.forwardRef(_.assign(({
   value,
   items = [],
   disabled = false,
@@ -38,7 +38,7 @@ export const PickerAndroid = React.forwardRef<Text, PickerNativeProps>(({
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}, forwardRef) => {
+}: PickerNativeProps, forwardRef: React.ForwardedRef<Text>) => {
 
   const selected = _.find(items, x => x.value === value);
 
@@ -61,6 +61,8 @@ export const PickerAndroid = React.forwardRef<Text, PickerNativeProps>(({
         }]} />
     </TouchableOpacity>
   )
-});
+}, {
+  displayName: 'Picker',
+}));
 
 export default PickerAndroid;

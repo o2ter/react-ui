@@ -37,13 +37,13 @@ type QRCodeProps = Modify<SvgProps, {
   backgroundColor?: ColorValue;
 }>
 
-export const QRCode = React.forwardRef<Svg, QRCodeProps>(({
+export const QRCode = React.forwardRef(_.assign(({
   value = '',
   options = {},
   color = 'black',
   backgroundColor,
   ...props
-}, forwardRef) => {
+}: QRCodeProps, forwardRef: React.ForwardedRef<Svg>) => {
 
   const { path, size } = React.useMemo(() => {
 
@@ -74,6 +74,8 @@ export const QRCode = React.forwardRef<Svg, QRCodeProps>(({
     {backgroundColor && <Rect x={0} y={0} width={size} height={size} fill={backgroundColor} />}
     <Path d={path} fill={color} />
   </Svg>;
-});
+}, {
+  displayName: 'QRCode',
+}));
 
 export default QRCode;

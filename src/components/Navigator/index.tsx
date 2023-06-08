@@ -71,6 +71,8 @@ export const Route: React.FC<{
   `never rendered directly. Please wrap your <Route> in a <Navigator>.`
 );
 
+Route.displayName = 'Route';
+
 function createRoutesFromChildren(children: React.ReactNode) {
 
   const routes: any[] = [];
@@ -129,6 +131,8 @@ const RouteObject: React.FC<React.PropsWithChildren<React.ComponentPropsWithoutR
   return <Component {...props}>{children}</Component>;
 }
 
+RouteObject.displayName = 'RouteObject';
+
 function routesBuilder(routes: any[]): any {
 
   const result = [];
@@ -157,3 +161,6 @@ function routesBuilder(routes: any[]): any {
 }
 
 export const Navigator: React.FC<React.PropsWithChildren> = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));
+
+
+Navigator.displayName = 'Navigator';

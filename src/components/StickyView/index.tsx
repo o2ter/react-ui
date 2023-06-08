@@ -82,13 +82,15 @@ const StickyContainer: React.FC<{
   </View>;
 }
 
-export const StickyView = React.forwardRef<View, StickyViewProps>(({
+StickyContainer.displayName = 'StickyContainer';
+
+export const StickyView = React.forwardRef(_.assign(({
   onLayout,
   stickyContainerStyle,
   stickyView,
   children,
   ...props
-}, forwardRef) => {
+}: StickyViewProps, forwardRef: React.ForwardedRef<View>) => {
 
   const containerRef = React.useRef<View>();
   const ref = useMergeRefs(containerRef, forwardRef);
@@ -122,6 +124,8 @@ export const StickyView = React.forwardRef<View, StickyViewProps>(({
       renderItem={stickyView} />}
     {children}
   </View>;
-});
+}, {
+  displayName: 'StickyView',
+}));
 
 export default StickyView;

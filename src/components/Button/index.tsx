@@ -78,7 +78,7 @@ const ButtonText = Animated.createAnimatedComponent(class extends React.PureComp
   }
 });
 
-export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
+export const Button = React.forwardRef(_.assign(({
   color,
   variant = 'primary',
   outline = false,
@@ -94,7 +94,7 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
   onPressIn,
   onPressOut,
   ...props
-}, forwardRef) => {
+}: ButtonProps, forwardRef: React.ForwardedRef<typeof AnimatedPressable>) => {
 
   const [focused, setFocused] = React.useState({ hovered: false, pressed: false });
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
@@ -193,6 +193,8 @@ export const Button = React.forwardRef<typeof AnimatedPressable, ButtonProps>(({
       {content}
     </AnimatedPressable>
   );
-})
+}, {
+  displayName: 'Button',
+}))
 
 export default Button;

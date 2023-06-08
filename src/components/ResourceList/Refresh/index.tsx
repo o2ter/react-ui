@@ -29,17 +29,19 @@ import { Button } from '../../Button';
 import Icon from '../../Icon';
 import { useList } from '../List';
 
-export const ListRefresh = React.forwardRef<React.ComponentRef<typeof Button>, React.ComponentPropsWithoutRef<typeof Button>>(({
+export const ListRefresh = React.forwardRef(_.assign(({
   title,
   children,
   ...props
-}, forwardRef) => {
+}: React.ComponentPropsWithoutRef<typeof Button>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Button>>) => {
   const { refresh } = useList();
   return (
     <Button ref={forwardRef} onPress={refresh} title={title} {...props}>
       {_.isEmpty(children) && _.isEmpty(title) ? <Icon icon='FontAwesome' name='refresh' /> : children}
     </Button>
   );
-});
+}, {
+  displayName: 'List.Refresh',
+}));
 
 export default ListRefresh;

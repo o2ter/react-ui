@@ -44,4 +44,6 @@ export const ViewStyleProvider: React.FC<React.PropsWithChildren<{
   );
 }
 
+ViewStyleProvider.displayName = 'ViewStyleProvider';
+
 export const useViewStyle = () => React.useContext(ViewStyleContext);

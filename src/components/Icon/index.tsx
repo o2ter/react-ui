@@ -39,14 +39,14 @@ type IconProps = Modify<TextProps, {
   iconStyle?: StyleProp<TextStyle>;
 }>
 
-export const Icon = React.forwardRef<React.ComponentRef<typeof Text>, IconProps>(({
+export const Icon = React.forwardRef(_.assign(({
   icon,
   name,
   style,
   iconStyle,
   children,
   ...props
-}, forwardRef) => {
+}: IconProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>) => {
 
   const _Icon = ICON_SETS[icon];
 
@@ -61,6 +61,8 @@ export const Icon = React.forwardRef<React.ComponentRef<typeof Text>, IconProps>
     {!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_iconStyle, text_style)} />}
     {children}
   </Text>;
-});
+}, {
+  displayName: 'Icon',
+}));
 
 export default Icon;

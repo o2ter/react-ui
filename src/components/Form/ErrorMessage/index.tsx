@@ -36,11 +36,11 @@ type FormErrorMessageProps = Modify<TextProps, {
   name: string | string[];
 }>
 
-export const FormErrorMessage = React.forwardRef<Text, FormErrorMessageProps>(({
+export const FormErrorMessage = React.forwardRef(_.assign(({
   name,
   style,
   ...props
-}, forwardRef) => {
+}: FormErrorMessageProps, forwardRef: React.ForwardedRef<Text>) => {
 
   const { error, touched } = useField(name);
   const theme = useTheme();
@@ -60,6 +60,8 @@ export const FormErrorMessage = React.forwardRef<Text, FormErrorMessageProps>(({
       ]} {...props}>{message}</Text>}
     </React.Fragment>
   );
-});
+}, {
+  displayName: 'Form.ErrorMessage'
+}));
 
 export default FormErrorMessage;

@@ -120,4 +120,6 @@ const LottieBase = React.forwardRef<View, LottieProps>(({
 
 export const Lottie = Animated.createAnimatedComponent(LottieBase);
 
+Lottie.displayName = 'Lottie';
+
 export default Lottie;

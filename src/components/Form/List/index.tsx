@@ -38,6 +38,8 @@ const FormListContext = React.createContext<{
   remove: () => { },
 });
 
+FormListContext.displayName = 'Form.ListContext';
+
 export const useFormList = () => React.useContext(FormListContext);
 
 type FormListProps = Modify<_.Omit<React.ComponentPropsWithoutRef<typeof List<any[]>>, 'data'>, {
@@ -50,13 +52,13 @@ type FormListProps = Modify<_.Omit<React.ComponentPropsWithoutRef<typeof List<an
   }>>;
 }>
 
-export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormListProps>(({
+export const FormList = React.forwardRef(_.assign(({
   name,
   keyExtractor,
   renderItem,
   ListComponent = ({ children }) => <>{children}</>,
   ...props
-}, forwardRef) => {
+}: FormListProps, forwardRef: React.ForwardedRef<ReturnType<typeof useFormList>>) => {
 
   const { value, onChange } = useField(name);
   const data = React.useMemo(() => _.castArray(value ?? []), [value]);
@@ -88,6 +90,8 @@ export const FormList = React.forwardRef<ReturnType<typeof useFormList>, FormLis
       </_ListComponent>
     </FormListContext.Provider>
   );
-});
+}, {
+  displayName: 'Form.List'
+}));
 
 export default FormList;

@@ -44,7 +44,7 @@ type SegmentedControlBaseProps<T = any> = Modify<ViewProps, {
 
 type SegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { tabStyle?: StyleProp<ViewStyle>; }>
 
-export const SegmentedControl = React.forwardRef<View, SegmentedControlProps>(({
+export const SegmentedControl = React.forwardRef(_.assign(({
   value,
   style,
   onChange,
@@ -55,7 +55,7 @@ export const SegmentedControl = React.forwardRef<View, SegmentedControlProps>(({
   segmentContainerStyle,
   selectedSegmentContainerStyle,
   ...props
-}, forwardRef) => {
+}: SegmentedControlProps, forwardRef: React.ForwardedRef<View>) => {
 
   const [segmentBounds, setSegmentBounds] = React.useState<Record<number, LayoutRectangle>>({});
   const selected_idx = Math.max(0, _.findIndex(segments, x => x.value === value));
@@ -102,11 +102,13 @@ export const SegmentedControl = React.forwardRef<View, SegmentedControlProps>(({
           onPress={() => { if (_.isFunction(onChange)) onChange(item.value) }} />
       )} />
   </View>;
-});
+}, {
+  displayName: 'SegmentedControl',
+}));
 
 type PlainSegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { color?: string; }>
 
-export const PlainSegmentedControl = React.forwardRef<View, PlainSegmentedControlProps>(({
+export const PlainSegmentedControl = React.forwardRef(_.assign(({
   value,
   style,
   color = '#2196F3',
@@ -117,7 +119,7 @@ export const PlainSegmentedControl = React.forwardRef<View, PlainSegmentedContro
   segmentContainerStyle,
   selectedSegmentContainerStyle,
   ...props
-}, forwardRef) => {
+}: PlainSegmentedControlProps, forwardRef: React.ForwardedRef<View>) => {
 
   const selected_idx = Math.max(0, _.findIndex(segments, x => x.value === value));
 
@@ -138,4 +140,6 @@ export const PlainSegmentedControl = React.forwardRef<View, PlainSegmentedContro
           onPress={() => { if (_.isFunction(onChange)) onChange(item.value) }} />
       )} />
   </View>;
-});
+}, {
+  displayName: 'PlainSegmentedControl',
+}));

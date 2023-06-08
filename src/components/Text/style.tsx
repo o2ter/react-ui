@@ -44,4 +44,6 @@ export const TextStyleProvider: React.FC<React.PropsWithChildren<{
   );
 }
 
+TextStyleProvider.displayName = 'TextStyleProvider';
+
 export const useTextStyle = () => React.useContext(TextStyleContext);

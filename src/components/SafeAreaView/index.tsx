@@ -61,13 +61,13 @@ type SafeAreaViewProps = Modify<ViewProps, {
   edges: InsetEdge[]
 }>
 
-export const SafeAreaView = React.forwardRef<View, SafeAreaViewProps>(({
+export const SafeAreaView = React.forwardRef(_.assign(({
   style,
   edges,
   children,
   onLayout,
   ...props
-}, forwardRef) => {
+}: SafeAreaViewProps, forwardRef: React.ForwardedRef<View>) => {
 
   const viewRef = React.useRef<View>();
   const ref = useMergeRefs(viewRef, forwardRef);
@@ -108,4 +108,6 @@ export const SafeAreaView = React.forwardRef<View, SafeAreaViewProps>(({
       paddingRight: _.isNumber(paddingRight) ? paddingRight + insetRight : paddingRight,
       paddingBottom: _.isNumber(paddingBottom) ? paddingBottom + insetBottom : paddingBottom,
     }, _style]} {...props}>{children}</View>;
-});
+}, {
+  displayName: 'SafeAreaView',
+}));

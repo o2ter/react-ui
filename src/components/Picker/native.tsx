@@ -41,7 +41,7 @@ export type PickerNativeProps<T = ItemValue> = {
   onBlur?: VoidFunction;
 }
 
-export const PickerNative = React.forwardRef<RNPicker<ItemValue>, PickerNativeProps>(({
+export const PickerNative = React.forwardRef(_.assign(({
   value,
   items,
   disabled = false,
@@ -49,7 +49,7 @@ export const PickerNative = React.forwardRef<RNPicker<ItemValue>, PickerNativePr
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}, forwardRef) => {
+}: PickerNativeProps, forwardRef: React.ForwardedRef<RNPicker<ItemValue>>) => {
 
   const id = React.useId();
   const _style = React.useMemo(() => StyleSheet.flatten(style), [style]);
@@ -66,6 +66,8 @@ export const PickerNative = React.forwardRef<RNPicker<ItemValue>, PickerNativePr
       {_.map(items, (item, index) => <RNPicker.Item key={`${id}-${index}`} {...item} />)}
     </RNPicker>
   );
-});
+}, {
+  displayName: 'Picker',
+}));
 
 export default PickerNative;

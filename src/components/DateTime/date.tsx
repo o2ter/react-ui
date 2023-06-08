@@ -35,7 +35,7 @@ import { useDefaultInputStyle } from '../TextInput/style';
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
 type DatePickerProps = Modify<TextProps, DatePickerBaseProps>;
 
-export const DatePicker = React.forwardRef<React.ComponentRef<typeof PickerBase>, DatePickerProps>(({
+export const DatePicker = React.forwardRef(_.assign(({
   value,
   min,
   max,
@@ -46,7 +46,7 @@ export const DatePicker = React.forwardRef<React.ComponentRef<typeof PickerBase>
   style,
   children,
   ...props
-}, forwardRef) => {
+}: DatePickerProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerBase>>) => {
 
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme);
@@ -85,6 +85,8 @@ export const DatePicker = React.forwardRef<React.ComponentRef<typeof PickerBase>
       picker={<_Calendar />}
       {...props} />
   )
-});
+}, {
+  displayName: 'DatePicker',
+}));
 
 export default DatePicker;

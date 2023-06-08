@@ -33,14 +33,14 @@ type LottieProps = Modify<AnimatedLottieViewProps, {
   source: AnimationObject;
 }>
 
-export const Lottie = React.forwardRef<RNLottie, LottieProps>(({
+export const Lottie = React.forwardRef(_.assign(({
   source,
   style,
   duration = 0,
   loop = true,
   autoPlay = false,
   ...props
-}, forwardRef) => {
+}: LottieProps, forwardRef: React.ForwardedRef<RNLottie>) => {
 
   const _style = StyleSheet.flatten(style) ?? {};
 
@@ -65,6 +65,8 @@ export const Lottie = React.forwardRef<RNLottie, LottieProps>(({
     loop={loop}
     style={[{ aspectRatio, width: _width, height: _height }, style]}
     {...props} />;
-});
+}, {
+  displayName: 'Lottie',
+}));
 
 export default Lottie;

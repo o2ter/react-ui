@@ -57,7 +57,7 @@ function registerEventListener(nodeHandle: EventTarget | undefined, event: strin
 
 const empty_function = () => { };
 
-export const Touchable = React.forwardRef<TouchableWithoutFeedback, TouchableProps>(({
+export const Touchable = React.forwardRef(_.assign(({
   onDragStart,
   onDragEnd,
   onDrop,
@@ -68,7 +68,7 @@ export const Touchable = React.forwardRef<TouchableWithoutFeedback, TouchablePro
   onHoverOut,
   children,
   ...props
-}, forwardRef) => {
+}: TouchableProps, forwardRef: React.ForwardedRef<TouchableWithoutFeedback>) => {
 
   const [nodeHandle, setNodeHandle] = React.useState<Element & EventTarget>();
 
@@ -109,6 +109,8 @@ export const Touchable = React.forwardRef<TouchableWithoutFeedback, TouchablePro
   return <NodeHandleProvider onChangeHandle={setNodeHandle}>
     <TouchableWithoutFeedback ref={forwardRef} {...props}>{children}</TouchableWithoutFeedback>
   </NodeHandleProvider>;
-});
+}, {
+  displayName: 'Touchable',
+}));
 
 export default Touchable;

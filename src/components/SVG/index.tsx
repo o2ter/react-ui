@@ -54,4 +54,6 @@ export const SVG: React.FC<SVGProps> = ({
   return <View style={[{ width, height }, _style]} {...props} />
 };
 
+SVG.displayName = 'SVG';
+
 export default SVG;

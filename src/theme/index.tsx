@@ -47,13 +47,15 @@ const ThemeContext = React.createContext({
   styles: defaultStyle,
 });
 
+ThemeContext.displayName = 'ThemeContext';
+
 type _simpleStylesKeys = keyof typeof _simpleStyles;
 
-export const ThemeProvider = ({
+export const ThemeProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>> = ({
   variables,
   styles,
   children
-}: React.PropsWithChildren<ThemeProviderProps>) => {
+}) => {
 
   const parent = React.useContext(ThemeContext);
   const _variables = useEquivalent(_.isFunction(variables) ? variables(parent.variables) : variables);
@@ -82,6 +84,8 @@ export const ThemeProvider = ({
     </ThemeContext.Provider>
   );
 };
+
+ThemeProvider.displayName = 'ThemeProvider';
 
 const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends any>(
   breakpoint: string,

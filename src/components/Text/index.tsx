@@ -29,11 +29,11 @@ import { Text as RNText, TextProps, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme';
 import { useTextStyle } from './style';
 
-export const Text = React.forwardRef<RNText, TextProps>(({
+export const Text = React.forwardRef(_.assign(({
   style,
   children,
   ...props
-}, forwardRef) => {
+}: TextProps, forwardRef: React.ForwardedRef<RNText>) => {
 
   const theme = useTheme();
   const textStyle = useTextStyle();
@@ -47,6 +47,8 @@ export const Text = React.forwardRef<RNText, TextProps>(({
       {children}
     </RNText>
   );
-});
+}, {
+  displayName: 'Text',
+}));
 
 export default Text;

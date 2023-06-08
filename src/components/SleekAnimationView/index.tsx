@@ -37,14 +37,14 @@ type SleekAnimationViewProps = Modify<Omit<React.ComponentPropsWithoutRef<typeof
   resizeMode?: ImageResizeMode;
 }>
 
-export const SleekAnimationView = React.forwardRef<React.ComponentRef<typeof StickyView>, SleekAnimationViewProps>(({
+export const SleekAnimationView = React.forwardRef(_.assign(({
   backgroundContainerStyle,
   backgroundStyle,
   backgroundImages = [],
   resizeMode,
   children,
   ...props
-}, forwardRef) => (
+}: SleekAnimationViewProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof StickyView>>) => (
   <StickyView
     ref={forwardRef}
     stickyContainerStyle={[{ zIndex: -1 }, backgroundContainerStyle]}
@@ -61,6 +61,8 @@ export const SleekAnimationView = React.forwardRef<React.ComponentRef<typeof Sti
     {...props}>
     {children}
   </StickyView>
-));
+), {
+  displayName: 'SleekAnimationView',
+}));
 
 export default SleekAnimationView;

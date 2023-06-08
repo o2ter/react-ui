@@ -44,14 +44,14 @@ type BarcodeProps = Modify<SvgProps, {
   backgroundColor?: ColorValue;
 }>
 
-export const Barcode = React.forwardRef<Svg, BarcodeProps>(({
+export const Barcode = React.forwardRef(_.assign(({
   value = '',
   format = 'CODE128',
   options = {},
   color = 'black',
   backgroundColor,
   ...props
-}, forwardRef) => {
+}: BarcodeProps, forwardRef: React.ForwardedRef<Svg>) => {
 
   const { rects, size } = React.useMemo(() => {
 
@@ -90,6 +90,8 @@ export const Barcode = React.forwardRef<Svg, BarcodeProps>(({
     {backgroundColor && <Rect x={0} y={0} width={size} height={100} fill={backgroundColor} />}
     <List data={rects} renderItem={({ item }) => <Rect y={0} height={100} fill={color} {...item} />} />
   </Svg>;
-});
+}, {
+  displayName: 'Barcode',
+}));
 
 export default Barcode;

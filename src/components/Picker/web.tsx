@@ -41,7 +41,7 @@ const _style = StyleSheet.create({
   }
 }) as any;
 
-export const PickerWeb = React.forwardRef<React.ComponentRef<typeof PickerNative>, PickerNativeProps>(({
+export const PickerWeb = React.forwardRef(_.assign(({
   value,
   items = [],
   disabled = false,
@@ -50,7 +50,7 @@ export const PickerWeb = React.forwardRef<React.ComponentRef<typeof PickerNative
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}, forwardRef) => {
+}: PickerNativeProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerNative>>) => {
 
   const theme = useTheme();
 
@@ -66,6 +66,8 @@ export const PickerWeb = React.forwardRef<React.ComponentRef<typeof PickerNative
       onBlur={onBlur}
       style={[_style.picker, theme.styles.pickerStyle, style]} />
   );
-});
+}, {
+  displayName: 'Picker',
+}));
 
 export default PickerWeb;

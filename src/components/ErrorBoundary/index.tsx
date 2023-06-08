@@ -58,6 +58,11 @@ class _ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 }
 
-export const ErrorBoundary = React.forwardRef<React.ComponentRef<typeof _ErrorBoundary>, ErrorBoundaryProps>((props, forwardRef) => <_ErrorBoundary ref={forwardRef} {...props} />);
+export const ErrorBoundary = React.forwardRef(_.assign((
+  props: ErrorBoundaryProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof _ErrorBoundary>>
+) => <_ErrorBoundary ref={forwardRef} {...props} />, {
+  displayName: 'ErrorBoundary',
+}));
 
 export default ErrorBoundary;

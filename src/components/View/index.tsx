@@ -29,11 +29,11 @@ import { View as RNView, ViewProps } from 'react-native';
 import { useTheme } from '../../theme';
 import { useViewStyle } from './style';
 
-export const View = React.forwardRef<RNView, ViewProps>(({
+export const View = React.forwardRef(_.assign(({
   style,
   children,
   ...props
-}, forwardRef) => {
+}: ViewProps, forwardRef: React.ForwardedRef<RNView>) => {
 
   const theme = useTheme();
   const viewStyle = useViewStyle();
@@ -46,6 +46,8 @@ export const View = React.forwardRef<RNView, ViewProps>(({
       {children}
     </RNView>
   );
-});
+}, {
+  displayName: 'View',
+}));
 
 export default View;

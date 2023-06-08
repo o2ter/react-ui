@@ -44,3 +44,5 @@ export const FormGroup: React.FC<React.PropsWithChildren<{
     </FormGroupContext.Provider>
   )
 };
+
+FormGroup.displayName = 'Form.Group';
