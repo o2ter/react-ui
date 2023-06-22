@@ -38,7 +38,44 @@ export const _colorContrast = (theme: ThemeVariables) => (background: string | C
   theme.minContrastRatio
 );
 
-export const _simpleStyles = {
+const defaultPalette = (
+  theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
+) => ({
+
+  buttonColors: memoize((color: string) => ({
+    color: theme.colorContrast(color),
+    backgroundColor: color,
+    borderColor: color,
+  })),
+
+  buttonFocusedColors: memoize((color: string) => {
+    const _color = theme.colorContrast(color);
+    const _color2 = _color === _hex(theme.colorContrastLight) ? shadeColor(color, 0.2) : tintColor(color, 0.2);
+    return ({
+      color: _color,
+      backgroundColor: _color2,
+      borderColor: _color2,
+    });
+  }),
+
+  toastColors: memoize((color: string) => ({
+    color: theme.themeColors[color] ?? theme.colors[color] ?? color,
+    borderColor: theme.themeColors[color] ?? theme.colors[color] ?? color,
+    messageColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[800]),
+    backgroundColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[100]),
+  })),
+
+  formCheckboxColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
+
+  formRadioColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
+
+});
+
+export const defaultStyle = (
+  ...args: Parameters<typeof defaultPalette>
+) => ({
+
+  ...defaultPalette(...args),
 
   viewStyle: {} as StyleProp<ViewStyle>,
   textStyle: {} as StyleProp<TextStyle>,
@@ -93,42 +130,7 @@ export const _simpleStyles = {
   formDateStyle: {} as StyleProp<TextStyle>,
   formDateErrorStyle: {} as StyleProp<TextStyle>,
 
-};
+});
 
-export const defaultStyle = (
-  theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
-) => ({
-
-  ..._simpleStyles,
-
-  buttonColors: memoize((color: string) => ({
-    color: theme.colorContrast(color),
-    backgroundColor: color,
-    borderColor: color,
-  })),
-
-  buttonFocusedColors: memoize((color: string) => {
-    const _color = theme.colorContrast(color);
-    const _color2 = _color === _hex(theme.colorContrastLight) ? shadeColor(color, 0.2) : tintColor(color, 0.2);
-    return ({
-      color: _color,
-      backgroundColor: _color2,
-      borderColor: _color2,
-    });
-  }),
-
-  toastColors: memoize((color: string) => ({
-    color: theme.themeColors[color] ?? theme.colors[color] ?? color,
-    borderColor: theme.themeColors[color] ?? theme.colors[color] ?? color,
-    messageColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[800]),
-    backgroundColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[100]),
-  })),
-
-  formCheckboxColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
-
-  formRadioColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
-
-})
-
-export type ThemeStyles = ReturnType<typeof defaultStyle>;
+export interface ThemeStyles extends ReturnType<typeof defaultStyle> {}
 export type ThemeStylesProvider = (...theme: Parameters<typeof defaultStyle>) => Partial<ThemeStyles>;

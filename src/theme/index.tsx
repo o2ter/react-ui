@@ -26,10 +26,10 @@
 import _ from 'lodash';
 import React from 'react';
 import { defaultVariables, ThemeVariables } from './variables';
-import { defaultStyle, _simpleStyles, ThemeStyles, ThemeStylesProvider, _colorContrast } from './styles';
+import { defaultStyle, ThemeStyles, ThemeStylesProvider, _colorContrast } from './styles';
 import { useWindowDimensions, ScaledSize, StyleSheet } from 'react-native';
 import { useEquivalent } from 'sugax';
-import { PrevState } from '../internals/types';
+import { NonFunctionProperties, PrevState } from '../internals/types';
 
 export {
   ThemeVariables,
@@ -49,8 +49,6 @@ const ThemeContext = React.createContext({
 
 ThemeContext.displayName = 'ThemeContext';
 
-type _simpleStylesKeys = keyof typeof _simpleStyles;
-
 export const ThemeProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>> = ({
   variables,
   styles,
@@ -67,14 +65,10 @@ export const ThemeProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>
     styles: (theme) => {
       const parent_style = parent.styles(theme);
       const current_style = styles?.(theme) ?? {};
-      return {
-        ...parent_style,
-        ...current_style,
-        ..._.mapValues(_simpleStyles, (_v, k) => StyleSheet.flatten([
-          parent_style[k as _simpleStylesKeys],
-          current_style[k as _simpleStylesKeys],
-        ].filter(Boolean))),
-      };
+      return _.mapValues(parent_style, (v, k) => {
+        const w = current_style[k as keyof ThemeStyles];
+        return _.isFunction(v) || _.isFunction(w) ? w ?? v : StyleSheet.flatten([v, w].filter(Boolean))
+      }) as ThemeStyles;
     },
   }), [parent, _variables, styles]);
 
@@ -109,8 +103,8 @@ export function useTheme() {
       get styles() {
         if (_.isNil(computed_style)) {
           const _computed_style = styles(computed);
-          const _picked = _.pick(_computed_style, _.keys(_simpleStyles) as _simpleStylesKeys[]);
-          computed_style = { ..._computed_style, ...StyleSheet.create(_.mapValues(_picked, x => StyleSheet.flatten(x))) };
+          const _styles = _.omitBy(_computed_style, _.isFunction) as NonFunctionProperties<ThemeStyles>;
+          computed_style = { ..._computed_style, ...StyleSheet.create(_.mapValues(_styles, x => StyleSheet.flatten(x))) };
         }
         return computed_style;
       },
