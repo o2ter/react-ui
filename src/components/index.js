@@ -40,7 +40,6 @@ export { List } from './List';
 export { Lottie } from './Lottie';
 export { Picker } from './Picker';
 export { QRCode } from './QRCode';
-export * from './ResourceList';
 export * from './SafeAreaView';
 export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
 export * from './SegmentedControl';
