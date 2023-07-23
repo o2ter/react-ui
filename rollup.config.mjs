@@ -6,7 +6,7 @@ import json from '@rollup/plugin-json';
 import dts from 'rollup-plugin-dts';
 
 const rollupPlugins = [
-  typescript(),
+  typescript({ declaration: false }),
   babel({
     babelrc: false,
     exclude: 'node_modules/**',
