@@ -49,7 +49,7 @@ export const FormPicker = React.forwardRef(_.assign(({
 
   React.useEffect(() => {
 
-    if (_.isNil(_.find(items, x => x.value === value))) onChange(_.first(items)?.value);
+    if (!_.some(items, x => x.value === value)) onChange(_.first(items)?.value);
 
   }, [useEquivalent(_.map(items, x => x.value))]);
 
