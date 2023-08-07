@@ -25,6 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
+import { Awaitable } from 'sugax';
 import { Animated, View, ActivityIndicator as RNActivityIndicator, StyleSheet, Platform } from 'react-native';
 
 import { useTheme } from '../../theme';
@@ -43,7 +44,7 @@ export const useActivity = () => {
 
   const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
 
-  return async <T extends unknown>(callback: () => T | PromiseLike<T>, delay: number) => {
+  return async <T extends unknown>(callback: () => Awaitable<T>, delay: number) => {
 
     const id = _.uniqueId();
 

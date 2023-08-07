@@ -38,7 +38,7 @@
     "@o2ter/valid.js": ">=1.0.0",
     "react": ">=18.2.0",
     "react-native": ">=0.70.2",
-    "sugax": ">=1.0.79"
+    "sugax": ">=1.0.83"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
@@ -60,7 +60,7 @@
     "rollup": "^3.10.0",
     "rollup-plugin-dts": "^5.1.1",
     "style-inject": "link:./src/styleInject",
-    "sugax": "^1.0.79",
+    "sugax": "^1.0.83",
     "tslib": "^2.4.1",
     "typescript": "^4.9.4",
     "webpack": "^5.76.0"
