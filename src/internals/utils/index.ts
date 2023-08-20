@@ -35,7 +35,4 @@ declare module 'react' {
 export const createComponent = <T, P = {}, A = {}>(
   render: (props: P, forwardRef: React.ForwardedRef<T>) => React.ReactElement | null,
   attrs?: A,
-) => {
-  const component = React.forwardRef(render);
-  return _.assign(component, attrs ?? {});
-}
+) => _.assign(React.forwardRef(render), attrs ?? {});
