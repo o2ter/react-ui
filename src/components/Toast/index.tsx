@@ -156,7 +156,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
 
     function show_message(
       message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>,
-      type: ToastType | string,
+      type: string,
       timeout?: number
     ) {
 
