@@ -34,15 +34,13 @@ import { useTextStyle } from '../Text/style';
 import { text_style } from '../../internals/text_style';
 import { createComponent } from '../../internals/utils';
 
-type IconSets = typeof GLYPH_MAPS;
-
-type IconProps<Icon extends keyof IconSets> = Modify<TextProps, {
+type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {
   icon: Icon;
-  name: keyof IconSets[Icon];
+  name: keyof (typeof GLYPH_MAPS)[Icon];
   iconStyle?: StyleProp<TextStyle>;
 }>
 
-export const Icon = createComponent(<Icon extends keyof IconSets>({
+export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>({
   icon,
   name,
   style,
