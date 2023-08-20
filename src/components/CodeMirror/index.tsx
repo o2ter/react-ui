@@ -33,6 +33,7 @@ import { lineNumbers as _lineNumbers, ViewUpdate } from '@codemirror/view';
 import { EditorView, keymap, highlightSpecialChars, drawSelection } from '@codemirror/view';
 import { standardKeymap, history, historyKeymap } from '@codemirror/commands';
 import { defaultHighlightStyle, syntaxHighlighting, codeFolding as _codeFolding, foldGutter as _foldGutter } from '@codemirror/language';
+import { createComponent } from '../../internals/utils';
 
 type CodeMirrorProps = Modify<React.ComponentPropsWithoutRef<typeof View>, {
   theme?: Parameters<typeof EditorView.theme>[0],
@@ -53,7 +54,7 @@ type CodeMirrorProps = Modify<React.ComponentPropsWithoutRef<typeof View>, {
   keymaps?: any[];
 }>
 
-export const CodeMirror = React.forwardRef(_.assign(({
+export const CodeMirror = createComponent(({
   theme,
   darkMode = false,
   initialValue,
@@ -130,6 +131,6 @@ export const CodeMirror = React.forwardRef(_.assign(({
   return <View ref={ref} {...props} />;
 }, {
   displayName: 'CodeMirror',
-}));
+});
 
 export default CodeMirror;

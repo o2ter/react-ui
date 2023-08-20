@@ -28,7 +28,7 @@ import React from 'react';
 import { useStableRef } from 'sugax';
 import { useField } from '../Form';
 import List from '../../List';
-import { Modify } from '../../../internals/types';
+import { createComponent } from '../../../internals/utils';
 
 const FormListContext = React.createContext<{
   create: (item: any, index?: number) => void;
@@ -42,7 +42,7 @@ FormListContext.displayName = 'Form.ListContext';
 
 export const useFormList = () => React.useContext(FormListContext);
 
-type FormListProps = Modify<_.Omit<React.ComponentPropsWithoutRef<typeof List<any[]>>, 'data'>, {
+type FormListProps = {
   name: string | string[];
   keyExtractor?: (item: any, index: number, data: any[]) => string;
   renderItem: (x: { item: any, index: number, data: any[], actions: ReturnType<typeof useFormList> }) => any;
@@ -50,14 +50,13 @@ type FormListProps = Modify<_.Omit<React.ComponentPropsWithoutRef<typeof List<an
     data: any[];
     actions: ReturnType<typeof useFormList>;
   }>>;
-}>
+}
 
-export const FormList = React.forwardRef(_.assign(({
+export const FormList = createComponent(({
   name,
   keyExtractor,
   renderItem,
   ListComponent = ({ children }) => <>{children}</>,
-  ...props
 }: FormListProps, forwardRef: React.ForwardedRef<ReturnType<typeof useFormList>>) => {
 
   const { value, onChange } = useField(name);
@@ -86,12 +85,12 @@ export const FormList = React.forwardRef(_.assign(({
   return (
     <FormListContext.Provider value={actions}>
       <_ListComponent data={data} actions={actions}>
-        <List data={data} keyExtractor={keyExtractor} renderItem={_renderItem} {...props} />
+        <List data={data} keyExtractor={keyExtractor} renderItem={_renderItem} />
       </_ListComponent>
     </FormListContext.Provider>
   );
 }, {
   displayName: 'Form.List'
-}));
+});
 
 export default FormList;

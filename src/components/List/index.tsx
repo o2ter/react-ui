@@ -30,7 +30,7 @@ import { useStableCallback } from 'sugax';
 type ListItem<L extends ArrayLike<any>> = L extends ArrayLike<infer T> ? T : never;
 type ListProps<D extends ArrayLike<any>> = {
   data: D,
-  keyExtractor?: (item: any, index: number, data: D) => string;
+  keyExtractor?: (item: ListItem<D>, index: number, data: D) => string;
   renderItem: (x: { item: ListItem<D>, index: number, data: D }) => any;
 }
 

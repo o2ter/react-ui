@@ -32,6 +32,7 @@ import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
 import { useTextStyle } from '../Text/style';
 import { text_style } from '../../internals/text_style';
+import { createComponent } from '../../internals/utils';
 
 type IconProps = Modify<TextProps, {
   icon: keyof typeof ICON_SETS;
@@ -39,7 +40,7 @@ type IconProps = Modify<TextProps, {
   iconStyle?: StyleProp<TextStyle>;
 }>
 
-export const Icon = React.forwardRef(_.assign(({
+export const Icon = createComponent(({
   icon,
   name,
   style,
@@ -63,6 +64,6 @@ export const Icon = React.forwardRef(_.assign(({
   </Text>;
 }, {
   displayName: 'Icon',
-}));
+});
 
 export default Icon;

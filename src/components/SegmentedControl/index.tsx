@@ -31,6 +31,7 @@ import { Modify } from '../../internals/types';
 
 import { style as _style } from './style';
 import { Segment } from './segment';
+import { createComponent } from '../../internals/utils';
 
 type SegmentedControlBaseProps<T = any> = Modify<ViewProps, {
   value?: T;
@@ -44,7 +45,7 @@ type SegmentedControlBaseProps<T = any> = Modify<ViewProps, {
 
 type SegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { tabStyle?: StyleProp<ViewStyle>; }>
 
-export const SegmentedControl = React.forwardRef(_.assign(({
+export const SegmentedControl = createComponent(({
   value,
   style,
   onChange,
@@ -104,11 +105,11 @@ export const SegmentedControl = React.forwardRef(_.assign(({
   </View>;
 }, {
   displayName: 'SegmentedControl',
-}));
+});
 
 type PlainSegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { color?: string; }>
 
-export const PlainSegmentedControl = React.forwardRef(_.assign(({
+export const PlainSegmentedControl = createComponent(({
   value,
   style,
   color = '#2196F3',
@@ -142,4 +143,4 @@ export const PlainSegmentedControl = React.forwardRef(_.assign(({
   </View>;
 }, {
   displayName: 'PlainSegmentedControl',
-}));
+});

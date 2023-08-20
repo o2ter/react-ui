@@ -31,17 +31,19 @@ import { Picker } from '../../Picker';
 import { Modify } from '../../../internals/types';
 import { useDefaultInputStyle } from '../../TextInput/style';
 import { useEquivalent } from 'sugax';
+import { createComponent } from '../../../internals/utils';
+import { ItemValue } from '../../Picker/native';
 
-type FormPickerProps = Modify<React.ComponentPropsWithoutRef<typeof Picker>, {
+type FormPickerProps<T = ItemValue> = Modify<React.ComponentPropsWithoutRef<typeof Picker<T>>, {
   name: string | string[];
 }>
 
-export const FormPicker = React.forwardRef(_.assign(({
+export const FormPicker = createComponent(<T = ItemValue>({
   name,
   style,
   items,
   ...props
-}: FormPickerProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Picker>>) => {
+}: FormPickerProps<T>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Picker<T>>>) => {
 
   const { value, error, touched, setTouched, onChange } = useField(name);
   const theme = useTheme();
@@ -72,6 +74,6 @@ export const FormPicker = React.forwardRef(_.assign(({
   )
 }, {
   displayName: 'Form.Picker'
-}));
+});
 
 export default FormPicker;

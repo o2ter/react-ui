@@ -28,12 +28,13 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import RNLottie, { AnimatedLottieViewProps, AnimationObject } from 'lottie-react-native';
 import { Modify } from '../../internals/types';
+import { createComponent } from '../../internals/utils';
 
 type LottieProps = Modify<AnimatedLottieViewProps, {
   source: AnimationObject;
 }>
 
-export const Lottie = React.forwardRef(_.assign(({
+export const Lottie = createComponent(({
   source,
   style,
   duration = 0,
@@ -67,6 +68,6 @@ export const Lottie = React.forwardRef(_.assign(({
     {...props} />;
 }, {
   displayName: 'Lottie',
-}));
+});
 
 export default Lottie;

@@ -29,6 +29,7 @@ import { Image, StyleProp, ViewStyle, ImageStyle, ImageSourcePropType, ImageResi
 import { List } from '../List';
 import { StickyView } from '../StickyView';
 import { Modify } from '../../internals/types';
+import { createComponent } from '../../internals/utils';
 
 type SleekAnimationViewProps = Modify<Omit<React.ComponentPropsWithoutRef<typeof StickyView>, 'stickyView'>, {
   backgroundContainerStyle?: StyleProp<ViewStyle>;
@@ -37,7 +38,7 @@ type SleekAnimationViewProps = Modify<Omit<React.ComponentPropsWithoutRef<typeof
   resizeMode?: ImageResizeMode;
 }>
 
-export const SleekAnimationView = React.forwardRef(_.assign(({
+export const SleekAnimationView = createComponent(({
   backgroundContainerStyle,
   backgroundStyle,
   backgroundImages = [],
@@ -63,6 +64,6 @@ export const SleekAnimationView = React.forwardRef(_.assign(({
   </StickyView>
 ), {
   displayName: 'SleekAnimationView',
-}));
+});
 
 export default SleekAnimationView;

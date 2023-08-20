@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  index.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -25,31 +25,17 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text as RNText, TextProps, StyleSheet } from 'react-native';
-import { useTheme } from '../../theme';
-import { useTextStyle } from './style';
-import { createComponent } from '../../internals/utils';
 
-export const Text = createComponent(({
-  style,
-  children,
-  ...props
-}: TextProps, forwardRef: React.ForwardedRef<RNText>) => {
+declare module 'react' {
+  function forwardRef<T, P = {}>(
+    render: (props: P, forwardRef: React.ForwardedRef<T>) => React.ReactElement | null,
+  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null
+}
 
-  const theme = useTheme();
-  const textStyle = useTextStyle();
-  const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.bodyColor } }).style, [theme]);
-
-  return (
-    <RNText
-      ref={forwardRef}
-      style={[defaultStyle, theme.styles.textStyle, textStyle, style]}
-      {...props}>
-      {children}
-    </RNText>
-  );
-}, {
-  displayName: 'Text',
-});
-
-export default Text;
+export const createComponent = <T, P = {}, A = {}>(
+  render: (props: P, forwardRef: React.ForwardedRef<T>) => React.ReactElement | null,
+  attrs?: A,
+) => {
+  const component = React.forwardRef(render);
+  return _.assign(component, attrs ?? {});
+}

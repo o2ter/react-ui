@@ -31,6 +31,7 @@ import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 
 import { Icon } from '../../Icon';
+import { createComponent } from '../../../internals/utils';
 
 type FormCheckboxProps = TextProps & {
   name: string | string[];
@@ -38,7 +39,7 @@ type FormCheckboxProps = TextProps & {
   tabIndex?: number;
 }
 
-export const FormCheckbox = React.forwardRef(_.assign(({
+export const FormCheckbox = createComponent(({
   name,
   value,
   style,
@@ -83,6 +84,6 @@ export const FormCheckbox = React.forwardRef(_.assign(({
   )
 }, {
   displayName: 'Form.Checkbox'
-}));
+});
 
 export default FormCheckbox;

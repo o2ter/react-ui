@@ -30,12 +30,13 @@ import TextInput from '../../TextInput';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
+import { createComponent } from '../../../internals/utils';
 
 type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput>, {
   name: string | string[];
 }>
 
-export const FormTextField = React.forwardRef(_.assign(({
+export const FormTextField = createComponent(({
   name,
   style,
   ...props
@@ -63,6 +64,6 @@ export const FormTextField = React.forwardRef(_.assign(({
   );
 }, {
   displayName: 'Form.TextField'
-}));
+});
 
 export default FormTextField;

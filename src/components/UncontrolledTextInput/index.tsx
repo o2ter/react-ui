@@ -26,8 +26,9 @@
 import _ from 'lodash';
 import React from 'react';
 import { TextInput, TextInputProps } from 'react-native';
+import { createComponent } from '../../internals/utils';
 
-export const UncontrolledTextInput = React.forwardRef(_.assign(({
+export const UncontrolledTextInput = createComponent(({
   value,
   onChangeText,
   ...props
@@ -52,6 +53,6 @@ export const UncontrolledTextInput = React.forwardRef(_.assign(({
   );
 }, {
   displayName: 'UncontrolledTextInput',
-}));
+});
 
 export default UncontrolledTextInput;

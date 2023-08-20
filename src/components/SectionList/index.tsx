@@ -34,6 +34,7 @@ import {
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
+import { createComponent } from '../../internals/utils';
 
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
@@ -42,7 +43,7 @@ type SectionListProps<ItemT = any> = Modify<RNSectionListProps<ItemT>, {
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const SectionList = React.forwardRef(_.assign(({
+export const SectionList = createComponent(({
   data,
   extraData,
   onRefresh,
@@ -70,6 +71,6 @@ export const SectionList = React.forwardRef(_.assign(({
   )
 }, {
   displayName: 'SectionList',
-}));
+});
 
 export default SectionList;

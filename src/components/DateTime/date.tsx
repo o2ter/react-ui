@@ -31,11 +31,12 @@ import { Calendar } from '../Calendar';
 import { PickerBase } from './picker';
 import { Modify } from '../../internals/types';
 import { useDefaultInputStyle } from '../TextInput/style';
+import { createComponent } from '../../internals/utils';
 
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
 type DatePickerProps = Modify<TextProps, DatePickerBaseProps>;
 
-export const DatePicker = React.forwardRef(_.assign(({
+export const DatePicker = createComponent(({
   value,
   min,
   max,
@@ -87,6 +88,6 @@ export const DatePicker = React.forwardRef(_.assign(({
   )
 }, {
   displayName: 'DatePicker',
-}));
+});
 
 export default DatePicker;

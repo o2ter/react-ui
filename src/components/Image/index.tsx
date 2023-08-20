@@ -28,12 +28,13 @@ import React from 'react';
 import { Image as RNImage, ImageProps as RNImageProps, ImageURISource, ImageRequireSource, StyleSheet } from 'react-native';
 import ImageBase from './ImageBase';
 import { Modify } from '../../internals/types';
+import { createComponent } from '../../internals/utils';
 
 type ImageProps = Modify<RNImageProps, {
   source: ImageURISource | ImageRequireSource;
 }>
 
-export const Image = React.forwardRef(_.assign(({
+export const Image = createComponent(({
   source,
   style,
   ...props
@@ -79,6 +80,6 @@ export const Image = React.forwardRef(_.assign(({
     {...props} />;
 }, {
   displayName: 'Image',
-}));
+});
 
 export default Image;

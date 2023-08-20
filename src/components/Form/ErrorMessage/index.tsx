@@ -31,12 +31,13 @@ import { ValidateError } from '@o2ter/valid.js';
 import { useField } from '../Form';
 import { Modify } from '../../../internals/types';
 import { useTheme } from '../../../theme';
+import { createComponent } from '../../../internals/utils';
 
 type FormErrorMessageProps = Modify<TextProps, {
   name: string | string[];
 }>
 
-export const FormErrorMessage = React.forwardRef(_.assign(({
+export const FormErrorMessage = createComponent(({
   name,
   style,
   ...props
@@ -62,6 +63,6 @@ export const FormErrorMessage = React.forwardRef(_.assign(({
   );
 }, {
   displayName: 'Form.ErrorMessage'
-}));
+});
 
 export default FormErrorMessage;

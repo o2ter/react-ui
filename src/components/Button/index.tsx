@@ -45,6 +45,7 @@ import { text_style } from '../../internals/text_style';
 import { Modify } from '../../internals/types';
 import { Text } from '../Text';
 import { TextStyleProvider } from '../Text/style';
+import { createComponent } from '../../internals/utils';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -78,7 +79,7 @@ const ButtonText = Animated.createAnimatedComponent(class extends React.PureComp
   }
 });
 
-export const Button = React.forwardRef(_.assign(({
+export const Button = createComponent(({
   color,
   variant = 'primary',
   outline = false,
@@ -195,6 +196,6 @@ export const Button = React.forwardRef(_.assign(({
   );
 }, {
   displayName: 'Button',
-}))
+});
 
 export default Button;

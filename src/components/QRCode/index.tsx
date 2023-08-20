@@ -29,6 +29,7 @@ import { ColorValue } from 'react-native';
 import { Svg, SvgProps, Rect, Path } from 'react-native-svg';
 import { Modify } from '../../internals/types';
 import qrcode from 'qrcode';
+import { createComponent } from '../../internals/utils';
 
 type QRCodeProps = Modify<SvgProps, {
   value?: string | any[];
@@ -37,7 +38,7 @@ type QRCodeProps = Modify<SvgProps, {
   backgroundColor?: ColorValue;
 }>
 
-export const QRCode = React.forwardRef(_.assign(({
+export const QRCode = createComponent(({
   value = '',
   options = {},
   color = 'black',
@@ -76,6 +77,6 @@ export const QRCode = React.forwardRef(_.assign(({
   </Svg>;
 }, {
   displayName: 'QRCode',
-}));
+});
 
 export default QRCode;

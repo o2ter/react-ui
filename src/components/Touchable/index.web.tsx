@@ -28,6 +28,7 @@ import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { NodeHandleProvider } from '../NodeHandleProvider';
 import { TouchableProps } from './types';
+import { createComponent } from '../../internals/utils';
 
 const supportsPointerEvent = () => typeof window !== 'undefined' && window.PointerEvent != null;
 const options = { passive: true };
@@ -57,7 +58,7 @@ function registerEventListener(nodeHandle: EventTarget | undefined, event: strin
 
 const empty_function = () => { };
 
-export const Touchable = React.forwardRef(_.assign(({
+export const Touchable = createComponent(({
   onDragStart,
   onDragEnd,
   onDrop,
@@ -111,6 +112,6 @@ export const Touchable = React.forwardRef(_.assign(({
   </NodeHandleProvider>;
 }, {
   displayName: 'Touchable',
-}));
+});
 
 export default Touchable;

@@ -27,8 +27,9 @@ import _ from 'lodash';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SVGProps } from './types';
+import { createComponent } from '../../internals/utils';
 
-export const SVG = React.forwardRef(_.assign(({
+export const SVG = createComponent(({
   source,
   style,
   ...props
@@ -67,6 +68,6 @@ export const SVG = React.forwardRef(_.assign(({
   return <View ref={forwardRef} style={[{ width, height, aspectRatio }, _style]} {...props} />;
 }, {
   displayName: 'SVG',
-}));
+});
 
 export default SVG;

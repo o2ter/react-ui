@@ -29,12 +29,13 @@ import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { DatePicker } from '../../DateTime';
+import { createComponent } from '../../../internals/utils';
 
 type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   name: string | string[];
 }>;
 
-export const FormDate = React.forwardRef(_.assign(({
+export const FormDate = createComponent(({
   name,
   min,
   max,
@@ -71,6 +72,6 @@ export const FormDate = React.forwardRef(_.assign(({
   )
 }, {
   displayName: 'Form.Date'
-}));
+});
 
 export default FormDate;

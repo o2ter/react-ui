@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { StyleProp, TextStyle, StyleSheet } from 'react-native';
 import { Picker as RNPicker, PickerItemProps } from '@react-native-picker/picker';
+import { createComponent } from '../../internals/utils';
 
 export type ItemValue = number | string;
 
@@ -41,7 +42,7 @@ export type PickerNativeProps<T = ItemValue> = {
   onBlur?: VoidFunction;
 }
 
-export const PickerNative = React.forwardRef(_.assign(({
+export const PickerNative = createComponent(<T = ItemValue>({
   value,
   items,
   disabled = false,
@@ -49,7 +50,7 @@ export const PickerNative = React.forwardRef(_.assign(({
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}: PickerNativeProps, forwardRef: React.ForwardedRef<RNPicker<ItemValue>>) => {
+}: PickerNativeProps<T>, forwardRef: React.ForwardedRef<RNPicker<T>>) => {
 
   const id = React.useId();
   const _style = React.useMemo(() => StyleSheet.flatten(style), [style]);
@@ -68,6 +69,6 @@ export const PickerNative = React.forwardRef(_.assign(({
   );
 }, {
   displayName: 'Picker',
-}));
+});
 
 export default PickerNative;

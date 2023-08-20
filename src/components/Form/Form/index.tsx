@@ -27,8 +27,9 @@ import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
 import { useStableRef } from 'sugax';
-import { ISchema, object, ValidateError } from '@o2ter/valid.js';
+import { ISchema, object, TypeOfSchema, ValidateError } from '@o2ter/valid.js';
 import { useToast } from '../../Toast';
+import { createComponent } from '../../../internals/utils';
 
 export type FormState = {
   values: Record<string, any>;
@@ -86,9 +87,9 @@ const defaultValidation = (validate: (value: any) => ValidateError[]) => {
   };
 };
 
-type FormProps = {
-  schema?: Record<string, ISchema<any, any>>;
-  initialValues?: Record<string, any>;
+type FormProps<S extends Record<string, ISchema<any, any>>> = {
+  schema?: S;
+  initialValues?: TypeOfSchema<ReturnType<typeof object<S>>>;
   validate?: (value: any, path?: string) => Error[];
   validateOnMount?: boolean;
   onReset?: (state: FormState) => void;
@@ -100,9 +101,9 @@ type FormProps = {
   children: React.ReactNode | ((state: FormState) => React.ReactNode);
 };
 
-export const Form = React.forwardRef(_.assign(({
-  schema = {},
-  initialValues = object(schema).getDefault() ?? {},
+export const Form = createComponent(<S extends Record<string, ISchema<any, any>>>({
+  schema,
+  initialValues = object(schema ?? {}).getDefault() ?? {},
   validate,
   validateOnMount,
   onReset = () => { },
@@ -112,13 +113,13 @@ export const Form = React.forwardRef(_.assign(({
   onSubmit = () => { },
   onError = () => { },
   children
-}: FormProps, forwardRef: React.ForwardedRef<FormState>) => {
+}: FormProps<S>, forwardRef: React.ForwardedRef<FormState>) => {
 
   const [counts, setCounts] = React.useState({ submit: 0, reset: 0, actions: {} as Record<string, number> });
   const [values, setValues] = React.useState(initialValues);
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
 
-  const _schema = React.useMemo(() => object(schema), [schema]);
+  const _schema = React.useMemo(() => object(schema ?? {}), [schema]);
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
 
   const { showError } = useToast();
@@ -188,7 +189,7 @@ export const Form = React.forwardRef(_.assign(({
   </FormContext.Provider>;
 }, {
   displayName: 'Form',
-}));
+});
 
 export const FormConsumer = FormContext.Consumer;
 

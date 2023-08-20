@@ -32,6 +32,7 @@ import { Options } from 'jsbarcode';
 import { Modify } from '../../internals/types';
 
 import barcodes from 'jsbarcode/src/barcodes';
+import { createComponent } from '../../internals/utils';
 
 export type BarcodeFormat = keyof typeof barcodes;
 export const BarcodeFormats = _.keys(barcodes) as BarcodeFormat[];
@@ -44,7 +45,7 @@ type BarcodeProps = Modify<SvgProps, {
   backgroundColor?: ColorValue;
 }>
 
-export const Barcode = React.forwardRef(_.assign(({
+export const Barcode = createComponent(({
   value = '',
   format = 'CODE128',
   options = {},
@@ -92,6 +93,6 @@ export const Barcode = React.forwardRef(_.assign(({
   </Svg>;
 }, {
   displayName: 'Barcode',
-}));
+});
 
 export default Barcode;

@@ -28,12 +28,13 @@ import React from 'react';
 import { useForm } from '../Form';
 import { Button } from '../../Button';
 import { Modify } from '../../../internals/types';
+import { createComponent } from '../../../internals/utils';
 
 type FormActionButtonProps = Modify<React.ComponentPropsWithoutRef<typeof Button>, {
   action: string;
 }>
 
-export const FormActionButton = React.forwardRef(_.assign(({
+export const FormActionButton = createComponent(({
   action,
   ...props
 }: FormActionButtonProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Button>>) => {
@@ -49,6 +50,6 @@ export const FormActionButton = React.forwardRef(_.assign(({
   );
 }, {
   displayName: 'Form.ActionButton'
-}));
+});
 
 export default FormActionButton;

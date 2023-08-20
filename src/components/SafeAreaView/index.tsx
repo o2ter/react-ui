@@ -30,6 +30,7 @@ import { View, ViewProps, ViewStyle, StyleSheet, useWindowDimensions, LayoutRect
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
+import { createComponent } from '../../internals/utils';
 export { SafeAreaProvider, useSafeAreaInsets, useSafeAreaFrame, withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TOP = 0b1000,
@@ -61,7 +62,7 @@ type SafeAreaViewProps = Modify<ViewProps, {
   edges: InsetEdge[]
 }>
 
-export const SafeAreaView = React.forwardRef(_.assign(({
+export const SafeAreaView = createComponent(({
   style,
   edges,
   children,
@@ -110,4 +111,4 @@ export const SafeAreaView = React.forwardRef(_.assign(({
     }, _style]} {...props}>{children}</View>;
 }, {
   displayName: 'SafeAreaView',
-}));
+});

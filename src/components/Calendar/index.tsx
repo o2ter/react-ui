@@ -39,6 +39,7 @@ import { CalendarBody } from './body';
 import { MaterialCommunityIcons as Icon } from '../Icons';
 
 import Localization from '../../locales';
+import { createComponent } from '../../internals/utils';
 
 const month_name = [
   'january',
@@ -66,7 +67,7 @@ type CalendarProps = Modify<ViewProps, {
   onChange?: (date: string[]) => void;
 }>
 
-const CalendarBase = React.forwardRef(_.assign(({
+const CalendarBase = createComponent(({
   value,
   min,
   max,
@@ -177,7 +178,7 @@ const CalendarBase = React.forwardRef(_.assign(({
   )
 }, {
   displayName: 'Calendar',
-}));
+});
 
 export const Calendar = _.assign(CalendarBase, { Date: _Date });
 

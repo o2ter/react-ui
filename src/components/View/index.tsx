@@ -28,8 +28,9 @@ import React from 'react';
 import { View as RNView, ViewProps } from 'react-native';
 import { useTheme } from '../../theme';
 import { useViewStyle } from './style';
+import { createComponent } from '../../internals/utils';
 
-export const View = React.forwardRef(_.assign(({
+export const View = createComponent(({
   style,
   children,
   ...props
@@ -48,6 +49,6 @@ export const View = React.forwardRef(_.assign(({
   );
 }, {
   displayName: 'View',
-}));
+});
 
 export default View;

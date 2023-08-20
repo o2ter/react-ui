@@ -33,6 +33,7 @@ import {
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
+import { createComponent } from '../../internals/utils';
 
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
@@ -41,7 +42,7 @@ type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const FlatList = React.forwardRef(_.assign(({
+export const FlatList = createComponent(<ItemT = any>({
   data,
   extraData,
   onRefresh,
@@ -53,7 +54,7 @@ export const FlatList = React.forwardRef(_.assign(({
   renderItem,
   children,
   ...props
-}: FlatListProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNFlatList>>) => {
+}: FlatListProps<ItemT>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNFlatList<ItemT>>>) => {
 
   const theme = useTheme();
   const _renderItem = React.useCallback(renderItem ?? (() => <></>), [data, extraData]);
@@ -73,6 +74,6 @@ export const FlatList = React.forwardRef(_.assign(({
   )
 }, {
   displayName: 'FlatList',
-}));
+});
 
 export default FlatList;

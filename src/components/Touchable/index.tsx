@@ -27,8 +27,9 @@ import _ from 'lodash';
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { TouchableProps } from './types';
+import { createComponent } from '../../internals/utils';
 
-export const Touchable = React.forwardRef(_.assign(({
+export const Touchable = createComponent(({
   onDragStart,
   onDragEnd,
   onDrop,
@@ -43,6 +44,6 @@ export const Touchable = React.forwardRef(_.assign(({
   return <TouchableWithoutFeedback ref={forwardRef} {...props}>{children}</TouchableWithoutFeedback>;
 }, {
   displayName: 'Touchable',
-}));
+});
 
 export default Touchable;

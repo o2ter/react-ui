@@ -28,8 +28,9 @@ import React from 'react';
 import { TextInput as RNTextInput, TextInputProps } from 'react-native';
 import { useTheme } from '../../theme';
 import { useDefaultInputStyle } from './style';
+import { createComponent } from '../../internals/utils';
 
-export const TextInput = React.forwardRef(_.assign(({
+export const TextInput = createComponent(({
   style,
   ...props
 }: TextInputProps, forwardRef: React.ForwardedRef<RNTextInput>) => {
@@ -49,6 +50,6 @@ export const TextInput = React.forwardRef(_.assign(({
   );
 }, {
   displayName: 'TextInput',
-}));
+});
 
 export default TextInput;

@@ -31,6 +31,7 @@ import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 
 import { Icon } from '../../Icon';
+import { createComponent } from '../../../internals/utils';
 
 type FormRadioProps = TextProps & {
   name: string | string[];
@@ -38,7 +39,7 @@ type FormRadioProps = TextProps & {
   tabIndex?: number;
 }
 
-export const FormRadio = React.forwardRef(_.assign(({
+export const FormRadio = createComponent(({
   name,
   value,
   style,
@@ -80,6 +81,6 @@ export const FormRadio = React.forwardRef(_.assign(({
   )
 }, {
   displayName: 'Form.Radio'
-}));
+});
 
 export default FormRadio;
