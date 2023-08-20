@@ -16,5 +16,9 @@
     "allowSyntheticDefaultImports": true,
     "emitDeclarationOnly": true,
     "downlevelIteration": true,
-  }
+  },
+  "exclude":[
+    "**/dist/*",
+    "**/node_modules/*"
+  ]
 }
