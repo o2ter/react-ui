@@ -35,13 +35,14 @@ import { useLocalize } from '@o2ter/i18n';
 
 type ToastMessage = string | (Error & { code?: number });
 type ToastType = 'success' | 'info' | 'warning' | 'error';
+type ToastOptions = { color: string; icon?: React.ReactNode; timeout?: number; };
 
 const ToastContext = React.createContext({
   showError(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { },
   showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { },
   showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { },
   showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { },
-  showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout?: number) { },
+  showToast(message: ToastMessage | RecursiveArray<ToastMessage>, options: ToastOptions) { },
 });
 
 ToastContext.displayName = 'ToastContext';
@@ -70,12 +71,12 @@ function toString(message: ToastMessage) {
 
 const ToastBody: React.FC<{
   message: ToastMessage;
-  type: string;
+  style: ToastType | { color: string; icon?: React.ReactNode },
   onShow: (x: { dismiss: VoidFunction }) => void;
   onDismiss: VoidFunction;
 }> = ({
   message,
-  type,
+  style,
   onShow,
   onDismiss,
 }) => {
@@ -104,7 +105,7 @@ const ToastBody: React.FC<{
     }).start(() => onShow({ dismiss() { _dismiss(); } }));
   });
 
-  const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors(type);
+  const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors(_.isString(style) ? style : style.color);
 
   const localize = useLocalize();
   const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);
@@ -125,7 +126,8 @@ const ToastBody: React.FC<{
       theme.styles.toastStyle,
       { opacity: fadeAnim },
     ]}>
-    {!_.isNil(icons[type as ToastType]) && <Svg width={24} height={24}><Path fill={color} d={icons[type as ToastType]} /></Svg>}
+    {_.isString(style) && <Svg width={24} height={24}><Path fill={color} d={icons[style]} /></Svg>}
+    {!_.isString(style) && style.icon && <View style={{ width: 24, height: 24 }}>{style.icon}</View>}
     <Text style={[
       {
         flex: 1,
@@ -156,13 +158,13 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
 
     function show_message(
       message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>,
-      type: string,
+      style: ToastType | { color: string; icon?: React.ReactNode },
       timeout?: number
     ) {
 
       if (_.isNil(message)) return;
       if (!_.isString(message) && _.isArrayLike(message)) {
-        _.forEach(message, x => show_message(x, type, timeout));
+        _.forEach(message, x => show_message(x, style, timeout));
         return;
       }
 
@@ -170,7 +172,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
 
       setElements(elements => ({
         ...elements,
-        [id]: <ToastBody key={id} message={message} type={type}
+        [id]: <ToastBody key={id} message={message} style={style}
           onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? defaultTimeout)}
           onDismiss={() => setElements(elements => _.pickBy(elements, (_val, key) => key != id))} />
       }));
@@ -181,7 +183,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
       showWarning(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { show_message(message, 'warning', timeout); },
       showInfo(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { show_message(message, 'info', timeout); },
       showSuccess(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { show_message(message, 'success', timeout); },
-      showToast(message: ToastMessage | RecursiveArray<ToastMessage>, color: string, timeout?: number) { show_message(message, color, timeout); },
+      showToast(message: ToastMessage | RecursiveArray<ToastMessage>, options: ToastOptions) { show_message(message, options, options.timeout); },
     };
 
   }, []);
