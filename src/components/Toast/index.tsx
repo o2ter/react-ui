@@ -31,7 +31,7 @@ import { useMount } from 'sugax';
 import { ValidateError } from '@o2ter/valid.js';
 import { useTheme } from '../../theme';
 import { useSafeAreaInsets } from '../SafeAreaView';
-import { useLocalize, useUserLocales } from '@o2ter/i18n';
+import { useLocalize } from '@o2ter/i18n';
 
 type ToastMessage = string | (Error & { code?: number });
 type ToastType = 'success' | 'info' | 'warning' | 'error';
@@ -70,7 +70,7 @@ function toString(message: ToastMessage) {
 
 const ToastBody: React.FC<{
   message: ToastMessage;
-  type: ToastType | string;
+  type: string;
   onShow: (x: { dismiss: VoidFunction }) => void;
   onDismiss: VoidFunction;
 }> = ({
