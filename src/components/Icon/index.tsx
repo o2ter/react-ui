@@ -27,27 +27,29 @@ import _ from 'lodash';
 import React from 'react';
 import { TextProps, StyleProp, TextStyle, StyleSheet } from 'react-native';
 import Text from '../Text';
-import { ICON_SETS } from '../Icons';
+import { GLYPH_MAPS, ICON_SETS } from '../Icons';
 import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
 import { useTextStyle } from '../Text/style';
 import { text_style } from '../../internals/text_style';
 import { createComponent } from '../../internals/utils';
 
-type IconProps = Modify<TextProps, {
-  icon: keyof typeof ICON_SETS;
-  name: string;
+type IconSets = typeof GLYPH_MAPS;
+
+type IconProps<Icon extends keyof IconSets> = Modify<TextProps, {
+  icon: Icon;
+  name: keyof IconSets[Icon];
   iconStyle?: StyleProp<TextStyle>;
 }>
 
-export const Icon = createComponent(({
+export const Icon = createComponent(<Icon extends keyof IconSets>({
   icon,
   name,
   style,
   iconStyle,
   children,
   ...props
-}: IconProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>) => {
+}: IconProps<Icon>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>) => {
 
   const _Icon = ICON_SETS[icon];
 
