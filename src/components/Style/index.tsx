@@ -146,3 +146,5 @@ export const useStyle = (
     return StyleSheet.flatten(names.map(x => classes[x]));
   }, [classes, classNames]);
 }
+
+export const useAllStyle = () => React.useContext(StyleContext);
