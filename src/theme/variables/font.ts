@@ -56,4 +56,4 @@ export const displayFontSizes: Record<string, number> = {
   '6': fontSizeBase * 2.5,
 };
 
-export const displayFontWeightBase: FontWeight = '300';
+export const displayFontWeight: FontWeight = '300';
