@@ -23,7 +23,7 @@
 //  THE SOFTWARE.
 //
 
-import _, { isString } from 'lodash';
+import _ from 'lodash';
 import React from 'react';
 import { StyleSheet, StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { useEquivalent } from 'sugax';
