@@ -88,22 +88,24 @@ type ComponentStyles = {
 
 type _StyleProp = StyleProp<ViewStyle | TextStyle | ImageStyle>;
 
-type StyleProviderProps = {
-  components?: ComponentStyles;
-  classes?: Record<string, _StyleProp>;
-};
+const StyleContext = React.createContext<{
+  components: ComponentStyles;
+  classes: Record<string, _StyleProp>;
+}>({ components: {}, classes: {} });
 
-const StyleContext = React.createContext<Required<StyleProviderProps>>({ components: {}, classes: {} });
-
+type WithCallback<T extends object> = { [K in keyof T]: T[K] | ((prev: T[K]) => T[K]); };
 const mergeStyle = <T extends Record<string, _StyleProp>>(
   parent: T,
-  style: T,
+  style: WithCallback<T>,
 ) => ({
   ..._.mapValues(parent, v => StyleSheet.flatten(v)),
-  ..._.mapValues(style, (v, k) => StyleSheet.flatten([parent[k], v])),
+  ..._.mapValues(style, (v, k) => StyleSheet.flatten([parent[k], _.isFunction(v) ? v(parent[k] as T[keyof T]) : v])),
 });
 
-export const StyleProvider: React.FC<React.PropsWithChildren<StyleProviderProps>> = ({
+export const StyleProvider: React.FC<React.PropsWithChildren<{
+  components?: WithCallback<ComponentStyles>;
+  classes?: WithCallback<Record<string, _StyleProp>>;
+}>> = ({
   children,
   components,
   classes,
