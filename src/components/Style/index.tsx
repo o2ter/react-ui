@@ -23,7 +23,7 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
+import _, { isString } from 'lodash';
 import React from 'react';
 import { StyleSheet, StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { useEquivalent } from 'sugax';
@@ -141,10 +141,10 @@ export const useStyle = (
   classNames?: ClassNames,
 ) => {
   const { classes } = React.useContext(StyleContext);
+  const names = _.sortedUniq(_.compact(_.compact(_.flattenDeep([classNames])).join(' ').split(/\s/)).sort());
   return React.useMemo(() => {
-    const names = _.compact(_.compact(_.flattenDeep([classNames])).join(' ').split(/\s/));
-    return StyleSheet.flatten(names.map(x => classes[x]));
-  }, [classes, classNames]);
+    return StyleSheet.flatten(_.pickBy(classes, (v, k) => _.includes(names, k)));
+  }, [classes, names.join(' ')]);
 }
 
 export const useAllStyle = () => React.useContext(StyleContext);
