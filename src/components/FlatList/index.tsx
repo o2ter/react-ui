@@ -32,8 +32,8 @@ import {
 } from 'react-native';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
-import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
@@ -43,6 +43,7 @@ type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
 }>
 
 export const FlatList = createComponent(<ItemT = any>({
+  classes,
   data,
   extraData,
   onRefresh,
@@ -54,9 +55,11 @@ export const FlatList = createComponent(<ItemT = any>({
   renderItem,
   children,
   ...props
-}: FlatListProps<ItemT>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNFlatList<ItemT>>>) => {
+}: FlatListProps<ItemT> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNFlatList<ItemT>>>) => {
 
-  const theme = useTheme();
+  const scrollableStyle = useComponentStyle('scrollable', classes);
+  const scrollableContentContainerStyle = useComponentStyle('scrollableContentContainer');
+  const flatlistColumnWrapperStyle = useComponentStyle('flatlistColumnWrapper');
   const _renderItem = React.useCallback(renderItem ?? (() => <></>), [data, extraData]);
 
   return (
@@ -66,9 +69,9 @@ export const FlatList = createComponent(<ItemT = any>({
       extraData={extraData}
       numColumns={numColumns}
       renderItem={_renderItem}
-      style={[theme.styles.scrollableStyle, style]}
-      contentContainerStyle={[theme.styles.scrollableContentContainerStyle, contentContainerStyle]}
-      columnWrapperStyle={numColumns > 1 ? [theme.styles.flatlistColumnWrapperStyle, columnWrapperStyle] : undefined}
+      style={[scrollableStyle, style]}
+      contentContainerStyle={[scrollableContentContainerStyle, contentContainerStyle]}
+      columnWrapperStyle={numColumns > 1 ? [flatlistColumnWrapperStyle, columnWrapperStyle] : undefined}
       refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : undefined}
       {...props} />
   )

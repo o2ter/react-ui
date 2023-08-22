@@ -28,10 +28,10 @@ import React from 'react';
 import { TextProps, Platform } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
-import { Modify } from '../../../internals/types';
 
 import { Icon } from '../../Icon';
 import { createComponent } from '../../../internals/utils';
+import { ClassNames, useComponentStyle } from '../../Style';
 
 type FormRadioProps = TextProps & {
   name: string | string[];
@@ -40,16 +40,19 @@ type FormRadioProps = TextProps & {
 }
 
 export const FormRadio = createComponent(({
+  classes,
   name,
   value,
   style,
   onPress,
   children,
   ...props
-}: FormRadioProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Icon>>) => {
+}: FormRadioProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Icon>>) => {
 
   const { value: _value, onChange } = useField(name);
   const theme = useTheme();
+  const formRadioStyle = useComponentStyle('formRadio', classes);
+  const formRadioTextStyle = useComponentStyle('formRadioText');
 
   const selected = value === _value;
   const iconName = selected ? 'radiobox-marked' : 'radiobox-blank';
@@ -61,7 +64,7 @@ export const FormRadio = createComponent(({
     },
     default: props,
   });
-  
+
   return (
     <Icon
       ref={forwardRef}
@@ -70,11 +73,11 @@ export const FormRadio = createComponent(({
       onPress={onPress ?? (() => onChange(value))}
       iconStyle={[
         { color: theme.styles.formRadioColor(selected) },
-        theme.styles.formRadioStyle,
+        formRadioStyle,
       ]}
       style={[
         { fontSize: theme.fontSizeBase },
-        theme.styles.formRadioTextStyle,
+        formRadioTextStyle,
         _.isFunction(style) ? style({ selected }) : style,
       ]}
       {..._props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>

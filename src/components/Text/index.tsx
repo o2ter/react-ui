@@ -27,23 +27,22 @@ import _ from 'lodash';
 import React from 'react';
 import { Text as RNText, TextProps, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme';
-import { useTextStyle } from './style';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 export const Text = createComponent(({
+  classes,
   style,
   children,
   ...props
-}: TextProps, forwardRef: React.ForwardedRef<RNText>) => {
-
+}: TextProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<RNText>) => {
   const theme = useTheme();
-  const textStyle = useTextStyle();
+  const textStyle = useComponentStyle('text', classes);
   const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.bodyColor } }).style, [theme]);
-
   return (
     <RNText
       ref={forwardRef}
-      style={[defaultStyle, theme.styles.textStyle, textStyle, style]}
+      style={[defaultStyle, textStyle, style]}
       {...props}>
       {children}
     </RNText>

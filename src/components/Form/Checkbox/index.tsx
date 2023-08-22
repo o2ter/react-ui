@@ -32,6 +32,7 @@ import { Modify } from '../../../internals/types';
 
 import { Icon } from '../../Icon';
 import { createComponent } from '../../../internals/utils';
+import { ClassNames, useComponentStyle } from '../../Style';
 
 type FormCheckboxProps = TextProps & {
   name: string | string[];
@@ -40,16 +41,19 @@ type FormCheckboxProps = TextProps & {
 }
 
 export const FormCheckbox = createComponent(({
+  classes,
   name,
   value,
   style,
   onPress,
   children,
   ...props
-}: FormCheckboxProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Icon>>) => {
+}: FormCheckboxProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Icon>>) => {
 
   const { value: state, onChange } = useField(name);
   const theme = useTheme();
+  const formCheckboxStyle = useComponentStyle('formCheckbox', classes);
+  const formCheckboxTextStyle = useComponentStyle('formCheckboxText');
 
   const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
   const iconName = selected ? 'checkbox-marked' : 'checkbox-blank-outline';
@@ -73,11 +77,11 @@ export const FormCheckbox = createComponent(({
       }))}
       iconStyle={[
         { color: theme.styles.formCheckboxColor(selected) },
-        theme.styles.formCheckboxStyle,
+        formCheckboxStyle,
       ]}
       style={[
         { fontSize: theme.fontSizeBase },
-        theme.styles.formCheckboxTextStyle,
+        formCheckboxTextStyle,
         _.isFunction(style) ? style({ selected }) : style,
       ]}
       {..._props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>

@@ -28,6 +28,7 @@ import React from 'react';
 import { View, Pressable, StyleSheet, Platform } from 'react-native';
 
 import { useTheme } from '../../theme';
+import { useComponentStyle } from '../Style';
 
 const ModalContext = React.createContext((element?: React.ReactElement) => { });
 ModalContext.displayName = 'ModalContext';
@@ -43,6 +44,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
 
   const [modal, setModal] = React.useState<React.ReactElement>();
   const theme = useTheme();
+  const modalBackdrop = useComponentStyle('modalBackdrop');
 
   return <ModalContext.Provider value={setModal}>
     {children}
@@ -70,7 +72,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
             default: {},
           }),
           StyleSheet.absoluteFill,
-          theme.styles.modalBackdrop,
+          modalBackdrop,
         ]} />}
       {modal}
     </View>}

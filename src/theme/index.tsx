@@ -27,9 +27,9 @@ import _ from 'lodash';
 import React from 'react';
 import { defaultVariables, ThemeVariables } from './variables';
 import { defaultStyle, ThemeStyles, ThemeStylesProvider, _colorContrast } from './styles';
-import { useWindowDimensions, ScaledSize, StyleSheet } from 'react-native';
+import { useWindowDimensions, ScaledSize } from 'react-native';
 import { useEquivalent } from 'sugax';
-import { NonFunctionProperties, PrevState } from '../internals/types';
+import { PrevState } from '../internals/types';
 
 export {
   ThemeVariables,
@@ -65,10 +65,7 @@ export const ThemeProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>
     styles: (theme) => {
       const parent_style = parent.styles(theme);
       const current_style = styles?.(theme) ?? {};
-      return _.mapValues(parent_style, (v, k) => {
-        const w = current_style[k as keyof ThemeStyles];
-        return _.isFunction(v) || _.isFunction(w) ? w ?? v : StyleSheet.flatten([v, w].filter(Boolean))
-      }) as ThemeStyles;
+      return _.mapValues(parent_style, (v, k) => current_style[k as keyof ThemeStyles] ?? v) as ThemeStyles;
     },
   }), [parent, _variables, styles]);
 
@@ -101,11 +98,7 @@ export function useTheme() {
       get colorContrast() { return _colorContrast(computed) },
       get mediaSelect() { return _mediaSelect(computed, windowDimensions) },
       get styles() {
-        if (_.isNil(computed_style)) {
-          const _computed_style = styles(computed);
-          const _styles = _.omitBy(_computed_style, _.isFunction) as NonFunctionProperties<ThemeStyles>;
-          computed_style = { ..._computed_style, ...StyleSheet.create(_.mapValues(_styles, x => StyleSheet.flatten(x))) };
-        }
+        if (_.isNil(computed_style)) computed_style = styles(computed);
         return computed_style;
       },
     }, variables);

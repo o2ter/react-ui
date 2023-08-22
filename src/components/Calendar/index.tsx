@@ -40,6 +40,7 @@ import { MaterialCommunityIcons as Icon } from '../Icons';
 
 import Localization from '../../locales';
 import { createComponent } from '../../internals/utils';
+import { useComponentStyle } from '../Style';
 
 const month_name = [
   'january',
@@ -78,6 +79,9 @@ const CalendarBase = createComponent(({
 }: CalendarProps, forwardRef: React.ForwardedRef<View>) => {
 
   const theme = useTheme();
+  const calendarWeekContainerStyle = useComponentStyle('calendarWeekContainer');
+  const calendarWeekdayStyle = useComponentStyle('calendarWeekday');
+
   const locale = Localization.useLocalize();
 
   const _value = _.sortBy(_.castArray(value ?? []).map(x => new _Date(x)), 'year', 'month', 'day');
@@ -137,14 +141,14 @@ const CalendarBase = createComponent(({
           }}><Icon name='chevron-right' size={theme.fontSizeBase * 1.5} /></Pressable>
         </View>
       </View>
-      <View style={[calendarStyle.weekContainer, theme.styles.calendarWeekContainerStyle]}>
-        <Text style={[calendarStyle.weekdays, theme.styles.calendarWeekdayStyle]}>{locale.string('calendar.weekdays.sunday')}</Text>
-        <Text style={[calendarStyle.weekdays, theme.styles.calendarWeekdayStyle]}>{locale.string('calendar.weekdays.monday')}</Text>
-        <Text style={[calendarStyle.weekdays, theme.styles.calendarWeekdayStyle]}>{locale.string('calendar.weekdays.tuesday')}</Text>
-        <Text style={[calendarStyle.weekdays, theme.styles.calendarWeekdayStyle]}>{locale.string('calendar.weekdays.wednesday')}</Text>
-        <Text style={[calendarStyle.weekdays, theme.styles.calendarWeekdayStyle]}>{locale.string('calendar.weekdays.thursday')}</Text>
-        <Text style={[calendarStyle.weekdays, theme.styles.calendarWeekdayStyle]}>{locale.string('calendar.weekdays.friday')}</Text>
-        <Text style={[calendarStyle.weekdays, theme.styles.calendarWeekdayStyle]}>{locale.string('calendar.weekdays.saturday')}</Text>
+      <View style={[calendarStyle.weekContainer, calendarWeekContainerStyle]}>
+        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.sunday')}</Text>
+        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.monday')}</Text>
+        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.tuesday')}</Text>
+        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.wednesday')}</Text>
+        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.thursday')}</Text>
+        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.friday')}</Text>
+        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.saturday')}</Text>
       </View>
       <CalendarBody selected={_value} selectable={_selectable} onSelect={({ year, month, day }) => {
 

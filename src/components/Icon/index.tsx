@@ -30,9 +30,9 @@ import Text from '../Text';
 import { GLYPH_MAPS, ICON_SETS } from '../Icons';
 import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
-import { useTextStyle } from '../Text/style';
 import { text_style } from '../../internals/text_style';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {
   icon: Icon;
@@ -41,21 +41,22 @@ type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {
 }>
 
 export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>({
+  classes,
   icon,
   name,
   style,
   iconStyle,
   children,
   ...props
-}: IconProps<Icon>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>) => {
+}: IconProps<Icon> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>) => {
 
   const _Icon = ICON_SETS[icon];
 
   const theme = useTheme();
-  const textStyle = useTextStyle();
+  const textStyle = useComponentStyle('text', classes) as TextStyle;
   const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.bodyColor } }).style, [theme]) as TextStyle;
 
-  const _iconStyle = StyleSheet.flatten([defaultStyle, theme.styles.textStyle, textStyle, style, iconStyle]);
+  const _iconStyle = StyleSheet.flatten([defaultStyle, textStyle, style, iconStyle]);
   const { fontSize, color } = _iconStyle ?? {};
 
   return <Text ref={forwardRef} style={style} {...props}>

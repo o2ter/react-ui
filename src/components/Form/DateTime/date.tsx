@@ -30,12 +30,14 @@ import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { DatePicker } from '../../DateTime';
 import { createComponent } from '../../../internals/utils';
+import { ClassNames, useComponentStyle } from '../../Style';
 
 type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   name: string | string[];
 }>;
 
 export const FormDate = createComponent(({
+  classes,
   name,
   min,
   max,
@@ -45,10 +47,12 @@ export const FormDate = createComponent(({
   selectable = () => true,
   children,
   ...props
-}: FormDateProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>) => {
+}: FormDateProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>) => {
 
   const { value, error, touched, setTouched, onChange } = useField(name);
   const theme = useTheme();
+  const formDateStyle = useComponentStyle('formDate', classes);
+  const formDateErrorStyle = useComponentStyle('formDateError');
 
   const _onChange = React.useCallback((value: any) => { onChange(multiple ? value : _.first(value)); setTouched(); }, []);
 
@@ -63,9 +67,9 @@ export const FormDate = createComponent(({
       selectable={selectable}
       disabled={disabled}
       style={[
-        theme.styles.formDateStyle,
+        formDateStyle,
         !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
-        !touched || _.isEmpty(error) ? {} : theme.styles.formDateErrorStyle,
+        !touched || _.isEmpty(error) ? {} : formDateErrorStyle,
         style
       ]}
       {...props} />

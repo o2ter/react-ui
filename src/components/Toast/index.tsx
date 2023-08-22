@@ -32,6 +32,7 @@ import { ValidateError } from '@o2ter/valid.js';
 import { useTheme } from '../../theme';
 import { useSafeAreaInsets } from '../SafeAreaView';
 import { useLocalize } from '@o2ter/i18n';
+import { useComponentStyle } from '../Style';
 
 type ToastMessage = string | (Error & { code?: number });
 type ToastType = 'success' | 'info' | 'warning' | 'error';
@@ -83,6 +84,8 @@ const ToastBody: React.FC<{
 
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const theme = useTheme();
+  const toastStyle = useComponentStyle('toast');
+  const toastTextStyle = useComponentStyle('toastText');
 
   function _dismiss() {
     Animated.timing(fadeAnim, {
@@ -123,7 +126,7 @@ const ToastBody: React.FC<{
         justifyContent: 'space-between',
       },
       toastColorStyle,
-      theme.styles.toastStyle,
+      toastStyle,
       { opacity: fadeAnim },
     ]}>
     {_.isString(style) && <Svg width={24} height={24}><Path fill={color} d={icons[style]} /></Svg>}
@@ -135,7 +138,7 @@ const ToastBody: React.FC<{
         fontSize: theme.fontSizeBase,
         color: messageColor,
       },
-      theme.styles.toastTextStyle,
+      toastTextStyle,
     ]}>{_message}</Text>
     <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
   </Animated.View>

@@ -29,6 +29,7 @@ import { Awaitable } from 'sugax';
 import { Animated, View, ActivityIndicator as RNActivityIndicator, StyleSheet, Platform } from 'react-native';
 
 import { useTheme } from '../../theme';
+import { useComponentStyle } from '../Style';
 
 const ActivityIndicatorContext = React.createContext<{
   setTasks: React.Dispatch<React.SetStateAction<string[]>>;
@@ -94,6 +95,8 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
   const theme = useTheme();
+  const defaultStyle = useComponentStyle('activityIndicator');
+  const defaultBackdropStyle = useComponentStyle('activityIndicatorBackdrop');
 
   React.useEffect(() => {
 
@@ -125,11 +128,11 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
           web: { position: 'fixed' } as any,
           default: {},
         }),
-        theme.styles.activityIndicator,
+        defaultStyle,
       ]}>
       {backdrop === true ? <View style={[
         style.activityIndicatorBackdrop,
-        theme.styles.activityIndicatorBackdrop
+        defaultBackdropStyle
       ]}><ActivityIndicator /></View> : <ActivityIndicator />}
     </Animated.View>}
   </ActivityIndicatorContext.Provider>;

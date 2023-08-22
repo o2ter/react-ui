@@ -32,19 +32,22 @@ import { useField } from '../Form';
 import { Modify } from '../../../internals/types';
 import { useTheme } from '../../../theme';
 import { createComponent } from '../../../internals/utils';
+import { ClassNames, useComponentStyle } from '../../Style';
 
 type FormErrorMessageProps = Modify<TextProps, {
   name: string | string[];
 }>
 
 export const FormErrorMessage = createComponent(({
+  classes,
   name,
   style,
   ...props
-}: FormErrorMessageProps, forwardRef: React.ForwardedRef<Text>) => {
+}: FormErrorMessageProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<Text>) => {
 
   const { error, touched } = useField(name);
   const theme = useTheme();
+  const formErrorMessageStyle = useComponentStyle('formErrorMessage', classes);
 
   const path = _.toPath(name);
   const _error = error.find(x => x instanceof ValidateError ? _.isEqual(x.path, path) : true) ?? _.first(error);
@@ -56,7 +59,7 @@ export const FormErrorMessage = createComponent(({
     <React.Fragment>
       {touched && !_.isNil(message) && <Text ref={forwardRef} style={[
         { color: theme.themeColors.danger },
-        theme.styles.formErrorMessageStyle,
+        formErrorMessageStyle,
         style,
       ]} {...props}>{message}</Text>}
     </React.Fragment>

@@ -37,8 +37,8 @@ import { KeyboardAwareScrollable } from './KeyboardAwareScrollable';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { useMergeRefs } from 'sugax';
-import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 const ScrollViewBase: typeof RNScrollView = KeyboardAwareScrollable(RNScrollView);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
@@ -61,6 +61,7 @@ type ScrollViewProps = Modify<RNScrollViewProps, {
 }>
 
 export const ScrollView = createComponent(({
+  classes,
   onRefresh,
   onLayout,
   onContentSizeChange,
@@ -72,11 +73,10 @@ export const ScrollView = createComponent(({
   horizontal = false,
   children,
   ...props
-}: ScrollViewProps, forwardRef: React.ForwardedRef<ScrollViewRef>) => {
+}: ScrollViewProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<ScrollViewRef>) => {
 
   const scrollViewRef = React.useRef<ScrollViewRef>();
   const ref = useMergeRefs(scrollViewRef, forwardRef);
-  const theme = useTheme();
 
   const [layoutMeasurement, setLayout] = React.useState<LayoutRectangle>();
   const [contentSize, setContentSize] = React.useState<NativeScrollSize>();
@@ -87,12 +87,15 @@ export const ScrollView = createComponent(({
     layoutMeasurement,
     contentSize,
     horizontal,
-  }), [layoutMeasurement, contentSize, scroll, horizontal])
+  }), [layoutMeasurement, contentSize, scroll, horizontal]);
+
+  const scrollableStyle = useComponentStyle('scrollable', classes);
+  const scrollableContentContainerStyle = useComponentStyle('scrollableContentContainer');
 
   return <ScrollViewBase
     ref={ref}
-    style={[theme.styles.scrollableStyle, style]}
-    contentContainerStyle={[theme.styles.scrollableContentContainerStyle, contentContainerStyle]}
+    style={[scrollableStyle, style]}
+    contentContainerStyle={[scrollableContentContainerStyle, contentContainerStyle]}
     onLayout={(event) => {
       setLayout(event.nativeEvent.layout);
       if (_.isFunction(onLayout)) onLayout(event);

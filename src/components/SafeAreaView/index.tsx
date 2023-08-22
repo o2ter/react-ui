@@ -29,8 +29,8 @@ import { useMergeRefs } from 'sugax';
 import { View, ViewProps, ViewStyle, StyleSheet, useWindowDimensions, LayoutRectangle, ScaledSize } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Modify } from '../../internals/types';
-import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 export { SafeAreaProvider, useSafeAreaInsets, useSafeAreaFrame, withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TOP = 0b1000,
@@ -63,16 +63,17 @@ type SafeAreaViewProps = Modify<ViewProps, {
 }>
 
 export const SafeAreaView = createComponent(({
+  classes,
   style,
   edges,
   children,
   onLayout,
   ...props
-}: SafeAreaViewProps, forwardRef: React.ForwardedRef<View>) => {
+}: SafeAreaViewProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<View>) => {
 
   const viewRef = React.useRef<View>();
   const ref = useMergeRefs(viewRef, forwardRef);
-  const theme = useTheme();
+  const safeAreaViewStyle = useComponentStyle('safeAreaView', classes);
 
   const insets = useSafeAreaInsets();
   const windowDimensions = useWindowDimensions();
@@ -95,7 +96,7 @@ export const SafeAreaView = createComponent(({
     paddingBottom = paddingVertical,
     paddingLeft = paddingHorizontal,
     ..._style
-  }: ViewStyle = StyleSheet.flatten([theme.styles.safeAreaViewStyle, style]) ?? {};
+  }: ViewStyle = StyleSheet.flatten([safeAreaViewStyle, style]) ?? {};
 
   return <View
     ref={ref}

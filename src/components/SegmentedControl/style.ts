@@ -24,10 +24,7 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { Animated, View, Text, Pressable, StyleSheet } from 'react-native';
-import { List } from '../List';
-import { Icon } from '../Icon';
+import { StyleSheet } from 'react-native';
 
 export const style = StyleSheet.create({
 

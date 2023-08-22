@@ -32,11 +32,13 @@ import { PickerBase } from './picker';
 import { Modify } from '../../internals/types';
 import { useDefaultInputStyle } from '../TextInput/style';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
 type DatePickerProps = Modify<TextProps, DatePickerBaseProps>;
 
 export const DatePicker = createComponent(({
+  classes,
   value,
   min,
   max,
@@ -47,10 +49,11 @@ export const DatePicker = createComponent(({
   style,
   children,
   ...props
-}: DatePickerProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerBase>>) => {
+}: DatePickerProps & { classes?: ClassNames; }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerBase>>) => {
 
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme);
+  const datePickerStyle = useComponentStyle('datePicker', classes);
 
   const date = _.castArray(value ?? []).map(x => new Calendar.Date(x));
 
@@ -80,7 +83,7 @@ export const DatePicker = createComponent(({
       text={date.map(x => x.toString()).join(', ')}
       style={[
         defaultStyle,
-        theme.styles.datePickerStyle,
+        datePickerStyle,
         style
       ]}
       picker={<_Calendar />}

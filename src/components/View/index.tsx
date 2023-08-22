@@ -26,23 +26,20 @@
 import _ from 'lodash';
 import React from 'react';
 import { View as RNView, ViewProps } from 'react-native';
-import { useTheme } from '../../theme';
-import { useViewStyle } from './style';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 export const View = createComponent(({
+  classes,
   style,
   children,
   ...props
-}: ViewProps, forwardRef: React.ForwardedRef<RNView>) => {
-
-  const theme = useTheme();
-  const viewStyle = useViewStyle();
-
+}: ViewProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<RNView>) => {
+  const viewStyle = useComponentStyle('view', classes);
   return (
     <RNView
       ref={forwardRef}
-      style={[theme.styles.viewStyle, viewStyle, style]}
+      style={[viewStyle, style]}
       {...props}>
       {children}
     </RNView>

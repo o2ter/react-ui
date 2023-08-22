@@ -27,10 +27,11 @@ import _ from 'lodash';
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ItemValue, PickerNative, PickerNativeProps } from './native';
-import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 export const PickerAndroid = createComponent(<T = ItemValue>({
+  classes,
   value,
   items = [],
   disabled = false,
@@ -39,11 +40,10 @@ export const PickerAndroid = createComponent(<T = ItemValue>({
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}: PickerNativeProps<T>, forwardRef: React.ForwardedRef<Text>) => {
+}: PickerNativeProps<T> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<Text>) => {
 
   const selected = _.find(items, x => x.value === value);
-
-  const theme = useTheme();
+  const pickerStyle = useComponentStyle('picker', classes);
 
   function _setShowPicker(value: boolean) {
     value ? onFocus() : onBlur();
@@ -51,7 +51,7 @@ export const PickerAndroid = createComponent(<T = ItemValue>({
 
   return (
     <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
-      <Text ref={forwardRef} style={[theme.styles.pickerStyle, style]}>{renderText(selected)}</Text>
+      <Text ref={forwardRef} style={[pickerStyle, style]}>{renderText(selected)}</Text>
       <PickerNative
         value={value}
         items={items}

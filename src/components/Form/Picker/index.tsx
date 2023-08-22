@@ -33,12 +33,14 @@ import { useDefaultInputStyle } from '../../TextInput/style';
 import { useEquivalent } from 'sugax';
 import { createComponent } from '../../../internals/utils';
 import { ItemValue } from '../../Picker/native';
+import { useComponentStyle } from '../../Style';
 
 type FormPickerProps<T = ItemValue> = Modify<React.ComponentPropsWithoutRef<typeof Picker<T>>, {
   name: string | string[];
 }>
 
 export const FormPicker = createComponent(<T = ItemValue>({
+  classes,
   name,
   style,
   items,
@@ -48,6 +50,8 @@ export const FormPicker = createComponent(<T = ItemValue>({
   const { value, error, touched, setTouched, onChange } = useField(name);
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme);
+  const formPickerStyle = useComponentStyle('formPicker', classes);
+  const formPickerErrorStyle = useComponentStyle('formPickerError');
 
   React.useEffect(() => {
 
@@ -65,9 +69,9 @@ export const FormPicker = createComponent(<T = ItemValue>({
       onValueChange={_onChange}
       style={[
         defaultStyle,
-        theme.styles.formPickerStyle,
+        formPickerStyle,
         !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
-        !touched || _.isEmpty(error) ? {} : theme.styles.formPickerErrorStyle,
+        !touched || _.isEmpty(error) ? {} : formPickerErrorStyle,
         style,
       ]}
       {...props} />

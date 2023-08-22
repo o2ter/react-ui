@@ -31,12 +31,14 @@ import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { createComponent } from '../../../internals/utils';
+import { useComponentStyle } from '../../Style';
 
 type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput>, {
   name: string | string[];
 }>
 
 export const FormTextField = createComponent(({
+  classes,
   name,
   style,
   ...props
@@ -44,6 +46,8 @@ export const FormTextField = createComponent(({
 
   const { value, error, touched, setTouched, onChange, submit } = useField(name);
   const theme = useTheme();
+  const formTextFieldStyle = useComponentStyle('formTextField', classes);
+  const formTextFieldErrorStyle = useComponentStyle('formTextFieldError');
 
   const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => { onChange(e.nativeEvent.text); setTouched(); }, []);
 
@@ -55,9 +59,9 @@ export const FormTextField = createComponent(({
       onEndEditing={onEndEditing}
       onSubmitEditing={submit}
       style={[
-        theme.styles.formTextFieldStyle,
+        formTextFieldStyle,
         !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
-        !touched || _.isEmpty(error) ? {} : theme.styles.formTextFieldErrorStyle,
+        !touched || _.isEmpty(error) ? {} : formTextFieldErrorStyle,
         style,
       ]}
       {...props} />

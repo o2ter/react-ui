@@ -29,8 +29,10 @@ import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { ItemValue, PickerNative, PickerNativeProps } from './native';
 import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 export const PickerIOS = createComponent(<T = ItemValue>({
+  classes,
   value,
   items = [],
   disabled = false,
@@ -39,13 +41,14 @@ export const PickerIOS = createComponent(<T = ItemValue>({
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}: PickerNativeProps<T>, forwardRef: React.ForwardedRef<Text>) => {
+}: PickerNativeProps<T> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<Text>) => {
 
   const selected = _.find(items, x => x.value === value);
 
   const [showPicker, setShowPicker] = React.useState(false);
   const [orientation, setOrientation] = React.useState('portrait');
   const theme = useTheme();
+  const pickerStyle = useComponentStyle('picker', classes);
 
   function _setShowPicker(value: boolean) {
     setShowPicker(value);
@@ -55,7 +58,7 @@ export const PickerIOS = createComponent(<T = ItemValue>({
   return (
     <React.Fragment>
       <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
-        <Text ref={forwardRef} style={[theme.styles.pickerStyle, style]}>{renderText(selected)}</Text>
+        <Text ref={forwardRef} style={[pickerStyle, style]}>{renderText(selected)}</Text>
       </TouchableOpacity>
       <Modal
         transparent

@@ -33,8 +33,8 @@ import {
 } from 'react-native';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
-import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
@@ -44,6 +44,7 @@ type SectionListProps<ItemT = any, SectionT = DefaultSectionT> = Modify<RNSectio
 }>
 
 export const SectionList = createComponent(<ItemT = any, SectionT = DefaultSectionT>({
+  classes,
   data,
   extraData,
   onRefresh,
@@ -53,10 +54,12 @@ export const SectionList = createComponent(<ItemT = any, SectionT = DefaultSecti
   renderItem,
   children,
   ...props
-}: SectionListProps<ItemT, SectionT>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNSectionList<ItemT, SectionT>>>) => {
+}: SectionListProps<ItemT, SectionT> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNSectionList<ItemT, SectionT>>>) => {
 
-  const theme = useTheme();
   const _renderItem = React.useCallback(renderItem ?? (() => <></>), [data, extraData]);
+
+  const scrollableStyle = useComponentStyle('scrollable', classes);
+  const scrollableContentContainerStyle = useComponentStyle('scrollableContentContainer');
 
   return (
     <RNSectionList
@@ -64,8 +67,8 @@ export const SectionList = createComponent(<ItemT = any, SectionT = DefaultSecti
       data={data}
       extraData={extraData}
       renderItem={_renderItem}
-      style={[theme.styles.scrollableStyle, style]}
-      contentContainerStyle={[theme.styles.scrollableContentContainerStyle, contentContainerStyle]}
+      style={[scrollableStyle, style]}
+      contentContainerStyle={[scrollableContentContainerStyle, contentContainerStyle]}
       refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : undefined}
       {...props} />
   )

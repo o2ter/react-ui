@@ -27,8 +27,8 @@ import _ from 'lodash';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ItemValue, PickerNative, PickerNativeProps } from './native';
-import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 const _style = StyleSheet.create({
   picker: {
@@ -43,6 +43,7 @@ const _style = StyleSheet.create({
 }) as any;
 
 export const PickerWeb = createComponent(<T = ItemValue>({
+  classes,
   value,
   items = [],
   disabled = false,
@@ -51,10 +52,8 @@ export const PickerWeb = createComponent(<T = ItemValue>({
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}: PickerNativeProps<T>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerNative<T>>>) => {
-
-  const theme = useTheme();
-
+}: PickerNativeProps<T> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerNative<T>>>) => {
+  const pickerStyle = useComponentStyle('picker', classes);
   return (
     <PickerNative
       ref={forwardRef}
@@ -65,7 +64,7 @@ export const PickerWeb = createComponent(<T = ItemValue>({
       onValueChange={onValueChange}
       onFocus={onFocus}
       onBlur={onBlur}
-      style={[_style.picker, theme.styles.pickerStyle, style]} />
+      style={[_style.picker, pickerStyle, style]} />
   );
 }, {
   displayName: 'Picker',

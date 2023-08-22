@@ -25,26 +25,29 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Image as RNImage, ImageProps as RNImageProps, ImageURISource, ImageRequireSource, StyleSheet } from 'react-native';
+import { Image as RNImage, ImageProps as RNImageProps, ImageURISource, ImageRequireSource, StyleSheet, ImageStyle } from 'react-native';
 import ImageBase from './ImageBase';
 import { Modify } from '../../internals/types';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, useComponentStyle } from '../Style';
 
 type ImageProps = Modify<RNImageProps, {
   source: ImageURISource | ImageRequireSource;
 }>
 
 export const Image = createComponent(({
+  classes,
   source,
   style,
   ...props
-}: ImageProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof ImageBase>>) => {
+}: ImageProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof ImageBase>>) => {
 
+  const imageStyle = useComponentStyle('image', classes) as ImageStyle;
   const {
     width,
     height,
     ..._style
-  } = StyleSheet.flatten(style) ?? {};
+  } = StyleSheet.flatten([imageStyle, style]) ?? {};
 
   const _source = RNImage.resolveAssetSource ? RNImage.resolveAssetSource(source) : undefined;
   const [imageSize, setImageSize] = React.useState({ width: _source?.width ?? 0, height: _source?.height ?? 0 });

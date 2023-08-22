@@ -44,8 +44,8 @@ import { transparent } from '../../color';
 import { text_style } from '../../internals/text_style';
 import { Modify } from '../../internals/types';
 import { Text } from '../Text';
-import { TextStyleProvider } from '../Text/style';
 import { createComponent } from '../../internals/utils';
+import { ClassNames, StyleProvider, useComponentStyle } from '../Style';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -54,6 +54,7 @@ type ButtonStateCallbackType = PressableStateCallbackType & {
 };
 
 type ButtonProps = Modify<PressableProps, {
+  classes?: ClassNames;
   color?: string;
   variant?: string;
   outline?: boolean;
@@ -72,14 +73,15 @@ const ButtonText = Animated.createAnimatedComponent(class extends React.PureComp
 }> {
   render() {
     return (
-      <TextStyleProvider style={(prev) => StyleSheet.flatten([prev, this.props.style])}>
+      <StyleProvider components={{ text: this.props.style }}>
         <Text selectable={false}>{this.props.children}</Text>
-      </TextStyleProvider>
+      </StyleProvider>
     );
   }
 });
 
 export const Button = createComponent(({
+  classes,
   color,
   variant = 'primary',
   outline = false,
@@ -112,6 +114,7 @@ export const Button = createComponent(({
   }, [focused.hovered || focused.pressed]);
 
   const theme = useTheme();
+  const buttonStyle = useComponentStyle('button', classes);
   const selectedColor = color ?? theme.themeColors[variant] ?? theme.colors[variant];
 
   const colors = React.useMemo(() => {
@@ -139,7 +142,7 @@ export const Button = createComponent(({
       fontWeight: theme.fontWeights['normal'] ?? theme.fontWeightBase,
       opacity: disabled ? 0.65 : 1,
     } as TextStyle,
-    theme.styles.buttonStyle,
+    buttonStyle,
   ]), [theme, size, disabled]);
 
   const defaultStyle = React.useMemo(() => StyleSheet.create({
