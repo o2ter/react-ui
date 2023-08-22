@@ -46,3 +46,14 @@ export const fontWeights: Record<string, FontWeight> = {
   semibold: '600',
   bold: '700',
 };
+
+export const displayFontSizes: Record<string, number> = {
+  '1': fontSizeBase * 5,
+  '2': fontSizeBase * 4.5,
+  '3': fontSizeBase * 4,
+  '4': fontSizeBase * 3.5,
+  '5': fontSizeBase * 3,
+  '6': fontSizeBase * 2.5,
+};
+
+export const displayFontWeightBase: FontWeight = '300';
