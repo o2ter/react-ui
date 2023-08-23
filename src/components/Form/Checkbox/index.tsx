@@ -28,7 +28,6 @@ import React from 'react';
 import { TextProps, Platform } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
-import { Modify } from '../../../internals/types';
 
 import { Icon } from '../../Icon';
 import { createComponent } from '../../../internals/utils';
