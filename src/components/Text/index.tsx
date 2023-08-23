@@ -25,10 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text as RNText, TextProps, StyleSheet } from 'react-native';
+import { Text as RNText, TextProps, StyleSheet, TextStyle } from 'react-native';
 import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, StyleProvider, useComponentStyle } from '../Style';
+import { text_style } from '../../internals/text_style';
 
 export const Text = createComponent(({
   classes,
@@ -44,7 +45,14 @@ export const Text = createComponent(({
       ref={forwardRef}
       style={[defaultStyle, textStyle, style]}
       {...props}>
-      {children}
+      <StyleProvider components={{
+        text: [
+          _.pick(textStyle, ...text_style) as TextStyle,
+          _.pick(style, ...text_style) as TextStyle,
+        ],
+      }}>
+        {children}
+      </StyleProvider>
     </RNText>
   );
 }, {
