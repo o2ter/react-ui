@@ -23,12 +23,12 @@
 //  THE SOFTWARE.
 //
 
-export const spacer: number = 16;
-export const spacers: Record<string, number> = {
+export const spacer: number | ((rem: number) => number) = rem => rem;
+export const spacers: Record<string, number | ((base: number) => number)> = {
   '0': 0,
-  '1': spacer * 0.25,
-  '2': spacer * 0.5,
-  '3': spacer,
-  '4': spacer * 1.5,
-  '5': spacer * 3,
+  '1': base => base * 0.25,
+  '2': base => base * 0.5,
+  '3': base => base,
+  '4': base => base * 1.5,
+  '5': base => base * 3,
 };

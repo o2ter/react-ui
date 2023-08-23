@@ -27,16 +27,16 @@ export type FontWeight = 'normal' | 'bold' | '100' | '200' | '300' | '400' | '50
 
 export const fontSizeBase: number = 16;
 
-export const fontSizes: Record<string, number> = {
-  '1': fontSizeBase * 2.5,
-  '2': fontSizeBase * 2,
-  '3': fontSizeBase * 1.75,
-  '4': fontSizeBase * 1.5,
-  '5': fontSizeBase * 1.25,
-  '6': fontSizeBase,
-  'normal': fontSizeBase,
-  'small': fontSizeBase * 0.875,
-  'large': fontSizeBase * 1.25,
+export const fontSizes: Record<string, number | ((base: number) => number)> = {
+  '1': base => base * 2.5,
+  '2': base => base * 2,
+  '3': base => base * 1.75,
+  '4': base => base * 1.5,
+  '5': base => base * 1.25,
+  '6': base => base,
+  'normal': base => base,
+  'small': base => base * 0.875,
+  'large': base => base * 1.25,
 };
 
 export const fontWeightBase: FontWeight = '400';
@@ -47,13 +47,13 @@ export const fontWeights: Record<string, FontWeight> = {
   bold: '700',
 };
 
-export const displayFontSizes: Record<string, number> = {
-  '1': fontSizeBase * 5,
-  '2': fontSizeBase * 4.5,
-  '3': fontSizeBase * 4,
-  '4': fontSizeBase * 3.5,
-  '5': fontSizeBase * 3,
-  '6': fontSizeBase * 2.5,
+export const displayFontSizes: Record<string, number | ((base: number) => number)> = {
+  '1': base => base * 5,
+  '2': base => base * 4.5,
+  '3': base => base * 4,
+  '4': base => base * 3.5,
+  '5': base => base * 3,
+  '6': base => base * 2.5,
 };
 
 export const displayFontWeight: FontWeight = '300';

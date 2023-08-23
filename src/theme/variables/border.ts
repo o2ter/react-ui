@@ -23,19 +23,19 @@
 //  THE SOFTWARE.
 //
 
-export const borderWidth: number = 1;
-export const borderWidths: Record<string, number> = {
-  '1': 1,
-  '2': 2,
-  '3': 3,
-  '4': 4,
-  '5': 5,
+export const borderWidth: number | ((rem: number) => number) = 1;
+export const borderWidths: Record<string, number | ((base: number) => number)> = {
+  '1': base => base,
+  '2': base => base * 2,
+  '3': base => base * 3,
+  '4': base => base * 4,
+  '5': base => base * 5,
 };
 
-export const borderRadiusBase: number = 6;
-export const borderRadius: Record<string, number> = {
-  'sm': 4,
-  'lg': 8,
-  'xl': 16,
-  'xxl': 32,
+export const borderRadiusBase: number | ((rem: number) => number) = rem => rem * 0.75;
+export const borderRadius: Record<string, number | ((base: number) => number)> = {
+  'sm': base => base * 2 / 3,
+  'lg': base => base * 4 / 3,
+  'xl': base => base * 8 / 3,
+  'xxl': base => base * 16 / 3,
 };

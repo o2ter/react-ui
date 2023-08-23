@@ -85,7 +85,40 @@ const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T
   return windowDimensions.width < theme.breakpoints[breakpoint] ? selector.down : selector.up;
 }
 
-export function useTheme() {
+const decodeVariables = (variables: typeof defaultVariables) => {
+
+  const {
+    fontSizeBase,
+    fontSizes: _fontSizes,
+    displayFontSizes: _displayFontSizes,
+    spacer: _spacer,
+    spacers: _spacers,
+    borderWidth: _borderWidth,
+    borderWidths: _borderWidths,
+    borderRadiusBase: _borderRadiusBase,
+    borderRadius: _borderRadius,
+    ...remains
+  } = variables;
+
+  const spacer = _.isFunction(_spacer) ? _spacer(fontSizeBase) : _spacer;
+  const borderWidth = _.isFunction(_borderWidth) ? _borderWidth(fontSizeBase) : _borderWidth;
+  const borderRadiusBase = _.isFunction(_borderRadiusBase) ? _borderRadiusBase(fontSizeBase) : _borderRadiusBase;
+
+  return {
+    ...remains,
+    fontSizeBase,
+    spacer,
+    borderWidth,
+    borderRadiusBase,
+    fontSizes: _.mapValues(_fontSizes, v => _.isFunction(v) ? v(fontSizeBase) : v),
+    displayFontSizes: _.mapValues(_displayFontSizes, v => _.isFunction(v) ? v(fontSizeBase) : v),
+    spacers: _.mapValues(_spacers, v => _.isFunction(v) ? v(spacer) : v),
+    borderWidths: _.mapValues(_borderWidths, v => _.isFunction(v) ? v(borderWidth) : v),
+    borderRadius: _.mapValues(_borderRadius, v => _.isFunction(v) ? v(borderRadiusBase) : v),
+  };
+}
+
+export const useTheme = () => {
 
   const { variables, styles } = React.useContext(ThemeContext);
   const windowDimensions = useWindowDimensions();
@@ -101,7 +134,7 @@ export function useTheme() {
         if (_.isNil(computed_style)) computed_style = styles(computed);
         return computed_style;
       },
-    }, variables);
+    }, decodeVariables(variables));
 
     return computed;
 
