@@ -60,7 +60,15 @@ export const FormRadio = createComponent(({
 
   const selected = value === _value;
 
-  const containerStyle = ['flexDirection', 'gap'];
+  const innerStyle = [
+    'width',
+    'height',
+    'borderRadius',
+    'backgroundColor',
+    'borderColor',
+    'borderWidth',
+    'opacity',
+  ];
   const _style = flattenStyle([
     {
       flexDirection: 'row',
@@ -80,7 +88,7 @@ export const FormRadio = createComponent(({
   return (
     <Pressable
       ref={forwardRef}
-      style={_.pick(_style, ...containerStyle)}
+      style={_.omit(_style, ...innerStyle)}
       onPress={onPress ?? (() => onChange(value))}
       {...Platform.select({
         web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
@@ -88,7 +96,7 @@ export const FormRadio = createComponent(({
       })}
       {...props}
     >
-      <View style={_.omit(_style, ...containerStyle)}>
+      <View style={_.pick(_style, ...innerStyle)}>
         {selected && <Svg width='100%' height='100%' viewBox='-4 -4 8 8'>
           <Circle r='2' fill='white' />
         </Svg>}

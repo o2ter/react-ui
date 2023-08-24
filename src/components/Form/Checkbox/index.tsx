@@ -60,7 +60,15 @@ export const FormCheckbox = createComponent(({
 
   const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
 
-  const containerStyle = ['flexDirection', 'gap'];
+  const innerStyle = [
+    'width',
+    'height',
+    'borderRadius',
+    'backgroundColor',
+    'borderColor',
+    'borderWidth',
+    'opacity',
+  ];
   const _style = flattenStyle([
     {
       flexDirection: 'row',
@@ -80,7 +88,7 @@ export const FormCheckbox = createComponent(({
   return (
     <Pressable
       ref={forwardRef}
-      style={_.pick(_style, ...containerStyle)}
+      style={_.omit(_style, ...innerStyle)}
       onPress={onPress ?? (() => onChange((state: any) => {
         if (_.isNil(value)) return !state;
         return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state ?? []), value];
@@ -91,7 +99,7 @@ export const FormCheckbox = createComponent(({
       })}
       {...props}
     >
-      <View style={_.omit(_style, ...containerStyle)}>
+      <View style={_.pick(_style, ...innerStyle)}>
         {selected && <Svg width='100%' height='100%' viewBox='0 0 20 20'>
           <Path
             fill='none'
