@@ -39,7 +39,12 @@ export const Text = createComponent(({
 }: TextProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<RNText>) => {
   const theme = useTheme();
   const textStyle = useComponentStyle('text', classes);
-  const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.bodyColor } }).style, [theme]);
+  const defaultStyle = React.useMemo(() => StyleSheet.create({
+    style: {
+      color: theme.bodyColor,
+      fontSize: theme.fontSizeBase,
+    },
+  }).style, [theme]);
   return (
     <RNText
       ref={forwardRef}
