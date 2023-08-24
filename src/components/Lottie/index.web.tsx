@@ -26,9 +26,10 @@
 import _ from 'lodash';
 import React from 'react';
 import { useMergeRefs } from 'sugax';
-import { View, StyleSheet, Animated, ViewProps, LayoutRectangle } from 'react-native';
+import { View, Animated, ViewProps, LayoutRectangle } from 'react-native';
 import LottieWeb, { AnimationItem, RendererType } from 'lottie-web';
 import { Modify } from '../../internals/types';
+import { flattenStyle } from '../Style/flatten';
 
 type LottieProps = Modify<ViewProps, {
   source: any;
@@ -65,7 +66,7 @@ const LottieBase = React.forwardRef<View, LottieProps>(({
     get duration() { return handleRef.current?.getDuration(false) },
   }) as any);
 
-  const _style = StyleSheet.flatten(style) ?? {};
+  const _style = flattenStyle(style) ?? {};
 
   let aspectRatio;
   let _width = _style.width;

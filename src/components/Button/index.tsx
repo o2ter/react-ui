@@ -46,6 +46,7 @@ import { Modify } from '../../internals/types';
 import { Text } from '../Text';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, StyleProvider, useComponentStyle } from '../Style';
+import { flattenStyle } from '../Style/flatten';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -131,7 +132,7 @@ export const Button = createComponent(({
 
   }, [theme, selectedColor, outline]);
 
-  const _defaultStyle = React.useMemo(() => StyleSheet.flatten([
+  const _defaultStyle = React.useMemo(() => flattenStyle([
     {
       textAlign: 'center',
       paddingHorizontal: 12,
@@ -150,7 +151,7 @@ export const Button = createComponent(({
     button: _.omit(_defaultStyle, text_style),
   }), [_defaultStyle]);
 
-  const _style = StyleSheet.flatten([
+  const _style = flattenStyle([
     defaultStyle.text,
     _.pick(colors, text_style) as TextStyle,
     _.isFunction(titleStyle) ? titleStyle(focused) : titleStyle,

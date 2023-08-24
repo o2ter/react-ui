@@ -25,11 +25,12 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Image as RNImage, ImageProps as RNImageProps, ImageURISource, ImageRequireSource, StyleSheet, ImageStyle } from 'react-native';
+import { Image as RNImage, ImageProps as RNImageProps, ImageURISource, ImageRequireSource, ImageStyle } from 'react-native';
 import ImageBase from './ImageBase';
 import { Modify } from '../../internals/types';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
+import { flattenStyle } from '../Style/flatten';
 
 type ImageProps = Modify<RNImageProps, {
   source: ImageURISource | ImageRequireSource;
@@ -47,7 +48,7 @@ export const Image = createComponent(({
     width,
     height,
     ..._style
-  } = StyleSheet.flatten([imageStyle, style]) ?? {};
+  } = flattenStyle([imageStyle, style]) ?? {};
 
   const _source = RNImage.resolveAssetSource ? RNImage.resolveAssetSource(source) : undefined;
   const [imageSize, setImageSize] = React.useState({ width: _source?.width ?? 0, height: _source?.height ?? 0 });

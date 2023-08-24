@@ -25,9 +25,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { SvgCss, SvgCssUri } from 'react-native-svg';
 import { SVGProps } from './types';
+import { flattenStyle } from '../Style/flatten';
 
 export const SVG: React.FC<SVGProps> = ({
   source,
@@ -39,7 +40,7 @@ export const SVG: React.FC<SVGProps> = ({
     width,
     height,
     ..._style
-  } = StyleSheet.flatten(style) ?? {};
+  } = flattenStyle(style) ?? {};
 
   const { content, uri } = source ?? {};
 

@@ -26,11 +26,12 @@
 import _ from 'lodash';
 import React from 'react';
 import { useMergeRefs } from 'sugax';
-import { View, ViewProps, ViewStyle, StyleSheet, useWindowDimensions, LayoutRectangle, ScaledSize } from 'react-native';
+import { View, ViewProps, ViewStyle, useWindowDimensions, LayoutRectangle, ScaledSize } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Modify } from '../../internals/types';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
+import { flattenStyle } from '../Style/flatten';
 export { SafeAreaProvider, useSafeAreaInsets, useSafeAreaFrame, withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TOP = 0b1000,
@@ -96,7 +97,7 @@ export const SafeAreaView = createComponent(({
     paddingBottom = paddingVertical,
     paddingLeft = paddingHorizontal,
     ..._style
-  }: ViewStyle = StyleSheet.flatten([safeAreaViewStyle, style]) ?? {};
+  }: ViewStyle = flattenStyle([safeAreaViewStyle, style]) ?? {};
 
   return <View
     ref={ref}

@@ -25,8 +25,9 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Image, ImageProps, StyleSheet } from 'react-native';
+import { Image, ImageProps } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { flattenStyle } from '../Style/flatten';
 
 const _FastImage = FastImage as any;
 
@@ -35,7 +36,7 @@ export const ImageBase = React.forwardRef<Image, ImageProps>((
   forwardRef
 ) => {
 
-  const _style = StyleSheet.flatten(props.style);
+  const _style = flattenStyle(props.style);
 
   if (_style.width && _style.height) {
     if (!_.isNumber(props.blurRadius) || props.blurRadius <= 0)

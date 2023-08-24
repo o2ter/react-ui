@@ -25,9 +25,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { SVGProps } from './types';
 import { createComponent } from '../../internals/utils';
+import { flattenStyle } from '../Style/flatten';
 
 export const SVG = createComponent(({
   source,
@@ -40,7 +41,7 @@ export const SVG = createComponent(({
     height,
     aspectRatio,
     ..._style
-  } = StyleSheet.flatten(style) ?? {};
+  } = flattenStyle(style) ?? {};
 
   const { content, uri } = source ?? {};
   const dataStr = React.useMemo(() => _.isString(content) ? `data:image/svg+xml,${encodeURIComponent(content)}` : '', [content]);

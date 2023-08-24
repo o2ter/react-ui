@@ -25,10 +25,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import RNLottie, { AnimatedLottieViewProps, AnimationObject } from 'lottie-react-native';
 import { Modify } from '../../internals/types';
 import { createComponent } from '../../internals/utils';
+import { flattenStyle } from '../Style/flatten';
 
 type LottieProps = Modify<AnimatedLottieViewProps, {
   source: AnimationObject;
@@ -43,7 +43,7 @@ export const Lottie = createComponent(({
   ...props
 }: LottieProps, forwardRef: React.ForwardedRef<RNLottie>) => {
 
-  const _style = StyleSheet.flatten(style) ?? {};
+  const _style = flattenStyle(style) ?? {};
 
   let aspectRatio;
   let _width = _style.width;

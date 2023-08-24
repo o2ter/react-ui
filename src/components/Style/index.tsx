@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { StyleSheet, StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { useEquivalent } from 'sugax';
+import { flattenStyle } from './flatten';
 
 type ComponentStyles = {
 
@@ -98,8 +99,8 @@ const mergeStyle = <T extends Record<string, _StyleProp>>(
   parent: T,
   style: WithCallback<T>,
 ) => ({
-  ..._.mapValues(parent, v => StyleSheet.flatten(v)),
-  ..._.mapValues(style, (v, k) => StyleSheet.flatten([parent[k], _.isFunction(v) ? v(parent[k] as T[keyof T]) : v])),
+  ..._.mapValues(parent, v => flattenStyle(v)),
+  ..._.mapValues(style, (v, k) => flattenStyle([parent[k], _.isFunction(v) ? v(parent[k] as T[keyof T]) : v])),
 });
 
 export const StyleProvider: React.FC<React.PropsWithChildren<{
@@ -134,7 +135,7 @@ export const useComponentStyle = (
   return React.useMemo(() => {
     const names = _.compact(_.compact(_.flattenDeep([classNames])).join(' ').split(/\s/));
     const styles = _.values(_.pickBy(classes, (v, k) => _.includes(names, k)));
-    return StyleSheet.flatten([components[component], ...styles]);
+    return flattenStyle([components[component], ...styles]);
   }, [components, classes, component, classNames]);
 }
 
@@ -145,7 +146,7 @@ export const useStyle = (
   const names = _.sortedUniq(_.compact(_.compact(_.flattenDeep([classNames])).join(' ').split(/\s/)).sort());
   return React.useMemo(() => {
     const styles = _.values(_.pickBy(classes, (v, k) => _.includes(names, k)));
-    return StyleSheet.flatten(styles);
+    return flattenStyle(styles);
   }, [classes, names.join(' ')]);
 }
 

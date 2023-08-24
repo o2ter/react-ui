@@ -33,6 +33,7 @@ import { useTheme } from '../../theme';
 import { text_style } from '../../internals/text_style';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
+import { flattenStyle } from '../Style/flatten';
 
 type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {
   icon: Icon;
@@ -56,7 +57,7 @@ export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>({
   const textStyle = useComponentStyle('text', classes) as TextStyle;
   const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.bodyColor } }).style, [theme]) as TextStyle;
 
-  const _iconStyle = StyleSheet.flatten([defaultStyle, textStyle, style, iconStyle]);
+  const _iconStyle = flattenStyle([defaultStyle, textStyle, style, iconStyle]);
   const { fontSize, color } = _iconStyle ?? {};
 
   return <Text ref={forwardRef} style={style} {...props}>
