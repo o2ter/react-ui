@@ -30,7 +30,7 @@ import { NodeHandleProvider } from '../NodeHandleProvider';
 import { TouchableProps } from './types';
 import { createComponent } from '../../internals/utils';
 
-const supportsPointerEvent = () => typeof window !== 'undefined' && window.PointerEvent != null;
+export const supportsPointerEvent = () => typeof window !== 'undefined' && window.PointerEvent != null;
 const options = { passive: true };
 
 function normalizeEvent(event: any) {

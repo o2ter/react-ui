@@ -25,8 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { BrowserRouter, useRoutes } from 'react-router-dom';
+import { BrowserRouter, useRoutes, Link as _Link } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
+import { Modify } from '../../internals/types';
+import { createComponent } from '../../internals/utils';
+import { supportsPointerEvent } from '../Touchable/index.web';
 
 export {
   useHref,
@@ -36,9 +39,34 @@ export {
   useParams,
   useResolvedPath,
   useLinkClickHandler,
-  Link,
   NavLink,
 } from 'react-router-dom';
+
+type LinkProps = Modify<React.ComponentPropsWithoutRef<typeof _Link>, {
+  onHoverIn?: React.PointerEventHandler<HTMLAnchorElement>;
+  onHoverOut?: React.PointerEventHandler<HTMLAnchorElement>;
+}>
+
+export const Link = createComponent(({
+  onHoverIn,
+  onHoverOut,
+  children,
+  ...props
+}: LinkProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof _Link>>) => {
+
+  const _supportsPointerEvent = supportsPointerEvent();
+
+  const extra: Record<string, React.PointerEventHandler<HTMLAnchorElement>> = {};
+  const type = _supportsPointerEvent ? 'Pointer' : 'Mouse';
+  if (onHoverIn) extra[`on${type}Enter`] = onHoverIn;
+  if (onHoverOut) extra[`on${type}Leave`] = onHoverOut;
+
+  return (
+    <_Link ref={forwardRef} {...extra} {...props}>{children}</_Link>
+  );
+}, {
+  displayName: 'Link',
+});
 
 const NavigatorContext = React.createContext<Record<string, any> | undefined>(undefined);
 
