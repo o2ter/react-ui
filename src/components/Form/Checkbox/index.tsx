@@ -34,6 +34,7 @@ import { ClassNames, useComponentStyle } from '../../Style';
 import View from '../../View';
 import { Path, Svg } from 'react-native-svg';
 import { Modify } from '../../../internals/types';
+import { flattenStyle } from '../../index.web';
 
 type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   name: string | string[];
@@ -59,13 +60,27 @@ export const FormCheckbox = createComponent(({
 
   const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
 
+  const containerStyle = ['flexDirection', 'gap'];
+  const _style = flattenStyle([
+    {
+      flexDirection: 'row',
+      gap: 0.5 * theme.fontSizeBase,
+      width: theme.fontSizeBase,
+      height: theme.fontSizeBase,
+      borderRadius: 0.25 * theme.fontSizeBase,
+      backgroundColor: selected ? theme.styles.formCheckboxColor(selected) : theme.bodyBackground,
+      borderColor: selected ? theme.styles.formCheckboxColor(selected) : theme.grays['300'],
+      borderWidth: theme.borderWidth,
+      opacity: props.disabled ? 0.65 : 1,
+    },
+    formCheckboxStyle,
+    _.isFunction(style) ? style({ selected }) : style,
+  ]);
+
   return (
     <Pressable
       ref={forwardRef}
-      style={{
-        flexDirection: 'row',
-        gap: 0.5 * theme.fontSizeBase,
-      }}
+      style={_.pick(_style, ...containerStyle)}
       onPress={onPress ?? (() => onChange((state: any) => {
         if (_.isNil(value)) return !state;
         return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state ?? []), value];
@@ -76,19 +91,7 @@ export const FormCheckbox = createComponent(({
       })}
       {...props}
     >
-      <View style={[
-        {
-          width: theme.fontSizeBase,
-          height: theme.fontSizeBase,
-          borderRadius: 0.25 * theme.fontSizeBase,
-          backgroundColor: selected ? theme.styles.formCheckboxColor(selected) : theme.bodyBackground,
-          borderColor: selected ? theme.styles.formCheckboxColor(selected) : theme.grays['300'],
-          borderWidth: theme.borderWidth,
-          opacity: props.disabled ? 0.65 : 1,
-        },
-        formCheckboxStyle,
-        _.isFunction(style) ? style({ selected }) : style,
-      ]}>
+      <View style={_.omit(_style, ...containerStyle)}>
         {selected && <Svg width='100%' height='100%' viewBox='0 0 20 20'>
           <Path
             fill='none'

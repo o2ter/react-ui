@@ -34,6 +34,7 @@ import { ClassNames, useComponentStyle } from '../../Style';
 import View from '../../View';
 import { Circle, Svg } from 'react-native-svg';
 import { Modify } from '../../../internals/types';
+import { flattenStyle } from '../../index.web';
 
 type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   name: string | string[];
@@ -59,13 +60,27 @@ export const FormRadio = createComponent(({
 
   const selected = value === _value;
 
+  const containerStyle = ['flexDirection', 'gap'];
+  const _style = flattenStyle([
+    {
+      flexDirection: 'row',
+      gap: 0.5 * theme.fontSizeBase,
+      width: theme.fontSizeBase,
+      height: theme.fontSizeBase,
+      borderRadius: 0.5 * theme.fontSizeBase,
+      backgroundColor: selected ? theme.styles.formRadioColor(selected) : theme.bodyBackground,
+      borderColor: selected ? theme.styles.formRadioColor(selected) : theme.grays['300'],
+      borderWidth: theme.borderWidth,
+      opacity: props.disabled ? 0.65 : 1,
+    },
+    formRadioStyle,
+    _.isFunction(style) ? style({ selected }) : style,
+  ]);
+
   return (
     <Pressable
       ref={forwardRef}
-      style={{
-        flexDirection: 'row',
-        gap: 0.5 * theme.fontSizeBase,
-      }}
+      style={_.pick(_style, ...containerStyle)}
       onPress={onPress ?? (() => onChange(value))}
       {...Platform.select({
         web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
@@ -73,19 +88,7 @@ export const FormRadio = createComponent(({
       })}
       {...props}
     >
-      <View style={[
-        {
-          width: theme.fontSizeBase,
-          height: theme.fontSizeBase,
-          borderRadius: 0.5 * theme.fontSizeBase,
-          backgroundColor: selected ? theme.styles.formRadioColor(selected) : theme.bodyBackground,
-          borderColor: selected ? theme.styles.formRadioColor(selected) : theme.grays['300'],
-          borderWidth: theme.borderWidth,
-          opacity: props.disabled ? 0.65 : 1,
-        },
-        formRadioStyle,
-        _.isFunction(style) ? style({ selected }) : style,
-      ]}>
+      <View style={_.omit(_style, ...containerStyle)}>
         {selected && <Svg width='100%' height='100%' viewBox='-4 -4 8 8'>
           <Circle r='2' fill='white' />
         </Svg>}
