@@ -133,7 +133,8 @@ export const useComponentStyle = (
   const { components, classes } = React.useContext(StyleContext);
   return React.useMemo(() => {
     const names = _.compact(_.compact(_.flattenDeep([classNames])).join(' ').split(/\s/));
-    return StyleSheet.flatten([components[component], ...names.map(x => classes[x])]);
+    const styles = _.values(_.pickBy(classes, (v, k) => _.includes(names, k)));
+    return StyleSheet.flatten([components[component], ...styles]);
   }, [components, classes, component, classNames]);
 }
 
@@ -143,7 +144,8 @@ export const useStyle = (
   const { classes } = React.useContext(StyleContext);
   const names = _.sortedUniq(_.compact(_.compact(_.flattenDeep([classNames])).join(' ').split(/\s/)).sort());
   return React.useMemo(() => {
-    return StyleSheet.flatten(_.pickBy(classes, (v, k) => _.includes(names, k)));
+    const styles = _.values(_.pickBy(classes, (v, k) => _.includes(names, k)));
+    return StyleSheet.flatten(styles);
   }, [classes, names.join(' ')]);
 }
 
