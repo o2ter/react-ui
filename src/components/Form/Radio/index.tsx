@@ -32,7 +32,7 @@ import { useTheme } from '../../../theme';
 import { createComponent } from '../../../internals/utils';
 import { ClassNames, useComponentStyle } from '../../Style';
 import View from '../../View';
-import { Circle, Path, Svg } from 'react-native-svg';
+import { Circle, Svg } from 'react-native-svg';
 import { Modify } from '../../../internals/types';
 
 type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
