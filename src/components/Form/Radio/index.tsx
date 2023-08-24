@@ -65,10 +65,6 @@ export const FormRadio = createComponent(({
       style={{
         flexDirection: 'row',
         gap: 0.5 * theme.fontSizeBase,
-        ...Platform.select({
-          web: { cursor: 'default' },
-          default: {},
-        }),
       }}
       onPress={onPress ?? (() => onChange(value))}
       {...Platform.select({

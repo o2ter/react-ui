@@ -65,10 +65,6 @@ export const FormCheckbox = createComponent(({
       style={{
         flexDirection: 'row',
         gap: 0.5 * theme.fontSizeBase,
-        ...Platform.select({
-          web: { cursor: 'default' },
-          default: {},
-        }),
       }}
       onPress={onPress ?? (() => onChange((state: any) => {
         if (_.isNil(value)) return !state;
