@@ -25,19 +25,23 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextProps, Platform } from 'react-native';
+import { Platform, Pressable, StyleProp, ViewStyle } from 'react-native';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 
-import { Icon } from '../../Icon';
 import { createComponent } from '../../../internals/utils';
 import { ClassNames, useComponentStyle } from '../../Style';
+import View from '../../View';
+import { Circle, Path, Svg } from 'react-native-svg';
+import { Modify } from '../../../internals/types';
 
-type FormRadioProps = TextProps & {
+type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   name: string | string[];
   value: any;
   tabIndex?: number;
-}
+  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<ViewStyle>);
+  children: React.ReactNode | ((state: { selected: boolean; }) => React.ReactNode);
+}>;
 
 export const FormRadio = createComponent(({
   classes,
@@ -47,40 +51,51 @@ export const FormRadio = createComponent(({
   onPress,
   children,
   ...props
-}: FormRadioProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Icon>>) => {
+}: FormRadioProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>) => {
 
   const { value: _value, onChange } = useField(name);
   const theme = useTheme();
   const formRadioStyle = useComponentStyle('formRadio', classes);
-  const formRadioTextStyle = useComponentStyle('formRadioText');
 
   const selected = value === _value;
-  const iconName = selected ? 'radiobox-marked' : 'radiobox-blank';
-
-  const _props = Platform.select({
-    web: {
-      ...props,
-      tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0),
-    },
-    default: props,
-  });
 
   return (
-    <Icon
+    <Pressable
       ref={forwardRef}
-      icon='MaterialCommunityIcons'
-      name={iconName}
+      style={{
+        flexDirection: 'row',
+        gap: 0.5 * theme.fontSizeBase,
+        ...Platform.select({
+          web: { cursor: 'default' },
+          default: {},
+        }),
+      }}
       onPress={onPress ?? (() => onChange(value))}
-      iconStyle={[
-        { color: theme.styles.formRadioColor(selected) },
+      {...Platform.select({
+        web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
+        default: {},
+      })}
+      {...props}
+    >
+      <View style={[
+        {
+          width: theme.fontSizeBase,
+          height: theme.fontSizeBase,
+          borderRadius: 0.5 * theme.fontSizeBase,
+          backgroundColor: selected ? theme.styles.formRadioColor(selected) : theme.bodyBackground,
+          borderColor: selected ? theme.styles.formRadioColor(selected) : theme.grays['300'],
+          borderWidth: theme.borderWidth,
+          opacity: props.disabled ? 0.65 : 1,
+        },
         formRadioStyle,
-      ]}
-      style={[
-        { fontSize: theme.fontSizeBase },
-        formRadioTextStyle,
         _.isFunction(style) ? style({ selected }) : style,
-      ]}
-      {..._props}>{_.isFunction(children) ? children({ selected }) : children}</Icon>
+      ]}>
+        {selected && <Svg width='100%' height='100%' viewBox='-4 -4 8 8'>
+          <Circle r='2' fill='white' />
+        </Svg>}
+      </View>
+      {_.isFunction(children) ? children({ selected }) : children}
+    </Pressable >
   )
 }, {
   displayName: 'Form.Radio'

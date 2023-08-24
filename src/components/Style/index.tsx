@@ -65,10 +65,7 @@ type ComponentStyles = {
   formErrorMessage?: StyleProp<TextStyle>;
 
   formCheckbox?: StyleProp<TextStyle>;
-  formCheckboxText?: StyleProp<TextStyle>;
-
   formRadio?: StyleProp<TextStyle>;
-  formRadioText?: StyleProp<TextStyle>;
 
   formPicker?: StyleProp<TextStyle>;
   formPickerError?: StyleProp<TextStyle>;
