@@ -28,14 +28,16 @@ import { StyleProp, ViewStyle } from 'react-native';
 
 const normalize = <T extends ViewStyle>(style: T): T => {
   const {
-    marginHorizontal,
-    marginVertical,
+    margin,
+    marginHorizontal = margin,
+    marginVertical = margin,
     marginTop = marginVertical,
     marginBottom = marginVertical,
     marginLeft = marginHorizontal,
     marginRight = marginHorizontal,
-    paddingHorizontal,
-    paddingVertical,
+    padding,
+    paddingHorizontal = padding,
+    paddingVertical = padding,
     paddingTop = paddingVertical,
     paddingBottom = paddingVertical,
     paddingLeft = paddingHorizontal,
