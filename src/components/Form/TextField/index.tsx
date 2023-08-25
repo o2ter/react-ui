@@ -45,11 +45,11 @@ export const FormTextField = createComponent(({
 }: FormTextFieldProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>) => {
 
   const { value, error, touched, setTouched, onChange, submit } = useField(name);
-  const invalid = touched && !_.isEmpty(error);
+  const invalid = !_.isEmpty(error);
 
   const theme = useTheme();
   const formTextFieldStyle = useComponentStyle('formTextField', classes, [
-    invalid ? 'invalid' : 'valid',
+    touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
   const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => { onChange(e.nativeEvent.text); setTouched(); }, []);
@@ -62,7 +62,7 @@ export const FormTextField = createComponent(({
       onEndEditing={onEndEditing}
       onSubmitEditing={submit}
       style={[
-        invalid ? { borderColor: theme.themeColors.danger } : {},
+        touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formTextFieldStyle,
         style,
       ]}

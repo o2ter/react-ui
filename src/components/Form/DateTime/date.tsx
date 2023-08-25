@@ -50,12 +50,12 @@ export const FormDate = createComponent(({
 }: FormDateProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>) => {
 
   const { value, error, touched, setTouched, onChange } = useField(name);
-  const invalid = touched && !_.isEmpty(error);
+  const invalid = !_.isEmpty(error);
 
   const theme = useTheme();
   const formDateStyle = useComponentStyle('formDate', classes, [
     disabled ? 'disabled' : 'enabled',
-    invalid ? 'invalid' : 'valid',
+    touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
   const _onChange = React.useCallback((value: any) => { onChange(multiple ? value : _.first(value)); setTouched(); }, []);
@@ -71,7 +71,7 @@ export const FormDate = createComponent(({
       selectable={selectable}
       disabled={disabled}
       style={[
-        invalid ? { borderColor: theme.themeColors.danger } : {},
+        touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formDateStyle,
         style
       ]}
