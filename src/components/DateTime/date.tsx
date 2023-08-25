@@ -53,7 +53,9 @@ export const DatePicker = createComponent(({
 
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme);
-  const datePickerStyle = useComponentStyle('datePicker', classes);
+  const datePickerStyle = useComponentStyle('datePicker', classes, [
+    disabled ? 'disabled' : 'enabled',
+  ]);
 
   const date = _.castArray(value ?? []).map(x => new Calendar.Date(x));
 

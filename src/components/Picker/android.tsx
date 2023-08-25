@@ -43,7 +43,9 @@ export const PickerAndroid = createComponent(<T = ItemValue>({
 }: PickerNativeProps<T> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<Text>) => {
 
   const selected = _.find(items, x => x.value === value);
-  const pickerStyle = useComponentStyle('picker', classes);
+  const pickerStyle = useComponentStyle('picker', classes, [
+    disabled ? 'disabled' : 'enabled',
+  ]);
 
   function _setShowPicker(value: boolean) {
     value ? onFocus() : onBlur();

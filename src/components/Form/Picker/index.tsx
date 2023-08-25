@@ -48,10 +48,14 @@ export const FormPicker = createComponent(<T = ItemValue>({
 }: FormPickerProps<T>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Picker<T>>>) => {
 
   const { value, error, touched, setTouched, onChange } = useField(name);
+  const invalid = !touched || _.isEmpty(error);
+
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme);
-  const formPickerStyle = useComponentStyle('formPicker', classes);
-  const formPickerErrorStyle = useComponentStyle('formPickerError');
+  const formPickerStyle = useComponentStyle('formPicker', classes, [
+    props.disabled ? 'disabled' : 'enabled',
+    invalid && 'invalid',
+  ]);
 
   React.useEffect(() => {
 
@@ -69,9 +73,8 @@ export const FormPicker = createComponent(<T = ItemValue>({
       onValueChange={_onChange}
       style={[
         defaultStyle,
+        invalid ? {} : { borderColor: theme.themeColors.danger },
         formPickerStyle,
-        !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
-        !touched || _.isEmpty(error) ? {} : formPickerErrorStyle,
         style,
       ]}
       {...props} />

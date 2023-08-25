@@ -45,9 +45,12 @@ export const FormTextField = createComponent(({
 }: FormTextFieldProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>) => {
 
   const { value, error, touched, setTouched, onChange, submit } = useField(name);
+  const invalid = !touched || _.isEmpty(error);
+
   const theme = useTheme();
-  const formTextFieldStyle = useComponentStyle('formTextField', classes);
-  const formTextFieldErrorStyle = useComponentStyle('formTextFieldError');
+  const formTextFieldStyle = useComponentStyle('formTextField', classes, [
+    invalid && 'invalid',
+  ]);
 
   const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => { onChange(e.nativeEvent.text); setTouched(); }, []);
 
@@ -59,9 +62,8 @@ export const FormTextField = createComponent(({
       onEndEditing={onEndEditing}
       onSubmitEditing={submit}
       style={[
+        invalid ? {} : { borderColor: theme.themeColors.danger },
         formTextFieldStyle,
-        !touched || _.isEmpty(error) ? {} : { borderColor: theme.themeColors.danger },
-        !touched || _.isEmpty(error) ? {} : formTextFieldErrorStyle,
         style,
       ]}
       {...props} />

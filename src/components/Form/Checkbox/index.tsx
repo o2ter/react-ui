@@ -56,7 +56,9 @@ export const FormCheckbox = createComponent(({
 
   const { value: state, onChange } = useField(name);
   const theme = useTheme();
-  const formCheckboxStyle = useComponentStyle('formCheckbox', classes);
+  const formCheckboxStyle = useComponentStyle('formCheckbox', classes, [
+    props.disabled ? 'disabled' : 'enabled',
+  ]);
 
   const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
 

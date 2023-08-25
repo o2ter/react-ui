@@ -53,7 +53,9 @@ export const PickerWeb = createComponent(<T = ItemValue>({
   onFocus = () => {},
   onBlur = () => {},
 }: PickerNativeProps<T> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerNative<T>>>) => {
-  const pickerStyle = useComponentStyle('picker', classes);
+  const pickerStyle = useComponentStyle('picker', classes, [
+    disabled ? 'disabled' : 'enabled',
+  ]);
   return (
     <PickerNative
       ref={forwardRef}

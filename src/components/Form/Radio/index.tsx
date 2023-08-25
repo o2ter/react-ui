@@ -56,7 +56,9 @@ export const FormRadio = createComponent(({
 
   const { value: _value, onChange } = useField(name);
   const theme = useTheme();
-  const formRadioStyle = useComponentStyle('formRadio', classes);
+  const formRadioStyle = useComponentStyle('formRadio', classes, [
+    props.disabled ? 'disabled' : 'enabled',
+  ]);
 
   const selected = value === _value;
 

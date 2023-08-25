@@ -115,7 +115,11 @@ export const Button = createComponent(({
   }, [focused.hovered || focused.pressed]);
 
   const theme = useTheme();
-  const buttonStyle = useComponentStyle('button', classes);
+  const buttonStyle = useComponentStyle('button', classes, [
+    focused.hovered && 'hover',
+    focused.pressed && 'active',
+    disabled ? 'disabled' : 'enabled',
+  ]);
   const selectedColor = color ?? theme.themeColors[variant] ?? theme.colors[variant];
 
   const colors = React.useMemo(() => {

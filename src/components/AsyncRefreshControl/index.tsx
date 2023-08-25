@@ -53,7 +53,7 @@ export const AsyncRefreshControl = (
 }, forwardRef) => {
 
   const [refreshing, setRefreshing] = React.useState(false);
-  const defaultStyle = useComponentStyle('refreshControl', classes);
+  const defaultStyle = useComponentStyle('refreshControl', classes, refreshing && 'active');
 
   return <RefreshControl
     ref={forwardRef}

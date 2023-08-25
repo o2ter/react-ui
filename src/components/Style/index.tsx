@@ -68,19 +68,19 @@ type ComponentStyles = {
   formRadio?: StyleProp<TextStyle>;
 
   formPicker?: StyleProp<TextStyle>;
-  formPickerError?: StyleProp<TextStyle>;
+  'formPicker:invalid'?: StyleProp<TextStyle>;
 
   formPlainSegmentedControl?: StyleProp<ViewStyle>;
-  formPlainSegmentedControlError?: StyleProp<ViewStyle>;
+  'formPlainSegmentedControl:invalid'?: StyleProp<ViewStyle>;
 
   formSegmentedControl?: StyleProp<ViewStyle>;
-  formSegmentedControlError?: StyleProp<ViewStyle>;
+  'formSegmentedControl:invalid'?: StyleProp<ViewStyle>;
 
   formTextField?: StyleProp<TextStyle>;
-  formTextFieldError?: StyleProp<TextStyle>;
+  'formTextField:invalid'?: StyleProp<TextStyle>;
 
   formDate?: StyleProp<TextStyle>;
-  formDateError?: StyleProp<TextStyle>;
+  'formDate:invalid'?: StyleProp<TextStyle>;
 
 };
 
@@ -108,39 +108,57 @@ export const StyleProvider: React.FC<React.PropsWithChildren<{
   components,
   classes,
 }) => {
-  const parent = React.useContext(StyleContext);
-  const _components = useEquivalent(components);
-  const _classes = useEquivalent(classes);
-  const value = React.useMemo(() => ({
-    components: _components ? StyleSheet.create(mergeStyle(parent.components, _components)) as ComponentStyles : parent.components,
-    classes: _classes ? StyleSheet.create(mergeStyle(parent.classes, _classes)) : parent.classes,
-  }), [parent, _components, _classes]);
-  return (
-    <StyleContext.Provider value={value}>{children}</StyleContext.Provider>
-  );
-}
+    const parent = React.useContext(StyleContext);
+    const _components = useEquivalent(components);
+    const _classes = useEquivalent(classes);
+    const value = React.useMemo(() => ({
+      components: _components ? StyleSheet.create(mergeStyle(parent.components, _components)) as ComponentStyles : parent.components,
+      classes: _classes ? StyleSheet.create(mergeStyle(parent.classes, _classes)) : parent.classes,
+    }), [parent, _components, _classes]);
+    return (
+      <StyleContext.Provider value={value}>{children}</StyleContext.Provider>
+    );
+  }
 
 StyleProvider.displayName = 'StyleProvider';
 
 export type ClassNames = string | _.Falsey | ClassNames[];
+export type Selectors = string | _.Falsey | Selectors[];
+
+const flattenClassNames = (
+  classNames?: ClassNames,
+  selectors?: Selectors,
+) => {
+  const flatted = _.compact(_.compact(_.flattenDeep([classNames])).join(' ').split(/\s/));
+  const _classNames = _.sortedUniq(flatted.sort());
+  const _selectors = _.sortedUniq(_.compact(_.flattenDeep([selectors])).sort());
+  return [..._classNames, ..._.flatMap(_classNames, c => _.map(_selectors, s => `${c}:${s}`))];
+}
 
 export const useComponentStyle = (
   component: keyof ComponentStyles,
   classNames?: ClassNames,
+  selectors?: Selectors,
 ) => {
   const { components, classes } = React.useContext(StyleContext);
+  const sel = _.sortedUniq(_.compact(_.flattenDeep([selectors])).sort());
+  const names = flattenClassNames(classNames, sel);
   return React.useMemo(() => {
-    const names = _.compact(_.compact(_.flattenDeep([classNames])).join(' ').split(/\s/));
     const styles = _.values(_.pickBy(classes, (v, k) => _.includes(names, k)));
-    return flattenStyle([components[component], ...styles]);
-  }, [components, classes, component, classNames]);
+    return flattenStyle([
+      components[component],
+      ...sel.map(s => components[`${component}:${s}` as keyof ComponentStyles]),
+      ...styles,
+    ]);
+  }, [components, classes, component, names.join(' ')]);
 }
 
 export const useStyle = (
   classNames?: ClassNames,
+  selectors?: Selectors,
 ) => {
   const { classes } = React.useContext(StyleContext);
-  const names = _.sortedUniq(_.compact(_.compact(_.flattenDeep([classNames])).join(' ').split(/\s/)).sort());
+  const names = flattenClassNames(classNames, selectors);
   return React.useMemo(() => {
     const styles = _.values(_.pickBy(classes, (v, k) => _.includes(names, k)));
     return flattenStyle(styles);

@@ -48,7 +48,9 @@ export const PickerIOS = createComponent(<T = ItemValue>({
   const [showPicker, setShowPicker] = React.useState(false);
   const [orientation, setOrientation] = React.useState('portrait');
   const theme = useTheme();
-  const pickerStyle = useComponentStyle('picker', classes);
+  const pickerStyle = useComponentStyle('picker', classes, [
+    disabled ? 'disabled' : 'enabled',
+  ]);
 
   function _setShowPicker(value: boolean) {
     setShowPicker(value);
