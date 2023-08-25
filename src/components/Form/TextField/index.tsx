@@ -45,11 +45,11 @@ export const FormTextField = createComponent(({
 }: FormTextFieldProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>) => {
 
   const { value, error, touched, setTouched, onChange, submit } = useField(name);
-  const invalid = !touched || _.isEmpty(error);
+  const invalid = touched && !_.isEmpty(error);
 
   const theme = useTheme();
   const formTextFieldStyle = useComponentStyle('formTextField', classes, [
-    invalid && 'invalid',
+    invalid ? 'invalid' : 'valid',
   ]);
 
   const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => { onChange(e.nativeEvent.text); setTouched(); }, []);
