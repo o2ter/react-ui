@@ -62,7 +62,7 @@ export const FormTextField = createComponent(({
       onEndEditing={onEndEditing}
       onSubmitEditing={submit}
       style={[
-        invalid ? {} : { borderColor: theme.themeColors.danger },
+        invalid ? { borderColor: theme.themeColors.danger } : {},
         formTextFieldStyle,
         style,
       ]}

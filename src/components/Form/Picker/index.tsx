@@ -73,7 +73,7 @@ export const FormPicker = createComponent(<T = ItemValue>({
       onValueChange={_onChange}
       style={[
         defaultStyle,
-        invalid ? {} : { borderColor: theme.themeColors.danger },
+        invalid ? { borderColor: theme.themeColors.danger } : {},
         formPickerStyle,
         style,
       ]}

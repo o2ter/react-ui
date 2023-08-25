@@ -71,7 +71,7 @@ export const FormDate = createComponent(({
       selectable={selectable}
       disabled={disabled}
       style={[
-        invalid ? {} : { borderColor: theme.themeColors.danger },
+        invalid ? { borderColor: theme.themeColors.danger } : {},
         formDateStyle,
         style
       ]}
