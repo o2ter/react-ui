@@ -35,3 +35,4 @@ export * from './color';
 export * from './theme';
 export * from './components';
 export * from './hooks';
+export { createComponent } from './internals/utils';
