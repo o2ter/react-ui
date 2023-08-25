@@ -58,6 +58,7 @@ export const FormRadio = createComponent(({
   return (
     <Radio
       ref={forwardRef}
+      selected={selected}
       style={[
         formRadioStyle,
         _.isFunction(style) ? style({ selected: selected ?? false }) : style,

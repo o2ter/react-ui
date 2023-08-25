@@ -58,6 +58,7 @@ export const FormCheckbox = createComponent(({
   return (
     <Checkbox
       ref={forwardRef}
+      selected={selected}
       style={[
         formCheckboxStyle,
         _.isFunction(style) ? style({ selected: selected ?? false }) : style,
