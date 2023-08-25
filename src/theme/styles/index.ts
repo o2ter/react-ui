@@ -64,9 +64,8 @@ export const defaultStyle = (
     backgroundColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[100]),
   })),
 
-  formCheckboxColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
-
-  formRadioColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
+  checkboxColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
+  radioColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
 
 });
 

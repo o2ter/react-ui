@@ -25,23 +25,16 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Platform, Pressable, StyleProp, ViewStyle } from 'react-native';
 import { useField } from '../Form';
-import { useTheme } from '../../../theme';
 
 import { createComponent } from '../../../internals/utils';
-import { ClassNames, useComponentStyle } from '../../Style';
-import View from '../../View';
-import { Circle, Svg } from 'react-native-svg';
+import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
-import { flattenStyle } from '../../index.web';
+import Radio from '../../Radio';
 
-type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
+type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Radio>, {
   name: string | string[];
   value: any;
-  tabIndex?: number;
-  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<ViewStyle>);
-  children: React.ReactNode | ((state: { selected: boolean; }) => React.ReactNode);
 }>;
 
 export const FormRadio = createComponent(({
@@ -52,59 +45,26 @@ export const FormRadio = createComponent(({
   onPress,
   children,
   ...props
-}: FormRadioProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>) => {
+}: FormRadioProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Radio>>) => {
 
   const { value: _value, onChange } = useField(name);
-  const theme = useTheme();
+  const selected = value === _value;
+
   const formRadioStyle = useComponentStyle('formRadio', classes, [
+    selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
   ]);
 
-  const selected = value === _value;
-
-  const innerStyle = [
-    'width',
-    'height',
-    'borderRadius',
-    'backgroundColor',
-    'borderColor',
-    'borderWidth',
-    'opacity',
-  ];
-  const _style = flattenStyle([
-    {
-      flexDirection: 'row',
-      gap: 0.5 * theme.fontSizeBase,
-      width: theme.fontSizeBase,
-      height: theme.fontSizeBase,
-      borderRadius: 0.5 * theme.fontSizeBase,
-      backgroundColor: selected ? theme.styles.formRadioColor(selected) : theme.bodyBackground,
-      borderColor: selected ? theme.styles.formRadioColor(selected) : theme.grays['300'],
-      borderWidth: theme.borderWidth,
-      opacity: props.disabled ? 0.65 : 1,
-    },
-    formRadioStyle,
-    _.isFunction(style) ? style({ selected }) : style,
-  ]);
-
   return (
-    <Pressable
+    <Radio
       ref={forwardRef}
-      style={_.omit(_style, ...innerStyle)}
+      style={[
+        formRadioStyle,
+        _.isFunction(style) ? style({ selected: selected ?? false }) : style,
+      ]}
       onPress={onPress ?? (() => onChange(value))}
-      {...Platform.select({
-        web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
-        default: {},
-      })}
       {...props}
-    >
-      <View style={_.pick(_style, ...innerStyle)}>
-        {selected && <Svg width='100%' height='100%' viewBox='-4 -4 8 8'>
-          <Circle r='2' fill='white' />
-        </Svg>}
-      </View>
-      {_.isFunction(children) ? children({ selected }) : children}
-    </Pressable >
+    >{children}</Radio>
   )
 }, {
   displayName: 'Form.Radio'

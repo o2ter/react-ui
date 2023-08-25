@@ -25,23 +25,16 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Platform, Pressable, StyleProp, ViewStyle } from 'react-native';
 import { useField } from '../Form';
-import { useTheme } from '../../../theme';
 
 import { createComponent } from '../../../internals/utils';
-import { ClassNames, useComponentStyle } from '../../Style';
-import View from '../../View';
-import { Path, Svg } from 'react-native-svg';
+import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
-import { flattenStyle } from '../../index.web';
+import Checkbox from '../../Checkbox';
 
-type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
+type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>, {
   name: string | string[];
   value?: string;
-  tabIndex?: number;
-  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<ViewStyle>);
-  children: React.ReactNode | ((state: { selected: boolean; }) => React.ReactNode);
 }>;
 
 export const FormCheckbox = createComponent(({
@@ -52,69 +45,29 @@ export const FormCheckbox = createComponent(({
   onPress,
   children,
   ...props
-}: FormCheckboxProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>) => {
+}: FormCheckboxProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Checkbox>>) => {
 
   const { value: state, onChange } = useField(name);
-  const theme = useTheme();
+  const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
+
   const formCheckboxStyle = useComponentStyle('formCheckbox', classes, [
+    selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
   ]);
 
-  const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
-
-  const innerStyle = [
-    'width',
-    'height',
-    'borderRadius',
-    'backgroundColor',
-    'borderColor',
-    'borderWidth',
-    'opacity',
-  ];
-  const _style = flattenStyle([
-    {
-      flexDirection: 'row',
-      gap: 0.5 * theme.fontSizeBase,
-      width: theme.fontSizeBase,
-      height: theme.fontSizeBase,
-      borderRadius: 0.25 * theme.fontSizeBase,
-      backgroundColor: selected ? theme.styles.formCheckboxColor(selected) : theme.bodyBackground,
-      borderColor: selected ? theme.styles.formCheckboxColor(selected) : theme.grays['300'],
-      borderWidth: theme.borderWidth,
-      opacity: props.disabled ? 0.65 : 1,
-    },
-    formCheckboxStyle,
-    _.isFunction(style) ? style({ selected }) : style,
-  ]);
-
   return (
-    <Pressable
+    <Checkbox
       ref={forwardRef}
-      style={_.omit(_style, ...innerStyle)}
+      style={[
+        formCheckboxStyle,
+        _.isFunction(style) ? style({ selected: selected ?? false }) : style,
+      ]}
       onPress={onPress ?? (() => onChange((state: any) => {
         if (_.isNil(value)) return !state;
         return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state ?? []), value];
       }))}
-      {...Platform.select({
-        web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
-        default: {},
-      })}
       {...props}
-    >
-      <View style={_.pick(_style, ...innerStyle)}>
-        {selected && <Svg width='100%' height='100%' viewBox='0 0 20 20'>
-          <Path
-            fill='none'
-            stroke='white'
-            strokeWidth='3'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='m6 10 3 3 6-6'
-          />
-        </Svg>}
-      </View>
-      {_.isFunction(children) ? children({ selected }) : children}
-    </Pressable >
+    >{children}</Checkbox>
   )
 }, {
   displayName: 'Form.Checkbox'

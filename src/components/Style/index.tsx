@@ -55,6 +55,9 @@ type ComponentStyles = {
 
   picker?: StyleProp<TextStyle>;
 
+  checkbox?: StyleProp<TextStyle>;
+  radio?: StyleProp<TextStyle>;
+
   calendarWeekContainer?: StyleProp<ViewStyle>;
   calendarWeekdayContainer?: StyleProp<ViewStyle>;
   calendarWeekday?: StyleProp<TextStyle>;
