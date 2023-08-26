@@ -37,12 +37,15 @@ type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput
   name: string | string[];
 }>
 
-export const FormTextField = createComponent(({
-  classes,
-  name,
-  style,
-  ...props
-}: FormTextFieldProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>) => {
+export const FormTextField = createComponent((
+  {
+    classes,
+    name,
+    style,
+    ...props
+  }: FormTextFieldProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>
+) => {
 
   const { value, error, touched, setTouched, onChange, submit } = useField(name);
   const invalid = !_.isEmpty(error);

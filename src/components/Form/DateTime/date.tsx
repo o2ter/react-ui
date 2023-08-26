@@ -36,18 +36,21 @@ type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   name: string | string[];
 }>;
 
-export const FormDate = createComponent(({
-  classes,
-  name,
-  min,
-  max,
-  multiple,
-  style,
-  disabled = false,
-  selectable = () => true,
-  children,
-  ...props
-}: FormDateProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>) => {
+export const FormDate = createComponent((
+  {
+    classes,
+    name,
+    min,
+    max,
+    multiple,
+    style,
+    disabled = false,
+    selectable = () => true,
+    children,
+    ...props
+  }: FormDateProps & { classes?: ClassNames },
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>
+) => {
 
   const { value, error, touched, setTouched, onChange } = useField(name);
   const invalid = !_.isEmpty(error);

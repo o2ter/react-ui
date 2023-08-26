@@ -39,13 +39,16 @@ type FormPickerProps<T = ItemValue> = Modify<React.ComponentPropsWithoutRef<type
   name: string | string[];
 }>
 
-export const FormPicker = createComponent(<T = ItemValue>({
-  classes,
-  name,
-  style,
-  items,
-  ...props
-}: FormPickerProps<T>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Picker<T>>>) => {
+export const FormPicker = createComponent(<T = ItemValue>(
+  {
+    classes,
+    name,
+    style,
+    items,
+    ...props
+  }: FormPickerProps<T>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Picker<T>>>
+) => {
 
   const { value, error, touched, setTouched, onChange } = useField(name);
   const invalid = !_.isEmpty(error);

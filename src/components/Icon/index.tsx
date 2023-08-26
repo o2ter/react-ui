@@ -63,15 +63,18 @@ const IconBody = <Icon extends keyof typeof GLYPH_MAPS>({
   );
 }
 
-export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>({
-  classes,
-  icon,
-  name,
-  style,
-  iconStyle,
-  children,
-  ...props
-}: IconProps<Icon> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>) => {
+export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>(
+  {
+    classes,
+    icon,
+    name,
+    style,
+    iconStyle,
+    children,
+    ...props
+  }: IconProps<Icon> & { classes?: ClassNames },
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>
+) => {
 
   return <Text ref={forwardRef} classes={classes} style={style} {...props}>
     <IconBody icon={icon} name={name} style={iconStyle} />

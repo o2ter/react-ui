@@ -36,12 +36,15 @@ type ImageProps = Modify<RNImageProps, {
   source: ImageURISource | ImageRequireSource;
 }>
 
-export const Image = createComponent(({
-  classes,
-  source,
-  style,
-  ...props
-}: ImageProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof ImageBase>>) => {
+export const Image = createComponent((
+  {
+    classes,
+    source,
+    style,
+    ...props
+  }: ImageProps & { classes?: ClassNames },
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof ImageBase>>
+) => {
 
   const imageStyle = useComponentStyle('image', classes) as ImageStyle;
   const {

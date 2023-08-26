@@ -47,12 +47,15 @@ type LinkProps = Modify<React.ComponentPropsWithoutRef<typeof _Link>, {
   onHoverOut?: React.PointerEventHandler<HTMLAnchorElement>;
 }>
 
-export const Link = createComponent(({
-  onHoverIn,
-  onHoverOut,
-  children,
-  ...props
-}: LinkProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof _Link>>) => {
+export const Link = createComponent((
+  {
+    onHoverIn,
+    onHoverOut,
+    children,
+    ...props
+  }: LinkProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof _Link>>
+) => {
 
   const _supportsPointerEvent = supportsPointerEvent();
 

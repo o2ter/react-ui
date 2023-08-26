@@ -37,15 +37,18 @@ type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Radio>, {
   value: any;
 }>;
 
-export const FormRadio = createComponent(({
-  classes,
-  name,
-  value,
-  style,
-  onPress,
-  children,
-  ...props
-}: FormRadioProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Radio>>) => {
+export const FormRadio = createComponent((
+  {
+    classes,
+    name,
+    value,
+    style,
+    onPress,
+    children,
+    ...props
+  }: FormRadioProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Radio>>
+) => {
 
   const { value: _value, onChange } = useField(name);
   const selected = value === _value;

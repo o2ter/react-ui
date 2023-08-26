@@ -41,11 +41,11 @@ import {
 
 import { useTheme } from '../../theme';
 import { transparent } from '../../color';
-import { TextStyleProvider, textStyleKeys } from '../Text/style';
+import { textStyleKeys } from '../Text/style';
 import { Modify } from '../../internals/types';
 import { Text } from '../Text';
 import { createComponent } from '../../internals/utils';
-import { ClassNames, StyleProvider, useComponentStyle } from '../Style';
+import { ClassNames, useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -68,10 +68,13 @@ type ButtonProps = Modify<PressableProps, {
   children?: React.ReactNode | ((state: ButtonStateCallbackType) => React.ReactNode);
 }>;
 
-const ButtonText = Animated.createAnimatedComponent(createComponent(({
-  style,
-  children,
-}: React.PropsWithChildren<{ style: TextStyle; }>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>) => {
+const ButtonText = Animated.createAnimatedComponent(createComponent((
+  {
+    style,
+    children,
+  }: React.PropsWithChildren<{ style: TextStyle; }>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>
+) => {
   return (
     <Text ref={forwardRef} style={style} selectable={false}>{children}</Text>
   );

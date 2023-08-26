@@ -37,19 +37,22 @@ import { ClassNames, useComponentStyle } from '../Style';
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
 type DatePickerProps = Modify<TextProps, DatePickerBaseProps>;
 
-export const DatePicker = createComponent(({
-  classes,
-  value,
-  min,
-  max,
-  multiple,
-  onChange,
-  disabled = false,
-  selectable = () => true,
-  style,
-  children,
-  ...props
-}: DatePickerProps & { classes?: ClassNames; }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerBase>>) => {
+export const DatePicker = createComponent((
+  {
+    classes,
+    value,
+    min,
+    max,
+    multiple,
+    onChange,
+    disabled = false,
+    selectable = () => true,
+    style,
+    children,
+    ...props
+  }: DatePickerProps & { classes?: ClassNames; },
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerBase>>
+) => {
 
   const theme = useThemeVariables();
   const defaultStyle = useDefaultInputStyle(theme);

@@ -37,15 +37,18 @@ type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>,
   value?: string;
 }>;
 
-export const FormCheckbox = createComponent(({
-  classes,
-  name,
-  value,
-  style,
-  onPress,
-  children,
-  ...props
-}: FormCheckboxProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Checkbox>>) => {
+export const FormCheckbox = createComponent((
+  {
+    classes,
+    name,
+    value,
+    style,
+    onPress,
+    children,
+    ...props
+  }: FormCheckboxProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Checkbox>>
+) => {
 
   const { value: state, onChange } = useField(name);
   const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);

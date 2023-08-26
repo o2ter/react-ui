@@ -43,18 +43,21 @@ type SectionListProps<ItemT = any, SectionT = DefaultSectionT> = Modify<RNSectio
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const SectionList = createComponent(<ItemT = any, SectionT = DefaultSectionT>({
-  classes,
-  data,
-  extraData,
-  onRefresh,
-  style,
-  contentContainerStyle,
-  refreshControlProps = {},
-  renderItem,
-  children,
-  ...props
-}: SectionListProps<ItemT, SectionT> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNSectionList<ItemT, SectionT>>>) => {
+export const SectionList = createComponent(<ItemT = any, SectionT = DefaultSectionT>(
+  {
+    classes,
+    data,
+    extraData,
+    onRefresh,
+    style,
+    contentContainerStyle,
+    refreshControlProps = {},
+    renderItem,
+    children,
+    ...props
+  }: SectionListProps<ItemT, SectionT> & { classes?: ClassNames },
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNSectionList<ItemT, SectionT>>>
+) => {
 
   const _renderItem = React.useCallback(renderItem ?? (() => <></>), [data, extraData]);
 

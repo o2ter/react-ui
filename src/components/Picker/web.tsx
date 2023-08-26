@@ -42,17 +42,20 @@ const _style = StyleSheet.create({
   }
 }) as any;
 
-export const PickerWeb = createComponent(<T = ItemValue>({
-  classes,
-  value,
-  items = [],
-  disabled = false,
-  style,
-  renderText = (item) => item?.label,
-  onValueChange = () => {},
-  onFocus = () => {},
-  onBlur = () => {},
-}: PickerNativeProps<T> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerNative<T>>>) => {
+export const PickerWeb = createComponent(<T = ItemValue>(
+  {
+    classes,
+    value,
+    items = [],
+    disabled = false,
+    style,
+    renderText = (item) => item?.label,
+    onValueChange = () => { },
+    onFocus = () => { },
+    onBlur = () => { },
+  }: PickerNativeProps<T> & { classes?: ClassNames },
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerNative<T>>>
+) => {
   const pickerStyle = useComponentStyle('picker', classes, [
     disabled ? 'disabled' : 'enabled',
   ]);

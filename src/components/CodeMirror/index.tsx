@@ -54,25 +54,28 @@ type CodeMirrorProps = Modify<React.ComponentPropsWithoutRef<typeof View>, {
   keymaps?: any[];
 }>
 
-export const CodeMirror = createComponent(({
-  theme,
-  darkMode = false,
-  initialValue,
-  autoFocus,
-  onChange,
-  onChangeValue,
-  onFocus,
-  onBlur,
-  onSelectionChange,
-  extensions = [],
-  editable = true,
-  codeFolding = false,
-  lineNumbers = false,
-  allowMultipleSelections = true,
-  tabSize = 4,
-  keymaps = [],
-  ...props
-}: CodeMirrorProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>) => {
+export const CodeMirror = createComponent((
+  {
+    theme,
+    darkMode = false,
+    initialValue,
+    autoFocus,
+    onChange,
+    onChangeValue,
+    onFocus,
+    onBlur,
+    onSelectionChange,
+    extensions = [],
+    editable = true,
+    codeFolding = false,
+    lineNumbers = false,
+    allowMultipleSelections = true,
+    tabSize = 4,
+    keymaps = [],
+    ...props
+  }: CodeMirrorProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
+) => {
 
   const codeMirror = React.useRef<EditorView>();
   const containerRef = React.useRef<React.ComponentRef<typeof View>>();

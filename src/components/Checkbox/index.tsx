@@ -42,13 +42,16 @@ type CheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   children: React.ReactNode | ((state: { selected: boolean; }) => React.ReactNode);
 }>;
 
-export const Checkbox = createComponent(({
-  classes,
-  style,
-  selected,
-  children,
-  ...props
-}: CheckboxProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>) => {
+export const Checkbox = createComponent((
+  {
+    classes,
+    style,
+    selected,
+    children,
+    ...props
+  }: CheckboxProps & { classes?: ClassNames },
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
+) => {
 
   const theme = useTheme();
   const textStyle = useComponentStyle('text') as TextStyle;

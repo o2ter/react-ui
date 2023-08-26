@@ -34,10 +34,13 @@ type FormButtonProps = Modify<React.ComponentPropsWithoutRef<typeof Button>, {
   action?: 'submit' | 'reset';
 }>
 
-export const FormButton = createComponent(({
-  action = 'submit',
-  ...props
-}: FormButtonProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Button>>) => {
+export const FormButton = createComponent((
+  {
+    action = 'submit',
+    ...props
+  }: FormButtonProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Button>>
+) => {
 
   const { submit, reset } = useForm();
 

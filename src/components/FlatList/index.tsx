@@ -42,20 +42,23 @@ type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const FlatList = createComponent(<ItemT = any>({
-  classes,
-  data,
-  extraData,
-  onRefresh,
-  numColumns = 1,
-  style,
-  contentContainerStyle,
-  columnWrapperStyle,
-  refreshControlProps = {},
-  renderItem,
-  children,
-  ...props
-}: FlatListProps<ItemT> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNFlatList<ItemT>>>) => {
+export const FlatList = createComponent(<ItemT = any>(
+  {
+    classes,
+    data,
+    extraData,
+    onRefresh,
+    numColumns = 1,
+    style,
+    contentContainerStyle,
+    columnWrapperStyle,
+    refreshControlProps = {},
+    renderItem,
+    children,
+    ...props
+  }: FlatListProps<ItemT> & { classes?: ClassNames },
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNFlatList<ItemT>>>
+) => {
 
   const scrollableStyle = useComponentStyle('scrollable', classes);
   const scrollableContentContainerStyle = useComponentStyle('scrollableContentContainer');
