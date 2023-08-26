@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Platform, Pressable, StyleProp, ViewStyle } from 'react-native';
+import { Platform, Pressable, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { useTheme } from '../../theme';
 
 import { createComponent } from '../../internals/utils';
@@ -51,10 +51,13 @@ export const Checkbox = createComponent(({
 }: CheckboxProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>) => {
 
   const theme = useTheme();
+  const textStyle = useComponentStyle('text') as TextStyle;
   const checkboxStyle = useComponentStyle('checkbox', classes, [
     selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
   ]);
+
+  const fontSize = textStyle.fontSize ?? theme.root.fontSize;
 
   const innerStyle = [
     'width',
@@ -68,10 +71,11 @@ export const Checkbox = createComponent(({
   const _style = flattenStyle([
     {
       flexDirection: 'row',
-      gap: 0.5 * theme.root.fontSize,
-      width: theme.root.fontSize,
-      height: theme.root.fontSize,
-      borderRadius: 0.25 * theme.root.fontSize,
+      gap: 0.5 * fontSize,
+      width: fontSize,
+      height: fontSize,
+      borderRadius: 0.25 * fontSize,
+      marginTop: _.isNumber(textStyle.lineHeight) ? (textStyle.lineHeight - 1) * 0.5 * fontSize : 0,
       backgroundColor: selected ? theme.styles.checkboxColor(selected ?? false) : theme.root.backgroundColor,
       borderColor: selected ? theme.styles.checkboxColor(selected ?? false) : theme.grays['300'],
       borderWidth: theme.borderWidth,
