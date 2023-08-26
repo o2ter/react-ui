@@ -42,6 +42,21 @@ const normalize = <T extends ViewStyle>(style: T): T => {
     paddingBottom = paddingVertical,
     paddingLeft = paddingHorizontal,
     paddingRight = paddingHorizontal,
+    borderColor,
+    borderTopColor = borderColor,
+    borderBottomColor = borderColor,
+    borderLeftColor = borderColor,
+    borderRightColor = borderColor,
+    borderWidth,
+    borderTopWidth = borderWidth,
+    borderBottomWidth = borderWidth,
+    borderLeftWidth = borderWidth,
+    borderRightWidth = borderWidth,
+    borderRadius,
+    borderTopLeftRadius = borderRadius,
+    borderBottomLeftRadius = borderRadius,
+    borderTopRightRadius = borderRadius,
+    borderBottomRightRadius = borderRadius,
     ..._style
   } = style;
   return {
@@ -54,6 +69,18 @@ const normalize = <T extends ViewStyle>(style: T): T => {
     ..._.isNil(paddingBottom) ? {} : { paddingBottom },
     ..._.isNil(paddingLeft) ? {} : { paddingLeft },
     ..._.isNil(paddingRight) ? {} : { paddingRight },
+    ..._.isNil(borderTopColor) ? {} : { borderTopColor },
+    ..._.isNil(borderBottomColor) ? {} : { borderBottomColor },
+    ..._.isNil(borderLeftColor) ? {} : { borderLeftColor },
+    ..._.isNil(borderRightColor) ? {} : { borderRightColor },
+    ..._.isNil(borderTopWidth) ? {} : { borderTopWidth },
+    ..._.isNil(borderBottomWidth) ? {} : { borderBottomWidth },
+    ..._.isNil(borderLeftWidth) ? {} : { borderLeftWidth },
+    ..._.isNil(borderRightWidth) ? {} : { borderRightWidth },
+    ..._.isNil(borderTopLeftRadius) ? {} : { borderTopLeftRadius },
+    ..._.isNil(borderBottomLeftRadius) ? {} : { borderBottomLeftRadius },
+    ..._.isNil(borderTopRightRadius) ? {} : { borderTopRightRadius },
+    ..._.isNil(borderBottomRightRadius) ? {} : { borderBottomRightRadius },
   } as T;
 }
 
