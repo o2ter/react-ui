@@ -29,10 +29,9 @@ import { TextProps, StyleProp, TextStyle } from 'react-native';
 import Text from '../Text';
 import { GLYPH_MAPS, ICON_SETS } from '../Icons';
 import { Modify } from '../../internals/types';
-import { textStyleKeys } from '../Text/style';
+import { textStyleKeys, textStyleNormalize } from '../Text/style';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
-import { flattenStyle } from '../Style/flatten';
 import { useThemeVariables } from '../../theme';
 
 type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {
@@ -55,7 +54,8 @@ const IconBody = <Icon extends keyof typeof GLYPH_MAPS>({
 
   const theme = useThemeVariables();
   const textStyle = useComponentStyle('text') as TextStyle;
-  const { fontSize, color, ..._style } = flattenStyle([{
+  const { fontSize, color, ..._style } = textStyleNormalize([{
+    color: theme.root.textColor,
     fontSize: theme.root.fontSize,
     lineHeight: theme.root.lineHeight,
   }, textStyle, style]) ?? {};
