@@ -61,7 +61,6 @@ export const ThemeProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>
     variables: _.assign({}, parent.variables, _variables, {
       root: _.assign({}, parent.variables.root, _variables?.root),
       grays: _.assign({}, parent.variables.grays, _variables?.grays),
-      colors: _.assign({}, parent.variables.colors, _variables?.colors),
       colorWeights: _.assign({}, parent.variables.colorWeights, _variables?.colorWeights),
       themeColors: _.assign({}, parent.variables.themeColors, _variables?.themeColors),
       zIndex: _.assign({}, parent.variables.zIndex, _variables?.zIndex),

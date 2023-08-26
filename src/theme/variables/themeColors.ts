@@ -1,5 +1,5 @@
 //
-//  theme_colors.ts
+//  themeColors.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.

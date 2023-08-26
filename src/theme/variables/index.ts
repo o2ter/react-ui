@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import * as color_defaults from './colors';
-import * as theme_color_defaults from './theme_colors';
+import * as theme_color_defaults from './themeColors';
 import * as root_defaults from './root';
 import * as font_defaults from './font';
 import * as border_defaults from './border';
