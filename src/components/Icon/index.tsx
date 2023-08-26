@@ -25,11 +25,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextProps, StyleProp, TextStyle, StyleSheet } from 'react-native';
+import { TextProps, StyleProp, TextStyle } from 'react-native';
 import Text from '../Text';
 import { GLYPH_MAPS, ICON_SETS } from '../Icons';
 import { Modify } from '../../internals/types';
-import { useThemeVariables } from '../../theme';
 import { textStyleKeys } from '../Text/style';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
@@ -41,6 +40,29 @@ type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {
   iconStyle?: StyleProp<TextStyle>;
 }>
 
+const IconBody = <Icon extends keyof typeof GLYPH_MAPS>({
+  icon,
+  name,
+  style,
+}: {
+  icon: Icon;
+  name: keyof (typeof GLYPH_MAPS)[Icon];
+  style?: StyleProp<TextStyle>;
+}) => {
+
+  const _Icon = ICON_SETS[icon];
+
+  const textStyle = useComponentStyle('text') as TextStyle;
+  const _style = flattenStyle([textStyle, style]);
+  const { fontSize, color } = _style ?? {};
+
+  return (
+    <>
+      {!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_style, textStyleKeys)} />}
+    </>
+  );
+}
+
 export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>({
   classes,
   icon,
@@ -51,17 +73,8 @@ export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>({
   ...props
 }: IconProps<Icon> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>) => {
 
-  const _Icon = ICON_SETS[icon];
-
-  const theme = useThemeVariables();
-  const textStyle = useComponentStyle('text', classes) as TextStyle;
-  const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.root.textColor } }).style, [theme]) as TextStyle;
-
-  const _iconStyle = flattenStyle([defaultStyle, textStyle, style, iconStyle]);
-  const { fontSize, color } = _iconStyle ?? {};
-
-  return <Text ref={forwardRef} style={style} {...props}>
-    {!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_iconStyle, textStyleKeys)} />}
+  return <Text ref={forwardRef} classes={classes} style={style} {...props}>
+    <IconBody icon={icon} name={name} style={iconStyle} />
     {children}
   </Text>;
 }, {
