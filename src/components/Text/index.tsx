@@ -41,7 +41,7 @@ export const Text = createComponent(({
   const textStyle = useComponentStyle('text', classes);
   const defaultStyle = React.useMemo(() => StyleSheet.create({
     style: {
-      color: theme.root.color,
+      color: theme.root.textColor,
       fontSize: theme.root.fontSize,
       lineHeight: theme.root.lineHeight,
     },

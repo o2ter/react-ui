@@ -26,7 +26,7 @@
 import { FontWeight } from "./font";
 
 export const backgroundColor: string = 'white';
-export const color: string = '#212529';
+export const textColor: string = '#212529';
 
 export const fontSize: number = 16;
 export const fontWeight: FontWeight = '400';

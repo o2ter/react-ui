@@ -55,7 +55,7 @@ export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>({
 
   const theme = useTheme();
   const textStyle = useComponentStyle('text', classes) as TextStyle;
-  const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.root.color } }).style, [theme]) as TextStyle;
+  const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.root.textColor } }).style, [theme]) as TextStyle;
 
   const _iconStyle = flattenStyle([defaultStyle, textStyle, style, iconStyle]);
   const { fontSize, color } = _iconStyle ?? {};
