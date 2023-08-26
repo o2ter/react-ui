@@ -58,6 +58,7 @@ export const Radio = createComponent(({
   ]);
 
   const fontSize = textStyle.fontSize ?? theme.root.fontSize;
+  const lineHeight = textStyle.lineHeight ?? theme.root.lineHeight;
 
   const innerStyle = [
     'width',
@@ -75,7 +76,6 @@ export const Radio = createComponent(({
       width: fontSize,
       height: fontSize,
       borderRadius: 0.5 * fontSize,
-      marginTop: _.isNumber(textStyle.lineHeight) ? (textStyle.lineHeight - 1) * 0.5 * fontSize : 0,
       backgroundColor: selected ? theme.styles.radioColor(selected ?? false) : theme.root.backgroundColor,
       borderColor: selected ? theme.styles.radioColor(selected ?? false) : theme.grays['300'],
       borderWidth: theme.borderWidth,
@@ -95,7 +95,10 @@ export const Radio = createComponent(({
       })}
       {...props}
     >
-      <View style={_.pick(_style, ...innerStyle)}>
+      <View style={[
+        _.pick(_style, ...innerStyle),
+        { marginTop: _.isNumber(lineHeight) ? (lineHeight - 1) * 0.5 * fontSize : 0 }
+      ]}>
         {selected && <Svg width='100%' height='100%' viewBox='-4 -4 8 8'>
           <Circle r='2' fill='white' />
         </Svg>}

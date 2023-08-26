@@ -58,6 +58,7 @@ export const Checkbox = createComponent(({
   ]);
 
   const fontSize = textStyle.fontSize ?? theme.root.fontSize;
+  const lineHeight = textStyle.lineHeight ?? theme.root.lineHeight;
 
   const innerStyle = [
     'width',
@@ -75,7 +76,6 @@ export const Checkbox = createComponent(({
       width: fontSize,
       height: fontSize,
       borderRadius: 0.25 * fontSize,
-      marginTop: _.isNumber(textStyle.lineHeight) ? (textStyle.lineHeight - 1) * 0.5 * fontSize : 0,
       backgroundColor: selected ? theme.styles.checkboxColor(selected ?? false) : theme.root.backgroundColor,
       borderColor: selected ? theme.styles.checkboxColor(selected ?? false) : theme.grays['300'],
       borderWidth: theme.borderWidth,
@@ -95,7 +95,10 @@ export const Checkbox = createComponent(({
       })}
       {...props}
     >
-      <View style={_.pick(_style, ...innerStyle)}>
+      <View style={[
+        _.pick(_style, ...innerStyle),
+        { marginTop: _.isNumber(lineHeight) ? (lineHeight - 1) * 0.5 * fontSize : 0 }
+      ]}>
         {selected && <Svg width='100%' height='100%' viewBox='0 0 20 20'>
           <Path
             fill='none'
