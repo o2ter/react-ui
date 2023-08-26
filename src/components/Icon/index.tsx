@@ -33,6 +33,7 @@ import { textStyleKeys } from '../Text/style';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
+import { useThemeVariables } from '../../theme';
 
 type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {
   icon: Icon;
@@ -52,9 +53,12 @@ const IconBody = <Icon extends keyof typeof GLYPH_MAPS>({
 
   const _Icon = ICON_SETS[icon];
 
+  const theme = useThemeVariables();
   const textStyle = useComponentStyle('text') as TextStyle;
-  const _style = flattenStyle([textStyle, style]);
-  const { fontSize, color } = _style ?? {};
+  const { fontSize, color, ..._style } = flattenStyle([{
+    fontSize: theme.root.fontSize,
+    lineHeight: theme.root.lineHeight,
+  }, textStyle, style]) ?? {};
 
   return (
     <>
