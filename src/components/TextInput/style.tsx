@@ -26,9 +26,9 @@
 import _ from 'lodash';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { useTheme } from '../../theme';
+import { useThemeVariables } from '../../theme';
 
-export const useDefaultInputStyle = (theme: ReturnType<typeof useTheme>) => React.useMemo(() => StyleSheet.create({
+export const useDefaultInputStyle = (theme: ReturnType<typeof useThemeVariables>) => React.useMemo(() => StyleSheet.create({
   style: {
     color: theme.root.textColor,
     backgroundColor: theme.root.backgroundColor,

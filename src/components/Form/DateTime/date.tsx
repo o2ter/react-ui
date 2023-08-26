@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useField } from '../Form';
-import { useTheme } from '../../../theme';
+import { useThemeVariables } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { DatePicker } from '../../DateTime';
 import { createComponent } from '../../../internals/utils';
@@ -52,7 +52,7 @@ export const FormDate = createComponent(({
   const { value, error, touched, setTouched, onChange } = useField(name);
   const invalid = !_.isEmpty(error);
 
-  const theme = useTheme();
+  const theme = useThemeVariables();
   const formDateStyle = useComponentStyle('formDate', classes, [
     disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),

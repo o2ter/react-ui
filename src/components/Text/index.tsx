@@ -25,8 +25,8 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text as RNText, TextProps, StyleSheet, TextStyle } from 'react-native';
-import { useTheme } from '../../theme';
+import { Text as RNText, TextProps, TextStyle } from 'react-native';
+import { useThemeVariables } from '../../theme';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, StyleProvider, useComponentStyle } from '../Style';
 import { textStyleKeys, textStyleNormalize } from './style';
@@ -37,19 +37,16 @@ export const Text = createComponent(({
   children,
   ...props
 }: TextProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<RNText>) => {
-  const theme = useTheme();
+  const theme = useThemeVariables();
   const textStyle = useComponentStyle('text', classes);
-  const defaultStyle = React.useMemo(() => StyleSheet.create({
-    style: {
-      color: theme.root.textColor,
-      fontSize: theme.root.fontSize,
-      lineHeight: theme.root.lineHeight,
-    },
-  }).style, [theme]);
   return (
     <RNText
       ref={forwardRef}
-      style={textStyleNormalize([defaultStyle, textStyle, style])}
+      style={textStyleNormalize([{
+        color: theme.root.textColor,
+        fontSize: theme.root.fontSize,
+        lineHeight: theme.root.lineHeight,
+      }, textStyle, style])}
       {...props}>
       <StyleProvider components={{
         text: [

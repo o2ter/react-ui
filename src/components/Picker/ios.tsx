@@ -27,7 +27,6 @@ import _ from 'lodash';
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { ItemValue, PickerNative, PickerNativeProps } from './native';
-import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
@@ -48,7 +47,6 @@ export const PickerIOS = createComponent(<T = ItemValue>({
 
   const [showPicker, setShowPicker] = React.useState(false);
   const [orientation, setOrientation] = React.useState('portrait');
-  const theme = useTheme();
   const pickerStyle = useComponentStyle('picker', classes, [
     disabled ? 'disabled' : 'enabled',
   ]);

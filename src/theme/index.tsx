@@ -118,6 +118,11 @@ const decodeVariables = (variables: typeof defaultVariables) => {
   };
 }
 
+export const useThemeVariables = () => {
+  const { variables } = React.useContext(ThemeContext);
+  return React.useMemo(() => decodeVariables(variables), [variables]);
+}
+
 export const useTheme = () => {
 
   const { variables, styles } = React.useContext(ThemeContext);

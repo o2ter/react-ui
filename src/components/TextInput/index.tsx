@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { TextInput as RNTextInput, TextInputProps } from 'react-native';
-import { useTheme } from '../../theme';
+import { useThemeVariables } from '../../theme';
 import { useDefaultInputStyle } from './style';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
@@ -38,7 +38,7 @@ export const TextInput = createComponent(({
   ...props
 }: TextInputProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<RNTextInput>) => {
 
-  const theme = useTheme();
+  const theme = useThemeVariables();
   const textInputStyle = useComponentStyle('textInput', classes);
   const defaultStyle = useDefaultInputStyle(theme);
 

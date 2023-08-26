@@ -28,7 +28,7 @@ import React from 'react';
 import { NativeSyntheticEvent, TextInputEndEditingEventData } from 'react-native';
 import TextInput from '../../TextInput';
 import { useField } from '../Form';
-import { useTheme } from '../../../theme';
+import { useThemeVariables } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { createComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
@@ -47,7 +47,7 @@ export const FormTextField = createComponent(({
   const { value, error, touched, setTouched, onChange, submit } = useField(name);
   const invalid = !_.isEmpty(error);
 
-  const theme = useTheme();
+  const theme = useThemeVariables();
   const formTextFieldStyle = useComponentStyle('formTextField', classes, [
     touched && (invalid ? 'invalid' : 'valid'),
   ]);

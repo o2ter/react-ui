@@ -29,7 +29,7 @@ import { TextProps, StyleProp, TextStyle, StyleSheet } from 'react-native';
 import Text from '../Text';
 import { GLYPH_MAPS, ICON_SETS } from '../Icons';
 import { Modify } from '../../internals/types';
-import { useTheme } from '../../theme';
+import { useThemeVariables } from '../../theme';
 import { textStyleKeys } from '../Text/style';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
@@ -53,7 +53,7 @@ export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>({
 
   const _Icon = ICON_SETS[icon];
 
-  const theme = useTheme();
+  const theme = useThemeVariables();
   const textStyle = useComponentStyle('text', classes) as TextStyle;
   const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.root.textColor } }).style, [theme]) as TextStyle;
 
