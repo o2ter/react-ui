@@ -30,7 +30,7 @@ import Text from '../Text';
 import { GLYPH_MAPS, ICON_SETS } from '../Icons';
 import { Modify } from '../../internals/types';
 import { useTheme } from '../../theme';
-import { text_style } from '../../internals/text_style';
+import { textStyleKeys } from '../Text/style';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
@@ -55,13 +55,13 @@ export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>({
 
   const theme = useTheme();
   const textStyle = useComponentStyle('text', classes) as TextStyle;
-  const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.bodyColor } }).style, [theme]) as TextStyle;
+  const defaultStyle = React.useMemo(() => StyleSheet.create({ style: { color: theme.root.color } }).style, [theme]) as TextStyle;
 
   const _iconStyle = flattenStyle([defaultStyle, textStyle, style, iconStyle]);
   const { fontSize, color } = _iconStyle ?? {};
 
   return <Text ref={forwardRef} style={style} {...props}>
-    {!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_iconStyle, text_style)} />}
+    {!_.isNil(_Icon) && <_Icon name={name} size={fontSize} color={color} style={_.pick(_iconStyle, textStyleKeys)} />}
     {children}
   </Text>;
 }, {

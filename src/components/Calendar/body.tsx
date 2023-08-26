@@ -33,6 +33,7 @@ import { DateTime } from 'luxon';
 import { _Date, dateToString } from './date';
 import { calendarStyle } from './style';
 import { useComponentStyle } from '../Style';
+import { textStyleNormalize } from '../Text/style';
 
 export const CalendarBody: React.FC<{
   selected: _Date[];
@@ -82,12 +83,12 @@ export const CalendarBody: React.FC<{
               <Circle cx={50} cy={50} r={40} fill={theme.themeColors.primary} />
             </Svg>
           )}
-          <Text style={[
+          <Text style={textStyleNormalize([
             calendarStyle.weekdays,
             calendarWeekdayStyle,
             selectable(dateToString(year, month, day)) ? {} : { color: theme.grays['500'] },
             selected ? { color: theme.colorContrast(theme.themeColors.primary) } : {},
-          ]}>{day}</Text>
+          ])}>{day}</Text>
         </Pressable>
       );
     }

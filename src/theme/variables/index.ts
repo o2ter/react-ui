@@ -26,6 +26,7 @@
 import _ from 'lodash';
 import * as color_defaults from './colors';
 import * as theme_color_defaults from './theme_colors';
+import * as root_defaults from './root';
 import * as font_defaults from './font';
 import * as border_defaults from './border';
 import * as spacer_defaults from './spacer';
@@ -62,8 +63,7 @@ export const defaultVariables = {
     '900': 0.8,
   },
 
-  bodyBackground: 'white',
-  bodyColor: '#212529',
+  root: root_defaults,
 
   minContrastRatio: 4.5,
   colorContrastDark: 'black',

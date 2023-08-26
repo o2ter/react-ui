@@ -30,6 +30,7 @@ import { ItemValue, PickerNative, PickerNativeProps } from './native';
 import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
+import { textStyleNormalize } from '../Text/style';
 
 export const PickerIOS = createComponent(<T = ItemValue>({
   classes,
@@ -60,7 +61,7 @@ export const PickerIOS = createComponent(<T = ItemValue>({
   return (
     <React.Fragment>
       <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
-        <Text ref={forwardRef} style={[pickerStyle, style]}>{renderText(selected)}</Text>
+        <Text ref={forwardRef} style={textStyleNormalize([pickerStyle, style])}>{renderText(selected)}</Text>
       </TouchableOpacity>
       <Modal
         transparent

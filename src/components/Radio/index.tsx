@@ -68,11 +68,11 @@ export const Radio = createComponent(({
   const _style = flattenStyle([
     {
       flexDirection: 'row',
-      gap: 0.5 * theme.fontSizeBase,
-      width: theme.fontSizeBase,
-      height: theme.fontSizeBase,
-      borderRadius: 0.5 * theme.fontSizeBase,
-      backgroundColor: selected ? theme.styles.radioColor(selected ?? false) : theme.bodyBackground,
+      gap: 0.5 * theme.root.fontSize,
+      width: theme.root.fontSize,
+      height: theme.root.fontSize,
+      borderRadius: 0.5 * theme.root.fontSize,
+      backgroundColor: selected ? theme.styles.radioColor(selected ?? false) : theme.root.backgroundColor,
       borderColor: selected ? theme.styles.radioColor(selected ?? false) : theme.grays['300'],
       borderWidth: theme.borderWidth,
       opacity: props.disabled ? 0.65 : 1,

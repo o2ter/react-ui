@@ -29,7 +29,7 @@ import { Text as RNText, TextProps, StyleSheet, TextStyle } from 'react-native';
 import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, StyleProvider, useComponentStyle } from '../Style';
-import { text_style } from '../../internals/text_style';
+import { textStyleKeys, textStyleNormalize } from './style';
 
 export const Text = createComponent(({
   classes,
@@ -41,19 +41,20 @@ export const Text = createComponent(({
   const textStyle = useComponentStyle('text', classes);
   const defaultStyle = React.useMemo(() => StyleSheet.create({
     style: {
-      color: theme.bodyColor,
-      fontSize: theme.fontSizeBase,
+      color: theme.root.color,
+      fontSize: theme.root.fontSize,
+      lineHeight: theme.root.lineHeight,
     },
   }).style, [theme]);
   return (
     <RNText
       ref={forwardRef}
-      style={[defaultStyle, textStyle, style]}
+      style={textStyleNormalize([defaultStyle, textStyle, style])}
       {...props}>
       <StyleProvider components={{
         text: [
-          _.pick(textStyle, ...text_style) as TextStyle,
-          _.pick(style, ...text_style) as TextStyle,
+          _.pick(textStyle, ...textStyleKeys) as TextStyle,
+          _.pick(style, ...textStyleKeys) as TextStyle,
         ],
       }}>
         {children}

@@ -29,6 +29,7 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ItemValue, PickerNative, PickerNativeProps } from './native';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
+import { textStyleNormalize } from '../Text/style';
 
 export const PickerAndroid = createComponent(<T = ItemValue>({
   classes,
@@ -53,7 +54,7 @@ export const PickerAndroid = createComponent(<T = ItemValue>({
 
   return (
     <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
-      <Text ref={forwardRef} style={[pickerStyle, style]}>{renderText(selected)}</Text>
+      <Text ref={forwardRef} style={textStyleNormalize([pickerStyle, style])}>{renderText(selected)}</Text>
       <PickerNative
         value={value}
         items={items}

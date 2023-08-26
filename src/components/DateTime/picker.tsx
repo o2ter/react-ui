@@ -28,6 +28,7 @@ import React from 'react';
 import { Text, TextProps, Pressable } from 'react-native';
 import { Modify } from '../../internals/types';
 import { useModal } from '../Modal';
+import { textStyleNormalize } from '../Text/style';
 
 type PickerBaseProps = Modify<TextProps, {
   text?: string;
@@ -47,7 +48,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
 
   return (
     <Pressable ref={forwardRef} onPress={() => { if (!disabled) showModal(picker) }}>
-      <Text style={style} {...props}>{_.isEmpty(text) ? ' ' : text}</Text>
+      <Text style={textStyleNormalize(style)} {...props}>{_.isEmpty(text) ? ' ' : text}</Text>
     </Pressable>
   )
 });

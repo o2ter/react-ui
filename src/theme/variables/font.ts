@@ -25,8 +25,6 @@
 
 export type FontWeight = 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
 
-export const fontSizeBase: number = 16;
-
 export const fontSizes: Record<string, number | ((base: number) => number)> = {
   '1': base => base * 2.5,
   '2': base => base * 2,
@@ -39,7 +37,6 @@ export const fontSizes: Record<string, number | ((base: number) => number)> = {
   'large': base => base * 1.25,
 };
 
-export const fontWeightBase: FontWeight = '400';
 export const fontWeights: Record<string, FontWeight> = {
   light: '300',
   normal: '400',

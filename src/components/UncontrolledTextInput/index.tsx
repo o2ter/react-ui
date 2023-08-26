@@ -27,9 +27,11 @@ import _ from 'lodash';
 import React from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 import { createComponent } from '../../internals/utils';
+import { textStyleNormalize } from '../Text/style';
 
 export const UncontrolledTextInput = createComponent(({
   value,
+  style,
   onChangeText,
   ...props
 }: TextInputProps, forwardRef: React.ForwardedRef<TextInput>) => {
@@ -45,6 +47,7 @@ export const UncontrolledTextInput = createComponent(({
     <TextInput
       ref={forwardRef}
       value={text ?? value ?? ''}
+      style={textStyleNormalize(style)}
       onFocus={() => setText(value ?? '')}
       onChangeText={setText}
       onBlur={() => submit()}

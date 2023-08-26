@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  font.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,37 +23,12 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import React from 'react';
-import { TextInput as RNTextInput, TextInputProps } from 'react-native';
-import { useTheme } from '../../theme';
-import { useDefaultInputStyle } from './style';
-import { createComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
-import { textStyleNormalize } from '../Text/style';
+import { FontWeight } from "./font";
 
-export const TextInput = createComponent(({
-  classes,
-  style,
-  ...props
-}: TextInputProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<RNTextInput>) => {
+export const backgroundColor: string = 'white';
+export const color: string = '#212529';
 
-  const theme = useTheme();
-  const textInputStyle = useComponentStyle('textInput', classes);
-  const defaultStyle = useDefaultInputStyle(theme);
+export const fontSize: number = 16;
+export const fontWeight: FontWeight = '400';
 
-  return (
-    <RNTextInput
-      ref={forwardRef}
-      style={textStyleNormalize([
-        defaultStyle,
-        textInputStyle,
-        style,
-      ])}
-      {...props} />
-  );
-}, {
-  displayName: 'TextInput',
-});
-
-export default TextInput;
+export const lineHeight: number = 1.5;

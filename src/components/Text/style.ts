@@ -1,5 +1,5 @@
 //
-//  index.js
+//  style.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,7 +23,11 @@
 //  THE SOFTWARE.
 //
 
-export const text_style = [
+import _ from 'lodash';
+import { TextStyle, StyleProp } from 'react-native';
+import { flattenStyle } from '../index.web';
+
+export const textStyleKeys = [
   'color',
   'fontFamily',
   'fontFeatureSettings',
@@ -51,4 +55,13 @@ export const text_style = [
   'wordBreak',
   'wordWrap',
   'writingDirection',
-]
+];
+
+export const textStyleNormalize = (style?: StyleProp<TextStyle>) => {
+  const { lineHeight, fontSize, ...remains } = flattenStyle(style);
+  return {
+    ...remains,
+    fontSize,
+    lineHeight: _.isNumber(fontSize) && _.isNumber(lineHeight) ? fontSize * lineHeight : undefined,
+  };
+}

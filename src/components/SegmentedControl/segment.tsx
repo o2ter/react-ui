@@ -28,6 +28,7 @@ import React from 'react';
 import { Text, TextStyle, ViewStyle, Pressable, StyleSheet, StyleProp, LayoutChangeEvent, GestureResponderEvent } from 'react-native';
 
 import { style as _style } from './style';
+import { textStyleNormalize } from '../Text/style';
 
 export const Segment: React.FC<{
   item: { label: string };
@@ -56,7 +57,7 @@ export const Segment: React.FC<{
     onPress={onPress}
     onLayout={onLayout}
     style={[{ paddingVertical: 8, paddingHorizontal: 16 }, _segmentContainerStyle]}>
-    <Text style={_segmentTextStyle}>{item.label}</Text>
+    <Text style={textStyleNormalize(_segmentTextStyle)}>{item.label}</Text>
   </Pressable>
 }
 

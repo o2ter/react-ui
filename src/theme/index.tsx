@@ -88,7 +88,7 @@ const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T
 const decodeVariables = (variables: typeof defaultVariables) => {
 
   const {
-    fontSizeBase,
+    root,
     fontSizes: _fontSizes,
     displayFontSizes: _displayFontSizes,
     spacer: _spacer,
@@ -100,18 +100,18 @@ const decodeVariables = (variables: typeof defaultVariables) => {
     ...remains
   } = variables;
 
-  const spacer = _.isFunction(_spacer) ? _spacer(fontSizeBase) : _spacer;
-  const borderWidth = _.isFunction(_borderWidth) ? _borderWidth(fontSizeBase) : _borderWidth;
-  const borderRadiusBase = _.isFunction(_borderRadiusBase) ? _borderRadiusBase(fontSizeBase) : _borderRadiusBase;
+  const spacer = _.isFunction(_spacer) ? _spacer(root.fontSize) : _spacer;
+  const borderWidth = _.isFunction(_borderWidth) ? _borderWidth(root.fontSize) : _borderWidth;
+  const borderRadiusBase = _.isFunction(_borderRadiusBase) ? _borderRadiusBase(root.fontSize) : _borderRadiusBase;
 
   return {
     ...remains,
-    fontSizeBase,
+    root,
     spacer,
     borderWidth,
     borderRadiusBase,
-    fontSizes: _.mapValues(_fontSizes, v => _.isFunction(v) ? v(fontSizeBase) : v),
-    displayFontSizes: _.mapValues(_displayFontSizes, v => _.isFunction(v) ? v(fontSizeBase) : v),
+    fontSizes: _.mapValues(_fontSizes, v => _.isFunction(v) ? v(root.fontSize) : v),
+    displayFontSizes: _.mapValues(_displayFontSizes, v => _.isFunction(v) ? v(root.fontSize) : v),
     spacers: _.mapValues(_spacers, v => _.isFunction(v) ? v(spacer) : v),
     borderWidths: _.mapValues(_borderWidths, v => _.isFunction(v) ? v(borderWidth) : v),
     borderRadius: _.mapValues(_borderRadius, v => _.isFunction(v) ? v(borderRadiusBase) : v),

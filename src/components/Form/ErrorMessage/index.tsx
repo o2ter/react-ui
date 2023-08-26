@@ -33,6 +33,7 @@ import { Modify } from '../../../internals/types';
 import { useTheme } from '../../../theme';
 import { createComponent } from '../../../internals/utils';
 import { ClassNames, useComponentStyle } from '../../Style';
+import { textStyleNormalize } from '../../Text/style';
 
 type FormErrorMessageProps = Modify<TextProps, {
   name: string | string[];
@@ -57,11 +58,11 @@ export const FormErrorMessage = createComponent(({
 
   return (
     <React.Fragment>
-      {touched && !_.isNil(message) && <Text ref={forwardRef} style={[
+      {touched && !_.isNil(message) && <Text ref={forwardRef} style={textStyleNormalize([
         { color: theme.themeColors.danger },
         formErrorMessageStyle,
         style,
-      ]} {...props}>{message}</Text>}
+      ])} {...props}>{message}</Text>}
     </React.Fragment>
   );
 }, {

@@ -33,6 +33,7 @@ import { useTheme } from '../../theme';
 import { useSafeAreaInsets } from '../SafeAreaView';
 import { useLocalize } from '@o2ter/i18n';
 import { useComponentStyle } from '../Style';
+import { textStyleNormalize } from '../Text/style';
 
 type ToastMessage = string | (Error & { code?: number });
 type ToastType = 'success' | 'info' | 'warning' | 'error';
@@ -131,15 +132,15 @@ const ToastBody: React.FC<{
     ]}>
     {_.isString(style) && <Svg width={24} height={24}><Path fill={color} d={icons[style]} /></Svg>}
     {!_.isString(style) && style.icon && <View style={{ width: 24, height: 24 }}>{style.icon}</View>}
-    <Text style={[
+    <Text style={textStyleNormalize([
       {
         flex: 1,
         marginHorizontal: theme.spacer * 0.5,
-        fontSize: theme.fontSizeBase,
+        fontSize: theme.root.fontSize,
         color: messageColor,
       },
       toastTextStyle,
-    ]}>{_message}</Text>
+    ])}>{_message}</Text>
     <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
   </Animated.View>
 }

@@ -41,6 +41,7 @@ import { MaterialCommunityIcons as Icon } from '../Icons';
 import Localization from '../../locales';
 import { createComponent } from '../../internals/utils';
 import { useComponentStyle } from '../Style';
+import { textStyleNormalize } from '../Text/style';
 
 const month_name = [
   'january',
@@ -106,7 +107,7 @@ const CalendarBase = createComponent(({
             value={month_name[current.month - 1]}
             items={month_name.map(x => ({ label: locale.string(`calendar.months.${x}`), value: x }))}
             onValueChange={(_value, index) => setCurrent(current => ({ ...current, month: index + 1 }))}
-            style={{ fontSize: theme.fontSizeBase * 1.5 }} />
+            style={{ fontSize: theme.root.fontSize * 1.5 }} />
           <UncontrolledTextInput
             selectTextOnFocus
             keyboardType='number-pad'
@@ -121,7 +122,7 @@ const CalendarBase = createComponent(({
               flex: 1,
               minWidth: 0,
               paddingLeft: 8,
-              fontSize: theme.fontSizeBase * 1.5,
+              fontSize: theme.root.fontSize * 1.5,
             }} />
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -131,24 +132,24 @@ const CalendarBase = createComponent(({
             } else {
               setCurrent(current => ({ ...current, month: current.month - 1 }));
             }
-          }}><Icon name='chevron-left' size={theme.fontSizeBase * 1.5} /></Pressable>
+          }}><Icon name='chevron-left' size={theme.root.fontSize * 1.5} /></Pressable>
           <Pressable onPress={() => {
             if (current.month === 12) {
               setCurrent(current => ({ year: current.year + 1, month: 1 }));
             } else {
               setCurrent(current => ({ ...current, month: current.month + 1 }));
             }
-          }}><Icon name='chevron-right' size={theme.fontSizeBase * 1.5} /></Pressable>
+          }}><Icon name='chevron-right' size={theme.root.fontSize * 1.5} /></Pressable>
         </View>
       </View>
       <View style={[calendarStyle.weekContainer, calendarWeekContainerStyle]}>
-        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.sunday')}</Text>
-        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.monday')}</Text>
-        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.tuesday')}</Text>
-        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.wednesday')}</Text>
-        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.thursday')}</Text>
-        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.friday')}</Text>
-        <Text style={[calendarStyle.weekdays, calendarWeekdayStyle]}>{locale.string('calendar.weekdays.saturday')}</Text>
+        <Text style={textStyleNormalize([calendarStyle.weekdays, calendarWeekdayStyle])}>{locale.string('calendar.weekdays.sunday')}</Text>
+        <Text style={textStyleNormalize([calendarStyle.weekdays, calendarWeekdayStyle])}>{locale.string('calendar.weekdays.monday')}</Text>
+        <Text style={textStyleNormalize([calendarStyle.weekdays, calendarWeekdayStyle])}>{locale.string('calendar.weekdays.tuesday')}</Text>
+        <Text style={textStyleNormalize([calendarStyle.weekdays, calendarWeekdayStyle])}>{locale.string('calendar.weekdays.wednesday')}</Text>
+        <Text style={textStyleNormalize([calendarStyle.weekdays, calendarWeekdayStyle])}>{locale.string('calendar.weekdays.thursday')}</Text>
+        <Text style={textStyleNormalize([calendarStyle.weekdays, calendarWeekdayStyle])}>{locale.string('calendar.weekdays.friday')}</Text>
+        <Text style={textStyleNormalize([calendarStyle.weekdays, calendarWeekdayStyle])}>{locale.string('calendar.weekdays.saturday')}</Text>
       </View>
       <CalendarBody selected={_value} selectable={_selectable} onSelect={({ year, month, day }) => {
 

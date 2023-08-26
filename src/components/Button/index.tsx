@@ -41,7 +41,7 @@ import {
 
 import { useTheme } from '../../theme';
 import { transparent } from '../../color';
-import { text_style } from '../../internals/text_style';
+import { textStyleKeys } from '../Text/style';
 import { Modify } from '../../internals/types';
 import { Text } from '../Text';
 import { createComponent } from '../../internals/utils';
@@ -143,21 +143,21 @@ export const Button = createComponent(({
       paddingVertical: 6,
       borderWidth: theme.borderWidth,
       borderRadius: theme.borderRadiusBase,
-      fontSize: theme.fontSizes[size] ?? theme.fontSizeBase,
-      fontWeight: theme.fontWeights['normal'] ?? theme.fontWeightBase,
+      fontSize: theme.fontSizes[size] ?? theme.root.fontSize,
+      fontWeight: theme.fontWeights['normal'] ?? theme.root.fontWeight,
       opacity: disabled ? 0.65 : 1,
     } as TextStyle,
     buttonStyle,
   ]), [theme, size, disabled]);
 
   const defaultStyle = React.useMemo(() => StyleSheet.create({
-    text: _.pick(_defaultStyle, text_style),
-    button: _.omit(_defaultStyle, text_style),
+    text: _.pick(_defaultStyle, textStyleKeys),
+    button: _.omit(_defaultStyle, textStyleKeys),
   }), [_defaultStyle]);
 
   const _style = flattenStyle([
     defaultStyle.text,
-    _.pick(colors, text_style) as TextStyle,
+    _.pick(colors, textStyleKeys) as TextStyle,
     _.isFunction(titleStyle) ? titleStyle(focused) : titleStyle,
   ]);
   const _wrapped = (children: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
@@ -187,7 +187,7 @@ export const Button = createComponent(({
       focusable={!disabled && focusable !== false}
       style={[
         defaultStyle.button,
-        _.omit(colors, text_style),
+        _.omit(colors, textStyleKeys),
         _.isFunction(style) ? style(focused) : style,
       ]}
       onPressIn={(e: GestureResponderEvent) => {
