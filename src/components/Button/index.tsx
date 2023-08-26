@@ -68,16 +68,14 @@ type ButtonProps = Modify<PressableProps, {
   children?: React.ReactNode | ((state: ButtonStateCallbackType) => React.ReactNode);
 }>;
 
-const ButtonText = Animated.createAnimatedComponent(class extends React.PureComponent<{
-  style: TextStyle;
-  children: React.ReactNode;
-}> {
-  render() {
-    return (
-      <Text style={this.props.style} selectable={false}>{this.props.children}</Text>
-    );
-  }
-});
+const ButtonText = Animated.createAnimatedComponent(createComponent(({
+  style,
+  children,
+}: React.PropsWithChildren<{ style: TextStyle; }>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>) => {
+  return (
+    <Text ref={forwardRef} style={style} selectable={false}>{children}</Text>
+  );
+}));
 
 export const Button = createComponent(({
   classes,
