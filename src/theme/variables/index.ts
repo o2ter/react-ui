@@ -70,7 +70,7 @@ export const defaultVariables = {
   colorContrastLight: 'white',
 
   breakpoints: breakpoint_defaults as Record<string, number>,
-  zIndex: zindex_defaults as Record<string, number>,
+  zIndex: zindex_defaults as Record<keyof typeof zindex_defaults, number> & Record<string, number>,
 
   ...font_defaults,
   ...border_defaults,

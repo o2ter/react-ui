@@ -59,8 +59,12 @@ export const ThemeProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>
   const _variables = useEquivalent(_.isFunction(variables) ? variables(parent.variables) : variables);
   const value: React.ContextType<typeof ThemeContext> = React.useMemo(() => ({
     variables: _.assign({}, parent.variables, _variables, {
+      root: _.assign({}, parent.variables.root, _variables?.root),
+      grays: _.assign({}, parent.variables.grays, _variables?.grays),
       colors: _.assign({}, parent.variables.colors, _variables?.colors),
+      colorWeights: _.assign({}, parent.variables.colorWeights, _variables?.colorWeights),
       themeColors: _.assign({}, parent.variables.themeColors, _variables?.themeColors),
+      zIndex: _.assign({}, parent.variables.zIndex, _variables?.zIndex),
     }),
     styles: (theme) => {
       const parent_style = parent.styles(theme);
