@@ -1,5 +1,5 @@
 //
-//  style.ts
+//  style.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -24,8 +24,10 @@
 //
 
 import _ from 'lodash';
+import React from 'react';
 import { TextStyle, StyleProp } from 'react-native';
-import { flattenStyle } from '../index.web';
+import { flattenStyle } from '../Style/flatten';
+import { ClassNames, StyleProvider, useStyle } from '../Style';
 
 export const textStyleKeys = [
   'color',
@@ -64,4 +66,18 @@ export const textStyleNormalize = (style?: StyleProp<TextStyle>) => {
     fontSize,
     lineHeight: _.isNumber(fontSize) && _.isNumber(lineHeight) ? fontSize * lineHeight : undefined,
   };
+}
+
+export const TextStyleProvider: React.FC<React.PropsWithChildren<{
+  classes?: ClassNames;
+  style?: StyleProp<TextStyle>;
+}>> = ({
+  classes,
+  style,
+  children,
+}) => {
+  const _style = flattenStyle([useStyle(classes) as TextStyle, style]);
+  return (
+    <StyleProvider components={{ text: _.pick(_style, ...textStyleKeys) }}>{children}</StyleProvider>
+  )
 }

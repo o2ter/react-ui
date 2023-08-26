@@ -41,7 +41,7 @@ import {
 
 import { useTheme } from '../../theme';
 import { transparent } from '../../color';
-import { textStyleKeys } from '../Text/style';
+import { TextStyleProvider, textStyleKeys } from '../Text/style';
 import { Modify } from '../../internals/types';
 import { Text } from '../Text';
 import { createComponent } from '../../internals/utils';
@@ -74,9 +74,7 @@ const ButtonText = Animated.createAnimatedComponent(class extends React.PureComp
 }> {
   render() {
     return (
-      <StyleProvider components={{ text: this.props.style }}>
-        <Text selectable={false}>{this.props.children}</Text>
-      </StyleProvider>
+      <Text style={this.props.style} selectable={false}>{this.props.children}</Text>
     );
   }
 });

@@ -25,11 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text as RNText, TextProps, TextStyle } from 'react-native';
+import { Text as RNText, TextProps } from 'react-native';
 import { useThemeVariables } from '../../theme';
 import { createComponent } from '../../internals/utils';
-import { ClassNames, StyleProvider, useComponentStyle } from '../Style';
-import { textStyleKeys, textStyleNormalize } from './style';
+import { ClassNames, useComponentStyle } from '../Style';
+import { TextStyleProvider, textStyleNormalize } from './style';
 
 export const Text = createComponent(({
   classes,
@@ -48,14 +48,7 @@ export const Text = createComponent(({
         lineHeight: theme.root.lineHeight,
       }, textStyle, style])}
       {...props}>
-      <StyleProvider components={{
-        text: [
-          _.pick(textStyle, ...textStyleKeys) as TextStyle,
-          _.pick(style, ...textStyleKeys) as TextStyle,
-        ],
-      }}>
-        {children}
-      </StyleProvider>
+      <TextStyleProvider classes={classes} style={style}>{children}</TextStyleProvider>
     </RNText>
   );
 }, {

@@ -33,7 +33,7 @@ import { ClassNames, useComponentStyle } from '../Style';
 import View from '../View';
 import { Circle, Svg } from 'react-native-svg';
 import { Modify } from '../../internals/types';
-import { flattenStyle } from '../index.web';
+import { flattenStyle } from '../Style/flatten';
 
 type RadioProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   selected?: boolean;
