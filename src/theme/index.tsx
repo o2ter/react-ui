@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { ThemeVariables } from './variables';
 import { ThemeStyles, ThemeStylesProvider, _colorContrast } from './styles';
-import { useWindowDimensions, ScaledSize } from 'react-native';
+import { useWindowDimensions, ScaledSize, Platform } from 'react-native';
 import { ThemeBaseContext, ThemeBaseProvider, ThemeProviderProps } from './provider/base';
 
 export {
@@ -49,18 +49,18 @@ export const ThemeProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>
 
 ThemeProvider.displayName = 'ThemeProvider';
 
+const isSSR = Platform.OS === 'web' && typeof window === 'undefined';
 const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends any>(
   breakpoint: string,
   selector: { up: T, down: T }
 ) => {
-  if (typeof window === 'undefined') return selector.up;
+  if (isSSR) return selector.up;
   return windowDimensions.width < theme.breakpoints[breakpoint] ? selector.down : selector.up;
 }
-
 const _mediaSelects = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends any>(
   breakpoints: Record<string, T>
 ) => {
-  const selected = typeof window === 'undefined' ? theme.breakpoints : _.pickBy(theme.breakpoints, v => windowDimensions.width >= v);
+  const selected = isSSR ? theme.breakpoints : _.pickBy(theme.breakpoints, v => windowDimensions.width >= v);
   const [breakpoint] = _.maxBy(_.toPairs(selected), ([, v]) => v) ?? [];
   return breakpoint ? breakpoints[breakpoint] : undefined;
 }
