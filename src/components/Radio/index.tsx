@@ -66,10 +66,21 @@ export const Radio = createComponent((
   const innerStyle = [
     'width',
     'height',
-    'borderRadius',
-    'backgroundColor',
     'borderColor',
+    'borderTopColor',
+    'borderBottomColor',
+    'borderLeftColor',
+    'borderRightColor',
     'borderWidth',
+    'borderTopWidth',
+    'borderBottomWidth',
+    'borderLeftWidth',
+    'borderRightWidth',
+    'borderRadius',
+    'borderTopLeftRadius',
+    'borderBottomLeftRadius',
+    'borderTopRightRadius',
+    'borderBottomRightRadius',
     'opacity',
   ];
   const _style = flattenStyle([
