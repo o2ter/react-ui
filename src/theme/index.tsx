@@ -91,5 +91,5 @@ export const useTheme = () => {
 
     return computed;
 
-  }, [decoded, styles, windowDimensions]);
+  }, [decoded, styles, windowDimensions.width]);
 }
