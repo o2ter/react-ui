@@ -66,6 +66,7 @@ export const Checkbox = createComponent((
   const innerStyle = [
     'width',
     'height',
+    'backgroundColor',
     'borderColor',
     'borderTopColor',
     'borderBottomColor',

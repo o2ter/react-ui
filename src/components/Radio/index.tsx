@@ -66,6 +66,7 @@ export const Radio = createComponent((
   const innerStyle = [
     'width',
     'height',
+    'backgroundColor',
     'borderColor',
     'borderTopColor',
     'borderBottomColor',
