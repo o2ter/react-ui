@@ -53,6 +53,7 @@ const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T
   breakpoint: string,
   selector: { up: T, down: T }
 ) => {
+  if (typeof window === 'undefined') return selector.up;
   return windowDimensions.width < theme.breakpoints[breakpoint] ? selector.down : selector.up;
 }
 
