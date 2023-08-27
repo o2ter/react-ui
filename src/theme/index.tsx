@@ -60,8 +60,7 @@ const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T
 const _mediaSelects = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends any>(
   breakpoints: Record<string, T>
 ) => {
-  if (typeof window === 'undefined') return;
-  const selected = _.pickBy(theme.breakpoints, v => windowDimensions.width >= v);
+  const selected = typeof window === 'undefined' ? theme.breakpoints : _.pickBy(theme.breakpoints, v => windowDimensions.width >= v);
   const [breakpoint] = _.maxBy(_.toPairs(selected), ([, v]) => v) ?? [];
   return breakpoint ? breakpoints[breakpoint] : undefined;
 }
