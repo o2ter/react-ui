@@ -56,6 +56,14 @@ const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T
   return windowDimensions.width < theme.breakpoints[breakpoint] ? selector.down : selector.up;
 }
 
+const _mediaSelects = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends any>(
+  breakpoints: Record<string, T>
+) => {
+  const selected = _.pickBy(theme.breakpoints, v => windowDimensions.width >= v);
+  const [breakpoint] = _.minBy(_.toPairs(selected), ([, v]) => v) ?? [];
+  return breakpoint ? breakpoints[breakpoint] : undefined;
+}
+
 export const useThemeVariables = () => {
   const { decoded } = React.useContext(ThemeBaseContext);
   return decoded;
@@ -73,6 +81,7 @@ export const useTheme = () => {
     const computed = _.assign({
       get colorContrast() { return _colorContrast(computed) },
       get mediaSelect() { return _mediaSelect(computed, windowDimensions) },
+      get mediaSelects() { return _mediaSelects(computed, windowDimensions) },
       get styles() {
         if (_.isNil(computed_style)) computed_style = styles(computed);
         return computed_style;
