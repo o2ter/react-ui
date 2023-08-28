@@ -50,12 +50,15 @@ export const FormCheckbox = createComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Checkbox>>
 ) => {
 
-  const { value: state, onChange } = useField(name);
+  const { value: state, error, touched, onChange } = useField(name);
+  const invalid = !_.isEmpty(error);
+
   const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
 
   const formCheckboxStyle = useComponentStyle('formCheckbox', classes, [
     selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
+    touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
   return (

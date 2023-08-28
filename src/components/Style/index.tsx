@@ -29,7 +29,7 @@ import { StyleSheet, StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-n
 import { useEquivalent } from 'sugax';
 import { flattenStyle } from './flatten';
 
-type ComponentStyles = {
+export type ComponentStyles = {
 
   view?: StyleProp<ViewStyle>;
   text?: StyleProp<TextStyle>;
@@ -68,22 +68,46 @@ type ComponentStyles = {
   formErrorMessage?: StyleProp<TextStyle>;
 
   formCheckbox?: StyleProp<TextStyle>;
+  'formCheckbox:invalid'?: StyleProp<TextStyle>;
+  'formCheckbox:valid'?: StyleProp<TextStyle>;
+  'formCheckbox:disabled'?: StyleProp<TextStyle>;
+  'formCheckbox:enabled'?: StyleProp<TextStyle>;
+
   formRadio?: StyleProp<TextStyle>;
+  'formRadio:invalid'?: StyleProp<TextStyle>;
+  'formRadio:valid'?: StyleProp<TextStyle>;
+  'formRadio:disabled'?: StyleProp<TextStyle>;
+  'formRadio:enabled'?: StyleProp<TextStyle>;
 
   formPicker?: StyleProp<TextStyle>;
   'formPicker:invalid'?: StyleProp<TextStyle>;
+  'formPicker:valid'?: StyleProp<TextStyle>;
+  'formPicker:disabled'?: StyleProp<TextStyle>;
+  'formPicker:enabled'?: StyleProp<TextStyle>;
 
   formPlainSegmentedControl?: StyleProp<ViewStyle>;
   'formPlainSegmentedControl:invalid'?: StyleProp<ViewStyle>;
+  'formPlainSegmentedControl:valid'?: StyleProp<ViewStyle>;
+  'formPlainSegmentedControl:disabled'?: StyleProp<ViewStyle>;
+  'formPlainSegmentedControl:enabled'?: StyleProp<ViewStyle>;
 
   formSegmentedControl?: StyleProp<ViewStyle>;
   'formSegmentedControl:invalid'?: StyleProp<ViewStyle>;
+  'formSegmentedControl:valid'?: StyleProp<ViewStyle>;
+  'formSegmentedControl:disabled'?: StyleProp<ViewStyle>;
+  'formSegmentedControl:enabled'?: StyleProp<ViewStyle>;
 
   formTextField?: StyleProp<TextStyle>;
   'formTextField:invalid'?: StyleProp<TextStyle>;
+  'formTextField:valid'?: StyleProp<TextStyle>;
+  'formTextField:disabled'?: StyleProp<TextStyle>;
+  'formTextField:enabled'?: StyleProp<TextStyle>;
 
   formDate?: StyleProp<TextStyle>;
   'formDate:invalid'?: StyleProp<TextStyle>;
+  'formDate:valid'?: StyleProp<TextStyle>;
+  'formDate:disabled'?: StyleProp<TextStyle>;
+  'formDate:enabled'?: StyleProp<TextStyle>;
 
 };
 

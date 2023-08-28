@@ -52,6 +52,7 @@ export const FormTextField = createComponent((
 
   const theme = useThemeVariables();
   const formTextFieldStyle = useComponentStyle('formTextField', classes, [
+    props.editable ? 'enabled' : 'disabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 

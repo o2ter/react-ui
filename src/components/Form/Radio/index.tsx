@@ -50,12 +50,15 @@ export const FormRadio = createComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Radio>>
 ) => {
 
-  const { value: _value, onChange } = useField(name);
+  const { value: _value, error, touched, onChange } = useField(name);
+  const invalid = !_.isEmpty(error);
+
   const selected = value === _value;
 
   const formRadioStyle = useComponentStyle('formRadio', classes, [
     selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
+    touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
   return (
