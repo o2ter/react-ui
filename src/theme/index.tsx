@@ -49,7 +49,7 @@ export const ThemeProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>
 
 ThemeProvider.displayName = 'ThemeProvider';
 
-const isSSR = Platform.OS === 'web' && typeof window === 'undefined';
+export const isSSR = Platform.OS === 'web' && typeof window === 'undefined';
 const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends any>(
   breakpoint: string,
   selector: { up: T, down: T }
