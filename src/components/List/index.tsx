@@ -30,12 +30,14 @@ import { useStableCallback } from 'sugax';
 type ListItem<L extends ArrayLike<any>> = L extends ArrayLike<infer T> ? T : never;
 type ListProps<D extends ArrayLike<any>> = {
   data: D,
+  extraData?: any;
   keyExtractor?: (item: ListItem<D>, index: number, data: D) => string;
   renderItem: (x: { item: ListItem<D>, index: number, data: D }) => any;
 }
 
 export const List = <D extends ArrayLike<any>>({
   data,
+  extraData,
   keyExtractor,
   renderItem,
 }: ListProps<D>) => {
@@ -48,7 +50,7 @@ export const List = <D extends ArrayLike<any>>({
       return React.cloneElement(element, { key: keyExtractor(item, index, data) });
     }
     return element;
-  }), [data]);
+  }), [data, extraData]);
 
   return React.createElement(React.Fragment, {}, ...elements);
 };

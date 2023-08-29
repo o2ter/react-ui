@@ -44,6 +44,7 @@ export const useFormList = () => React.useContext(FormListContext);
 
 type FormListProps = {
   name: string | string[];
+  extraData?: any;
   keyExtractor?: (item: any, index: number, data: any[]) => string;
   renderItem: (x: { item: any, index: number, data: any[], actions: ReturnType<typeof useFormList> }) => any;
   ListComponent?: React.ComponentType<React.PropsWithChildren<{
@@ -54,6 +55,7 @@ type FormListProps = {
 
 export const FormList = createComponent(({
   name,
+  extraData,
   keyExtractor,
   renderItem,
   ListComponent = ({ children }) => <>{children}</>,
@@ -85,7 +87,7 @@ export const FormList = createComponent(({
   return (
     <FormListContext.Provider value={actions}>
       <_ListComponent data={data} actions={actions}>
-        <List data={data} keyExtractor={keyExtractor} renderItem={_renderItem} />
+        <List data={data} extraData={extraData} keyExtractor={keyExtractor} renderItem={_renderItem} />
       </_ListComponent>
     </FormListContext.Provider>
   );
