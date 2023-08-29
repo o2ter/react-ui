@@ -39,5 +39,12 @@ export function useDOMElementEvent(element: EventTarget, event: string, callback
   }, [element, event]);
 }
 
-export const useWindowEvent = (event: string, callback: (event: Event) => void) => void (typeof window !== 'undefined' && useDOMElementEvent(window, event, callback));
-export const useDocumentEvent = (event: string, callback: (event: Event) => void) => void (typeof document !== 'undefined' && useDOMElementEvent(document, event, callback));
+export const useWindowEvent = <K extends keyof WindowEventMap>(
+  event: K,
+  callback: (event: WindowEventMap[K]) => void,
+) => void (typeof window !== 'undefined' && useDOMElementEvent(window, event, callback as any));
+
+export const useDocumentEvent = <K extends keyof DocumentEventMap>(
+  event: K,
+  callback: (event: DocumentEventMap[K]) => void,
+) => void (typeof document !== 'undefined' && useDOMElementEvent(document, event, callback as any));
