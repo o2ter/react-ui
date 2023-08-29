@@ -1,8 +1,8 @@
 //
-//  index.web.js
+//  ref.tsx
 //
 //  The MIT License
-//  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
+//  Copyright (c) 2015 - 2022 Susan Cheng. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,26 @@
 //  THE SOFTWARE.
 //
 
-export { styleInject } from '../styleInject';
-export * from './index.js';
-export { NodeHandleProvider } from './NodeHandleProvider';
-export * from './Navigator';
-export * from './CodeMirror';
-export * from './DataSheet';
+import _ from 'lodash';
+import React from 'react';
+import { DataSheetCell } from '../table/cell';
+
+const DataSheetRefContext = React.createContext<{
+  table?: React.RefObject<React.ComponentRef<'table'>>;
+  editing?: React.RefObject<React.ComponentRef<typeof DataSheetCell>>;
+}>({});
+
+export const DataSheetRefProvider = ({
+  children
+}: React.PropsWithChildren<{}>) => {
+  const table = React.useRef<React.ComponentRef<'table'>>(null);
+  const editing = React.useRef<React.ComponentRef<typeof DataSheetCell>>(null);
+  const value = React.useMemo(() => ({ table, editing }), []);
+  return (
+    <DataSheetRefContext.Provider value={value}>
+      {children}
+    </DataSheetRefContext.Provider>
+  );
+}
+
+export const useDataSheetRef = () => React.useContext(DataSheetRefContext);
