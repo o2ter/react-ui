@@ -34,8 +34,9 @@ export const borderWidths: Record<string, number | ((base: number) => number)> =
 
 export const borderRadiusBase: number | ((rem: number) => number) = rem => rem * 0.375;
 export const borderRadius: Record<string, number | ((base: number) => number)> = {
-  'sm': base => base * 2 / 3,
-  'lg': base => base * 4 / 3,
-  'xl': base => base * 8 / 3,
-  'xxl': base => base * 16 / 3,
+  '1': base => base * 2 / 3,
+  '2': base => base * 4 / 3,
+  '3': base => base * 8 / 3,
+  '4': base => base * 16 / 3,
+  '5': base => base * 32 / 3,
 };
