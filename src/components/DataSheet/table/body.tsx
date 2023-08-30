@@ -104,7 +104,7 @@ export const DataSheetBody = <T extends object>({
                     highlightColor={highlightColor}
                     onMouseDown={(e) => {
                       if (allowSelection) setState(state => ({
-                        ..._.omit(state, 'editing'),
+                        ..._.omit(state, '_selectStart', '_selectEnd', 'editing'),
                         _selectRows: { start: row, end: row },
                         shiftKey: e.shiftKey,
                         metaKey: e.metaKey,
@@ -112,7 +112,7 @@ export const DataSheetBody = <T extends object>({
                     }}
                     onMouseOver={(e) => {
                       if (allowSelection) setState(state => ({
-                        ..._.omit(state, 'editing'),
+                        ..._.omit(state, '_selectStart', '_selectEnd', 'editing'),
                         ...state._selectRows ? { _selectRows: { start: state._selectRows.start, end: row } } : {},
                         shiftKey: e.shiftKey,
                         metaKey: e.metaKey,
@@ -159,7 +159,7 @@ export const DataSheetBody = <T extends object>({
                       highlightColor={highlightColor}
                       onMouseDown={(e) => {
                         if (allowSelection) setState(state => ({
-                          ..._.omit(state, 'editing'),
+                          ..._.omit(state, '_selectRows', 'editing'),
                           _selectStart: { row, col },
                           _selectEnd: { row, col },
                           shiftKey: e.shiftKey,
@@ -168,7 +168,7 @@ export const DataSheetBody = <T extends object>({
                       }}
                       onMouseOver={(e) => {
                         if (allowSelection) setState(state => ({
-                          ..._.omit(state, 'editing'),
+                          ..._.omit(state, '_selectRows', 'editing'),
                           ...state._selectStart ? { _selectEnd: { row, col } } : {},
                           shiftKey: e.shiftKey,
                           metaKey: e.metaKey,
