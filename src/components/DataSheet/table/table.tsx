@@ -140,14 +140,13 @@ export const DataSheetTable = createComponent(<T extends object>(
   const handlePaste = (e: ClipboardEvent | KeyboardEvent) => {
     if (!props.allowSelection) return;
     const selectedRows = handle.state.selectedRows?.sort() ?? [];
-    const clipboard = 'clipboardData' in e && e.clipboardData ? e.clipboardData : navigator.clipboard;
     if (!_.isEmpty(selectedRows)) {
       e.preventDefault();
-      if (_.isFunction(props.onPasteRows)) props.onPasteRows(selectedRows, clipboard);
+      if (_.isFunction(props.onPasteRows)) props.onPasteRows(selectedRows, navigator.clipboard);
     }
     if (!_.isEmpty(handle.state.selectedCells)) {
       e.preventDefault();
-      if (_.isFunction(props.onPasteCells)) props.onPasteCells(handle.state.selectedCells, clipboard);
+      if (_.isFunction(props.onPasteCells)) props.onPasteCells(handle.state.selectedCells, navigator.clipboard);
     }
   }
 
