@@ -93,7 +93,23 @@ export const DataSheetTable = createComponent(<T extends object>(
     }
   });
 
-  const handleCopy = (e: Event) => {
+  const encodeClipboard = (e: ClipboardEvent | KeyboardEvent, data: T[keyof T][][]) => {
+    const encoders = {
+      ...defaultEncoders,
+      ...props.encoders ?? {},
+    };
+    if ('clipboardData' in e && e.clipboardData) {
+      for (const [format, encoder] of _.toPairs(encoders)) {
+        e.clipboardData.setData(format, encoder(data));
+      }
+    } else {
+      navigator.clipboard.write([
+        new ClipboardItem(_.mapValues(encoders, encoder => encoder(data)))
+      ]);
+    }
+  }
+
+  const handleCopy = (e: ClipboardEvent | KeyboardEvent) => {
     if (!props.allowSelection) return;
     const selectedRows = handle.state.selectedRows?.sort().filter(x => x < props.data.length) ?? [];
     if (!_.isEmpty(selectedRows)) {
@@ -102,14 +118,8 @@ export const DataSheetTable = createComponent(<T extends object>(
         const _data = _.map(selectedRows, row => _.pick(props.data[row], props.columns));
         props.onCopyRows(selectedRows, _data);
       } else {
-        const encoders = {
-          ...defaultEncoders,
-          ...props.encoders ?? {},
-        };
         const _data = _.map(selectedRows, row => _.map(props.columns, col => props.data[row][col]));
-        navigator.clipboard.write([
-          new ClipboardItem(_.mapValues(encoders, encoder => encoder(_data)))
-        ]);
+        encodeClipboard(e, _data);
       }
     }
     if (!_.isEmpty(handle.state.selectedCells)) {
@@ -121,28 +131,23 @@ export const DataSheetTable = createComponent(<T extends object>(
         const _data = _.map(_rows, row => _.pick(props.data[row], _.map(_cols, col => props.columns[col])));
         props.onCopyCells(selectedCells, _data);
       } else {
-        const encoders = {
-          ...defaultEncoders,
-          ...props.encoders ?? {},
-        };
         const _data = _.map(_rows, row => _.map(_cols, col => props.data[row][props.columns[col]]));
-        navigator.clipboard.write([
-          new ClipboardItem(_.mapValues(encoders, encoder => encoder(_data)))
-        ]);
+        encodeClipboard(e, _data);
       }
     }
   }
 
-  const handlePaste = (e: Event) => {
+  const handlePaste = (e: ClipboardEvent | KeyboardEvent) => {
     if (!props.allowSelection) return;
     const selectedRows = handle.state.selectedRows?.sort() ?? [];
+    const clipboard = 'clipboardData' in e && e.clipboardData ? e.clipboardData : navigator.clipboard;
     if (!_.isEmpty(selectedRows)) {
       e.preventDefault();
-      if (_.isFunction(props.onPasteRows)) props.onPasteRows(selectedRows, navigator.clipboard);
+      if (_.isFunction(props.onPasteRows)) props.onPasteRows(selectedRows, clipboard);
     }
     if (!_.isEmpty(handle.state.selectedCells)) {
       e.preventDefault();
-      if (_.isFunction(props.onPasteCells)) props.onPasteCells(handle.state.selectedCells, navigator.clipboard);
+      if (_.isFunction(props.onPasteCells)) props.onPasteCells(handle.state.selectedCells, clipboard);
     }
   }
 
