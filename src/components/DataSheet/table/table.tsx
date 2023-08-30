@@ -25,7 +25,6 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { tsvFormatRows } from 'd3-dsv';
 import { DataSheetProps, selectionKeys } from '../types';
 import { useDataSheetState } from '../provider/state';
 import { flattenCSSStyle } from '../styles';
@@ -34,6 +33,7 @@ import { DataSheetBody } from './body';
 import { useDataSheetRef } from '../provider/ref';
 import { createComponent } from '../../../internals/utils';
 import { useDocumentEvent } from '../../../hooks/webHooks';
+import { defaultEncoders } from '../encoders';
 
 const isChildNode = (parent?: Node | null, node?: Node | EventTarget | null) => {
   if (!parent) return false;
@@ -102,11 +102,15 @@ export const DataSheetTable = createComponent(<T extends object>(
         const _data = _.map(selectedRows, row => _.pick(props.data[row], props.columns));
         props.onCopyRows(selectedRows, _data);
       } else {
+        const encoders = {
+          ...defaultEncoders,
+          ...props.encoders ?? {},
+        };
         const _data = _.map(selectedRows, row => _.map(props.columns, col => props.data[row][col]));
-        const text = _data.map(row => _.map(row, val => props.encodeValue(val)));
-        if ('clipboardData' in e) {
-          e.clipboardData?.setData('text/plain', tsvFormatRows(text));
-          if (props.encodeJson) e.clipboardData?.setData('application/json', props.encodeJson(_data));
+        if ('clipboardData' in e && e.clipboardData) {
+          for (const [format, encoder] of _.toPairs(encoders)) {
+            e.clipboardData.setData(format, encoder(_data));
+          }
         }
       }
     }
@@ -119,11 +123,15 @@ export const DataSheetTable = createComponent(<T extends object>(
         const _data = _.map(_rows, row => _.pick(props.data[row], _.map(_cols, col => props.columns[col])));
         props.onCopyCells(selectedCells, _data);
       } else {
+        const encoders = {
+          ...defaultEncoders,
+          ...props.encoders ?? {},
+        };
         const _data = _.map(_rows, row => _.map(_cols, col => props.data[row][props.columns[col]]));
-        const text = _data.map(row => _.map(row, val => props.encodeValue(val)));
-        if ('clipboardData' in e) {
-          e.clipboardData?.setData('text/plain', tsvFormatRows(text));
-          if (props.encodeJson) e.clipboardData?.setData('application/json', props.encodeJson(_data));
+        if ('clipboardData' in e && e.clipboardData) {
+          for (const [format, encoder] of _.toPairs(encoders)) {
+            e.clipboardData.setData(format, encoder(_data));
+          }
         }
       }
     }

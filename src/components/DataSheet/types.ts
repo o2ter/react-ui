@@ -65,8 +65,7 @@ type DataSheetStyleProps = {
 export type DataSheetProps<T extends object> = DataSheetStyleProps & {
   data: T[];
   columns: (keyof T)[];
-  encodeValue: (value: T[keyof T]) => string;
-  encodeJson?: (value: T[keyof T][][]) => string;
+  encoders?: Record<string, (data: T[keyof T][][]) => string>;
   allowSelection?: boolean;
   allowEditForCell?: boolean | ((row: number, col: number) => boolean);
   columnWidth: number[];
