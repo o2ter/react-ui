@@ -82,7 +82,7 @@ export type DataSheetProps<T extends object> = DataSheetStyleProps & {
   onDeleteCells?: (cells: Range<Position>) => void;
   onCopyRows?: (rows: number[], data: Pick<T, keyof T>[]) => void;
   onCopyCells?: (cells: Range<Position>, data: Pick<T, keyof T>[]) => void;
-  onPasteRows?: (rows: number[], clipboard: Clipboard) => void;
-  onPasteCells?: (cells: Range<Position>, clipboard: Clipboard) => void;
+  onPasteRows?: (rows: number[], clipboard: DataTransfer | Clipboard) => void;
+  onPasteCells?: (cells: Range<Position>, clipboard: DataTransfer | Clipboard) => void;
   onEndEditing?: (row: number, col: number) => void;
 };
