@@ -65,7 +65,7 @@ type DataSheetStyleProps = {
 export type DataSheetProps<T extends object> = DataSheetStyleProps & {
   data: T[];
   columns: (keyof T)[];
-  encoders?: Record<string, (data: T[keyof T][][]) => string>;
+  encoders?: Record<string, (data: T[keyof T][][]) => string | Blob | PromiseLike<string | Blob>>;
   allowSelection?: boolean;
   allowEditForCell?: boolean | ((row: number, col: number) => boolean);
   columnWidth: number[];
@@ -82,7 +82,7 @@ export type DataSheetProps<T extends object> = DataSheetStyleProps & {
   onDeleteCells?: (cells: Range<Position>) => void;
   onCopyRows?: (rows: number[], data: Pick<T, keyof T>[]) => void;
   onCopyCells?: (cells: Range<Position>, data: Pick<T, keyof T>[]) => void;
-  onPasteRows?: (rows: number[]) => void;
-  onPasteCells?: (cells: Range<Position>) => void;
+  onPasteRows?: (rows: number[], clipboard: Clipboard) => void;
+  onPasteCells?: (cells: Range<Position>, clipboard: Clipboard) => void;
   onEndEditing?: (row: number, col: number) => void;
 };

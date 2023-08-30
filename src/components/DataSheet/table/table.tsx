@@ -93,7 +93,7 @@ export const DataSheetTable = createComponent(<T extends object>(
     }
   });
 
-  const handleCopy = (e: ClipboardEvent | KeyboardEvent) => {
+  const handleCopy = (e: Event) => {
     if (!props.allowSelection) return;
     const selectedRows = handle.state.selectedRows?.sort().filter(x => x < props.data.length) ?? [];
     if (!_.isEmpty(selectedRows)) {
@@ -107,11 +107,9 @@ export const DataSheetTable = createComponent(<T extends object>(
           ...props.encoders ?? {},
         };
         const _data = _.map(selectedRows, row => _.map(props.columns, col => props.data[row][col]));
-        if ('clipboardData' in e && e.clipboardData) {
-          for (const [format, encoder] of _.toPairs(encoders)) {
-            e.clipboardData.setData(format, encoder(_data));
-          }
-        }
+        navigator.clipboard.write([
+          new ClipboardItem(_.mapValues(encoders, encoder => encoder(_data)))
+        ]);
       }
     }
     if (!_.isEmpty(handle.state.selectedCells)) {
@@ -128,25 +126,23 @@ export const DataSheetTable = createComponent(<T extends object>(
           ...props.encoders ?? {},
         };
         const _data = _.map(_rows, row => _.map(_cols, col => props.data[row][props.columns[col]]));
-        if ('clipboardData' in e && e.clipboardData) {
-          for (const [format, encoder] of _.toPairs(encoders)) {
-            e.clipboardData.setData(format, encoder(_data));
-          }
-        }
+        navigator.clipboard.write([
+          new ClipboardItem(_.mapValues(encoders, encoder => encoder(_data)))
+        ]);
       }
     }
   }
 
-  const handlePaste = (e: ClipboardEvent | KeyboardEvent) => {
+  const handlePaste = (e: Event) => {
     if (!props.allowSelection) return;
     const selectedRows = handle.state.selectedRows?.sort() ?? [];
     if (!_.isEmpty(selectedRows)) {
       e.preventDefault();
-      if (_.isFunction(props.onPasteRows)) props.onPasteRows(selectedRows);
+      if (_.isFunction(props.onPasteRows)) props.onPasteRows(selectedRows, navigator.clipboard);
     }
     if (!_.isEmpty(handle.state.selectedCells)) {
       e.preventDefault();
-      if (_.isFunction(props.onPasteCells)) props.onPasteCells(handle.state.selectedCells);
+      if (_.isFunction(props.onPasteCells)) props.onPasteCells(handle.state.selectedCells, navigator.clipboard);
     }
   }
 
