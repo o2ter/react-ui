@@ -149,7 +149,7 @@ export const DataSheetBody = <T extends object>({
                 )}
 
                 <List
-                  data={_.map(columns, col => items[col])}
+                  data={_.map(columns, col => items[_.isString(col) ? col : col.key])}
                   extraData={state}
                   renderItem={({ item, index: col }) => (
                     <DataSheetCell

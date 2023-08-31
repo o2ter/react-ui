@@ -77,7 +77,7 @@ export const DataSheetHeader = <T extends object>({
           extraData={state}
           renderItem={({ item, index: col }) => (
             <DataSheetHeaderCell
-              label={item as any}
+              label={_.isString(item) ? item : item.label}
               headerTextStyle={headerTextStyle}
               columnWidth={_.isArray(columnWidth) ? columnWidth[col] : undefined}
               columnMinWidth={columnMinWidth}

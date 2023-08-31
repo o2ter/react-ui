@@ -112,13 +112,14 @@ export const DataSheetTable = createComponent(<T extends object>(
   const handleCopy = (e: ClipboardEvent | KeyboardEvent) => {
     if (!props.allowSelection) return;
     const selectedRows = handle.state.selectedRows?.sort().filter(x => x < props.data.length) ?? [];
+    const columns = _.map(props.columns, col => _.isString(col) ? col : col.key);
     if (!_.isEmpty(selectedRows)) {
       e.preventDefault();
       if (_.isFunction(props.onCopyRows)) {
-        const _data = _.map(selectedRows, row => _.pick(props.data[row], props.columns));
+        const _data = _.map(selectedRows, row => _.pick(props.data[row], columns));
         props.onCopyRows(selectedRows, _data);
       } else {
-        const _data = _.map(selectedRows, row => _.map(props.columns, col => props.data[row][col]));
+        const _data = _.map(selectedRows, row => _.map(columns, col => props.data[row][col]));
         encodeClipboard(e, _data);
       }
     }
@@ -128,10 +129,10 @@ export const DataSheetTable = createComponent(<T extends object>(
       const _rows = _.range(selectedCells.start.row, selectedCells.end.row + 1);
       const _cols = _.range(selectedCells.start.col, selectedCells.end.col + 1);
       if (_.isFunction(props.onCopyCells)) {
-        const _data = _.map(_rows, row => _.pick(props.data[row], _.map(_cols, col => props.columns[col])));
+        const _data = _.map(_rows, row => _.pick(props.data[row], _.map(_cols, col => columns[col])));
         props.onCopyCells(selectedCells, _data);
       } else {
-        const _data = _.map(_rows, row => _.map(_cols, col => props.data[row][props.columns[col]]));
+        const _data = _.map(_rows, row => _.map(_cols, col => props.data[row][columns[col]]));
         encodeClipboard(e, _data);
       }
     }
