@@ -30,9 +30,8 @@ import { flattenCSSStyle } from '../styles';
 import { createComponent } from '../../../internals/utils';
 
 type DataSheetHeaderCellProps = React.ComponentPropsWithoutRef<'th'> & {
-  label?: string;
+  label?: React.ReactNode;
   borderSize?: number;
-  headerTextStyle?: StyleProp<TextStyle>;
   columnWidth?: number;
   columnMinWidth?: number;
   onColumnWidthChange?: (width: number) => void;
@@ -42,7 +41,6 @@ export const DataSheetHeaderCell = createComponent(({
   label,
   style,
   borderSize = 1,
-  headerTextStyle,
   columnWidth,
   columnMinWidth,
   onColumnWidthChange,
@@ -61,7 +59,9 @@ export const DataSheetHeaderCell = createComponent(({
       {...props}
     >
       <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
-        <Text style={[{ flex: 1, padding: 4 }, headerTextStyle]}>{label}</Text>
+        {_.isString(label) ? (
+          <Text style={[{ flex: 1, padding: 4 }]}>{label}</Text>
+        ) : label}
         <View ref={borderRef}
           onStartShouldSetResponder={(e) => e.target === borderRef.current as any}
           onMoveShouldSetResponder={(e) => e.target === borderRef.current as any}

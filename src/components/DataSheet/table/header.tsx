@@ -37,7 +37,6 @@ export const DataSheetHeader = <T extends object>({
   headerContainerStyle,
   rowNumbers,
   columns,
-  headerTextStyle,
   columnWidth,
   columnMinWidth,
   headerItemContainerStyle,
@@ -78,7 +77,6 @@ export const DataSheetHeader = <T extends object>({
           renderItem={({ item, index: col }) => (
             <DataSheetHeaderCell
               label={_.isString(item) ? item : item.label}
-              headerTextStyle={headerTextStyle}
               columnWidth={_.isArray(columnWidth) ? columnWidth[col] : undefined}
               columnMinWidth={columnMinWidth}
               onColumnWidthChange={_.isFunction(onColumnWidthChange) ? (width) => onColumnWidthChange(col, width) : undefined}

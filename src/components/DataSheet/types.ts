@@ -53,7 +53,6 @@ export type TableCellItemProps<T> = {
 
 type DataSheetStyleProps = {
   style?: React.CSSProperties;
-  headerTextStyle?: StyleProp<TextStyle>;
   headerContainerStyle?: React.CSSProperties;
   headerItemContainerStyle?: React.CSSProperties;
   rowContainerStyle?: React.CSSProperties;
@@ -64,7 +63,7 @@ type DataSheetStyleProps = {
 
 export type DataSheetProps<T extends object> = DataSheetStyleProps & {
   data: T[];
-  columns: (Extract<keyof T, string> | { key: keyof T; label: string; })[];
+  columns: (Extract<keyof T, string> | { key: keyof T; label: React.ReactNode; })[];
   encoders?: Record<string, (data: T[keyof T][][]) => string | Blob | PromiseLike<string | Blob>>;
   allowSelection?: boolean;
   allowEditForCell?: boolean | ((row: number, col: number) => boolean);
