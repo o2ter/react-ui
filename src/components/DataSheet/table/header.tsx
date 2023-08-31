@@ -56,7 +56,7 @@ export const DataSheetHeader = <T extends object>({
     position: 'sticky',
     tableLayout: 'fixed',
     left: 0,
-    zIndex: 1,
+    zIndex: 2,
   } : {};
 
   return (
