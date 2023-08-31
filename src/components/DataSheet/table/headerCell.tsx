@@ -68,8 +68,8 @@ export const DataSheetHeaderCell = createComponent(({
           onStartShouldSetResponderCapture={() => false}
           onMoveShouldSetResponderCapture={() => false}
           onResponderTerminationRequest={() => false}
-          onResponderMove={e => onColumnWidthChange?.(_columnWidth + e.nativeEvent.locationX - borderSize * 0.5)}
-          onResponderRelease={e => onColumnWidthChange?.(_columnWidth + e.nativeEvent.locationX - borderSize * 0.5)}
+          onResponderMove={_.isFunction(onColumnWidthChange) ? (e) => onColumnWidthChange(_columnWidth + e.nativeEvent.locationX - borderSize * 0.5) : undefined}
+          onResponderRelease={_.isFunction(onColumnWidthChange) ? (e) => onColumnWidthChange(_columnWidth + e.nativeEvent.locationX - borderSize * 0.5) : undefined}
           style={{ width: borderSize, cursor: 'col-resize' } as StyleProp<ViewStyle>} />
       </View>
     </th>
