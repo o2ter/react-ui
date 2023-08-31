@@ -28,6 +28,7 @@ import React from 'react';
 import { View as RNView, ViewProps } from 'react-native';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
+import { TextStyleProvider } from '../index.web';
 
 export const View = createComponent(({
   classes,
@@ -41,7 +42,7 @@ export const View = createComponent(({
       ref={forwardRef}
       style={[viewStyle, style]}
       {...props}>
-      {children}
+      <TextStyleProvider classes={classes} style={style}>{children}</TextStyleProvider>
     </RNView>
   );
 }, {
