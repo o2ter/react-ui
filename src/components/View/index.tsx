@@ -28,7 +28,7 @@ import React from 'react';
 import { View as RNView, ViewProps } from 'react-native';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
-import { TextStyleProvider } from '../index.web';
+import { TextStyleProvider } from '../Text/style';
 
 export const View = createComponent(({
   classes,
