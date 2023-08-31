@@ -102,22 +102,18 @@ export const DataSheetBody = <T extends object>({
                   <DataSheetCell
                     selected={isRowSelected(row)}
                     highlightColor={highlightColor}
-                    onMouseDown={(e) => {
-                      if (allowSelection) setState(state => ({
-                        ..._.omit(state, '_selectStart', '_selectEnd', 'editing'),
-                        _selectRows: { start: row, end: row },
-                        shiftKey: e.shiftKey,
-                        metaKey: e.metaKey,
-                      }))
-                    }}
-                    onMouseOver={(e) => {
-                      if (allowSelection) setState(state => ({
-                        ..._.omit(state, '_selectStart', '_selectEnd', 'editing'),
-                        ...state._selectRows ? { _selectRows: { start: state._selectRows.start, end: row } } : {},
-                        shiftKey: e.shiftKey,
-                        metaKey: e.metaKey,
-                      }))
-                    }}
+                    onMouseDown={allowSelection ? (e) => setState(state => ({
+                      ..._.omit(state, '_selectStart', '_selectEnd', 'editing'),
+                      _selectRows: { start: row, end: row },
+                      shiftKey: e.shiftKey,
+                      metaKey: e.metaKey,
+                    })) : undefined}
+                    onMouseOver={allowSelection ? (e) => setState(state => ({
+                      ..._.omit(state, '_selectStart', '_selectEnd', 'editing'),
+                      ...state._selectRows ? { _selectRows: { start: state._selectRows.start, end: row } } : {},
+                      shiftKey: e.shiftKey,
+                      metaKey: e.metaKey,
+                    })) : undefined}
                     style={flattenCSSStyle([{
                       padding: 4,
                       overflow: 'hidden',
@@ -157,24 +153,20 @@ export const DataSheetBody = <T extends object>({
                       isEditing={isCellEditing(row, col)}
                       selected={isRowSelected(row) || isCellSelected(row, col)}
                       highlightColor={highlightColor}
-                      onMouseDown={(e) => {
-                        if (allowSelection) setState(state => ({
-                          ..._.omit(state, '_selectRows', 'editing'),
-                          _selectStart: { row, col },
-                          _selectEnd: { row, col },
-                          shiftKey: e.shiftKey,
-                          metaKey: e.metaKey,
-                        }))
-                      }}
-                      onMouseOver={(e) => {
-                        if (allowSelection) setState(state => ({
-                          ..._.omit(state, '_selectRows', 'editing'),
-                          ...state._selectStart ? { _selectEnd: { row, col } } : {},
-                          shiftKey: e.shiftKey,
-                          metaKey: e.metaKey,
-                        }))
-                      }}
-                      onDoubleClick={() => { if (_allowEditForCell(row, col)) setState({ editing: { row, col } }) }}
+                      onMouseDown={allowSelection ? (e) => setState(state => ({
+                        ..._.omit(state, '_selectRows', 'editing'),
+                        _selectStart: { row, col },
+                        _selectEnd: { row, col },
+                        shiftKey: e.shiftKey,
+                        metaKey: e.metaKey,
+                      })) : undefined}
+                      onMouseOver={allowSelection ? (e) => setState(state => ({
+                        ..._.omit(state, '_selectRows', 'editing'),
+                        ...state._selectStart ? { _selectEnd: { row, col } } : {},
+                        shiftKey: e.shiftKey,
+                        metaKey: e.metaKey,
+                      })) : undefined}
+                      onDoubleClick={_allowEditForCell(row, col) ? () => setState({ editing: { row, col } }) : undefined}
                       style={flattenCSSStyle([{
                         padding: 0,
                         position: 'relative',
@@ -259,7 +251,7 @@ export const DataSheetBody = <T extends object>({
                     isEditing={isCellEditing(data.length, col)}
                     selected={isRowSelected(data.length)}
                     highlightColor={highlightColor}
-                    onDoubleClick={() => { if (_allowEditForCell(data.length, col)) setState({ editing: { row: data.length, col } }) }}
+                    onDoubleClick={_allowEditForCell(data.length, col) ? () => setState({ editing: { row: data.length, col } }) : undefined}
                     style={flattenCSSStyle([{
                       padding: 0,
                       position: 'relative',
