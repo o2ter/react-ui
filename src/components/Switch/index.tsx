@@ -104,7 +104,7 @@ export const Switch = createComponent((
           width: size - theme.borderWidth * 4,
           height: size - theme.borderWidth * 4,
           borderRadius: 0.5 * size - theme.borderWidth * 2,
-          left: posAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 0.8 * size] }),
+          left: posAnim.interpolate({ inputRange: [0, 1], outputRange: [0, size] }),
           backgroundColor: selected ? 'white' : theme.grays['300'],
         }}
       />
