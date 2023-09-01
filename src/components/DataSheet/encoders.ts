@@ -29,6 +29,7 @@ import { tsvFormatRows } from 'd3-dsv';
 const encodeValue = (x: any) => {
   if (_.isNil(x)) return '';
   if (_.isNumber(x) || _.isBoolean(x) || _.isString(x)) return `${x}`;
+  if (_.isDate(x)) return x.toLocaleString();
   return JSON.stringify(x);
 }
 
