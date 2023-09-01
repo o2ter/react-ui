@@ -102,13 +102,13 @@ export const DataSheetBody = <T extends object>({
                   <DataSheetCell
                     selected={isRowSelected(row)}
                     highlightColor={highlightColor}
-                    onMouseDown={allowSelection ? (e) => setState(state => ({
-                      ..._.omit(state, '_selectStart', '_selectEnd', 'editing'),
+                    onMouseDown={allowSelection && !state.editing ? (e) => setState(state => ({
+                      ..._.omit(state, '_selectStart', '_selectEnd'),
                       _selectRows: { start: row, end: row },
                       shiftKey: e.shiftKey,
                       metaKey: e.metaKey,
                     })) : undefined}
-                    onMouseOver={allowSelection ? (e) => setState(state => ({
+                    onMouseOver={allowSelection && !state.editing ? (e) => setState(state => ({
                       ..._.omit(state, '_selectStart', '_selectEnd'),
                       ...state._selectRows ? { _selectRows: { start: state._selectRows.start, end: row } } : {},
                       shiftKey: e.shiftKey,
@@ -153,14 +153,14 @@ export const DataSheetBody = <T extends object>({
                       isEditing={isCellEditing(row, col)}
                       selected={isRowSelected(row) || isCellSelected(row, col)}
                       highlightColor={highlightColor}
-                      onMouseDown={allowSelection ? (e) => setState(state => ({
-                        ..._.omit(state, '_selectRows', 'editing'),
+                      onMouseDown={allowSelection && !state.editing ? (e) => setState(state => ({
+                        ..._.omit(state, '_selectRows'),
                         _selectStart: { row, col },
                         _selectEnd: { row, col },
                         shiftKey: e.shiftKey,
                         metaKey: e.metaKey,
                       })) : undefined}
-                      onMouseOver={allowSelection ? (e) => setState(state => ({
+                      onMouseOver={allowSelection && !state.editing ? (e) => setState(state => ({
                         ..._.omit(state, '_selectRows'),
                         ...state._selectStart ? { _selectEnd: { row, col } } : {},
                         shiftKey: e.shiftKey,
