@@ -80,6 +80,7 @@ export const DataSheetBody = <T extends object>({
 
   const _allowEditForCell = (row: number, col: number) => _.isFunction(allowEditForCell) ? allowEditForCell(row, col) : !!allowEditForCell;
 
+  const cursor: React.CSSProperties = state.editing ? {} : { cursor: 'cell' };
   const stickyRowNumberStyle: React.CSSProperties = stickyRowNumbers ? {
     position: 'sticky',
     tableLayout: 'fixed',
@@ -170,7 +171,6 @@ export const DataSheetBody = <T extends object>({
                       style={flattenCSSStyle([{
                         padding: 0,
                         position: 'relative',
-                        cursor: 'cell',
                         borderTop: 0,
                         borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
                         borderBottom: 1,
@@ -182,11 +182,10 @@ export const DataSheetBody = <T extends object>({
                         borderBottomStyle: isRowSelected(row + 1) || isCellSelected(row + 1, col) ? 'double' : 'solid',
                         borderBottomColor: isRowSelected(row + 1) || isCellSelected(row + 1, col) ? '#2185D0' : '#DDD',
                         backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
-                      }, itemContainerStyle])}
+                      }, cursor, itemContainerStyle])}
                       selectedStyle={flattenCSSStyle([{
                         padding: 0,
                         position: 'relative',
-                        cursor: 'cell',
                         borderTop: 0,
                         borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
                         borderBottom: 1,
@@ -194,7 +193,7 @@ export const DataSheetBody = <T extends object>({
                         borderStyle: 'double',
                         borderColor: '#2185D0',
                         backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
-                      }, selectedItemContainerStyle])}>
+                      }, cursor, selectedItemContainerStyle])}>
                       <Text classes='font-monospace'>{' '}</Text>
                       <TableCellItem
                         item={item}
@@ -255,7 +254,6 @@ export const DataSheetBody = <T extends object>({
                     style={flattenCSSStyle([{
                       padding: 0,
                       position: 'relative',
-                      cursor: 'cell',
                       borderTop: 0,
                       borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
                       borderBottom: 1,
@@ -263,11 +261,10 @@ export const DataSheetBody = <T extends object>({
                       borderStyle: 'solid',
                       borderColor: '#DDD',
                       backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
-                    }, itemContainerStyle])}
+                    }, cursor, itemContainerStyle])}
                     selectedStyle={flattenCSSStyle([{
                       padding: 0,
                       position: 'relative',
-                      cursor: 'cell',
                       borderTop: 0,
                       borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
                       borderBottom: 1,
@@ -275,7 +272,7 @@ export const DataSheetBody = <T extends object>({
                       borderStyle: 'double',
                       borderColor: '#2185D0',
                       backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
-                    }, selectedItemContainerStyle])}>
+                    }, cursor, selectedItemContainerStyle])}>
                     <Text classes='font-monospace'>{' '}</Text>
                     {isCellEditing(data.length, col) && (
                       <TableCellItem
