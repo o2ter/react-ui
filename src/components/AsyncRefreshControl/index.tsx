@@ -46,12 +46,15 @@ async function _onRefresh(
 
 export const AsyncRefreshControl = (
   RefreshControl: typeof RefreshControlBase
-) => createComponent(({
-  classes,
-  style,
-  onRefresh,
-  ...props
-}: AsyncRefreshControlProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RefreshControlBase>>) => {
+) => createComponent((
+  {
+    classes,
+    style,
+    onRefresh,
+    ...props
+  }: AsyncRefreshControlProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof RefreshControlBase>>
+) => {
 
   const [refreshing, setRefreshing] = React.useState(false);
   const defaultStyle = useComponentStyle('refreshControl', classes, refreshing && 'active');
