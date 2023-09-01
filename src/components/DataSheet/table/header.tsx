@@ -67,6 +67,7 @@ export const DataSheetHeader = <T extends object>({
             border: 1,
             borderStyle: 'solid',
             borderColor: '#DDD',
+            backgroundColor: '#F6F8FF',
             borderBottomStyle: isRowSelected(0) ? 'double' : 'solid',
             borderBottomColor: isRowSelected(0) ? '#2185D0' : '#DDD',
           }, stickyRowNumberStyle])} />
