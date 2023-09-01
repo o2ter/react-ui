@@ -57,6 +57,7 @@ export type ComponentStyles = {
 
   checkbox?: StyleProp<TextStyle>;
   radio?: StyleProp<TextStyle>;
+  switch?: StyleProp<TextStyle>;
 
   calendarWeekContainer?: StyleProp<ViewStyle>;
   calendarWeekdayContainer?: StyleProp<ViewStyle>;
@@ -78,6 +79,12 @@ export type ComponentStyles = {
   'formRadio:valid'?: StyleProp<TextStyle>;
   'formRadio:disabled'?: StyleProp<TextStyle>;
   'formRadio:enabled'?: StyleProp<TextStyle>;
+
+  formSwitch?: StyleProp<TextStyle>;
+  'formSwitch:invalid'?: StyleProp<TextStyle>;
+  'formSwitch:valid'?: StyleProp<TextStyle>;
+  'formSwitch:disabled'?: StyleProp<TextStyle>;
+  'formSwitch:enabled'?: StyleProp<TextStyle>;
 
   formPicker?: StyleProp<TextStyle>;
   'formPicker:invalid'?: StyleProp<TextStyle>;

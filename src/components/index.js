@@ -51,6 +51,7 @@ export { StickyView } from './StickyView';
 export { StyleProvider, useStyle, useAllStyle } from './Style';
 export { flattenStyle } from './Style/flatten';
 export { SVG } from './SVG';
+export * from './Switch';
 export { TextInput } from './TextInput';
 export * from './Modal';
 export { Text } from './Text';

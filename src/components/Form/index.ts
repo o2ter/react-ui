@@ -35,6 +35,7 @@ import Button from './Button';
 import Picker from './Picker';
 import Checkbox from './Checkbox';
 import Radio from './Radio';
+import Switch from './Switch';
 
 export { FormState } from './Form';
 
@@ -49,6 +50,7 @@ const Form = _.assign(FormBase, {
   Picker,
   Checkbox,
   Radio,
+  Switch,
   Date: FormDate,
 });
 

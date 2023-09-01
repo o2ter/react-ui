@@ -66,6 +66,7 @@ export const defaultStyle = (
 
   checkboxColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
   radioColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
+  switchColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
 
 });
 
