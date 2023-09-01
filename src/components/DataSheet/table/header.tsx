@@ -49,7 +49,7 @@ export const DataSheetHeader = <T extends object>({
     position: 'sticky',
     tableLayout: 'fixed',
     top: 0,
-    zIndex: 2,
+    zIndex: 1,
   } : {};
 
   const stickyRowNumberStyle: React.CSSProperties = stickyRowNumbers ? {
@@ -67,7 +67,6 @@ export const DataSheetHeader = <T extends object>({
             border: 1,
             borderStyle: 'solid',
             borderColor: '#DDD',
-            backgroundColor: '#F6F8FF',
             borderBottomStyle: isRowSelected(0) ? 'double' : 'solid',
             borderBottomColor: isRowSelected(0) ? '#2185D0' : '#DDD',
           }, stickyRowNumberStyle])} />
@@ -87,8 +86,10 @@ export const DataSheetHeader = <T extends object>({
                 borderLeft: 0,
                 borderStyle: 'solid',
                 borderColor: '#DDD',
+                backgroundColor: '#F6F8FF',
                 borderBottomStyle: isRowSelected(0) || isCellSelected(0, col) ? 'double' : 'solid',
                 borderBottomColor: isRowSelected(0) || isCellSelected(0, col) ? '#2185D0' : '#DDD',
+                zIndex: 2,
               }, headerItemContainerStyle])} />
           )}
         />
