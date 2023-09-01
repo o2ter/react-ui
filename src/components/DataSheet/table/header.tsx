@@ -49,14 +49,14 @@ export const DataSheetHeader = <T extends object>({
     position: 'sticky',
     tableLayout: 'fixed',
     top: 0,
-    zIndex: 1,
+    zIndex: 2,
   } : {};
 
   const stickyRowNumberStyle: React.CSSProperties = stickyRowNumbers ? {
     position: 'sticky',
     tableLayout: 'fixed',
     left: 0,
-    zIndex: 2,
+    zIndex: 1,
   } : {};
 
   return (
