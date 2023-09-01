@@ -119,7 +119,8 @@ export const DataSheetTable = createComponent(<T extends object>(
         const _data = _.map(selectedRows, row => _.pick(props.data[row], columns));
         props.onCopyRows(selectedRows, _data);
       } else {
-        const _data = _.map(selectedRows, row => _.map(columns, col => props.data[row][col]));
+        const encodeValue = props.encodeValue ?? ((v: any) => v);
+        const _data = _.map(selectedRows, row => _.map(columns, col => encodeValue(props.data[row][col])));
         encodeClipboard(e, _data);
       }
     }
@@ -132,7 +133,8 @@ export const DataSheetTable = createComponent(<T extends object>(
         const _data = _.map(_rows, row => _.pick(props.data[row], _.map(_cols, col => columns[col])));
         props.onCopyCells(selectedCells, _data);
       } else {
-        const _data = _.map(_rows, row => _.map(_cols, col => props.data[row][columns[col]]));
+        const encodeValue = props.encodeValue ?? ((v: any) => v);
+        const _data = _.map(_rows, row => _.map(_cols, col => encodeValue(props.data[row][columns[col]])));
         encodeClipboard(e, _data);
       }
     }

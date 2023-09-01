@@ -64,7 +64,8 @@ type DataSheetStyleProps = {
 export type DataSheetProps<T extends object> = DataSheetStyleProps & {
   data: T[];
   columns: (Extract<keyof T, string> | { key: keyof T; label: React.ReactNode; })[];
-  encoders?: Record<string, (data: T[keyof T][][]) => string | Blob | PromiseLike<string | Blob>>;
+  encoders?: Record<string, (data: any[][]) => string | Blob | PromiseLike<string | Blob>>;
+  encodeValue?: (data: T[keyof T]) => any;
   allowSelection?: boolean;
   allowEditForCell?: boolean | ((row: number, col: number) => boolean);
   columnWidth: number[];
