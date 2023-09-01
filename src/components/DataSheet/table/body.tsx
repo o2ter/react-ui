@@ -109,7 +109,7 @@ export const DataSheetBody = <T extends object>({
                       metaKey: e.metaKey,
                     })) : undefined}
                     onMouseOver={allowSelection ? (e) => setState(state => ({
-                      ..._.omit(state, '_selectStart', '_selectEnd', 'editing'),
+                      ..._.omit(state, '_selectStart', '_selectEnd'),
                       ...state._selectRows ? { _selectRows: { start: state._selectRows.start, end: row } } : {},
                       shiftKey: e.shiftKey,
                       metaKey: e.metaKey,
@@ -161,7 +161,7 @@ export const DataSheetBody = <T extends object>({
                         metaKey: e.metaKey,
                       })) : undefined}
                       onMouseOver={allowSelection ? (e) => setState(state => ({
-                        ..._.omit(state, '_selectRows', 'editing'),
+                        ..._.omit(state, '_selectRows'),
                         ...state._selectStart ? { _selectEnd: { row, col } } : {},
                         shiftKey: e.shiftKey,
                         metaKey: e.metaKey,
