@@ -28,6 +28,7 @@ import React from 'react';
 import { RefreshControlBase, RefreshControlProps } from 'react-native';
 import { Modify } from '../../internals/types';
 import { ClassNames, useComponentStyle } from '../Style';
+import { createComponent } from '../../internals/utils';
 
 type AsyncRefreshControlProps = Modify<Omit<RefreshControlProps, 'refreshing'>, {
   classes?: ClassNames;
@@ -45,12 +46,12 @@ async function _onRefresh(
 
 export const AsyncRefreshControl = (
   RefreshControl: typeof RefreshControlBase
-) => React.forwardRef<React.ComponentRef<typeof RefreshControlBase>, AsyncRefreshControlProps>(({
+) => createComponent(({
   classes,
   style,
   onRefresh,
   ...props
-}, forwardRef) => {
+}: AsyncRefreshControlProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof RefreshControlBase>>) => {
 
   const [refreshing, setRefreshing] = React.useState(false);
   const defaultStyle = useComponentStyle('refreshControl', classes, refreshing && 'active');
@@ -61,6 +62,8 @@ export const AsyncRefreshControl = (
     style={[defaultStyle, style]}
     onRefresh={() => { if (_.isFunction(onRefresh)) _onRefresh(onRefresh, setRefreshing) }}
     {...props} />;
+}, {
+  displayName: 'AsyncRefreshControl',
 });
 
 export default AsyncRefreshControl;

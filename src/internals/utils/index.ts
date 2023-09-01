@@ -26,13 +26,9 @@
 import _ from 'lodash';
 import React from 'react';
 
-declare module 'react' {
-  function forwardRef<T, P = {}>(
-    render: (props: P, forwardRef: React.ForwardedRef<T>) => React.ReactElement | null,
-  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null
-}
+type FunctionComponent<T, P> = (props: P & React.RefAttributes<T>) => React.ReactElement | null;
 
 export const createComponent = <T, P = {}, A = {}>(
   render: (props: P, forwardRef: React.ForwardedRef<T>) => React.ReactElement | null,
   attrs?: A,
-) => _.assign(React.forwardRef(render), attrs ?? {});
+) => _.assign(React.forwardRef(render) as FunctionComponent<T, P>, attrs ?? {});
