@@ -47,15 +47,19 @@ export const DataSheetHeaderCell = createComponent(({
   ...props
 }: DataSheetHeaderCellProps, forwardRef: React.ForwardedRef<React.ComponentRef<'th'>>) => {
 
-  const _columnWidth = columnWidth ?? 0;
-  const _columnMinWidth = columnMinWidth ?? 0;
+  const _columnWidth = Math.max(0, columnWidth ?? 0);
+  const _columnMinWidth = Math.max(0, columnMinWidth ?? 0);
 
   const borderRef = React.useRef<React.ComponentRef<typeof View>>(null);
 
   return (
     <th
       ref={forwardRef}
-      style={flattenCSSStyle([{ width: Math.max(_columnWidth, _columnMinWidth) }, style])}
+      style={flattenCSSStyle([{
+        width: Math.max(_columnWidth, _columnMinWidth),
+        minWidth: Math.max(_columnWidth, _columnMinWidth),
+        maxWidth: Math.max(_columnWidth, _columnMinWidth),
+      }, style])}
       {...props}
     >
       <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
