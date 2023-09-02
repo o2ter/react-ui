@@ -33,6 +33,8 @@ import { ClassNames, useComponentStyle } from '../Style';
 import { Modify } from '../../internals/types';
 import { flattenStyle } from '../Style/flatten';
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 type SwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   selected?: boolean;
   tabIndex?: number;
@@ -61,7 +63,7 @@ export const Switch = createComponent((
   const lineHeight = textStyle.lineHeight ?? theme.root.lineHeight;
 
   const size = _.isNumber(lineHeight) ? lineHeight * fontSize : fontSize;
-  const posAnim = React.useRef(new Animated.Value(selected ? 1 : 0)).current;
+  const animate = React.useRef(new Animated.Value(selected ? 1 : 0)).current;
 
   const _style = flattenStyle([
     {
@@ -69,18 +71,15 @@ export const Switch = createComponent((
       height: size,
       padding: theme.borderWidth,
       borderRadius: 0.5 * size,
-      backgroundColor: selected ? theme.styles.switchColor(selected ?? false) : theme.root.backgroundColor,
-      borderColor: selected ? theme.styles.switchColor(selected ?? false) : theme.grays['300'],
       borderWidth: theme.borderWidth,
       opacity: props.disabled ? 0.65 : 1,
     },
     switchStyle,
-    _.isFunction(style) ? style({ selected: selected ?? false }) : style,
   ]);
 
   React.useEffect(() => {
 
-    Animated.timing(posAnim, {
+    Animated.timing(animate, {
       toValue: selected ? 1 : 0,
       duration: 100,
       easing: Easing.linear,
@@ -90,9 +89,26 @@ export const Switch = createComponent((
   }, [selected]);
 
   return (
-    <Pressable
+    <AnimatedPressable
       ref={forwardRef}
-      style={_style}
+      style={[
+        _style,
+        {
+          backgroundColor: animate.interpolate({
+            inputRange: [0, 1], outputRange: [
+              theme.root.backgroundColor,
+              theme.styles.switchColor(selected ?? false),
+            ]
+          }),
+          borderColor: animate.interpolate({
+            inputRange: [0, 1], outputRange: [
+              theme.grays['300'],
+              theme.styles.switchColor(selected ?? false),
+            ]
+          }),
+        },
+        _.isFunction(style) ? style({ selected: selected ?? false }) : style,
+      ]}
       {...Platform.select({
         web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
         default: {},
@@ -104,11 +120,13 @@ export const Switch = createComponent((
           width: size - theme.borderWidth * 4,
           height: size - theme.borderWidth * 4,
           borderRadius: 0.5 * size - theme.borderWidth * 2,
-          left: posAnim.interpolate({ inputRange: [0, 1], outputRange: [0, size] }),
-          backgroundColor: selected ? 'white' : theme.grays['300'],
+          left: animate.interpolate({ inputRange: [0, 1], outputRange: [0, size] }),
+          backgroundColor: animate.interpolate({
+            inputRange: [0, 1], outputRange: [theme.grays['300'], 'white']
+          }),
         }}
       />
-    </Pressable>
+    </AnimatedPressable>
   )
 }, {
   displayName: 'Switch'
