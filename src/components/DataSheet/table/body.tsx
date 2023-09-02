@@ -217,6 +217,18 @@ export const DataSheetBody = <T extends object>({
                 <DataSheetCell
                   selected={isRowSelected(data.length)}
                   highlightColor={highlightColor}
+                  onMouseDown={allowSelection && !state.editing ? (e) => setState(state => ({
+                    ..._.omit(state, '_selectStart', '_selectEnd'),
+                    _selectRows: { start: data.length, end: data.length },
+                    shiftKey: e.shiftKey,
+                    metaKey: e.metaKey,
+                  })) : undefined}
+                  onMouseOver={allowSelection && !state.editing ? (e) => setState(state => ({
+                    ..._.omit(state, '_selectStart', '_selectEnd'),
+                    ...state._selectRows ? { _selectRows: { start: state._selectRows.start, end: data.length } } : {},
+                    shiftKey: e.shiftKey,
+                    metaKey: e.metaKey,
+                  })) : undefined}
                   style={flattenCSSStyle([{
                     padding: 4,
                     overflow: 'hidden',
@@ -226,6 +238,10 @@ export const DataSheetBody = <T extends object>({
                     borderRight: 1,
                     borderStyle: 'solid',
                     borderColor: '#DDD',
+                    borderRightStyle: isRowSelected(data.length) || isCellSelected(data.length, 0) ? 'double' : 'solid',
+                    borderRightColor: isRowSelected(data.length) || isCellSelected(data.length, 0) ? '#2185D0' : '#DDD',
+                    borderBottomStyle: isRowSelected(data.length + 1) ? 'double' : 'solid',
+                    borderBottomColor: isRowSelected(data.length + 1) ? '#2185D0' : '#DDD',
                     backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
                   }, stickyRowNumberStyle, itemContainerStyle])}
                   selectedStyle={flattenCSSStyle([{
@@ -248,8 +264,21 @@ export const DataSheetBody = <T extends object>({
                   <DataSheetCell
                     ref={isCellEditing(data.length, col) ? editingRef : undefined}
                     isEditing={isCellEditing(data.length, col)}
-                    selected={isRowSelected(data.length)}
+                    selected={isRowSelected(data.length) || isCellSelected(data.length, col)}
                     highlightColor={highlightColor}
+                    onMouseDown={allowSelection && !state.editing ? (e) => setState(state => ({
+                      ..._.omit(state, '_selectRows'),
+                      _selectStart: { row: data.length, col },
+                      _selectEnd: { row: data.length, col },
+                      shiftKey: e.shiftKey,
+                      metaKey: e.metaKey,
+                    })) : undefined}
+                    onMouseOver={allowSelection && !state.editing ? (e) => setState(state => ({
+                      ..._.omit(state, '_selectRows'),
+                      ...state._selectStart ? { _selectEnd: { row: data.length, col } } : {},
+                      shiftKey: e.shiftKey,
+                      metaKey: e.metaKey,
+                    })) : undefined}
                     onDoubleClick={_allowEditForCell(data.length, col) ? () => setState({ editing: { row: data.length, col } }) : undefined}
                     style={flattenCSSStyle([{
                       padding: 0,
@@ -260,6 +289,10 @@ export const DataSheetBody = <T extends object>({
                       borderRight: 1,
                       borderStyle: 'solid',
                       borderColor: '#DDD',
+                      borderRightStyle: isRowSelected(data.length) || isCellSelected(data.length, col + 1) ? 'double' : 'solid',
+                      borderRightColor: isRowSelected(data.length) || isCellSelected(data.length, col + 1) ? '#2185D0' : '#DDD',
+                      borderBottomStyle: isRowSelected(data.length + 1) || isCellSelected(data.length + 1, col) ? 'double' : 'solid',
+                      borderBottomColor: isRowSelected(data.length + 1) || isCellSelected(data.length + 1, col) ? '#2185D0' : '#DDD',
                       backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
                     }, cursor, itemContainerStyle])}
                     selectedStyle={flattenCSSStyle([{
