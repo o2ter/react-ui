@@ -64,10 +64,6 @@ export const defaultStyle = (
     backgroundColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[100]),
   })),
 
-  checkboxColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
-  radioColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
-  switchColor: (value: boolean) => value ? theme.themeColors.primary : theme.grays['600'],
-
 });
 
 export interface ThemeStyles extends ReturnType<typeof defaultStyle> {}

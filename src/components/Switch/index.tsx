@@ -95,16 +95,10 @@ export const Switch = createComponent((
         _style,
         {
           backgroundColor: animate.interpolate({
-            inputRange: [0, 1], outputRange: [
-              theme.root.backgroundColor,
-              theme.styles.switchColor(selected ?? false),
-            ]
+            inputRange: [0, 1], outputRange: [theme.root.backgroundColor, theme.themeColors.primary]
           }),
           borderColor: animate.interpolate({
-            inputRange: [0, 1], outputRange: [
-              theme.grays['300'],
-              theme.styles.switchColor(selected ?? false),
-            ]
+            inputRange: [0, 1], outputRange: [theme.grays['300'], theme.themeColors.primary]
           }),
         },
         _.isFunction(style) ? style({ selected: selected ?? false }) : style,
