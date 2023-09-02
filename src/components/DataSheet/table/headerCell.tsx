@@ -60,7 +60,8 @@ export const DataSheetHeaderCell = createComponent(({
         if (e.nativeEvent.layout.width !== _columnWidth) onColumnWidthChange(e.nativeEvent.layout.width);
       } : undefined}>
         <div style={{
-          width: Math.max(_columnWidth, _columnMinWidth) - 6,
+          width: _columnWidth - 6,
+          minWidth: _columnMinWidth - 6,
           resize: 'horizontal',
           overflow: 'hidden',
           paddingRight: 6,
