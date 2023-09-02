@@ -50,31 +50,23 @@ export const DataSheetHeaderCell = createComponent(({
   const _columnWidth = Math.max(0, columnWidth ?? 0);
   const _columnMinWidth = Math.max(0, columnMinWidth ?? 0);
 
-  const borderRef = React.useRef<React.ComponentRef<typeof View>>(null);
-
   return (
     <th
       ref={forwardRef}
-      style={flattenCSSStyle([{
-        width: Math.max(_columnWidth, _columnMinWidth),
-        minWidth: Math.max(_columnWidth, _columnMinWidth),
-        maxWidth: Math.max(_columnWidth, _columnMinWidth),
-      }, style])}
+      style={flattenCSSStyle([{ padding: 0 }, style])}
       {...props}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
-        {_.isString(label) ? (
-          <Text style={[{ flex: 1, padding: 4 }]}>{label}</Text>
-        ) : label}
-        <View ref={borderRef}
-          onStartShouldSetResponder={(e) => e.target === borderRef.current as any}
-          onMoveShouldSetResponder={(e) => e.target === borderRef.current as any}
-          onStartShouldSetResponderCapture={() => false}
-          onMoveShouldSetResponderCapture={() => false}
-          onResponderTerminationRequest={() => false}
-          onResponderMove={_.isFunction(onColumnWidthChange) ? (e) => onColumnWidthChange(_columnWidth + e.nativeEvent.locationX - borderSize * 0.5) : undefined}
-          onResponderRelease={_.isFunction(onColumnWidthChange) ? (e) => onColumnWidthChange(_columnWidth + e.nativeEvent.locationX - borderSize * 0.5) : undefined}
-          style={{ width: borderSize, cursor: 'col-resize' } as StyleProp<ViewStyle>} />
+      <View onLayout={_.isFunction(onColumnWidthChange) ? (e) => {
+        if (e.nativeEvent.layout.width !== _columnWidth) onColumnWidthChange(e.nativeEvent.layout.width);
+      } : undefined}>
+        <div style={{
+          width: Math.max(_columnWidth, _columnMinWidth) - 6,
+          resize: 'horizontal',
+          overflow: 'hidden',
+          paddingRight: 6,
+        }}>
+          {_.isString(label) ? <Text>{label}</Text> : label}
+        </div>
       </View>
     </th>
   );
