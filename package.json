@@ -64,7 +64,6 @@
     "style-inject": "link:./src/styleInject",
     "sugax": "^1.0.83",
     "tslib": "^2.4.1",
-    "typescript": "^4.9.4",
-    "webpack": "^5.76.0"
+    "typescript": "^4.9.4"
   }
 }
