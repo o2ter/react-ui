@@ -25,10 +25,8 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { useMergeRefs } from 'sugax';
 import { flattenCSSStyle } from '../styles';
 import { createComponent } from '../../../internals/utils';
-import { useElementLayout } from '../../../hooks/webHooks';
 
 type DataSheetCellProps = React.ComponentPropsWithoutRef<'td'> & {
   selectedStyle?: React.CSSProperties;
@@ -46,18 +44,14 @@ export const DataSheetCell = createComponent(({
   ...props
 }: DataSheetCellProps, forwardRef: React.ForwardedRef<React.ComponentRef<'td'>>) => {
 
-  const cellRef = React.useRef<React.ComponentRef<'td'>>(null);
-  const ref = useMergeRefs(cellRef, forwardRef);
-  const [cellHeight, setCellHeight] = React.useState(0);
-
-  useElementLayout(cellRef, (e) => setCellHeight(e.nativeEvent?.layout?.height ?? 0));
-
-  const _style = flattenCSSStyle([{
-    zIndex: isEditing === true ? 1 : 0,
-    boxShadow: selected ? `inset 0 -${cellHeight}px 0 ${highlightColor}` : undefined,
-  }, selected ? selectedStyle : style]);
-
-  return <td ref={ref} style={_style} {...props}>{children}</td>;
+  return <td
+    ref={forwardRef}
+    style={flattenCSSStyle([{
+      zIndex: isEditing === true ? 1 : 0,
+      boxShadow: selected ? `inset 0 -100vh ${highlightColor}` : undefined,
+    }, selected ? selectedStyle : style])}
+    {...props}
+  >{children}</td>;
 }, {
   displayName: 'DataSheetCell',
 });
