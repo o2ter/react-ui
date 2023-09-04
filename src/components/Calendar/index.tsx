@@ -121,7 +121,10 @@ const CalendarBase = createComponent(({
             style={{
               flex: 1,
               minWidth: 0,
+              padding: 0,
               paddingLeft: 8,
+              borderWidth: 0,
+              borderRadius: 0,
               fontSize: theme.root.fontSize * 1.5,
             }} />
         </View>
