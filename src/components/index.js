@@ -58,4 +58,5 @@ export { Text } from './Text';
 export { TextStyleProvider } from './Text/style';
 export * from './Toast';
 export { Touchable } from './Touchable';
+export { UncontrolledTextInput } from './UncontrolledTextInput';
 export { View } from './View';
