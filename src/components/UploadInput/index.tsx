@@ -1,5 +1,5 @@
 //
-//  index.web.js
+//  index.js
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,10 +23,27 @@
 //  THE SOFTWARE.
 //
 
-export { styleInject } from '../styleInject';
-export * from './index.js';
-export { NodeHandleProvider } from './NodeHandleProvider';
-export * from './Navigator';
-export * from './CodeMirror';
-export * from './DataSheet';
-export * from './UploadInput';
+import _ from 'lodash';
+import React from 'react';
+
+type UploadInputProps = Omit<React.ComponentPropsWithoutRef<'input'>, 'children'> & {
+  children?: React.ReactNode | ((input: React.RefObject<HTMLInputElement>) => React.ReactNode | undefined);
+};
+
+const UploadInputContext = React.createContext<React.RefObject<HTMLInputElement> | null>(null);
+
+export const UploadInput: React.FC<UploadInputProps> = ({ children, style, ...props }) => {
+  const ref = React.useRef<React.ComponentRef<'input'>>(null);
+  return (
+    <>
+      <input ref={ref} type='file' style={{ display: 'none', ...style ?? {} }} {...props} />
+      <UploadInputContext.Provider value={ref}>
+        {_.isFunction(children) ? children(ref) : children}
+      </UploadInputContext.Provider>
+    </>
+  );
+}
+
+export const useUploadInput = () => React.useContext(UploadInputContext);
+
+export default UploadInput;
