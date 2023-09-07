@@ -25,10 +25,14 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextInputProps } from 'react-native';
+import { TextInputProps as RNTextInputProps } from 'react-native';
 import { createComponent } from '../../internals/utils';
 import { ClassNames } from '../Style';
 import TextInput from '../TextInput';
+
+type TextInputProps = RNTextInputProps & {
+  classes?: ClassNames;
+};
 
 export const UncontrolledTextInput = createComponent(({
   classes,
@@ -36,7 +40,7 @@ export const UncontrolledTextInput = createComponent(({
   style,
   onChangeText,
   ...props
-}: TextInputProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>) => {
+}: TextInputProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>) => {
 
   const [text, setText] = React.useState<string | null>(null);
 

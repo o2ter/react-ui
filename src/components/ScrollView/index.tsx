@@ -56,6 +56,7 @@ const ScrollLayoutContext = React.createContext<Modify<Partial<NativeScrollEvent
 export const useScrollLayout = () => React.useContext(ScrollLayoutContext);
 
 type ScrollViewProps = Modify<RNScrollViewProps, {
+  classes?: ClassNames;
   onRefresh?: () => PromiseLike<void>;
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
@@ -73,7 +74,7 @@ export const ScrollView = createComponent(({
   horizontal = false,
   children,
   ...props
-}: ScrollViewProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<ScrollViewRef>) => {
+}: ScrollViewProps, forwardRef: React.ForwardedRef<ScrollViewRef>) => {
 
   const scrollViewRef = React.useRef<ScrollViewRef>();
   const ref = useMergeRefs(scrollViewRef, forwardRef);

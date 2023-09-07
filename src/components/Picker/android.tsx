@@ -26,9 +26,9 @@
 import _ from 'lodash';
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { ItemValue, PickerNative, PickerNativeProps } from './native';
+import { ItemValue, PickerNative, PickerProps } from './native';
 import { createComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 
 export const PickerAndroid = createComponent(<T = ItemValue>({
@@ -41,7 +41,7 @@ export const PickerAndroid = createComponent(<T = ItemValue>({
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}: PickerNativeProps<T> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<Text>) => {
+}: PickerProps<T>, forwardRef: React.ForwardedRef<Text>) => {
 
   const selected = _.find(items, x => x.value === value);
   const pickerStyle = useComponentStyle('picker', classes, [

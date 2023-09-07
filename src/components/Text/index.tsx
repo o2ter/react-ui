@@ -25,18 +25,22 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text as RNText, TextProps } from 'react-native';
+import { Text as RNText, TextProps as RNTextProps } from 'react-native';
 import { useThemeVariables } from '../../theme';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { TextStyleProvider, textStyleNormalize } from './style';
+
+type TextProps = RNTextProps & {
+  classes?: ClassNames;
+};
 
 export const Text = createComponent(({
   classes,
   style,
   children,
   ...props
-}: TextProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<RNText>) => {
+}: TextProps, forwardRef: React.ForwardedRef<RNText>) => {
   const theme = useThemeVariables();
   const textStyle = useComponentStyle('text', classes);
   return (

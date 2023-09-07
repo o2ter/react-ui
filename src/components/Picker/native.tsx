@@ -30,10 +30,11 @@ import { Picker as RNPicker, PickerItemProps } from '@react-native-picker/picker
 import { createComponent } from '../../internals/utils';
 import { flattenStyle } from '../Style/flatten';
 import { useTheme } from '../../theme';
+import { ClassNames } from '../Style';
 
 export type ItemValue = number | string;
 
-export type PickerNativeProps<T = ItemValue> = {
+type PickerNativeProps<T = ItemValue> = {
   value?: T;
   items: PickerItemProps<T>[];
   disabled?: boolean;
@@ -43,6 +44,10 @@ export type PickerNativeProps<T = ItemValue> = {
   onFocus?: VoidFunction;
   onBlur?: VoidFunction;
 }
+
+export type PickerProps<T = ItemValue> = PickerNativeProps<T> & {
+  classes?: ClassNames;
+};
 
 export const PickerNative = createComponent(<T = ItemValue>({
   value,

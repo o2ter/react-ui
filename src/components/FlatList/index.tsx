@@ -38,6 +38,7 @@ import { ClassNames, useComponentStyle } from '../Style';
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
+  classes?: ClassNames;
   onRefresh?: () => PromiseLike<void>;
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
@@ -56,7 +57,7 @@ export const FlatList = createComponent(<ItemT = any>(
     renderItem,
     children,
     ...props
-  }: FlatListProps<ItemT> & { classes?: ClassNames },
+  }: FlatListProps<ItemT>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNFlatList<ItemT>>>
 ) => {
 

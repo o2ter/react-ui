@@ -33,6 +33,7 @@ import { createComponent } from '../../../internals/utils';
 import { ClassNames, useComponentStyle } from '../../Style';
 
 type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
+  classes?: ClassNames;
   name: string | string[];
 }>;
 
@@ -48,7 +49,7 @@ export const FormDate = createComponent((
     selectable = () => true,
     children,
     ...props
-  }: FormDateProps & { classes?: ClassNames },
+  }: FormDateProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>
 ) => {
 

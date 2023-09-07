@@ -36,6 +36,7 @@ import { flattenStyle } from '../Style/flatten';
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type SwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
+  classes?: ClassNames;
   selected?: boolean;
   tabIndex?: number;
   style?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<ViewStyle>);
@@ -48,7 +49,7 @@ export const Switch = createComponent((
     selected,
     children,
     ...props
-  }: SwitchProps & { classes?: ClassNames },
+  }: SwitchProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
 ) => {
 

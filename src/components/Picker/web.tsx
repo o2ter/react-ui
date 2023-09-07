@@ -26,9 +26,9 @@
 import _ from 'lodash';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { ItemValue, PickerNative, PickerNativeProps } from './native';
+import { ItemValue, PickerNative, PickerProps } from './native';
 import { createComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { useComponentStyle } from '../Style';
 
 const _style = StyleSheet.create({
   picker: {
@@ -53,7 +53,7 @@ export const PickerWeb = createComponent(<T = ItemValue>(
     onValueChange = () => { },
     onFocus = () => { },
     onBlur = () => { },
-  }: PickerNativeProps<T> & { classes?: ClassNames },
+  }: PickerProps<T>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerNative<T>>>
 ) => {
   const pickerStyle = useComponentStyle('picker', classes, [

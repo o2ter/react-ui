@@ -39,6 +39,7 @@ import { ClassNames, useComponentStyle } from '../Style';
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
 type SectionListProps<ItemT = any, SectionT = DefaultSectionT> = Modify<RNSectionListProps<ItemT, SectionT>, {
+  classes?: ClassNames;
   onRefresh?: () => PromiseLike<void>;
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
@@ -55,7 +56,7 @@ export const SectionList = createComponent(<ItemT = any, SectionT = DefaultSecti
     renderItem,
     children,
     ...props
-  }: SectionListProps<ItemT, SectionT> & { classes?: ClassNames },
+  }: SectionListProps<ItemT, SectionT>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNSectionList<ItemT, SectionT>>>
 ) => {
 

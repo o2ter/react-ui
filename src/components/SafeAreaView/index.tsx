@@ -60,6 +60,7 @@ const calculateInsets = (
 });
 
 type SafeAreaViewProps = Modify<ViewProps, {
+  classes?: ClassNames;
   edges: InsetEdge[]
 }>
 
@@ -70,7 +71,7 @@ export const SafeAreaView = createComponent(({
   children,
   onLayout,
   ...props
-}: SafeAreaViewProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<View>) => {
+}: SafeAreaViewProps, forwardRef: React.ForwardedRef<View>) => {
 
   const viewRef = React.useRef<View>();
   const ref = useMergeRefs(viewRef, forwardRef);

@@ -36,6 +36,7 @@ import { Modify } from '../../internals/types';
 import { flattenStyle } from '../Style/flatten';
 
 type RadioProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
+  classes?: ClassNames;
   selected?: boolean;
   tabIndex?: number;
   style?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<ViewStyle>);
@@ -49,7 +50,7 @@ export const Radio = createComponent((
     selected,
     children,
     ...props
-  }: RadioProps & { classes?: ClassNames },
+  }: RadioProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
 ) => {
 

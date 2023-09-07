@@ -25,18 +25,22 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextInput as RNTextInput, TextInputProps } from 'react-native';
+import { TextInput as RNTextInput, TextInputProps as RNTextInputProps } from 'react-native';
 import { useThemeVariables } from '../../theme';
 import { useDefaultInputStyle } from './style';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 
+type TextInputProps = RNTextInputProps & {
+  classes?: ClassNames;
+};
+
 export const TextInput = createComponent(({
   classes,
   style,
   ...props
-}: TextInputProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<RNTextInput>) => {
+}: TextInputProps, forwardRef: React.ForwardedRef<RNTextInput>) => {
 
   const theme = useThemeVariables();
   const textInputStyle = useComponentStyle('textInput', classes);

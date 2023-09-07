@@ -36,6 +36,7 @@ import { ClassNames, useComponentStyle } from '../../Style';
 import { textStyleNormalize } from '../../Text/style';
 
 type FormErrorMessageProps = Modify<TextProps, {
+  classes?: ClassNames;
   name: string | string[];
 }>
 
@@ -44,7 +45,7 @@ export const FormErrorMessage = createComponent(({
   name,
   style,
   ...props
-}: FormErrorMessageProps & { classes?: ClassNames }, forwardRef: React.ForwardedRef<Text>) => {
+}: FormErrorMessageProps, forwardRef: React.ForwardedRef<Text>) => {
 
   const { error, touched } = useField(name);
   const theme = useThemeVariables();

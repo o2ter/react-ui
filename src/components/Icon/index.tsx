@@ -35,6 +35,7 @@ import { ClassNames, useComponentStyle } from '../Style';
 import { useThemeVariables } from '../../theme';
 
 type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {
+  classes?: ClassNames;
   icon: Icon;
   name: keyof (typeof GLYPH_MAPS)[Icon];
   iconStyle?: StyleProp<TextStyle>;
@@ -76,7 +77,7 @@ export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>(
     iconStyle,
     children,
     ...props
-  }: IconProps<Icon> & { classes?: ClassNames },
+  }: IconProps<Icon>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>
 ) => {
 

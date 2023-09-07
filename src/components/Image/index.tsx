@@ -33,6 +33,7 @@ import { ClassNames, useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 
 type ImageProps = Modify<RNImageProps, {
+  classes?: ClassNames;
   source: ImageURISource | ImageRequireSource;
 }>
 
@@ -42,7 +43,7 @@ export const Image = createComponent((
     source,
     style,
     ...props
-  }: ImageProps & { classes?: ClassNames },
+  }: ImageProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof ImageBase>>
 ) => {
 

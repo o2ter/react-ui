@@ -26,9 +26,9 @@
 import _ from 'lodash';
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
-import { ItemValue, PickerNative, PickerNativeProps } from './native';
+import { ItemValue, PickerNative, PickerProps } from './native';
 import { createComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 
 export const PickerIOS = createComponent(<T = ItemValue>({
@@ -41,7 +41,7 @@ export const PickerIOS = createComponent(<T = ItemValue>({
   onValueChange = () => {},
   onFocus = () => {},
   onBlur = () => {},
-}: PickerNativeProps<T> & { classes?: ClassNames }, forwardRef: React.ForwardedRef<Text>) => {
+}: PickerProps<T>, forwardRef: React.ForwardedRef<Text>) => {
 
   const selected = _.find(items, x => x.value === value);
 
