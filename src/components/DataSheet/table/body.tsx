@@ -88,33 +88,81 @@ export const DataSheetBody = <T extends object>({
     zIndex: 1,
   } : {};
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+
+    const element = e.target as HTMLElement;
+    const cell = element.closest('td');
+    if (_.isNil(cell)) return;
+
+    const row = cell.dataset.row ?? '';
+    const col = cell.dataset.col ?? '';
+
+    if (_.isEmpty(col)) {
+      setState(state => ({
+        ..._.omit(state, '_selectStart', '_selectEnd'),
+        _selectRows: { start: Number(row), end: Number(row) },
+        shiftKey: e.shiftKey,
+        metaKey: e.metaKey,
+      }))
+    } else {
+      setState(state => ({
+        ..._.omit(state, '_selectRows'),
+        _selectStart: { row: Number(row), col: Number(col) },
+        _selectEnd: { row: Number(row), col: Number(col) },
+        shiftKey: e.shiftKey,
+        metaKey: e.metaKey,
+      }));
+    }
+  }
+
+  const handleMouseOver = (e: React.MouseEvent) => {
+
+    const element = e.target as HTMLElement;
+    const cell = element.closest('td');
+    if (_.isNil(cell)) return;
+
+    const row = cell.dataset.row ?? '';
+    const col = cell.dataset.col ?? '';
+
+    if (_.isEmpty(col)) {
+      if (state._selectRows) {
+        setState(state => ({
+          ..._.omit(state, '_selectStart', '_selectEnd'),
+          ...{ _selectRows: { start: state._selectRows!.start, end: Number(row) } },
+          shiftKey: e.shiftKey,
+          metaKey: e.metaKey,
+        }));
+      }
+    } else {
+      if (state._selectStart) {
+        setState(state => ({
+          ..._.omit(state, '_selectRows'),
+          ...{ _selectEnd: { row: Number(row), col: Number(col) } },
+          shiftKey: e.shiftKey,
+          metaKey: e.metaKey,
+        }));
+      }
+    }
+  }
+
   return (
     <>
       {_.isArray(data) && (
-        <tbody style={flattenCSSStyle([{ backgroundColor: 'white' }, contentContainerStyle])}>
-
+        <tbody
+          style={flattenCSSStyle([{ backgroundColor: 'white' }, contentContainerStyle])}
+          onMouseDown={allowSelection && !state.editing ? handleMouseDown : undefined}
+          onMouseOver={allowSelection && !state.editing ? handleMouseOver : undefined}
+        >
           <List
             data={data}
             extraData={state}
             renderItem={({ item: items, index: row }) => (
               <tr style={flattenCSSStyle(rowContainerStyle)}>
-
                 {rowNumbers === true && (
                   <DataSheetCell
                     selected={isRowSelected(row)}
                     highlightColor={highlightColor}
-                    onMouseDown={allowSelection && !state.editing ? (e) => setState(state => ({
-                      ..._.omit(state, '_selectStart', '_selectEnd'),
-                      _selectRows: { start: row, end: row },
-                      shiftKey: e.shiftKey,
-                      metaKey: e.metaKey,
-                    })) : undefined}
-                    onMouseOver={allowSelection && !state.editing ? (e) => setState(state => ({
-                      ..._.omit(state, '_selectStart', '_selectEnd'),
-                      ...state._selectRows ? { _selectRows: { start: state._selectRows.start, end: row } } : {},
-                      shiftKey: e.shiftKey,
-                      metaKey: e.metaKey,
-                    })) : undefined}
+                    data-row={row}
                     style={flattenCSSStyle([{
                       padding: 4,
                       overflow: 'hidden',
@@ -144,7 +192,6 @@ export const DataSheetBody = <T extends object>({
                     <Text classes='font-monospace'>{row + 1}</Text>
                   </DataSheetCell>
                 )}
-
                 <List
                   data={_.map(columns, col => items[_.isString(col) ? col : col.key])}
                   extraData={state}
@@ -154,19 +201,8 @@ export const DataSheetBody = <T extends object>({
                       isEditing={isCellEditing(row, col)}
                       selected={isRowSelected(row) || isCellSelected(row, col)}
                       highlightColor={highlightColor}
-                      onMouseDown={allowSelection && !state.editing ? (e) => setState(state => ({
-                        ..._.omit(state, '_selectRows'),
-                        _selectStart: { row, col },
-                        _selectEnd: { row, col },
-                        shiftKey: e.shiftKey,
-                        metaKey: e.metaKey,
-                      })) : undefined}
-                      onMouseOver={allowSelection && !state.editing ? (e) => setState(state => ({
-                        ..._.omit(state, '_selectRows'),
-                        ...state._selectStart ? { _selectEnd: { row, col } } : {},
-                        shiftKey: e.shiftKey,
-                        metaKey: e.metaKey,
-                      })) : undefined}
+                      data-row={row}
+                      data-col={col}
                       onDoubleClick={_allowEditForCell(row, col) ? () => setState({ editing: { row, col } }) : undefined}
                       style={flattenCSSStyle([{
                         padding: 0,
@@ -205,30 +241,16 @@ export const DataSheetBody = <T extends object>({
                     </DataSheetCell>
                   )}
                 />
-
               </tr>
             )}
           />
-
           {showEmptyLastRow === true && (
             <tr style={flattenCSSStyle(rowContainerStyle)}>
-
               {rowNumbers === true && (
                 <DataSheetCell
                   selected={isRowSelected(data.length)}
                   highlightColor={highlightColor}
-                  onMouseDown={allowSelection && !state.editing ? (e) => setState(state => ({
-                    ..._.omit(state, '_selectStart', '_selectEnd'),
-                    _selectRows: { start: data.length, end: data.length },
-                    shiftKey: e.shiftKey,
-                    metaKey: e.metaKey,
-                  })) : undefined}
-                  onMouseOver={allowSelection && !state.editing ? (e) => setState(state => ({
-                    ..._.omit(state, '_selectStart', '_selectEnd'),
-                    ...state._selectRows ? { _selectRows: { start: state._selectRows.start, end: data.length } } : {},
-                    shiftKey: e.shiftKey,
-                    metaKey: e.metaKey,
-                  })) : undefined}
+                  data-row={data.length}
                   style={flattenCSSStyle([{
                     padding: 4,
                     overflow: 'hidden',
@@ -256,7 +278,6 @@ export const DataSheetBody = <T extends object>({
                     backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
                   }, stickyRowNumberStyle, selectedItemContainerStyle])} />
               )}
-
               <List
                 data={columns}
                 extraData={state}
@@ -266,19 +287,8 @@ export const DataSheetBody = <T extends object>({
                     isEditing={isCellEditing(data.length, col)}
                     selected={isRowSelected(data.length) || isCellSelected(data.length, col)}
                     highlightColor={highlightColor}
-                    onMouseDown={allowSelection && !state.editing ? (e) => setState(state => ({
-                      ..._.omit(state, '_selectRows'),
-                      _selectStart: { row: data.length, col },
-                      _selectEnd: { row: data.length, col },
-                      shiftKey: e.shiftKey,
-                      metaKey: e.metaKey,
-                    })) : undefined}
-                    onMouseOver={allowSelection && !state.editing ? (e) => setState(state => ({
-                      ..._.omit(state, '_selectRows'),
-                      ...state._selectStart ? { _selectEnd: { row: data.length, col } } : {},
-                      shiftKey: e.shiftKey,
-                      metaKey: e.metaKey,
-                    })) : undefined}
+                    data-row={data.length}
+                    data-col={col}
                     onDoubleClick={_allowEditForCell(data.length, col) ? () => setState({ editing: { row: data.length, col } }) : undefined}
                     style={flattenCSSStyle([{
                       padding: 0,
@@ -318,10 +328,8 @@ export const DataSheetBody = <T extends object>({
                   </DataSheetCell>
                 )}
               />
-
             </tr>
           )}
-
         </tbody>
       )}
     </>
