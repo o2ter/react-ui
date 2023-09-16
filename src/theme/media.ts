@@ -51,7 +51,7 @@ export const useMediaSelect = () => {
   const theme = useTheme();
   const windowDimensions = useWindowDimensions();
   return React.useMemo(() => ({
-    get select() { return _mediaSelect(theme, windowDimensions); },
-    get selects() { return _mediaSelects(theme, windowDimensions); },
+    select: _mediaSelect(theme, windowDimensions),
+    selects: _mediaSelects(theme, windowDimensions),
   }), [theme, windowDimensions.width]);
 };
