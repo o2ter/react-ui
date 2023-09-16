@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { View, ViewProps, Text, Pressable } from 'react-native';
 import { Picker } from '../Picker';
-import { useThemeVariables } from '../../theme';
+import { useTheme } from '../../theme';
 import { DateTime } from 'luxon';
 import { Modify } from '../../internals/types';
 import { UncontrolledTextInput } from '../UncontrolledTextInput';
@@ -79,7 +79,7 @@ const CalendarBase = createComponent(({
   onChange
 }: CalendarProps, forwardRef: React.ForwardedRef<View>) => {
 
-  const theme = useThemeVariables();
+  const theme = useTheme();
   const calendarWeekContainerStyle = useComponentStyle('calendarWeekContainer');
   const calendarWeekdayStyle = useComponentStyle('calendarWeekday');
 

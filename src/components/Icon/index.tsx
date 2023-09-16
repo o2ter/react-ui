@@ -32,7 +32,7 @@ import { Modify } from '../../internals/types';
 import { textStyleKeys, textStyleNormalize } from '../Text/style';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
-import { useThemeVariables } from '../../theme';
+import { useTheme } from '../../theme';
 
 type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {
   classes?: ClassNames;
@@ -53,7 +53,7 @@ const IconBody = <Icon extends keyof typeof GLYPH_MAPS>({
 
   const _Icon = ICON_SETS[icon];
 
-  const theme = useThemeVariables();
+  const theme = useTheme();
   const textStyle = useComponentStyle('text') as TextStyle;
   const { fontSize, color, ..._style } = textStyleNormalize([{
     color: theme.root.textColor,

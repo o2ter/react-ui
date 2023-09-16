@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { View, Pressable, StyleSheet, Platform } from 'react-native';
 
-import { useThemeVariables } from '../../theme';
+import { useTheme } from '../../theme';
 import { useComponentStyle } from '../Style';
 
 const ModalContext = React.createContext((element?: React.ReactElement) => { });
@@ -43,7 +43,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
 }) => {
 
   const [modal, setModal] = React.useState<React.ReactElement>();
-  const theme = useThemeVariables();
+  const theme = useTheme();
   const modalBackdrop = useComponentStyle('modalBackdrop');
 
   return <ModalContext.Provider value={setModal}>

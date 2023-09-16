@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { Text as RNText, TextProps as RNTextProps } from 'react-native';
-import { useThemeVariables } from '../../theme';
+import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { TextStyleProvider, textStyleNormalize } from './style';
@@ -41,7 +41,7 @@ export const Text = createComponent(({
   children,
   ...props
 }: TextProps, forwardRef: React.ForwardedRef<RNText>) => {
-  const theme = useThemeVariables();
+  const theme = useTheme();
   const textStyle = useComponentStyle('text', classes);
   return (
     <RNText

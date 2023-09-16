@@ -30,7 +30,7 @@ import { useLocalize } from '@o2ter/i18n';
 import { ValidateError } from '@o2ter/valid.js';
 import { useField } from '../Form';
 import { Modify } from '../../../internals/types';
-import { useThemeVariables } from '../../../theme';
+import { useTheme } from '../../../theme';
 import { createComponent } from '../../../internals/utils';
 import { ClassNames, useComponentStyle } from '../../Style';
 import { textStyleNormalize } from '../../Text/style';
@@ -48,7 +48,7 @@ export const FormErrorMessage = createComponent(({
 }: FormErrorMessageProps, forwardRef: React.ForwardedRef<Text>) => {
 
   const { error, touched } = useField(name);
-  const theme = useThemeVariables();
+  const theme = useTheme();
   const formErrorMessageStyle = useComponentStyle('formErrorMessage', classes);
 
   const path = _.toPath(name);

@@ -1,5 +1,5 @@
 //
-//  index.ts
+//  media.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -26,70 +26,32 @@
 import _ from 'lodash';
 import React from 'react';
 import { ThemeVariables } from './variables';
-import { ThemeStyles, ThemeStylesProvider, _colorContrast } from './styles';
 import { useWindowDimensions, ScaledSize, Platform } from 'react-native';
-import { ThemeBaseContext, ThemeBaseProvider, ThemeProviderProps } from './provider/base';
-
-export {
-  ThemeVariables,
-  ThemeStyles,
-  ThemeStylesProvider,
-};
-
-export const ThemeProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>> = ({
-  variables,
-  styles,
-  children
-}) => {
-
-  return (
-    <ThemeBaseProvider variables={variables} styles={styles}>{children}</ThemeBaseProvider>
-  );
-};
-
-ThemeProvider.displayName = 'ThemeProvider';
+import { useTheme } from './theme';
 
 export const isSSR = Platform.OS === 'web' && typeof window === 'undefined';
+
 const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends any>(
   breakpoint: string,
-  selector: { up: T, down: T }
+  selector: { up: T; down: T; }
 ) => {
   if (isSSR) return selector.up;
   return windowDimensions.width < theme.breakpoints[breakpoint] ? selector.down : selector.up;
-}
+};
+
 const _mediaSelects = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends any>(
   breakpoints: Record<string, T>
 ) => {
   const selected = isSSR ? theme.breakpoints : _.pickBy(theme.breakpoints, v => windowDimensions.width >= v);
   const [breakpoint] = _.maxBy(_.toPairs(selected), ([, v]) => v) ?? [];
   return breakpoint ? breakpoints[breakpoint] : undefined;
-}
+};
 
-export const useThemeVariables = () => {
-  const { decoded } = React.useContext(ThemeBaseContext);
-  return decoded;
-}
-
-export const useTheme = () => {
-
-  const { decoded, styles } = React.useContext(ThemeBaseContext);
+export const useMediaSelect = () => {
+  const theme = useTheme();
   const windowDimensions = useWindowDimensions();
-
-  return React.useMemo(() => {
-
-    let computed_style: ThemeStyles;
-
-    const computed = _.assign({
-      get colorContrast() { return _colorContrast(computed) },
-      get mediaSelect() { return _mediaSelect(computed, windowDimensions) },
-      get mediaSelects() { return _mediaSelects(computed, windowDimensions) },
-      get styles() {
-        if (_.isNil(computed_style)) computed_style = styles(computed);
-        return computed_style;
-      },
-    }, decoded);
-
-    return computed;
-
-  }, [decoded, styles, windowDimensions.width]);
-}
+  return React.useMemo(() => ({
+    get select() { return _mediaSelect(theme, windowDimensions); },
+    get selects() { return _mediaSelects(theme, windowDimensions); },
+  }), [theme, windowDimensions.width]);
+};

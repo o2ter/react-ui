@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  index.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,20 +23,7 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { useTheme } from '../../theme';
-
-export const useDefaultInputStyle = (theme: ReturnType<typeof useTheme>) => React.useMemo(() => StyleSheet.create({
-  style: {
-    color: theme.root.textColor,
-    backgroundColor: theme.root.backgroundColor,
-    fontSize: theme.root.fontSize,
-    borderColor: theme.grays['400'],
-    borderWidth: theme.borderWidth,
-    borderRadius: theme.borderRadiusBase,
-    paddingVertical: theme.spacer * 0.375,
-    paddingHorizontal: theme.spacer * 0.75,
-  }
-}).style, [theme]);
+export { ThemeVariables } from './variables';
+export { ThemeStylesProvider, ThemeStyles } from './styles';
+export * from './media';
+export * from './theme';

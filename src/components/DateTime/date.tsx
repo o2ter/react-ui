@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { TextProps } from 'react-native';
-import { useThemeVariables } from '../../theme';
+import { useTheme } from '../../theme';
 import { Calendar } from '../Calendar';
 import { PickerBase } from './picker';
 import { Modify } from '../../internals/types';
@@ -54,7 +54,7 @@ export const DatePicker = createComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerBase>>
 ) => {
 
-  const theme = useThemeVariables();
+  const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme);
   const datePickerStyle = useComponentStyle('datePicker', classes, [
     disabled ? 'disabled' : 'enabled',

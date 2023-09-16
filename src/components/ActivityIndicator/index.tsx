@@ -28,7 +28,7 @@ import React from 'react';
 import { Awaitable } from 'sugax';
 import { Animated, View, ActivityIndicator as RNActivityIndicator, StyleSheet, Platform } from 'react-native';
 
-import { useThemeVariables } from '../../theme';
+import { useTheme } from '../../theme';
 import { useComponentStyle } from '../Style';
 
 const ActivityIndicatorContext = React.createContext<{
@@ -94,7 +94,7 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
   const [visible, setVisible] = React.useState(false);
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
-  const theme = useThemeVariables();
+  const theme = useTheme();
   const defaultStyle = useComponentStyle('activityIndicator');
   const defaultBackdropStyle = useComponentStyle('activityIndicatorBackdrop');
 

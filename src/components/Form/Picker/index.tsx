@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useField } from '../Form';
-import { useThemeVariables } from '../../../theme';
+import { useTheme } from '../../../theme';
 import { Picker } from '../../Picker';
 import { Modify } from '../../../internals/types';
 import { useDefaultInputStyle } from '../../TextInput/style';
@@ -53,7 +53,7 @@ export const FormPicker = createComponent(<T = ItemValue>(
   const { value, error, touched, setTouched, onChange } = useField(name);
   const invalid = !_.isEmpty(error);
 
-  const theme = useThemeVariables();
+  const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme);
   const formPickerStyle = useComponentStyle('formPicker', classes, [
     props.disabled ? 'disabled' : 'enabled',
