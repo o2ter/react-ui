@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { ThemeVariables } from './variables';
 import { useWindowDimensions, ScaledSize, Platform } from 'react-native';
-import { useTheme } from './theme';
+import { ThemeBaseContext } from './provider/base';
 
 export const isSSR = Platform.OS === 'web' && typeof window === 'undefined';
 
@@ -48,10 +48,10 @@ const _mediaSelects = (theme: ThemeVariables, windowDimensions: ScaledSize) => <
 };
 
 export const useMediaSelect = () => {
-  const theme = useTheme();
+  const { decoded } = React.useContext(ThemeBaseContext);
   const windowDimensions = useWindowDimensions();
   return React.useMemo(() => ({
-    select: _mediaSelect(theme, windowDimensions),
-    selects: _mediaSelects(theme, windowDimensions),
-  }), [theme, windowDimensions.width]);
+    select: _mediaSelect(decoded, windowDimensions),
+    selects: _mediaSelects(decoded, windowDimensions),
+  }), [decoded, windowDimensions.width]);
 };
