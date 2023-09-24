@@ -35,4 +35,4 @@ export * from './color';
 export * from './theme';
 export * from './components';
 export * from './hooks';
-export { createComponent, createMemoComponent as createMemoedComponent } from './internals/utils';
+export { createComponent, createMemoComponent } from './internals/utils';
