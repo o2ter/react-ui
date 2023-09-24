@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 
 type ErrorBoundaryProps = React.PropsWithChildren<{
   fallback: React.ReactNode | ((error: Error) => React.ReactNode);
@@ -59,7 +59,7 @@ class _ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 }
 
-export const ErrorBoundary = createComponent((
+export const ErrorBoundary = createMemoComponent((
   props: ErrorBoundaryProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof _ErrorBoundary>>
 ) => <_ErrorBoundary ref={forwardRef} {...props} />, {

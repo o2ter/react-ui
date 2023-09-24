@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Text as RNText, TextProps as RNTextProps } from 'react-native';
 import { useTheme } from '../../theme';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { TextStyleProvider, textStyleNormalize } from './style';
 
@@ -35,7 +35,7 @@ type TextProps = RNTextProps & {
   classes?: ClassNames;
 };
 
-export const Text = createComponent(({
+export const Text = createMemoComponent(({
   classes,
   style,
   children,

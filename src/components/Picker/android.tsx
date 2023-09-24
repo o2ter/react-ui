@@ -27,11 +27,11 @@ import _ from 'lodash';
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ItemValue, PickerNative, PickerProps } from './native';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 
-export const PickerAndroid = createComponent(<T = ItemValue>({
+export const PickerAndroid = createMemoComponent(<T = ItemValue>({
   classes,
   value,
   items = [],

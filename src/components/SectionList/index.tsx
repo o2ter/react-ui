@@ -33,7 +33,7 @@ import {
 } from 'react-native';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
@@ -44,7 +44,7 @@ type SectionListProps<ItemT = any, SectionT = DefaultSectionT> = Modify<RNSectio
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const SectionList = createComponent(<ItemT = any, SectionT = DefaultSectionT>(
+export const SectionList = createMemoComponent(<ItemT = any, SectionT = DefaultSectionT>(
   {
     classes,
     data,

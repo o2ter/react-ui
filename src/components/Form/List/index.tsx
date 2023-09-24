@@ -28,7 +28,7 @@ import React from 'react';
 import { useStableRef } from 'sugax';
 import { useField } from '../Form';
 import List from '../../List';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 
 const FormListContext = React.createContext<{
   create: (item: any, index?: number) => void;
@@ -53,7 +53,7 @@ type FormListProps = {
   }>>;
 }
 
-export const FormList = createComponent(({
+export const FormList = createMemoComponent(({
   name,
   extraData,
   keyExtractor,

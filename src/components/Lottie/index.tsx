@@ -27,14 +27,14 @@ import _ from 'lodash';
 import React from 'react';
 import RNLottie, { AnimatedLottieViewProps, AnimationObject } from 'lottie-react-native';
 import { Modify } from '../../internals/types';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { flattenStyle } from '../Style/flatten';
 
 type LottieProps = Modify<AnimatedLottieViewProps, {
   source: AnimationObject;
 }>
 
-export const Lottie = createComponent(({
+export const Lottie = createMemoComponent(({
   source,
   style,
   duration = 0,

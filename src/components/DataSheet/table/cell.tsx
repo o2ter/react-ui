@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { flattenCSSStyle } from '../styles';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 
 type DataSheetCellProps = React.ComponentPropsWithoutRef<'td'> & {
   selectedStyle?: React.CSSProperties;
@@ -35,7 +35,7 @@ type DataSheetCellProps = React.ComponentPropsWithoutRef<'td'> & {
   isEditing?: boolean;
 };
 
-export const DataSheetCell = React.memo(createComponent(({
+export const DataSheetCell = createMemoComponent(({
   style,
   selectedStyle,
   selected,
@@ -55,4 +55,4 @@ export const DataSheetCell = React.memo(createComponent(({
   >{children}</td>;
 }, {
   displayName: 'DataSheetCell',
-}));
+});

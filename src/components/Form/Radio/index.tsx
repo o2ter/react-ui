@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { useField } from '../Form';
 
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Radio from '../../Radio';
@@ -37,7 +37,7 @@ type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Radio>, {
   value: any;
 }>;
 
-export const FormRadio = createComponent((
+export const FormRadio = createMemoComponent((
   {
     classes,
     name,

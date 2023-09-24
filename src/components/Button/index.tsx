@@ -44,7 +44,7 @@ import { transparent } from '../../color';
 import { textStyleKeys } from '../Text/style';
 import { Modify } from '../../internals/types';
 import { Text } from '../Text';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 
@@ -68,7 +68,7 @@ type ButtonProps = Modify<PressableProps, {
   children?: React.ReactNode | ((state: ButtonStateCallbackType) => React.ReactNode);
 }>;
 
-const ButtonText = Animated.createAnimatedComponent(createComponent((
+const ButtonText = Animated.createAnimatedComponent(createMemoComponent((
   {
     style,
     children,
@@ -80,7 +80,7 @@ const ButtonText = Animated.createAnimatedComponent(createComponent((
   );
 }));
 
-export const Button = createComponent(({
+export const Button = createMemoComponent(({
   classes,
   color,
   variant = 'primary',

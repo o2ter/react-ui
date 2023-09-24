@@ -28,13 +28,13 @@ import React from 'react';
 import { useForm } from '../Form';
 import { Button } from '../../Button';
 import { Modify } from '../../../internals/types';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 
 type FormButtonProps = Modify<React.ComponentPropsWithoutRef<typeof Button>, {
   action?: 'submit' | 'reset';
 }>
 
-export const FormButton = createComponent((
+export const FormButton = createMemoComponent((
   {
     action = 'submit',
     ...props

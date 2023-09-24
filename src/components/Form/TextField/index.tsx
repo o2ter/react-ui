@@ -30,14 +30,14 @@ import TextInput from '../../TextInput';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 
 type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput>, {
   name: string | string[];
 }>
 
-export const FormTextField = createComponent((
+export const FormTextField = createMemoComponent((
   {
     classes,
     name,

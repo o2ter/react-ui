@@ -30,7 +30,7 @@ import Text from '../Text';
 import { GLYPH_MAPS, ICON_SETS } from '../Icons';
 import { Modify } from '../../internals/types';
 import { textStyleKeys, textStyleNormalize } from '../Text/style';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { useTheme } from '../../theme';
 
@@ -68,7 +68,7 @@ const IconBody = <Icon extends keyof typeof GLYPH_MAPS>({
   );
 }
 
-export const Icon = createComponent(<Icon extends keyof typeof GLYPH_MAPS>(
+export const Icon = createMemoComponent(<Icon extends keyof typeof GLYPH_MAPS>(
   {
     classes,
     icon,

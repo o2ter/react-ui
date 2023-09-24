@@ -31,7 +31,7 @@ import { Picker } from '../../Picker';
 import { Modify } from '../../../internals/types';
 import { useDefaultInputStyle } from '../../TextInput/style';
 import { useEquivalent } from 'sugax';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 import { ItemValue } from '../../Picker/native';
 import { useComponentStyle } from '../../Style';
 
@@ -39,7 +39,7 @@ type FormPickerProps<T = ItemValue> = Modify<React.ComponentPropsWithoutRef<type
   name: string | string[];
 }>
 
-export const FormPicker = createComponent(<T = ItemValue>(
+export const FormPicker = createMemoComponent(<T = ItemValue>(
   {
     classes,
     name,

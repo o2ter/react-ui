@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import { Picker as RNPicker, PickerItemProps } from '@react-native-picker/picker';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { flattenStyle } from '../Style/flatten';
 import { useTheme } from '../../theme';
 import { ClassNames } from '../Style';
@@ -49,7 +49,7 @@ export type PickerProps<T = ItemValue> = PickerNativeProps<T> & {
   classes?: ClassNames;
 };
 
-export const PickerNative = createComponent(<T = ItemValue>({
+export const PickerNative = createMemoComponent(<T = ItemValue>({
   value,
   items,
   disabled = false,

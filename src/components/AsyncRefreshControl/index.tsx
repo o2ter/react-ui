@@ -28,7 +28,7 @@ import React from 'react';
 import { RefreshControlBase, RefreshControlProps } from 'react-native';
 import { Modify } from '../../internals/types';
 import { ClassNames, useComponentStyle } from '../Style';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 
 type AsyncRefreshControlProps = Modify<Omit<RefreshControlProps, 'refreshing'>, {
   classes?: ClassNames;
@@ -46,7 +46,7 @@ async function _onRefresh(
 
 export const AsyncRefreshControl = (
   RefreshControl: typeof RefreshControlBase
-) => createComponent((
+) => createMemoComponent((
   {
     classes,
     style,

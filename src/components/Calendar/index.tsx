@@ -39,7 +39,7 @@ import { CalendarBody } from './body';
 import { MaterialCommunityIcons as Icon } from '../Icons';
 
 import Localization from '../../locales';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 
@@ -69,7 +69,7 @@ type CalendarProps = Modify<ViewProps, {
   onChange?: (date: string[]) => void;
 }>
 
-const CalendarBase = createComponent(({
+const CalendarBase = createMemoComponent(({
   value,
   min,
   max,

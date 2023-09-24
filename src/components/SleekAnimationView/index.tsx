@@ -29,7 +29,7 @@ import { Image, StyleProp, ViewStyle, ImageStyle, ImageSourcePropType, ImageResi
 import { List } from '../List';
 import { StickyView } from '../StickyView';
 import { Modify } from '../../internals/types';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 
 type SleekAnimationViewProps = Modify<Omit<React.ComponentPropsWithoutRef<typeof StickyView>, 'stickyView'>, {
   backgroundContainerStyle?: StyleProp<ViewStyle>;
@@ -38,7 +38,7 @@ type SleekAnimationViewProps = Modify<Omit<React.ComponentPropsWithoutRef<typeof
   resizeMode?: ImageResizeMode;
 }>
 
-export const SleekAnimationView = createComponent((
+export const SleekAnimationView = createMemoComponent((
   {
     backgroundContainerStyle,
     backgroundStyle,

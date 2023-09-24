@@ -31,7 +31,7 @@ import { ValidateError } from '@o2ter/valid.js';
 import { useField } from '../Form';
 import { Modify } from '../../../internals/types';
 import { useTheme } from '../../../theme';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 import { ClassNames, useComponentStyle } from '../../Style';
 import { textStyleNormalize } from '../../Text/style';
 
@@ -40,7 +40,7 @@ type FormErrorMessageProps = Modify<TextProps, {
   name: string | string[];
 }>
 
-export const FormErrorMessage = createComponent(({
+export const FormErrorMessage = createMemoComponent(({
   classes,
   name,
   style,

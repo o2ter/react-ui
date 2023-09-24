@@ -28,7 +28,7 @@ import { useDataSheetState } from '../provider/state';
 import { flattenCSSStyle } from '../styles';
 import { DataSheetCell } from './cell';
 import { StyleProp } from 'react-native';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 
 const stickyRowNumberStyle: React.CSSProperties = {
   position: 'sticky',
@@ -45,7 +45,7 @@ type RowNumberCellProps = React.PropsWithChildren<{
   highlightColor: string;
 }>
 
-export const RowNumberCell = React.memo(createComponent(({
+export const RowNumberCell = createMemoComponent(({
   row,
   stickyRowNumbers,
   style,
@@ -96,4 +96,4 @@ export const RowNumberCell = React.memo(createComponent(({
       {children}
     </DataSheetCell>
   );
-}));
+});

@@ -29,9 +29,9 @@ import { DataSheetProps } from './types';
 import { DataSheetStateProvider } from './provider/state';
 import { DataSheetTable } from './table/table';
 import { DataSheetRefProvider } from './provider/ref';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 
-export const DataSheet = createComponent(<T extends object>({
+export const DataSheet = createMemoComponent(<T extends object>({
   columnMinWidth = 64,
   rowNumbers = true,
   stickyHeader = true,

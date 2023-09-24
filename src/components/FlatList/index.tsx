@@ -32,7 +32,7 @@ import {
 } from 'react-native';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
@@ -43,7 +43,7 @@ type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const FlatList = createComponent(<ItemT = any>(
+export const FlatList = createMemoComponent(<ItemT = any>(
   {
     classes,
     data,

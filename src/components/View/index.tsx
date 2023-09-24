@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { View as RNView, ViewProps as RNViewProps } from 'react-native';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { TextStyleProvider } from '../Text/style';
 
@@ -34,7 +34,7 @@ type ViewProps = RNViewProps & {
   classes?: ClassNames;
 };
 
-export const View = createComponent(({
+export const View = createMemoComponent(({
   classes,
   style,
   children,

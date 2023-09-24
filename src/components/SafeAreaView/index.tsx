@@ -29,7 +29,7 @@ import { useMergeRefs } from 'sugax';
 import { View, ViewProps, ViewStyle, useWindowDimensions, LayoutRectangle, ScaledSize } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Modify } from '../../internals/types';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 export { SafeAreaProvider, useSafeAreaInsets, useSafeAreaFrame, withSafeAreaInsets } from 'react-native-safe-area-context';
@@ -64,7 +64,7 @@ type SafeAreaViewProps = Modify<ViewProps, {
   edges: InsetEdge[]
 }>
 
-export const SafeAreaView = createComponent(({
+export const SafeAreaView = createMemoComponent(({
   classes,
   style,
   edges,

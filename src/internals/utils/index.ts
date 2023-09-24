@@ -27,8 +27,14 @@ import _ from 'lodash';
 import React from 'react';
 
 type FunctionComponent<T, P> = (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+type ForwardFunctionComponent<T, P> = (props: P, forwardRef: React.ForwardedRef<T>) => React.ReactElement | null;
 
 export const createComponent = <T, P = {}, A = {}>(
-  render: (props: P, forwardRef: React.ForwardedRef<T>) => React.ReactElement | null,
+  render: ForwardFunctionComponent<T, P>,
   attrs?: A,
 ) => _.assign(React.forwardRef(render) as FunctionComponent<T, P>, attrs ?? {});
+
+export const createMemoComponent = <T, P = {}, A = {}>(
+  render: ForwardFunctionComponent<T, P>,
+  attrs?: A,
+) => React.memo(createComponent(render, attrs)) as FunctionComponent<T, P>;

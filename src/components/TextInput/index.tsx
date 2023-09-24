@@ -28,7 +28,7 @@ import React from 'react';
 import { TextInput as RNTextInput, TextInputProps as RNTextInputProps } from 'react-native';
 import { useTheme } from '../../theme';
 import { useDefaultInputStyle } from './style';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 
@@ -36,7 +36,7 @@ type TextInputProps = RNTextInputProps & {
   classes?: ClassNames;
 };
 
-export const TextInput = createComponent(({
+export const TextInput = createMemoComponent(({
   classes,
   style,
   ...props

@@ -31,7 +31,7 @@ import { flattenCSSStyle } from '../styles';
 import { DataSheetHeader } from '../table/header';
 import { DataSheetBody } from './body';
 import { useDataSheetRef } from '../provider/ref';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 import { useDocumentEvent } from '../../../hooks/webHooks';
 import { defaultEncoders } from '../encoders';
 
@@ -56,7 +56,7 @@ const createHandle = ({ state, clearSelection, endEditing }: ReturnType<typeof u
   endEditing,
 });
 
-export const DataSheetTable = createComponent(<T extends object>(
+export const DataSheetTable = createMemoComponent(<T extends object>(
   props: DataSheetProps<T>,
   forwardRef: React.ForwardedRef<ReturnType<typeof createHandle>>,
 ) => {

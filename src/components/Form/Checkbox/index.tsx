@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { useField } from '../Form';
 
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Checkbox from '../../Checkbox';
@@ -37,7 +37,7 @@ type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>,
   value?: string;
 }>;
 
-export const FormCheckbox = createComponent((
+export const FormCheckbox = createMemoComponent((
   {
     classes,
     name,

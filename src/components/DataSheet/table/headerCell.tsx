@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { View, Text, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { flattenCSSStyle } from '../styles';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 
 type DataSheetHeaderCellProps = React.ComponentPropsWithoutRef<'th'> & {
   label?: React.ReactNode;
@@ -37,7 +37,7 @@ type DataSheetHeaderCellProps = React.ComponentPropsWithoutRef<'th'> & {
   onColumnWidthChange?: (width: number) => void;
 };
 
-export const DataSheetHeaderCell = createComponent(({
+export const DataSheetHeaderCell = createMemoComponent(({
   label,
   style,
   borderSize = 1,

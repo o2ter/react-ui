@@ -27,9 +27,9 @@ import _ from 'lodash';
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { TouchableProps } from './types';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 
-export const Touchable = createComponent(({
+export const Touchable = createMemoComponent(({
   onDragStart,
   onDragEnd,
   onDrop,

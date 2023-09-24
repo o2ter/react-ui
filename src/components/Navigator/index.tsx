@@ -28,7 +28,7 @@ import React from 'react';
 import { BrowserRouter, useRoutes, Link as _Link } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 import { Modify } from '../../internals/types';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { supportsPointerEvent } from '../Touchable/index.web';
 
 export {
@@ -47,7 +47,7 @@ type LinkProps = Modify<React.ComponentPropsWithoutRef<typeof _Link>, {
   onHoverOut?: React.PointerEventHandler<HTMLAnchorElement>;
 }>
 
-export const Link = createComponent((
+export const Link = createMemoComponent((
   {
     onHoverIn,
     onHoverOut,

@@ -29,7 +29,7 @@ import { View, ViewProps, StyleProp, ViewStyle, LayoutRectangle } from 'react-na
 import { useScrollView, useScrollLayout } from '../ScrollView';
 import { Modify } from '../../internals/types';
 import { useMergeRefs, useStableCallback } from 'sugax';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 
 type StickyViewProps = Modify<ViewProps, {
   stickyContainerStyle?: StyleProp<ViewStyle>;
@@ -85,7 +85,7 @@ const StickyContainer: React.FC<{
 
 StickyContainer.displayName = 'StickyContainer';
 
-export const StickyView = createComponent(({
+export const StickyView = createMemoComponent(({
   onLayout,
   stickyContainerStyle,
   stickyView,

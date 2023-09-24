@@ -28,7 +28,7 @@ import React from 'react';
 import { Platform, Pressable, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { useTheme } from '../../theme';
 
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import View from '../View';
 import { Path, Svg } from 'react-native-svg';
@@ -43,7 +43,7 @@ type CheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   children: React.ReactNode | ((state: { selected: boolean; }) => React.ReactNode);
 }>;
 
-export const Checkbox = createComponent((
+export const Checkbox = createMemoComponent((
   {
     classes,
     style,

@@ -32,7 +32,7 @@ import { Options } from 'jsbarcode';
 import { Modify } from '../../internals/types';
 
 import barcodes from 'jsbarcode/src/barcodes';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 
 export type BarcodeFormat = keyof typeof barcodes;
 export const BarcodeFormats = _.keys(barcodes) as BarcodeFormat[];
@@ -45,7 +45,7 @@ type BarcodeProps = Modify<SvgProps, {
   backgroundColor?: ColorValue;
 }>
 
-export const Barcode = createComponent(({
+export const Barcode = createMemoComponent(({
   value = '',
   format = 'CODE128',
   options = {},

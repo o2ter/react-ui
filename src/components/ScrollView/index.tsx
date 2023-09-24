@@ -37,7 +37,7 @@ import { KeyboardAwareScrollable } from './KeyboardAwareScrollable';
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { useMergeRefs } from 'sugax';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 
 const ScrollViewBase: typeof RNScrollView = KeyboardAwareScrollable(RNScrollView);
@@ -61,7 +61,7 @@ type ScrollViewProps = Modify<RNScrollViewProps, {
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const ScrollView = createComponent(({
+export const ScrollView = createMemoComponent(({
   classes,
   onRefresh,
   onLayout,

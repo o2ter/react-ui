@@ -28,7 +28,7 @@ import React from 'react';
 import { Image as RNImage, ImageProps as RNImageProps, ImageURISource, ImageRequireSource, ImageStyle } from 'react-native';
 import ImageBase from './ImageBase';
 import { Modify } from '../../internals/types';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 
@@ -37,7 +37,7 @@ type ImageProps = Modify<RNImageProps, {
   source: ImageURISource | ImageRequireSource;
 }>
 
-export const Image = createComponent((
+export const Image = createMemoComponent((
   {
     classes,
     source,

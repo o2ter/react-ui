@@ -29,7 +29,7 @@ import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { DatePicker } from '../../DateTime';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 import { ClassNames, useComponentStyle } from '../../Style';
 
 type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
@@ -37,7 +37,7 @@ type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   name: string | string[];
 }>;
 
-export const FormDate = createComponent((
+export const FormDate = createMemoComponent((
   {
     classes,
     name,

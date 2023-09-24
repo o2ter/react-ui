@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { TextInputProps as RNTextInputProps } from 'react-native';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames } from '../Style';
 import TextInput from '../TextInput';
 
@@ -34,7 +34,7 @@ type TextInputProps = RNTextInputProps & {
   classes?: ClassNames;
 };
 
-export const UncontrolledTextInput = createComponent(({
+export const UncontrolledTextInput = createMemoComponent(({
   classes,
   value,
   style,

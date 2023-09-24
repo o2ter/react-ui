@@ -29,7 +29,7 @@ import { useFormGroup } from '../Group';
 import { useStableRef } from 'sugax';
 import { ISchema, object, TypeOfSchema, ValidateError } from '@o2ter/valid.js';
 import { useToast } from '../../Toast';
-import { createComponent } from '../../../internals/utils';
+import { createMemoComponent } from '../../../internals/utils';
 
 export type FormState = {
   values: Record<string, any>;
@@ -101,7 +101,7 @@ type FormProps<S extends Record<string, ISchema<any, any>>> = {
   children: React.ReactNode | ((state: FormState) => React.ReactNode);
 };
 
-export const Form = createComponent(<S extends Record<string, ISchema<any, any>>>({
+export const Form = createMemoComponent(<S extends Record<string, ISchema<any, any>>>({
   schema,
   initialValues = object(schema ?? {}).getDefault() ?? {},
   validate,

@@ -29,7 +29,7 @@ import { ColorValue } from 'react-native';
 import { Svg, SvgProps, Rect, Path } from 'react-native-svg';
 import { Modify } from '../../internals/types';
 import qrcode from 'qrcode';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 
 type QRCodeProps = Modify<SvgProps, {
   value?: string | any[];
@@ -38,7 +38,7 @@ type QRCodeProps = Modify<SvgProps, {
   backgroundColor?: ColorValue;
 }>
 
-export const QRCode = createComponent(({
+export const QRCode = createMemoComponent(({
   value = '',
   options = {},
   color = 'black',

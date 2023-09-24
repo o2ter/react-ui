@@ -31,7 +31,7 @@ import { Modify } from '../../internals/types';
 
 import { style as _style } from './style';
 import { Segment } from './segment';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 
 type SegmentedControlBaseProps<T = any> = Modify<ViewProps, {
   value?: T;
@@ -45,7 +45,7 @@ type SegmentedControlBaseProps<T = any> = Modify<ViewProps, {
 
 type SegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { tabStyle?: StyleProp<ViewStyle>; }>
 
-export const SegmentedControl = createComponent(({
+export const SegmentedControl = createMemoComponent(({
   value,
   style,
   onChange,
@@ -109,7 +109,7 @@ export const SegmentedControl = createComponent(({
 
 type PlainSegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { color?: string; }>
 
-export const PlainSegmentedControl = createComponent(({
+export const PlainSegmentedControl = createMemoComponent(({
   value,
   style,
   color = '#2196F3',

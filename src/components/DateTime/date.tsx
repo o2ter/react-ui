@@ -31,13 +31,13 @@ import { Calendar } from '../Calendar';
 import { PickerBase } from './picker';
 import { Modify } from '../../internals/types';
 import { useDefaultInputStyle } from '../TextInput/style';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
 type DatePickerProps = Modify<TextProps, DatePickerBaseProps>;
 
-export const DatePicker = createComponent((
+export const DatePicker = createMemoComponent((
   {
     classes,
     value,

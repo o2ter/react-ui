@@ -28,7 +28,7 @@ import React from 'react';
 import { Animated, Easing, Platform, Pressable, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { useTheme } from '../../theme';
 
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { Modify } from '../../internals/types';
 import { flattenStyle } from '../Style/flatten';
@@ -42,7 +42,7 @@ type SwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   style?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<ViewStyle>);
 }>;
 
-export const Switch = createComponent((
+export const Switch = createMemoComponent((
   {
     classes,
     style,
