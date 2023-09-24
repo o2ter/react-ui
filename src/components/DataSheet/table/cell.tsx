@@ -34,7 +34,8 @@ type DataSheetCellProps = React.ComponentPropsWithoutRef<'td'> & {
   highlightColor: string;
   isEditing?: boolean;
 };
-export const DataSheetCell = createComponent(({
+
+export const DataSheetCell = React.memo(createComponent(({
   style,
   selectedStyle,
   selected,
@@ -54,4 +55,4 @@ export const DataSheetCell = createComponent(({
   >{children}</td>;
 }, {
   displayName: 'DataSheetCell',
-});
+}));

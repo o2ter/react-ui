@@ -25,14 +25,15 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { DataSheetProps } from '../types';
-import { useDataSheetState } from '../provider/state';
-import { flattenCSSStyle } from '../styles';
-import { DataSheetCell } from './cell';
-import { useDataSheetRef } from '../provider/ref';
 import View from '../../View';
 import List from '../../List';
 import Text from '../../Text';
+import { DataSheetProps } from '../types';
+import { useDataSheetState } from '../provider/state';
+import { flattenCSSStyle } from '../styles';
+import { useDataSheetRef } from '../provider/ref';
+import { RowNumberCell } from './rowNumberCell';
+import { BodyCell } from './bodyCell';
 
 type TableCellItemProps<T> = {
   item?: T;
@@ -75,18 +76,8 @@ export const DataSheetBody = <T extends object>({
   highlightColor = 'rgba(33, 133, 208, 0.15)',
 }: DataSheetProps<T>) => {
 
-  const { state, setState, isRowSelected, isCellSelected, isCellEditing } = useDataSheetState();
+  const { state, setState, isCellEditing } = useDataSheetState();
   const { editing: editingRef } = useDataSheetRef();
-
-  const _allowEditForCell = (row: number, col: number) => _.isFunction(allowEditForCell) ? allowEditForCell(row, col) : !!allowEditForCell;
-
-  const cursor: React.CSSProperties = state.editing ? {} : { cursor: 'cell' };
-  const stickyRowNumberStyle: React.CSSProperties = stickyRowNumbers ? {
-    position: 'sticky',
-    tableLayout: 'fixed',
-    left: 0,
-    zIndex: 1,
-  } : {};
 
   const handleMouseDown = (e: React.MouseEvent) => {
 
@@ -159,77 +150,29 @@ export const DataSheetBody = <T extends object>({
             renderItem={({ item: items, index: row }) => (
               <tr style={flattenCSSStyle(rowContainerStyle)}>
                 {rowNumbers === true && (
-                  <DataSheetCell
-                    selected={isRowSelected(row)}
+                  <RowNumberCell
+                    row={row}
+                    style={itemContainerStyle}
+                    selectedStyle={selectedItemContainerStyle}
                     highlightColor={highlightColor}
-                    data-row={row}
-                    style={flattenCSSStyle([{
-                      padding: 4,
-                      overflow: 'hidden',
-                      borderTop: 0,
-                      borderLeft: 1,
-                      borderBottom: 1,
-                      borderRight: 1,
-                      borderStyle: 'solid',
-                      borderColor: '#DDD',
-                      borderRightStyle: isRowSelected(row) || isCellSelected(row, 0) ? 'double' : 'solid',
-                      borderRightColor: isRowSelected(row) || isCellSelected(row, 0) ? '#2185D0' : '#DDD',
-                      borderBottomStyle: isRowSelected(row + 1) ? 'double' : 'solid',
-                      borderBottomColor: isRowSelected(row + 1) ? '#2185D0' : '#DDD',
-                      backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
-                    }, stickyRowNumberStyle, itemContainerStyle])}
-                    selectedStyle={flattenCSSStyle([{
-                      padding: 4,
-                      overflow: 'hidden',
-                      borderTop: 0,
-                      borderLeft: 1,
-                      borderBottom: 1,
-                      borderRight: 1,
-                      borderStyle: 'double',
-                      borderColor: '#2185D0',
-                      backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
-                    }, stickyRowNumberStyle, selectedItemContainerStyle])}>
+                    stickyRowNumbers={stickyRowNumbers}
+                  >
                     <Text classes='font-monospace'>{row + 1}</Text>
-                  </DataSheetCell>
+                  </RowNumberCell>
                 )}
                 <List
                   data={_.map(columns, col => items[_.isString(col) ? col : col.key])}
                   extraData={state}
                   renderItem={({ item, index: col }) => (
-                    <DataSheetCell
+                    <BodyCell
                       ref={isCellEditing(row, col) ? editingRef : undefined}
-                      isEditing={isCellEditing(row, col)}
-                      selected={isRowSelected(row) || isCellSelected(row, col)}
+                      row={row}
+                      col={col}
+                      style={itemContainerStyle}
+                      selectedStyle={selectedItemContainerStyle}
                       highlightColor={highlightColor}
-                      data-row={row}
-                      data-col={col}
-                      onDoubleClick={_allowEditForCell(row, col) ? () => setState({ editing: { row, col } }) : undefined}
-                      style={flattenCSSStyle([{
-                        padding: 0,
-                        position: 'relative',
-                        borderTop: 0,
-                        borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
-                        borderBottom: 1,
-                        borderRight: 1,
-                        borderStyle: 'solid',
-                        borderColor: '#DDD',
-                        borderRightStyle: isRowSelected(row) || isCellSelected(row, col + 1) ? 'double' : 'solid',
-                        borderRightColor: isRowSelected(row) || isCellSelected(row, col + 1) ? '#2185D0' : '#DDD',
-                        borderBottomStyle: isRowSelected(row + 1) || isCellSelected(row + 1, col) ? 'double' : 'solid',
-                        borderBottomColor: isRowSelected(row + 1) || isCellSelected(row + 1, col) ? '#2185D0' : '#DDD',
-                        backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
-                      }, cursor, itemContainerStyle])}
-                      selectedStyle={flattenCSSStyle([{
-                        padding: 0,
-                        position: 'relative',
-                        borderTop: 0,
-                        borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
-                        borderBottom: 1,
-                        borderRight: 1,
-                        borderStyle: 'double',
-                        borderColor: '#2185D0',
-                        backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
-                      }, cursor, selectedItemContainerStyle])}>
+                      allowEditForCell={allowEditForCell}
+                    >
                       <Text classes='font-monospace'>{' '}</Text>
                       <TableCellItem
                         item={item}
@@ -238,7 +181,7 @@ export const DataSheetBody = <T extends object>({
                         isEditing={isCellEditing(row, col)}
                         renderItem={renderItem}
                       />
-                    </DataSheetCell>
+                    </BodyCell>
                   )}
                 />
               </tr>
@@ -247,75 +190,27 @@ export const DataSheetBody = <T extends object>({
           {showEmptyLastRow === true && (
             <tr style={flattenCSSStyle(rowContainerStyle)}>
               {rowNumbers === true && (
-                <DataSheetCell
-                  selected={isRowSelected(data.length)}
+                <RowNumberCell
+                  row={data.length}
+                  style={itemContainerStyle}
+                  selectedStyle={selectedItemContainerStyle}
                   highlightColor={highlightColor}
-                  data-row={data.length}
-                  style={flattenCSSStyle([{
-                    padding: 4,
-                    overflow: 'hidden',
-                    borderTop: 0,
-                    borderLeft: 1,
-                    borderBottom: 1,
-                    borderRight: 1,
-                    borderStyle: 'solid',
-                    borderColor: '#DDD',
-                    borderRightStyle: isRowSelected(data.length) || isCellSelected(data.length, 0) ? 'double' : 'solid',
-                    borderRightColor: isRowSelected(data.length) || isCellSelected(data.length, 0) ? '#2185D0' : '#DDD',
-                    borderBottomStyle: isRowSelected(data.length + 1) ? 'double' : 'solid',
-                    borderBottomColor: isRowSelected(data.length + 1) ? '#2185D0' : '#DDD',
-                    backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
-                  }, stickyRowNumberStyle, itemContainerStyle])}
-                  selectedStyle={flattenCSSStyle([{
-                    padding: 4,
-                    overflow: 'hidden',
-                    borderTop: 0,
-                    borderLeft: 1,
-                    borderBottom: 1,
-                    borderRight: 1,
-                    borderStyle: 'double',
-                    borderColor: '#2185D0',
-                    backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
-                  }, stickyRowNumberStyle, selectedItemContainerStyle])} />
+                  stickyRowNumbers={stickyRowNumbers}
+                />
               )}
               <List
                 data={columns}
                 extraData={state}
                 renderItem={({ index: col }) => (
-                  <DataSheetCell
+                  <BodyCell
                     ref={isCellEditing(data.length, col) ? editingRef : undefined}
-                    isEditing={isCellEditing(data.length, col)}
-                    selected={isRowSelected(data.length) || isCellSelected(data.length, col)}
+                    row={data.length}
+                    col={col}
+                    style={itemContainerStyle}
+                    selectedStyle={selectedItemContainerStyle}
                     highlightColor={highlightColor}
-                    data-row={data.length}
-                    data-col={col}
-                    onDoubleClick={_allowEditForCell(data.length, col) ? () => setState({ editing: { row: data.length, col } }) : undefined}
-                    style={flattenCSSStyle([{
-                      padding: 0,
-                      position: 'relative',
-                      borderTop: 0,
-                      borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
-                      borderBottom: 1,
-                      borderRight: 1,
-                      borderStyle: 'solid',
-                      borderColor: '#DDD',
-                      borderRightStyle: isRowSelected(data.length) || isCellSelected(data.length, col + 1) ? 'double' : 'solid',
-                      borderRightColor: isRowSelected(data.length) || isCellSelected(data.length, col + 1) ? '#2185D0' : '#DDD',
-                      borderBottomStyle: isRowSelected(data.length + 1) || isCellSelected(data.length + 1, col) ? 'double' : 'solid',
-                      borderBottomColor: isRowSelected(data.length + 1) || isCellSelected(data.length + 1, col) ? '#2185D0' : '#DDD',
-                      backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
-                    }, cursor, itemContainerStyle])}
-                    selectedStyle={flattenCSSStyle([{
-                      padding: 0,
-                      position: 'relative',
-                      borderTop: 0,
-                      borderLeft: rowNumbers === true || col != 0 ? 0 : 1,
-                      borderBottom: 1,
-                      borderRight: 1,
-                      borderStyle: 'double',
-                      borderColor: '#2185D0',
-                      backgroundColor: data.length % 2 == 0 ? 'white' : '#F6F8FF',
-                    }, cursor, selectedItemContainerStyle])}>
+                    allowEditForCell={allowEditForCell}
+                  >
                     <Text classes='font-monospace'>{' '}</Text>
                     {isCellEditing(data.length, col) && (
                       <TableCellItem
@@ -325,7 +220,7 @@ export const DataSheetBody = <T extends object>({
                         renderItem={renderItem}
                       />
                     )}
-                  </DataSheetCell>
+                  </BodyCell>
                 )}
               />
             </tr>
