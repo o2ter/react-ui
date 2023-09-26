@@ -30,6 +30,7 @@ export const offcanvasBackdrop = 1040;
 export const offcanvas = 1045;
 export const modalBackdrop = 1050;
 export const modal = 1055;
+export const indicator = 1060;
 export const popover = 1070;
 export const tooltip = 1080;
 export const toast = 1090;

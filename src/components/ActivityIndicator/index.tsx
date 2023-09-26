@@ -120,7 +120,7 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
       style={[
         {
           opacity: fadeAnim,
-          zIndex: theme.zIndex.modal,
+          zIndex: theme.zIndex.indicator,
         },
         style.activityIndicator,
         StyleSheet.absoluteFill,

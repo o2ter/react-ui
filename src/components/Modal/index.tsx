@@ -48,25 +48,14 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
 
   return <ModalContext.Provider value={setModal}>
     {children}
-    {React.isValidElement(modal) && <View
-      pointerEvents='box-none'
-      style={[
-        {
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: theme.zIndex.modal,
-        },
-        StyleSheet.absoluteFill,
-        Platform.select({
-          web: { position: 'fixed' } as any,
-          default: {},
-        }),
-      ]}>
+    {React.isValidElement(modal) && <>
       {backdrop === true && <Pressable
         onPress={() => setModal(undefined)}
         style={[
-          { backgroundColor: 'rgba(0, 0, 0, 0.75)' } as any,
+          {
+            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            zIndex: theme.zIndex.modalBackdrop,
+          },
           Platform.select({
             web: { cursor: 'default' } as any,
             default: {},
@@ -74,8 +63,24 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
           StyleSheet.absoluteFill,
           modalBackdrop,
         ]} />}
-      {modal}
-    </View>}
+      <View
+        pointerEvents='box-none'
+        style={[
+          {
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: theme.zIndex.modal,
+          },
+          StyleSheet.absoluteFill,
+          Platform.select({
+            web: { position: 'fixed' } as any,
+            default: {},
+          }),
+        ]}>
+        {modal}
+      </View>
+    </>}
   </ModalContext.Provider>;
 };
 
