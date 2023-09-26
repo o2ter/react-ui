@@ -24,4 +24,3 @@
 //
 
 export * from './elementEvent';
-export * from './elementLayout';
