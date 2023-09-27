@@ -27,7 +27,8 @@ import _ from 'lodash';
 import React from 'react';
 import { createMemoComponent } from '../../../internals/utils';
 import View from '../../View';
-import { LayoutRectangle } from 'react-native';
+import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
+import { useStableCallback } from 'sugax';
 
 export const Popover = createMemoComponent((
   {
@@ -40,13 +41,15 @@ export const Popover = createMemoComponent((
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
 
+  const _onLayout = useStableCallback((e: LayoutChangeEvent) => {
+    setLayout(e.nativeEvent.layout);
+    if (onLayout) onLayout(e);
+  });
+
   return (
     <View
       ref={forwardRef}
-      onLayout={(e) => {
-        setLayout(e.nativeEvent.layout);
-        if (onLayout) onLayout(e);
-      }}
+      onLayout={_onLayout}
       {...props}
     >{children}</View>
   );
