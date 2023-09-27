@@ -23,5 +23,5 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-
+export * from './popover';
+export * from './provider';

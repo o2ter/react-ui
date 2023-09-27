@@ -40,6 +40,7 @@ export { Image } from './Image';
 export { List } from './List';
 export { Lottie } from './Lottie';
 export { Picker } from './Picker';
+export * from './Popover';
 export { QRCode } from './QRCode';
 export * from './Radio';
 export * from './SafeAreaView';
