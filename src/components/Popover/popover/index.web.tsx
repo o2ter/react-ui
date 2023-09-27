@@ -25,11 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
+import { useMergeRefs } from 'sugax';
+import { LayoutRectangle } from 'react-native';
+import { useWindowEvent } from '../../../hooks/webHooks';
 import { createMemoComponent } from '../../../internals/utils';
 import View from '../../View';
-import { useMergeRefs } from 'sugax';
-import { useWindowEvent } from '../../../hooks/webHooks';
-import { LayoutRectangle } from 'react-native';
 
 export const Popover = createMemoComponent((
   {

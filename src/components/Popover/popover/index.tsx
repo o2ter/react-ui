@@ -25,10 +25,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { createMemoComponent } from '../../../internals/utils';
-import View from '../../View';
-import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
 import { useStableCallback } from 'sugax';
+import { createMemoComponent } from '../../../internals/utils';
+import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
+import View from '../../View';
 
 export const Popover = createMemoComponent((
   {
