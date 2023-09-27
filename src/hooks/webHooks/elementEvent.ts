@@ -27,24 +27,31 @@ import _ from 'lodash';
 import React from 'react';
 import { useStableRef } from 'sugax';
 
-export function useDOMElementEvent(element: EventTarget, event: string, callback: (event: Event) => void) {
+export function useDOMElementEvent(
+  element: EventTarget,
+  event: string,
+  callback: (event: Event) => void,
+  options?: AddEventListenerOptions | boolean,
+) {
 
   const callbackRef = useStableRef(callback);
 
   React.useEffect(() => {
     if (!(element instanceof EventTarget)) return;
     const listener = (event: Event) => { if (_.isFunction(callbackRef.current)) callbackRef.current(event); };
-    element.addEventListener(event, listener);
-    return () => void element.removeEventListener(event, listener);
+    element.addEventListener(event, listener, options);
+    return () => void element.removeEventListener(event, listener, options);
   }, [element, event]);
 }
 
 export const useWindowEvent = <K extends keyof WindowEventMap>(
   event: K,
   callback: (event: WindowEventMap[K]) => void,
-) => void (typeof window !== 'undefined' && useDOMElementEvent(window, event, callback as any));
+  options?: AddEventListenerOptions | boolean,
+) => void (typeof window !== 'undefined' && useDOMElementEvent(window, event, callback as any, options));
 
 export const useDocumentEvent = <K extends keyof DocumentEventMap>(
   event: K,
   callback: (event: DocumentEventMap[K]) => void,
-) => void (typeof document !== 'undefined' && useDOMElementEvent(document, event, callback as any));
+  options?: AddEventListenerOptions | boolean,
+) => void (typeof document !== 'undefined' && useDOMElementEvent(document, event, callback as any, options));
