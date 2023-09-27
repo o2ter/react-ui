@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  types.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,23 +23,4 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import React from 'react';
-import { createMemoComponent } from '../../../internals/utils';
-import View from '../../View';
-import { LayoutRectangle } from 'react-native';
-import { PopoverProps } from './types';
-
-export const Popover = createMemoComponent(({
-  children,
-}: React.PropsWithChildren<PopoverProps>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>) => {
-
-  const [layout, setLayout] = React.useState<LayoutRectangle>();
-
-  return (
-    <View
-      ref={forwardRef}
-      onLayout={({ nativeEvent }) => setLayout(nativeEvent.layout)}
-    >{children}</View>
-  );
-});
+export type PopoverProps = {};

@@ -30,9 +30,7 @@ import View from '../../View';
 import { useMergeRefs } from 'sugax';
 import { useWindowEvent } from '../../../hooks/webHooks';
 import { LayoutRectangle } from 'react-native';
-
-type PopoverProps = {
-};
+import { PopoverProps } from './types';
 
 export const Popover = createMemoComponent(({
   children,
