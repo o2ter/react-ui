@@ -28,18 +28,26 @@ import React from 'react';
 import { createMemoComponent } from '../../../internals/utils';
 import View from '../../View';
 import { LayoutRectangle } from 'react-native';
-import { PopoverProps } from './types';
 
-export const Popover = createMemoComponent(({
-  children,
-}: React.PropsWithChildren<PopoverProps>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>) => {
+export const Popover = createMemoComponent((
+  {
+    onLayout,
+    children,
+    ...props
+  }: React.ComponentProps<typeof View>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
+) => {
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
 
   return (
     <View
       ref={forwardRef}
-      onLayout={({ nativeEvent }) => setLayout(nativeEvent.layout)}
+      onLayout={(e) => {
+        setLayout(e.nativeEvent.layout);
+        if (onLayout) onLayout(e);
+      }}
+      {...props}
     >{children}</View>
   );
 });
