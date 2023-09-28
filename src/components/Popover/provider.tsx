@@ -25,16 +25,39 @@
 
 import _ from 'lodash';
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
 
-const PopoverContext = React.createContext({});
+type PopoverConfig = {
+  id: string;
+  node: React.ReactNode;
+};
+
+const PopoverContext = React.createContext<{
+  nodes: PopoverConfig[];
+  setNodes: React.Dispatch<React.SetStateAction<PopoverConfig[]>>;
+}>({
+  nodes: [],
+  setNodes: () => { },
+});
 PopoverContext.displayName = 'PopoverContext';
 
 export const PopoverProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
 }) => {
 
-  return <PopoverContext.Provider value={{}}>
+  const [nodes, setNodes] = React.useState<PopoverConfig[]>([]);
+  const values = React.useMemo(() => ({ nodes, setNodes }), [nodes]);
+
+  return <PopoverContext.Provider value={values}>
     {children}
+    {!_.isEmpty(nodes) && (
+      <View
+        pointerEvents='box-none'
+        style={StyleSheet.absoluteFill}
+      >
+        {_.map(nodes, ({ node }) => node)}
+      </View>
+    )}
   </PopoverContext.Provider>;
 };
 
