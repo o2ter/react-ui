@@ -39,6 +39,7 @@ export const PopoverBase = (
   _useWindowEvent?: typeof useWindowEvent
 ) => createMemoComponent((
   {
+    hidden,
     popover,
     onLayout,
     children,
@@ -53,7 +54,7 @@ export const PopoverBase = (
   const ref = useMergeRefs(viewRef, forwardRef);
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
-  useSetNode(React.useMemo(() => layout && (
+  useSetNode(React.useMemo(() => layout && !hidden && (
     <RNView
       pointerEvents='box-none'
       style={{

@@ -28,5 +28,6 @@ import React from 'react';
 import View from '../../View';
 
 export type PopoverProps = React.ComponentProps<typeof View> & {
+  hidden: boolean;
   popover: React.ReactNode;
 };
