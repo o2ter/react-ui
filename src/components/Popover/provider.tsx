@@ -25,7 +25,9 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { PopoverContext } from './context';
+
+const PopoverContext = React.createContext({});
+PopoverContext.displayName = 'PopoverContext';
 
 export const PopoverProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
