@@ -36,7 +36,7 @@ export const PopoverProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   return <PopoverContext.Provider value={values}>
     {children}
-    {_.map(nodes, ({ node }) => node)}
+    {_.compact(_.map(nodes, ({ node }) => node))}
   </PopoverContext.Provider>;
 };
 

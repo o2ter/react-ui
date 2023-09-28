@@ -28,7 +28,7 @@ import React from 'react';
 
 export type PopoverConfig = {
   id: string;
-  node: React.ReactNode;
+  node?: React.ReactNode;
 };
 
 export const PopoverContext = React.createContext<{
@@ -40,3 +40,20 @@ export const PopoverContext = React.createContext<{
 });
 
 PopoverContext.displayName = 'PopoverContext';
+
+export const useSetNode = (
+  node: React.ReactNode
+) => {
+
+  const id = React.useId();
+  const { setNodes } = React.useContext(PopoverContext);
+
+  React.useEffect(() => {
+    setNodes(nodes => [...nodes, { id, node }]);
+    return () => setNodes(nodes => _.filter(nodes, x => x.id !== id));
+  }, []);
+
+  React.useEffect(() => {
+    setNodes(nodes => _.map(nodes, x => x.id === id ? { id, node } : x));
+  }, [node]);
+}
