@@ -25,7 +25,6 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
 import { PopoverConfig, PopoverContext } from './context';
 
 export const PopoverProvider: React.FC<React.PropsWithChildren<{}>> = ({
