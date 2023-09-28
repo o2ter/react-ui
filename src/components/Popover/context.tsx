@@ -1,5 +1,5 @@
 //
-//  provider.tsx
+//  context.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -25,27 +25,18 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { PopoverConfig, PopoverContext } from './context';
 
-export const PopoverProvider: React.FC<React.PropsWithChildren<{}>> = ({
-  children,
-}) => {
-
-  const [nodes, setNodes] = React.useState<PopoverConfig[]>([]);
-  const values = React.useMemo(() => ({ nodes, setNodes }), [nodes]);
-
-  return <PopoverContext.Provider value={values}>
-    {children}
-    {!_.isEmpty(nodes) && (
-      <View
-        pointerEvents='box-none'
-        style={StyleSheet.absoluteFill}
-      >
-        {_.map(nodes, ({ node }) => node)}
-      </View>
-    )}
-  </PopoverContext.Provider>;
+export type PopoverConfig = {
+  id: string;
+  node: React.ReactNode;
 };
 
-PopoverProvider.displayName = 'PopoverProvider';
+export const PopoverContext = React.createContext<{
+  nodes: PopoverConfig[];
+  setNodes: React.Dispatch<React.SetStateAction<PopoverConfig[]>>;
+}>({
+  nodes: [],
+  setNodes: () => { },
+});
+
+PopoverContext.displayName = 'PopoverContext';
