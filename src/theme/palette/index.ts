@@ -37,7 +37,7 @@ export const _colorContrast = (theme: ThemeVariables) => (background: string | C
   theme.minContrastRatio
 );
 
-export const defaultStyle = (
+export const defaultPalette = (
   theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
 ) => ({
 
@@ -66,5 +66,5 @@ export const defaultStyle = (
 
 });
 
-export interface ThemeStyles extends ReturnType<typeof defaultStyle> {}
-export type ThemeStylesProvider = (...theme: Parameters<typeof defaultStyle>) => Partial<ThemeStyles>;
+export interface ThemePalette extends ReturnType<typeof defaultPalette> {}
+export type ThemePaletteProvider = (...theme: Parameters<typeof defaultPalette>) => Partial<ThemePalette>;

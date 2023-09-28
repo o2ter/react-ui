@@ -24,6 +24,6 @@
 //
 
 export { ThemeVariables } from './variables';
-export { ThemeStylesProvider, ThemeStyles } from './styles';
+export { ThemePaletteProvider, ThemePalette } from './palette';
 export * from './media';
 export * from './theme';
