@@ -30,10 +30,12 @@ import { LayoutRectangle } from 'react-native';
 import { useWindowEvent } from '../../../hooks/webHooks';
 import { createMemoComponent } from '../../../internals/utils';
 import { PopoverProps } from './types';
+import { PopoverContext } from '../context';
 import View from '../../View';
 
 export const Popover = createMemoComponent((
   {
+    popover,
     children,
     ...props
   }: PopoverProps,
@@ -44,6 +46,7 @@ export const Popover = createMemoComponent((
   const ref = useMergeRefs(viewRef, forwardRef);
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
+  const { setNodes } = React.useContext(PopoverContext);
 
   useWindowEvent('scroll', () => {
     viewRef.current?.measureInWindow((x, y, width, height) => setLayout({ x, y, width, height }));

@@ -29,10 +29,12 @@ import { useStableCallback } from 'sugax';
 import { createMemoComponent } from '../../../internals/utils';
 import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
 import { PopoverProps } from './types';
+import { PopoverContext } from '../context';
 import View from '../../View';
 
 export const Popover = createMemoComponent((
   {
+    popover,
     onLayout,
     children,
     ...props
@@ -41,6 +43,7 @@ export const Popover = createMemoComponent((
 ) => {
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
+  const { setNodes } = React.useContext(PopoverContext);
 
   const _onLayout = useStableCallback((e: LayoutChangeEvent) => {
     setLayout(e.nativeEvent.layout);
