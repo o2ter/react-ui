@@ -24,47 +24,7 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { View as RNView } from 'react-native';
-import { useMergeRefs } from 'sugax';
-import { LayoutRectangle } from 'react-native';
+import { PopoverBase } from './base';
 import { useWindowEvent } from '../../../hooks/webHooks';
-import { createMemoComponent } from '../../../internals/utils';
-import { PopoverProps } from './types';
-import { useSetNode } from '../context';
-import View from '../../View';
 
-export const Popover = createMemoComponent((
-  {
-    popover,
-    children,
-    ...props
-  }: PopoverProps,
-  forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
-) => {
-
-  const viewRef = React.useRef<React.ComponentRef<typeof View>>();
-  const ref = useMergeRefs(viewRef, forwardRef);
-
-  const [layout, setLayout] = React.useState<LayoutRectangle>();
-  useSetNode(React.useMemo(() => layout && (
-    <RNView
-      pointerEvents='box-none'
-      style={{
-        position: 'absolute',
-        left: layout.x,
-        top: layout.y,
-        width: layout.width,
-        height: layout.height,
-      }}
-    >{popover}</RNView>
-  ), [layout, popover]));
-
-  useWindowEvent('scroll', () => {
-    viewRef.current?.measureInWindow((x, y, width, height) => setLayout({ x, y, width, height }));
-  }, true);
-
-  return (
-    <View ref={ref} {...props}>{children}</View>
-  );
-});
+export const Popover = PopoverBase(useWindowEvent);

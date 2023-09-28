@@ -24,49 +24,6 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { View as RNView } from 'react-native';
-import { useStableCallback } from 'sugax';
-import { createMemoComponent } from '../../../internals/utils';
-import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
-import { PopoverProps } from './types';
-import { useSetNode } from '../context';
-import View from '../../View';
+import { PopoverBase } from './base';
 
-export const Popover = createMemoComponent((
-  {
-    popover,
-    onLayout,
-    children,
-    ...props
-  }: PopoverProps,
-  forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
-) => {
-
-  const [layout, setLayout] = React.useState<LayoutRectangle>();
-  useSetNode(React.useMemo(() => layout && (
-    <RNView
-      pointerEvents='box-none'
-      style={{
-        position: 'absolute',
-        left: layout.x,
-        top: layout.y,
-        width: layout.width,
-        height: layout.height,
-      }}
-    >{popover}</RNView>
-  ), [layout, popover]));
-
-  const _onLayout = useStableCallback((e: LayoutChangeEvent) => {
-    setLayout(e.nativeEvent.layout);
-    if (onLayout) onLayout(e);
-  });
-
-  return (
-    <View
-      ref={forwardRef}
-      onLayout={_onLayout}
-      {...props}
-    >{children}</View>
-  );
-});
+export const Popover = PopoverBase();
