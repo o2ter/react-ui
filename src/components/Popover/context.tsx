@@ -42,7 +42,7 @@ export const PopoverContext = React.createContext<{
 PopoverContext.displayName = 'PopoverContext';
 
 export const useSetNode = (
-  node: React.ReactNode
+  node?: React.ReactNode
 ) => {
 
   const id = React.useId();
