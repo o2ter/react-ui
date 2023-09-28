@@ -29,13 +29,14 @@ import { useMergeRefs } from 'sugax';
 import { LayoutRectangle } from 'react-native';
 import { useWindowEvent } from '../../../hooks/webHooks';
 import { createMemoComponent } from '../../../internals/utils';
+import { PopoverProps } from './types';
 import View from '../../View';
 
 export const Popover = createMemoComponent((
   {
     children,
     ...props
-  }: React.ComponentProps<typeof View>,
+  }: PopoverProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
 ) => {
 

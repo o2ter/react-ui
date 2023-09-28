@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  types.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -25,33 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { useStableCallback } from 'sugax';
-import { createMemoComponent } from '../../../internals/utils';
-import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
-import { PopoverProps } from './types';
 import View from '../../View';
 
-export const Popover = createMemoComponent((
-  {
-    onLayout,
-    children,
-    ...props
-  }: PopoverProps,
-  forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
-) => {
-
-  const [layout, setLayout] = React.useState<LayoutRectangle>();
-
-  const _onLayout = useStableCallback((e: LayoutChangeEvent) => {
-    setLayout(e.nativeEvent.layout);
-    if (onLayout) onLayout(e);
-  });
-
-  return (
-    <View
-      ref={forwardRef}
-      onLayout={_onLayout}
-      {...props}
-    >{children}</View>
-  );
-});
+export type PopoverProps = React.ComponentProps<typeof View> & {
+};
