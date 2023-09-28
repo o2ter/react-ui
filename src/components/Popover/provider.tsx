@@ -37,14 +37,7 @@ export const PopoverProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   return <PopoverContext.Provider value={values}>
     {children}
-    {!_.isEmpty(nodes) && (
-      <View
-        pointerEvents='box-none'
-        style={StyleSheet.absoluteFill}
-      >
-        {_.map(nodes, ({ node }) => node)}
-      </View>
-    )}
+    {_.map(nodes, ({ node }) => node)}
   </PopoverContext.Provider>;
 };
 
