@@ -26,13 +26,13 @@
 import _ from 'lodash';
 import React from 'react';
 import { defaultVariables, ThemeVariables } from '../variables';
-import { defaultStyle, ThemeStyles, ThemeStylesProvider, _colorContrast } from '../styles';
+import { defaultPalette, ThemePalette, ThemePaletteProvider, _colorContrast } from '../palette';
 import { useEquivalent } from 'sugax';
 import { PrevState } from '../../internals/types';
 
 export type ThemeProviderProps = {
   variables?: PrevState<Partial<ThemeVariables>>;
-  styles?: ThemeStylesProvider;
+  palette?: ThemePaletteProvider;
 }
 
 const decodeVariables = (variables: typeof defaultVariables) => {
@@ -61,7 +61,7 @@ const decodeVariables = (variables: typeof defaultVariables) => {
 
 const contextValues = (values: {
   variables: typeof defaultVariables;
-  styles: typeof defaultStyle;
+  palette: typeof defaultPalette;
 }) => ({
   ...values,
   decoded: decodeVariables(values.variables),
@@ -69,14 +69,14 @@ const contextValues = (values: {
 
 export const ThemeBaseContext = React.createContext(contextValues({
   variables: defaultVariables,
-  styles: defaultStyle,
+  palette: defaultPalette,
 }));
 
 ThemeBaseContext.displayName = 'ThemeBaseContext';
 
 export const ThemeBaseProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>> = ({
   variables,
-  styles,
+  palette,
   children
 }) => {
 
@@ -90,12 +90,12 @@ export const ThemeBaseProvider: React.FC<React.PropsWithChildren<ThemeProviderPr
       themeColors: _.assign({}, parent.variables.themeColors, _variables?.themeColors),
       zIndex: _.assign({}, parent.variables.zIndex, _variables?.zIndex),
     }),
-    styles: (theme) => {
-      const parent_style = parent.styles(theme);
-      const current_style = styles?.(theme) ?? {};
-      return _.mapValues(parent_style, (v, k) => current_style[k as keyof ThemeStyles] ?? v) as ThemeStyles;
+    palette: (theme) => {
+      const parent_style = parent.palette(theme);
+      const current_style = palette?.(theme) ?? {};
+      return _.mapValues(parent_style, (v, k) => current_style[k as keyof ThemePalette] ?? v) as ThemePalette;
     },
-  }), [parent, _variables, styles]);
+  }), [parent, _variables, palette]);
 
   return (
     <ThemeBaseContext.Provider value={values}>

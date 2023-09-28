@@ -109,7 +109,7 @@ const ToastBody: React.FC<{
     }).start(() => onShow({ dismiss() { _dismiss(); } }));
   });
 
-  const { color, messageColor, ...toastColorStyle } = theme.styles.toastColors(_.isString(style) ? style : style.color);
+  const { color, messageColor, ...toastColorStyle } = theme.palette.toastColors(_.isString(style) ? style : style.color);
 
   const localize = useLocalize();
   const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);

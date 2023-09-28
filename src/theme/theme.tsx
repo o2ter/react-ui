@@ -25,18 +25,18 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { ThemeStyles, _colorContrast } from './styles';
+import { ThemePalette, _colorContrast } from './palette';
 import { ThemeBaseContext, ThemeBaseProvider, ThemeProviderProps } from './provider/base';
 
 const computedTheme = (
   base: React.ContextType<typeof ThemeBaseContext>
 ) => {
-  let style: ThemeStyles;
+  let palette: ThemePalette;
   const computed = _.assign({
     get colorContrast() { return _colorContrast(computed); },
-    get styles() {
-      if (_.isNil(style)) style = base.styles(computed);
-      return style;
+    get palette() {
+      if (_.isNil(palette)) palette = base.palette(computed);
+      return palette;
     },
   }, base.decoded);
   return computed;
@@ -53,9 +53,9 @@ const _ThemeProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => 
 };
 
 export const ThemeProvider: React.FC<React.PropsWithChildren<ThemeProviderProps>> = ({
-  variables, styles, children
+  variables, palette, children
 }) => (
-  <ThemeBaseProvider variables={variables} styles={styles}>
+  <ThemeBaseProvider variables={variables} palette={palette}>
     <_ThemeProvider>{children}</_ThemeProvider>
   </ThemeBaseProvider>
 );

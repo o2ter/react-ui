@@ -123,8 +123,8 @@ export const Button = createMemoComponent(({
 
   const colors = React.useMemo(() => {
 
-    const fromColors = theme.styles.buttonColors(selectedColor);
-    const toColors = theme.styles.buttonFocusedColors(selectedColor);
+    const fromColors = theme.palette.buttonColors(selectedColor);
+    const toColors = theme.palette.buttonFocusedColors(selectedColor);
 
     const _interpolate = (c1: string, c2: string) => c1 === c2 ? c1 : fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
     return {
