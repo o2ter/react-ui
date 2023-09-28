@@ -42,6 +42,7 @@ export const Popover = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
 ) => {
 
+  const id = React.useId();
   const [layout, setLayout] = React.useState<LayoutRectangle>();
   const { setNodes } = React.useContext(PopoverContext);
 

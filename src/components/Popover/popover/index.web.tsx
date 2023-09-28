@@ -42,6 +42,7 @@ export const Popover = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
 ) => {
 
+  const id = React.useId();
   const viewRef = React.useRef<React.ComponentRef<typeof View>>();
   const ref = useMergeRefs(viewRef, forwardRef);
 
