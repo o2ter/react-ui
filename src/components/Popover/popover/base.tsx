@@ -73,11 +73,14 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
 
   const _position = selectPosition(position, layout, windowDimensions);
 
+  const _style = flattenStyle([popoverStyle, style]);
+  const borderColor = _style.borderColor ?? theme.grays['300'];
+  const backgroundColor = _style.backgroundColor ?? theme.root.backgroundColor;
+  const borderWidth = _style.borderWidth ?? theme.borderWidth;
+  const arrowSize = theme.spacers['2'];
+
   const containerWidth = containerLayout?.width ?? 0;
   const containerHeight = containerLayout?.height ?? 0;
-
-  const borderWidth = theme.borderWidth;
-  const arrowSize = theme.spacers['2'];
 
   const _pos_x = {
     top: layout.x + 0.5 * layout.width - 0.5 * containerWidth,
@@ -94,10 +97,6 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
 
   const _arrow_pos_x = _position === 'left' ? containerWidth : _position === 'right' ? -arrowSize : 0.5 * containerWidth - arrowSize;
   const _arrow_pos_y = _position === 'top' ? containerHeight : _position === 'bottom' ? -arrowSize : 0.5 * containerHeight - arrowSize;
-
-  const _style = flattenStyle([popoverStyle, style]);
-  const borderColor = _style.borderColor ?? theme.grays['300'];
-  const backgroundColor = _style.backgroundColor ?? theme.root.backgroundColor;
 
   return (
     <RNView
