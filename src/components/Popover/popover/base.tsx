@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View as RNView } from 'react-native';
+import { MeasureInWindowOnSuccessCallback, View as RNView } from 'react-native';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import type { useWindowEvent } from '../../../hooks/webHooks';
 import { createMemoComponent } from '../../../internals/utils';
@@ -36,6 +36,7 @@ import { useTheme } from '../../../theme';
 import View from '../../View';
 
 export const PopoverBase = (
+  _measureInWindow: (view: RNView, callback: MeasureInWindowOnSuccessCallback) => void,
   _useWindowEvent?: typeof useWindowEvent
 ) => createMemoComponent((
   {
@@ -68,7 +69,9 @@ export const PopoverBase = (
     >{popover}</RNView>
   ), [layout, popover]));
 
-  const calculate = () => viewRef.current?.measureInWindow((x, y, width, height) => setLayout({ x, y, width, height }));
+  const calculate = () => {
+    if (viewRef.current) _measureInWindow(viewRef.current, (x, y, width, height) => setLayout({ x, y, width, height }));
+  }
 
   if (_useWindowEvent) _useWindowEvent('scroll', () => { calculate(); }, true);
   const _onLayout = useStableCallback((e: LayoutChangeEvent) => {

@@ -27,4 +27,7 @@ import _ from 'lodash';
 import { PopoverBase } from './base';
 import { useWindowEvent } from '../../../hooks/webHooks';
 
-export const Popover = PopoverBase(useWindowEvent);
+export const Popover = PopoverBase(
+  (view, callback) => view.measureInWindow((x, y, width, height) => callback(x + window.scrollX, y + window.scrollY, width, height)),
+  useWindowEvent,
+);

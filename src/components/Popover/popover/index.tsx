@@ -26,4 +26,4 @@
 import _ from 'lodash';
 import { PopoverBase } from './base';
 
-export const Popover = PopoverBase();
+export const Popover = PopoverBase((view, callback) => view.measureInWindow(callback));
