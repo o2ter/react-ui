@@ -49,6 +49,7 @@ export const PopoverBase = (
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
 ) => {
 
+  const id = React.useId();
   const theme = useTheme();
 
   const viewRef = React.useRef<React.ComponentRef<typeof View>>();
@@ -57,6 +58,7 @@ export const PopoverBase = (
   const [layout, setLayout] = React.useState<LayoutRectangle>();
   useSetNode(React.useMemo(() => layout && !hidden && (
     <RNView
+      key={id}
       pointerEvents='box-none'
       style={[
         {
