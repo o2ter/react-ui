@@ -36,7 +36,7 @@ import View from '../../View';
 
 type PopoverProps = React.ComponentProps<typeof View> & {
   hidden: boolean;
-  popover: React.ReactNode | ((layout: LayoutRectangle) => React.ReactNode);
+  render: (layout: LayoutRectangle) => React.ReactNode;
   extraData?: any;
 };
 
@@ -46,7 +46,7 @@ export const PopoverBase = (
 ) => createMemoComponent((
   {
     hidden,
-    popover,
+    render,
     extraData,
     onLayout,
     children,
@@ -62,8 +62,6 @@ export const PopoverBase = (
   const ref = useMergeRefs(viewRef, forwardRef);
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
-  const _popover = useStableCallback((layout: LayoutRectangle) => _.isFunction(popover) ? popover(layout) : popover);
-
   useSetNode(React.useMemo(() => layout && !hidden && (
     <RNView
       key={id}
@@ -81,7 +79,7 @@ export const PopoverBase = (
           default: { position: 'absolute' },
         }),
       ]}
-    >{_popover(layout)}</RNView>
+    >{render(layout)}</RNView>
   ), [layout, extraData]));
 
   const calculate = () => {
