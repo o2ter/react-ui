@@ -28,6 +28,6 @@ import { PopoverBase } from './base';
 import { useWindowEvent } from '../../../hooks/webHooks';
 
 export const Popover = PopoverBase(
-  (view, callback) => view.measureInWindow((x, y, width, height) => callback(x + window.scrollX, y + window.scrollY, width, height)),
+  (view, callback) => view.measureInWindow((x, y, width, height) => callback(x + 2 * window.scrollX, y + 2 * window.scrollY, width, height)),
   useWindowEvent,
 );
