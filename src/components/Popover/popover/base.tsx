@@ -195,7 +195,7 @@ export const PopoverBase = (
   const [layout, setLayout] = React.useState<LayoutRectangle>();
   const popover = React.useMemo(() => layout && !hidden && (
     <PopoverBody key={id} position={position} layout={layout} style={containerStyle}>{render()}</PopoverBody>
-  ), [layout, position, containerStyle, extraData]);
+  ), [layout, hidden, position, containerStyle, extraData]);
 
   useSetNode(popover);
 
