@@ -66,6 +66,8 @@ export type ComponentStyles = {
   toast?: StyleProp<ViewStyle>;
   toastText?: StyleProp<TextStyle>;
 
+  popover?: StyleProp<ViewStyle>;
+
   formErrorMessage?: StyleProp<TextStyle>;
 
   formCheckbox?: StyleProp<TextStyle>;

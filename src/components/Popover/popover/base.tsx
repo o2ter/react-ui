@@ -24,8 +24,8 @@
 //
 
 import _ from 'lodash';
-import React, { useCallback } from 'react';
-import { MeasureInWindowOnSuccessCallback, View as RNView, Platform, useWindowDimensions, ScaledSize } from 'react-native';
+import React from 'react';
+import { MeasureInWindowOnSuccessCallback, View as RNView, Platform, useWindowDimensions, ScaledSize, StyleProp, ViewStyle } from 'react-native';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import type { useWindowEvent } from '../../../hooks/webHooks';
 import { createMemoComponent } from '../../../internals/utils';
@@ -33,6 +33,8 @@ import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
 import { useSetNode } from '../context';
 import { useTheme } from '../../../theme';
 import View from '../../View';
+import { useComponentStyle } from '../../Style';
+import { flattenStyle } from '../../index.web';
 
 type PopoverPosition = 'auto' | 'top' | 'left' | 'right' | 'bottom';
 
@@ -55,15 +57,19 @@ const selectPosition = (
 const PopoverBody: React.FC<React.PropsWithChildren<{
   position: PopoverPosition;
   layout: LayoutRectangle;
+  style?: StyleProp<ViewStyle>;
 }>> = ({
   position,
   layout,
+  style,
   children,
 }) => {
 
   const theme = useTheme();
   const windowDimensions = useWindowDimensions();
   const [containerLayout, setContainerLayout] = React.useState<LayoutRectangle>();
+
+  const popoverStyle = useComponentStyle('popover');
 
   const _position = selectPosition(position, layout, windowDimensions);
 
@@ -88,6 +94,11 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
 
   const _arrow_pos_x = _position === 'left' ? containerWidth : _position === 'right' ? -arrowSize : 0.5 * containerWidth - arrowSize;
   const _arrow_pos_y = _position === 'top' ? containerHeight : _position === 'bottom' ? -arrowSize : 0.5 * containerHeight - arrowSize;
+
+  const _style = flattenStyle([popoverStyle, style]);
+  const borderColor = _style.borderColor ?? theme.grays['300'];
+  const backgroundColor = _style.backgroundColor ?? theme.root.backgroundColor;
+
   return (
     <RNView
       pointerEvents='box-none'
@@ -96,10 +107,10 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
         {
           left: _pos_x,
           top: _pos_y,
-          backgroundColor: theme.root.backgroundColor,
+          backgroundColor: backgroundColor,
           borderStyle: 'solid',
           borderWidth: borderWidth,
-          borderColor: theme.grays['300'],
+          borderColor: borderColor,
           borderRadius: theme.borderRadiusBase,
           minWidth: 2 * theme.borderRadiusBase + (_position === 'top' || _position === 'bottom' ? 2 * arrowSize : arrowSize),
           minHeight: 2 * theme.borderRadiusBase + (_position === 'left' || _position === 'right' ? 2 * arrowSize : arrowSize),
@@ -111,6 +122,7 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
           web: { position: 'fixed' } as any,
           default: { position: 'absolute' },
         }),
+        _style,
       ]}
     >
       <RNView
@@ -124,10 +136,10 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
           borderLeftWidth: _position === 'right' ? 0 : arrowSize,
           borderRightWidth: _position === 'left' ? 0 : arrowSize,
           borderBottomWidth: _position === 'top' ? 0 : arrowSize,
-          borderTopColor: _position === 'top' ? theme.grays['300'] : 'transparent',
-          borderLeftColor: _position === 'left' ? theme.grays['300'] : 'transparent',
-          borderRightColor: _position === 'right' ? theme.grays['300'] : 'transparent',
-          borderBottomColor: _position === 'bottom' ? theme.grays['300'] : 'transparent',
+          borderTopColor: _position === 'top' ? borderColor : 'transparent',
+          borderLeftColor: _position === 'left' ? borderColor : 'transparent',
+          borderRightColor: _position === 'right' ? borderColor : 'transparent',
+          borderBottomColor: _position === 'bottom' ? borderColor : 'transparent',
         }}
       />
       <RNView
@@ -141,10 +153,10 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
           borderLeftWidth: _position === 'right' ? 0 : arrowSize,
           borderRightWidth: _position === 'left' ? 0 : arrowSize,
           borderBottomWidth: _position === 'top' ? 0 : arrowSize,
-          borderTopColor: _position === 'top' ? theme.root.backgroundColor : 'transparent',
-          borderLeftColor: _position === 'left' ? theme.root.backgroundColor : 'transparent',
-          borderRightColor: _position === 'right' ? theme.root.backgroundColor : 'transparent',
-          borderBottomColor: _position === 'bottom' ? theme.root.backgroundColor : 'transparent',
+          borderTopColor: _position === 'top' ? backgroundColor : 'transparent',
+          borderLeftColor: _position === 'left' ? backgroundColor : 'transparent',
+          borderRightColor: _position === 'right' ? backgroundColor : 'transparent',
+          borderBottomColor: _position === 'bottom' ? backgroundColor : 'transparent',
         }}
       />
       {children}
@@ -157,6 +169,7 @@ type PopoverProps = React.ComponentProps<typeof View> & {
   hidden: boolean;
   render: () => React.ReactNode;
   extraData?: any;
+  containerStyle?: StyleProp<ViewStyle>;
 };
 
 export const PopoverBase = (
@@ -168,6 +181,7 @@ export const PopoverBase = (
     hidden,
     render,
     extraData,
+    containerStyle,
     onLayout,
     children,
     ...props
@@ -182,8 +196,8 @@ export const PopoverBase = (
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
   const popover = React.useMemo(() => layout && !hidden && (
-    <PopoverBody key={id} position={position} layout={layout}>{render()}</PopoverBody>
-  ), [layout, position, extraData]);
+    <PopoverBody key={id} position={position} layout={layout} style={containerStyle}>{render()}</PopoverBody>
+  ), [layout, position, extraData, containerStyle]);
 
   useSetNode(popover);
 
