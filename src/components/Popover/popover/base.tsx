@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { MeasureInWindowOnSuccessCallback, View as RNView, Platform, useWindowDimensions, ScaledSize, StyleProp, ViewStyle } from 'react-native';
+import { MeasureInWindowOnSuccessCallback, View as RNView, Platform, useWindowDimensions, ScaledSize, StyleProp, ViewStyle, Animated } from 'react-native';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import type { useWindowEvent } from '../../../hooks/webHooks';
 import { createMemoComponent } from '../../../internals/utils';
@@ -55,10 +55,12 @@ const selectPosition = (
 }
 
 const PopoverBody: React.FC<React.PropsWithChildren<{
+  hidden: boolean;
   position: PopoverPosition;
   layout: LayoutRectangle;
   style?: StyleProp<ViewStyle>;
 }>> = ({
+  hidden,
   position,
   layout,
   style,
@@ -69,11 +71,30 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
   const windowDimensions = useWindowDimensions();
   const [containerLayout, setContainerLayout] = React.useState<LayoutRectangle>();
 
+  const [visible, setVisible] = React.useState(false);
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+
+    setVisible(true);
+
+    Animated.timing(fadeAnim, {
+      toValue: hidden ? 0 : 1,
+      duration: theme.popoverDuration,
+      easing: theme.popoverEasing,
+      useNativeDriver: Platform.OS !== 'web',
+    }).start(() => setVisible(!hidden));
+
+  }, [hidden]);
+
   const arrowSize = theme.spacers['2'];
   const {
     borderColor = theme.grays['300'],
     backgroundColor = theme.root.backgroundColor,
-    borderWidth = theme.borderWidth,
+    borderTopWidth: borderWidth = theme.borderWidth,
+    borderLeftWidth,
+    borderRightWidth,
+    borderBottomWidth,
     ..._style
   } = flattenStyle([useComponentStyle('popover'), style]);
 
@@ -98,67 +119,69 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
   const _arrow_pos_y = _position === 'top' ? containerHeight : _position === 'bottom' ? -arrowSize : 0.5 * containerHeight - arrowSize;
 
   return (
-    <RNView
-      pointerEvents='box-none'
-      onLayout={(e) => setContainerLayout(e.nativeEvent.layout)}
-      style={[
-        {
-          left: _pos_x,
-          top: _pos_y,
-          backgroundColor: backgroundColor,
-          borderStyle: 'solid',
-          borderWidth: borderWidth,
-          borderColor: borderColor,
-          borderRadius: theme.borderRadiusBase,
-          minWidth: 2 * theme.borderRadiusBase + (_position === 'top' || _position === 'bottom' ? 2 * arrowSize : arrowSize),
-          minHeight: 2 * theme.borderRadiusBase + (_position === 'left' || _position === 'right' ? 2 * arrowSize : arrowSize),
-          zIndex: theme.zIndex.popover,
-          opacity: containerLayout ? 1 : 0,
-          padding: theme.spacers['1'],
-        },
-        Platform.select({
-          web: { position: 'fixed' } as any,
-          default: { position: 'absolute' },
-        }),
-        _style,
-      ]}
-    >
-      <RNView
+    <>
+      {visible && <Animated.View
         pointerEvents='box-none'
-        style={{
-          position: 'absolute',
-          left: _arrow_pos_x - borderWidth,
-          top: _arrow_pos_y - borderWidth,
-          borderStyle: 'solid',
-          borderTopWidth: _position === 'bottom' ? 0 : arrowSize,
-          borderLeftWidth: _position === 'right' ? 0 : arrowSize,
-          borderRightWidth: _position === 'left' ? 0 : arrowSize,
-          borderBottomWidth: _position === 'top' ? 0 : arrowSize,
-          borderTopColor: _position === 'top' ? borderColor : 'transparent',
-          borderLeftColor: _position === 'left' ? borderColor : 'transparent',
-          borderRightColor: _position === 'right' ? borderColor : 'transparent',
-          borderBottomColor: _position === 'bottom' ? borderColor : 'transparent',
-        }}
-      />
-      <RNView
-        pointerEvents='box-none'
-        style={{
-          position: 'absolute',
-          left: _position === 'left' ? _arrow_pos_x - 2 * borderWidth : _position === 'right' ? _arrow_pos_x : _arrow_pos_x - borderWidth,
-          top: _position === 'top' ? _arrow_pos_y - 2 * borderWidth : _position === 'bottom' ? _arrow_pos_y : _arrow_pos_y - borderWidth,
-          borderStyle: 'solid',
-          borderTopWidth: _position === 'bottom' ? 0 : arrowSize,
-          borderLeftWidth: _position === 'right' ? 0 : arrowSize,
-          borderRightWidth: _position === 'left' ? 0 : arrowSize,
-          borderBottomWidth: _position === 'top' ? 0 : arrowSize,
-          borderTopColor: _position === 'top' ? backgroundColor : 'transparent',
-          borderLeftColor: _position === 'left' ? backgroundColor : 'transparent',
-          borderRightColor: _position === 'right' ? backgroundColor : 'transparent',
-          borderBottomColor: _position === 'bottom' ? backgroundColor : 'transparent',
-        }}
-      />
-      {children}
-    </RNView>
+        onLayout={(e) => setContainerLayout(e.nativeEvent.layout)}
+        style={[
+          {
+            left: _pos_x,
+            top: _pos_y,
+            backgroundColor: backgroundColor,
+            borderStyle: 'solid',
+            borderWidth: borderWidth,
+            borderColor: borderColor,
+            borderRadius: theme.borderRadiusBase,
+            minWidth: 2 * theme.borderRadiusBase + (_position === 'top' || _position === 'bottom' ? 2 * arrowSize : arrowSize),
+            minHeight: 2 * theme.borderRadiusBase + (_position === 'left' || _position === 'right' ? 2 * arrowSize : arrowSize),
+            zIndex: theme.zIndex.popover,
+            opacity: containerLayout ? fadeAnim : 0,
+            padding: theme.spacers['1'],
+          },
+          Platform.select({
+            web: { position: 'fixed' } as any,
+            default: { position: 'absolute' },
+          }),
+          _style,
+        ]}
+      >
+        <RNView
+          pointerEvents='box-none'
+          style={{
+            position: 'absolute',
+            left: _arrow_pos_x - borderWidth,
+            top: _arrow_pos_y - borderWidth,
+            borderStyle: 'solid',
+            borderTopWidth: _position === 'bottom' ? 0 : arrowSize,
+            borderLeftWidth: _position === 'right' ? 0 : arrowSize,
+            borderRightWidth: _position === 'left' ? 0 : arrowSize,
+            borderBottomWidth: _position === 'top' ? 0 : arrowSize,
+            borderTopColor: _position === 'top' ? borderColor : 'transparent',
+            borderLeftColor: _position === 'left' ? borderColor : 'transparent',
+            borderRightColor: _position === 'right' ? borderColor : 'transparent',
+            borderBottomColor: _position === 'bottom' ? borderColor : 'transparent',
+          }}
+        />
+        <RNView
+          pointerEvents='box-none'
+          style={{
+            position: 'absolute',
+            left: _position === 'left' ? _arrow_pos_x - 2 * borderWidth : _position === 'right' ? _arrow_pos_x : _arrow_pos_x - borderWidth,
+            top: _position === 'top' ? _arrow_pos_y - 2 * borderWidth : _position === 'bottom' ? _arrow_pos_y : _arrow_pos_y - borderWidth,
+            borderStyle: 'solid',
+            borderTopWidth: _position === 'bottom' ? 0 : arrowSize,
+            borderLeftWidth: _position === 'right' ? 0 : arrowSize,
+            borderRightWidth: _position === 'left' ? 0 : arrowSize,
+            borderBottomWidth: _position === 'top' ? 0 : arrowSize,
+            borderTopColor: _position === 'top' ? backgroundColor : 'transparent',
+            borderLeftColor: _position === 'left' ? backgroundColor : 'transparent',
+            borderRightColor: _position === 'right' ? backgroundColor : 'transparent',
+            borderBottomColor: _position === 'bottom' ? backgroundColor : 'transparent',
+          }}
+        />
+        {children}
+      </Animated.View>}
+    </>
   );
 };
 
@@ -193,8 +216,14 @@ export const PopoverBase = (
   const ref = useMergeRefs(viewRef, forwardRef);
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
-  const popover = React.useMemo(() => layout && !hidden && (
-    <PopoverBody key={id} position={position} layout={layout} style={containerStyle}>{render()}</PopoverBody>
+  const popover = React.useMemo(() => layout && (
+    <PopoverBody
+      key={id}
+      hidden={hidden}
+      position={position}
+      layout={layout}
+      style={containerStyle}
+    >{render()}</PopoverBody>
   ), [layout, hidden, position, containerStyle, extraData]);
 
   useSetNode(popover);

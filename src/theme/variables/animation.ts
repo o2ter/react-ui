@@ -25,6 +25,9 @@
 
 import { Easing } from 'react-native';
 
+export const popoverDuration: number = 100;
+export const popoverEasing = Easing.linear;
+
 export const activityIndicatorDuration: number = 250;
 export const activityIndicatorEasing = Easing.linear;
 
