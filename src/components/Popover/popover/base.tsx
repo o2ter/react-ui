@@ -36,7 +36,7 @@ import View from '../../View';
 
 type PopoverProps = React.ComponentProps<typeof View> & {
   hidden: boolean;
-  popover: React.ReactNode;
+  popover: React.ReactNode | ((layout: LayoutRectangle) => React.ReactNode);
 };
 
 export const PopoverBase = (
@@ -77,7 +77,7 @@ export const PopoverBase = (
           default: { position: 'absolute' },
         }),
       ]}
-    >{popover}</RNView>
+    >{_.isFunction(popover) ? popover(layout) : popover}</RNView>
   ), [layout, popover]));
 
   const calculate = () => {
