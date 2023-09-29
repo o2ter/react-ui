@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React, { useCallback } from 'react';
-import { MeasureInWindowOnSuccessCallback, View as RNView, Platform } from 'react-native';
+import { MeasureInWindowOnSuccessCallback, View as RNView, Platform, useWindowDimensions, ScaledSize } from 'react-native';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import type { useWindowEvent } from '../../../hooks/webHooks';
 import { createMemoComponent } from '../../../internals/utils';
@@ -34,9 +34,128 @@ import { useSetNode } from '../context';
 import { useTheme } from '../../../theme';
 import View from '../../View';
 
+type PopoverPosition = 'auto' | 'top' | 'left' | 'right' | 'bottom';
+
+const selectPosition = (
+  position: PopoverPosition,
+  layout: LayoutRectangle,
+  windowDimensions: ScaledSize,
+) => {
+  const _position = ['top', 'left', 'right', 'bottom'] as const;
+  if (_.includes(_position, position)) return position as (typeof _position)[number];
+  const spaces = {
+    top: Math.max(0, layout.y),
+    left: Math.max(0, layout.x),
+    right: Math.max(0, windowDimensions.width - layout.x - layout.width),
+    bottom: Math.max(0, windowDimensions.height - layout.y - layout.height),
+  };
+  return _.maxBy(_position, x => spaces[x])!;
+}
+
+const PopoverBody: React.FC<React.PropsWithChildren<{
+  position: PopoverPosition;
+  layout: LayoutRectangle;
+}>> = ({
+  position,
+  layout,
+  children,
+}) => {
+
+  const theme = useTheme();
+  const windowDimensions = useWindowDimensions();
+  const [containerLayout, setContainerLayout] = React.useState<LayoutRectangle>();
+
+  const _position = selectPosition(position, layout, windowDimensions);
+
+  const containerWidth = containerLayout?.width ?? 0;
+  const containerHeight = containerLayout?.height ?? 0;
+
+  const borderWidth = theme.borderWidth;
+  const arrowSize = theme.spacers['2'];
+
+  const _pos_x = {
+    top: layout.x + 0.5 * layout.width - 0.5 * containerWidth,
+    left: layout.x - containerWidth - arrowSize,
+    right: layout.x + layout.width + arrowSize + borderWidth,
+    bottom: layout.x + 0.5 * layout.width - 0.5 * containerWidth,
+  }[_position];
+  const _pos_y = {
+    top: layout.y - containerHeight - arrowSize,
+    left: layout.y + 0.5 * layout.height - 0.5 * containerHeight,
+    right: layout.y + 0.5 * layout.height - 0.5 * containerHeight,
+    bottom: layout.y + layout.height + arrowSize + borderWidth,
+  }[_position];
+
+  const _arrow_pos_x = _position === 'left' ? containerWidth : _position === 'right' ? -arrowSize : 0.5 * containerWidth - arrowSize;
+  const _arrow_pos_y = _position === 'top' ? containerHeight : _position === 'bottom' ? -arrowSize : 0.5 * containerHeight - arrowSize;
+  return (
+    <RNView
+      pointerEvents='box-none'
+      onLayout={(e) => setContainerLayout(e.nativeEvent.layout)}
+      style={[
+        {
+          left: _pos_x,
+          top: _pos_y,
+          backgroundColor: theme.root.backgroundColor,
+          borderStyle: 'solid',
+          borderWidth: borderWidth,
+          borderColor: theme.grays['300'],
+          borderRadius: theme.borderRadiusBase,
+          minWidth: 2 * theme.borderRadiusBase + (_position === 'top' || _position === 'bottom' ? 2 * arrowSize : arrowSize),
+          minHeight: 2 * theme.borderRadiusBase + (_position === 'left' || _position === 'right' ? 2 * arrowSize : arrowSize),
+          zIndex: theme.zIndex.popover,
+          opacity: containerLayout ? 1 : 0,
+          padding: theme.spacers['1'],
+        },
+        Platform.select({
+          web: { position: 'fixed' } as any,
+          default: { position: 'absolute' },
+        }),
+      ]}
+    >
+      <RNView
+        pointerEvents='box-none'
+        style={{
+          position: 'absolute',
+          left: _arrow_pos_x - borderWidth,
+          top: _arrow_pos_y - borderWidth,
+          borderStyle: 'solid',
+          borderTopWidth: _position === 'bottom' ? 0 : arrowSize,
+          borderLeftWidth: _position === 'right' ? 0 : arrowSize,
+          borderRightWidth: _position === 'left' ? 0 : arrowSize,
+          borderBottomWidth: _position === 'top' ? 0 : arrowSize,
+          borderTopColor: _position === 'top' ? theme.grays['300'] : 'transparent',
+          borderLeftColor: _position === 'left' ? theme.grays['300'] : 'transparent',
+          borderRightColor: _position === 'right' ? theme.grays['300'] : 'transparent',
+          borderBottomColor: _position === 'bottom' ? theme.grays['300'] : 'transparent',
+        }}
+      />
+      <RNView
+        pointerEvents='box-none'
+        style={{
+          position: 'absolute',
+          left: _position === 'left' ? _arrow_pos_x - 2 * borderWidth : _position === 'right' ? _arrow_pos_x : _arrow_pos_x - borderWidth,
+          top: _position === 'top' ? _arrow_pos_y - 2 * borderWidth : _position === 'bottom' ? _arrow_pos_y : _arrow_pos_y - borderWidth,
+          borderStyle: 'solid',
+          borderTopWidth: _position === 'bottom' ? 0 : arrowSize,
+          borderLeftWidth: _position === 'right' ? 0 : arrowSize,
+          borderRightWidth: _position === 'left' ? 0 : arrowSize,
+          borderBottomWidth: _position === 'top' ? 0 : arrowSize,
+          borderTopColor: _position === 'top' ? theme.root.backgroundColor : 'transparent',
+          borderLeftColor: _position === 'left' ? theme.root.backgroundColor : 'transparent',
+          borderRightColor: _position === 'right' ? theme.root.backgroundColor : 'transparent',
+          borderBottomColor: _position === 'bottom' ? theme.root.backgroundColor : 'transparent',
+        }}
+      />
+      {children}
+    </RNView>
+  );
+};
+
 type PopoverProps = React.ComponentProps<typeof View> & {
+  position?: PopoverPosition;
   hidden: boolean;
-  render: (layout: LayoutRectangle) => React.ReactNode;
+  render: () => React.ReactNode;
   extraData?: any;
 };
 
@@ -45,6 +164,7 @@ export const PopoverBase = (
   _useWindowEvent?: typeof useWindowEvent
 ) => createMemoComponent((
   {
+    position = 'auto',
     hidden,
     render,
     extraData,
@@ -56,31 +176,16 @@ export const PopoverBase = (
 ) => {
 
   const id = React.useId();
-  const theme = useTheme();
 
   const viewRef = React.useRef<React.ComponentRef<typeof View>>();
   const ref = useMergeRefs(viewRef, forwardRef);
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
-  useSetNode(React.useMemo(() => layout && !hidden && (
-    <RNView
-      key={id}
-      pointerEvents='box-none'
-      style={[
-        {
-          left: layout.x,
-          top: layout.y,
-          width: layout.width,
-          height: layout.height,
-          zIndex: theme.zIndex.popover,
-        },
-        Platform.select({
-          web: { position: 'fixed' } as any,
-          default: { position: 'absolute' },
-        }),
-      ]}
-    >{render(layout)}</RNView>
-  ), [layout, extraData]));
+  const popover = React.useMemo(() => layout && !hidden && (
+    <PopoverBody key={id} position={position} layout={layout}>{render()}</PopoverBody>
+  ), [layout, position, extraData]);
+
+  useSetNode(popover);
 
   const calculate = () => {
     if (viewRef.current) _measureInWindow(viewRef.current, (x, y, width, height) => setLayout({ x, y, width, height }));
