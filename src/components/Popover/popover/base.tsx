@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { MeasureInWindowOnSuccessCallback, View as RNView, Platform } from 'react-native';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import type { useWindowEvent } from '../../../hooks/webHooks';
@@ -37,6 +37,7 @@ import View from '../../View';
 type PopoverProps = React.ComponentProps<typeof View> & {
   hidden: boolean;
   popover: React.ReactNode | ((layout: LayoutRectangle) => React.ReactNode);
+  extraData?: any;
 };
 
 export const PopoverBase = (
@@ -46,6 +47,7 @@ export const PopoverBase = (
   {
     hidden,
     popover,
+    extraData,
     onLayout,
     children,
     ...props
@@ -60,6 +62,8 @@ export const PopoverBase = (
   const ref = useMergeRefs(viewRef, forwardRef);
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
+  const _popover = useStableCallback((layout: LayoutRectangle) => _.isFunction(popover) ? popover(layout) : popover);
+
   useSetNode(React.useMemo(() => layout && !hidden && (
     <RNView
       key={id}
@@ -77,8 +81,8 @@ export const PopoverBase = (
           default: { position: 'absolute' },
         }),
       ]}
-    >{_.isFunction(popover) ? popover(layout) : popover}</RNView>
-  ), [layout, popover]));
+    >{_popover(layout)}</RNView>
+  ), [layout, extraData]));
 
   const calculate = () => {
     if (viewRef.current) _measureInWindow(viewRef.current, (x, y, width, height) => setLayout({ x, y, width, height }));
