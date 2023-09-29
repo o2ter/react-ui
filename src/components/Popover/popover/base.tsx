@@ -30,10 +30,14 @@ import { useMergeRefs, useStableCallback } from 'sugax';
 import type { useWindowEvent } from '../../../hooks/webHooks';
 import { createMemoComponent } from '../../../internals/utils';
 import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
-import { PopoverProps } from './types';
 import { useSetNode } from '../context';
 import { useTheme } from '../../../theme';
 import View from '../../View';
+
+type PopoverProps = React.ComponentProps<typeof View> & {
+  hidden: boolean;
+  popover: React.ReactNode;
+};
 
 export const PopoverBase = (
   _measureInWindow: (view: RNView, callback: MeasureInWindowOnSuccessCallback) => void,
