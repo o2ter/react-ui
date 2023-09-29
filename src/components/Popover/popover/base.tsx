@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { MeasureInWindowOnSuccessCallback, View as RNView } from 'react-native';
+import { MeasureInWindowOnSuccessCallback, View as RNView, Platform } from 'react-native';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import type { useWindowEvent } from '../../../hooks/webHooks';
 import { createMemoComponent } from '../../../internals/utils';
@@ -58,14 +58,19 @@ export const PopoverBase = (
   useSetNode(React.useMemo(() => layout && !hidden && (
     <RNView
       pointerEvents='box-none'
-      style={{
-        position: 'absolute',
-        left: layout.x,
-        top: layout.y,
-        width: layout.width,
-        height: layout.height,
-        zIndex: theme.zIndex.popover,
-      }}
+      style={[
+        {
+          left: layout.x,
+          top: layout.y,
+          width: layout.width,
+          height: layout.height,
+          zIndex: theme.zIndex.popover,
+        },
+        Platform.select({
+          web: { position: 'fixed' } as any,
+          default: { position: 'absolute' },
+        }),
+      ]}
     >{popover}</RNView>
   ), [layout, popover]));
 
