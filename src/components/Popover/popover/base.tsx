@@ -69,18 +69,15 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
   const windowDimensions = useWindowDimensions();
   const [containerLayout, setContainerLayout] = React.useState<LayoutRectangle>();
 
-  const popoverStyle = useComponentStyle('popover');
-
-  const _position = selectPosition(position, layout, windowDimensions);
-
   const arrowSize = theme.spacers['2'];
   const {
     borderColor = theme.grays['300'],
     backgroundColor = theme.root.backgroundColor,
     borderWidth = theme.borderWidth,
     ..._style
-  } = flattenStyle([popoverStyle, style]);
+  } = flattenStyle([useComponentStyle('popover'), style]);
 
+  const _position = selectPosition(position, layout, windowDimensions);
   const containerWidth = containerLayout?.width ?? 0;
   const containerHeight = containerLayout?.height ?? 0;
 
