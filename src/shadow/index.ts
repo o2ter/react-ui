@@ -81,7 +81,7 @@ export const selectPlatformTextShadow = (style: TextStyle & { textShadow?: strin
 
   return Platform.select({
     web: {
-      boxShadow: textShadow ?? createShadowValue({
+      textShadow: textShadow ?? createShadowValue({
         shadowColor: textShadowColor,
         shadowOffset: textShadowOffset,
         shadowRadius: textShadowRadius,
