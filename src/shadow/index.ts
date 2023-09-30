@@ -65,26 +65,24 @@ export const selectPlatformShadow = (style: TextStyle & {
     ..._style
   } = style;
 
+  const _elevation = elevation ? elevationShadow(elevation) : null;
+  const _shadow = {
+    shadowColor,
+    shadowOffset: shadowOffset ?? _elevation?.shadowOffset,
+    shadowOpacity: shadowOpacity ?? _elevation?.shadowOpacity,
+    shadowRadius: shadowRadius ?? _elevation?.shadowRadius,
+  };
+
   return {
     ..._style,
     ...Platform.select({
-      ios: {
-        shadowColor,
-        shadowOffset,
-        shadowOpacity,
-        shadowRadius,
-      },
+      ios: { ..._shadow },
       android: {
         shadowColor,
         elevation,
       },
       web: {
-        boxShadow: boxShadow ?? createShadowValue({
-          shadowColor,
-          shadowOffset,
-          shadowOpacity,
-          shadowRadius,
-        }),
+        boxShadow: boxShadow ?? createShadowValue(_shadow),
       },
       default: {},
     }),
