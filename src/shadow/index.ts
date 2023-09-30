@@ -80,11 +80,6 @@ export const selectPlatformTextShadow = (style: TextStyle & { textShadow?: strin
   } = style;
 
   return Platform.select({
-    ios: {
-      textShadowColor,
-      textShadowOffset,
-      textShadowRadius,
-    },
     web: {
       boxShadow: textShadow ?? createShadowValue({
         shadowColor: textShadowColor,
@@ -92,6 +87,10 @@ export const selectPlatformTextShadow = (style: TextStyle & { textShadow?: strin
         shadowRadius: textShadowRadius,
       }),
     },
-    default: {},
+    default: {
+      textShadowColor,
+      textShadowOffset,
+      textShadowRadius,
+    },
   });
 }
