@@ -37,6 +37,15 @@ const createShadowValue = (shadow: ShadowStyleIOS) => {
   return `${offsetX} ${offsetY} ${blurRadius} ${color}`;
 };
 
+export const elevationShadow = (x: number) => ({
+  shadowOffset: {
+    width: 0,
+    height: Math.round(x * x / 1012 + x * 723 / 1012 + 72 / 253),
+  },
+  shadowOpacity: Math.round(3.14658 * Math.log(117.576 * x)) / 100,
+  shadowRadius: Math.round(0.509881 * x * x + 69.8617 * x + 29.6285) / 100,
+});
+
 export const selectPlatformShadow = (style: TextStyle & {
   boxShadow?: string;
   textShadow?: string;
