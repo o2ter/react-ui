@@ -1,5 +1,5 @@
 //
-//  index.web.tsx
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,11 +23,5 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import { createPopoverBase } from './base';
-import { useWindowEvent } from '../../../hooks/webHooks';
-
-export const PopoverBase = createPopoverBase(
-  (view, callback) => view.measureInWindow((x, y, width, height) => callback(x + window.scrollX, y + window.scrollY, width, height)),
-  useWindowEvent,
-);
+export * from './overlay';
+export * from './provider';

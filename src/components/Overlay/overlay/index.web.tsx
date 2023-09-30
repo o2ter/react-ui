@@ -1,5 +1,5 @@
 //
-//  provider.tsx
+//  index.web.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -24,20 +24,10 @@
 //
 
 import _ from 'lodash';
-import React from 'react';
-import { PopoverConfig, PopoverContext } from './context';
+import { createOverlay } from './base';
+import { useWindowEvent } from '../../../hooks/webHooks';
 
-export const PopoverProvider: React.FC<React.PropsWithChildren<{}>> = ({
-  children,
-}) => {
-
-  const [nodes, setNodes] = React.useState<PopoverConfig[]>([]);
-  const values = React.useMemo(() => ({ nodes, setNodes }), [nodes]);
-
-  return <PopoverContext.Provider value={values}>
-    {children}
-    {_.compact(_.map(nodes, ({ node }) => node))}
-  </PopoverContext.Provider>;
-};
-
-PopoverProvider.displayName = 'PopoverProvider';
+export const Overlay = createOverlay(
+  (view, callback) => view.measureInWindow((x, y, width, height) => callback(x + window.scrollX, y + window.scrollY, width, height)),
+  useWindowEvent,
+);

@@ -1,5 +1,5 @@
 //
-//  context.tsx
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,37 +23,16 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
 import React from 'react';
+import View from '../View';
+import { StyleProp, ViewStyle } from 'react-native';
 
-export type PopoverConfig = {
-  id: string;
-  node?: React.ReactNode;
+export type PopoverPosition = 'auto' | 'top' | 'left' | 'right' | 'bottom';
+
+export type PopoverProps = React.ComponentProps<typeof View> & {
+  position?: PopoverPosition;
+  hidden: boolean;
+  render: () => React.ReactNode;
+  extraData?: any;
+  containerStyle?: StyleProp<ViewStyle>;
 };
-
-export const PopoverContext = React.createContext<{
-  nodes: PopoverConfig[];
-  setNodes: React.Dispatch<React.SetStateAction<PopoverConfig[]>>;
-}>({
-  nodes: [],
-  setNodes: () => { },
-});
-
-PopoverContext.displayName = 'PopoverContext';
-
-export const useSetNode = (
-  node?: React.ReactNode
-) => {
-
-  const id = React.useId();
-  const { setNodes } = React.useContext(PopoverContext);
-
-  React.useEffect(() => {
-    setNodes(nodes => [...nodes, { id, node }]);
-    return () => setNodes(nodes => _.filter(nodes, x => x.id !== id));
-  }, []);
-
-  React.useEffect(() => {
-    setNodes(nodes => _.map(nodes, x => x.id === id ? { id, node } : x));
-  }, [node]);
-}

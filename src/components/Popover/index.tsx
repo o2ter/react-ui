@@ -23,6 +23,47 @@
 //  THE SOFTWARE.
 //
 
-export * from './base';
-export * from './popover';
-export * from './provider';
+import React from 'react';
+import { useStableCallback } from 'sugax';
+import { createMemoComponent } from '../../internals/utils';
+import { LayoutRectangle } from 'react-native';
+import { PopoverProps } from './types';
+import { PopoverBody } from './body';
+import { Overlay } from '../Overlay';
+
+export const Popover = createMemoComponent((
+  {
+    position = 'auto',
+    hidden,
+    render,
+    extraData,
+    containerStyle,
+    onLayout,
+    children,
+    ...props
+  }: PopoverProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Overlay>>
+) => {
+
+  const id = React.useId();
+
+  const _extraData = [hidden, position, containerStyle, extraData];
+  const _render = useStableCallback((layout: LayoutRectangle) => (
+    <PopoverBody
+      key={id}
+      layout={layout}
+      hidden={hidden}
+      position={position}
+      style={containerStyle}
+    >{render()}</PopoverBody>
+  ));
+
+  return (
+    <Overlay
+      ref={forwardRef}
+      render={_render}
+      extraData={React.useMemo(() => _extraData, _extraData)}
+      {...props}
+    >{children}</Overlay>
+  );
+});

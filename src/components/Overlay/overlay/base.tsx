@@ -33,12 +33,12 @@ import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
 import type { useWindowEvent } from '../../../hooks/webHooks';
 import { useSetNode } from '../context';
 
-type PopoverBaseProps = React.ComponentProps<typeof View> & {
+type OverlayProps = React.ComponentProps<typeof View> & {
   render: (layout: LayoutRectangle) => React.ReactNode;
   extraData?: any;
 };
 
-export const createPopoverBase = (
+export const createOverlay = (
   _measureInWindow: (view: RNView, callback: MeasureInWindowOnSuccessCallback) => void,
   _useWindowEvent?: typeof useWindowEvent
 ) => createMemoComponent((
@@ -48,7 +48,7 @@ export const createPopoverBase = (
     onLayout,
     children,
     ...props
-  }: PopoverBaseProps,
+  }: OverlayProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
 ) => {
 
@@ -56,9 +56,9 @@ export const createPopoverBase = (
   const ref = useMergeRefs(viewRef, forwardRef);
 
   const [layout, setLayout] = React.useState<LayoutRectangle>();
-  const popover = React.useMemo(() => layout && render(layout), [layout, extraData]);
+  const overlay = React.useMemo(() => layout && render(layout), [layout, extraData]);
 
-  useSetNode(popover);
+  useSetNode(overlay);
 
   const calculate = () => {
     if (viewRef.current) _measureInWindow(viewRef.current, (x, y, width, height) => setLayout({ x, y, width, height }));

@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  context.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -24,6 +24,36 @@
 //
 
 import _ from 'lodash';
-import { createPopoverBase } from './base';
+import React from 'react';
 
-export const PopoverBase = createPopoverBase((view, callback) => view.measureInWindow(callback));
+export type OverlayConfig = {
+  id: string;
+  node?: React.ReactNode;
+};
+
+export const OverlayContext = React.createContext<{
+  nodes: OverlayConfig[];
+  setNodes: React.Dispatch<React.SetStateAction<OverlayConfig[]>>;
+}>({
+  nodes: [],
+  setNodes: () => { },
+});
+
+OverlayContext.displayName = 'OverlayContext';
+
+export const useSetNode = (
+  node?: React.ReactNode
+) => {
+
+  const id = React.useId();
+  const { setNodes } = React.useContext(OverlayContext);
+
+  React.useEffect(() => {
+    setNodes(nodes => [...nodes, { id, node }]);
+    return () => setNodes(nodes => _.filter(nodes, x => x.id !== id));
+  }, []);
+
+  React.useEffect(() => {
+    setNodes(nodes => _.map(nodes, x => x.id === id ? { id, node } : x));
+  }, [node]);
+}

@@ -39,6 +39,7 @@ export * as Icons from './Icons';
 export { Image } from './Image';
 export { List } from './List';
 export { Lottie } from './Lottie';
+export * from './Overlay';
 export { Picker } from './Picker';
 export * from './Popover';
 export { QRCode } from './QRCode';

@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  provider.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,16 +23,21 @@
 //  THE SOFTWARE.
 //
 
+import _ from 'lodash';
 import React from 'react';
-import View from '../../View';
-import { StyleProp, ViewStyle } from 'react-native';
+import { OverlayConfig, OverlayContext } from './context';
 
-export type PopoverPosition = 'auto' | 'top' | 'left' | 'right' | 'bottom';
+export const OverlayProvider: React.FC<React.PropsWithChildren<{}>> = ({
+  children,
+}) => {
 
-export type PopoverProps = React.ComponentProps<typeof View> & {
-  position?: PopoverPosition;
-  hidden: boolean;
-  render: () => React.ReactNode;
-  extraData?: any;
-  containerStyle?: StyleProp<ViewStyle>;
+  const [nodes, setNodes] = React.useState<OverlayConfig[]>([]);
+  const values = React.useMemo(() => ({ nodes, setNodes }), [nodes]);
+
+  return <OverlayContext.Provider value={values}>
+    {children}
+    {_.compact(_.map(nodes, ({ node }) => node))}
+  </OverlayContext.Provider>;
 };
+
+OverlayProvider.displayName = 'OverlayProvider';

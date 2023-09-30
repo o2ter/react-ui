@@ -27,11 +27,11 @@ import _ from 'lodash';
 import React from 'react';
 import { View as RNView, Platform, useWindowDimensions, ScaledSize, StyleProp, ViewStyle, Animated } from 'react-native';
 import { LayoutRectangle } from 'react-native';
-import { useTheme } from '../../../theme';
-import { useComponentStyle } from '../../Style';
-import { flattenStyle } from '../../Style/flatten';
+import { useTheme } from '../../theme';
+import { useComponentStyle } from '../Style';
+import { flattenStyle } from '../Style/flatten';
 import { PopoverPosition } from './types';
-import { elevationShadow, selectPlatformShadow } from '../../../shadow';
+import { elevationShadow, selectPlatformShadow } from '../../shadow';
 
 type PopoverBodyProps = React.PropsWithChildren<{
   hidden: boolean;
