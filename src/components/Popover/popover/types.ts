@@ -1,5 +1,5 @@
 //
-//  index.web.tsx
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,11 +23,16 @@
 //  THE SOFTWARE.
 //
 
-import _ from 'lodash';
-import { PopoverBase } from './base';
-import { useWindowEvent } from '../../../hooks/webHooks';
+import React from 'react';
+import View from '../../View';
+import { StyleProp, ViewStyle } from 'react-native';
 
-export const Popover = PopoverBase(
-  (view, callback) => view.measureInWindow((x, y, width, height) => callback(x + window.scrollX, y + window.scrollY, width, height)),
-  useWindowEvent,
-);
+export type PopoverPosition = 'auto' | 'top' | 'left' | 'right' | 'bottom';
+
+export type PopoverProps = React.ComponentProps<typeof View> & {
+  position?: PopoverPosition;
+  hidden: boolean;
+  render: () => React.ReactNode;
+  extraData?: any;
+  containerStyle?: StyleProp<ViewStyle>;
+};

@@ -1,5 +1,5 @@
 //
-//  base.tsx
+//  body.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -25,23 +25,24 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { MeasureInWindowOnSuccessCallback, View as RNView, Platform, useWindowDimensions, ScaledSize, StyleProp, ViewStyle, Animated } from 'react-native';
-import { useMergeRefs, useStableCallback } from 'sugax';
-import type { useWindowEvent } from '../../../hooks/webHooks';
-import { createMemoComponent } from '../../../internals/utils';
-import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
-import { useSetNode } from '../context';
+import { View as RNView, Platform, useWindowDimensions, ScaledSize, StyleProp, ViewStyle, Animated } from 'react-native';
+import { LayoutRectangle } from 'react-native';
 import { useTheme } from '../../../theme';
-import View from '../../View';
 import { useComponentStyle } from '../../Style';
-import { flattenStyle } from '../../index.web';
+import { flattenStyle } from '../../Style/flatten';
+import { PopoverPosition } from './types';
 
-type PopoverPosition = 'auto' | 'top' | 'left' | 'right' | 'bottom';
+type PopoverBodyProps = React.PropsWithChildren<{
+  hidden: boolean;
+  position: PopoverPosition;
+  layout: LayoutRectangle;
+  style?: StyleProp<ViewStyle>;
+}>;
 
 const selectPosition = (
   position: PopoverPosition,
   layout: LayoutRectangle,
-  windowDimensions: ScaledSize,
+  windowDimensions: ScaledSize
 ) => {
   const _position = ['top', 'left', 'right', 'bottom'] as const;
   if (_.includes(_position, position)) return position as (typeof _position)[number];
@@ -52,19 +53,10 @@ const selectPosition = (
     bottom: Math.max(0, windowDimensions.height - layout.y - layout.height),
   };
   return _.maxBy(_position, x => spaces[x])!;
-}
+};
 
-const PopoverBody: React.FC<React.PropsWithChildren<{
-  hidden: boolean;
-  position: PopoverPosition;
-  layout: LayoutRectangle;
-  style?: StyleProp<ViewStyle>;
-}>> = ({
-  hidden,
-  position,
-  layout,
-  style,
-  children,
+export const PopoverBody: React.FC<PopoverBodyProps> = ({
+  hidden, position, layout, style, children,
 }) => {
 
   const theme = useTheme();
@@ -89,13 +81,7 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
 
   const arrowSize = theme.spacers['2'];
   const {
-    borderColor = theme.grays['300'],
-    backgroundColor = theme.root.backgroundColor,
-    borderTopWidth: borderWidth = theme.borderWidth,
-    borderLeftWidth,
-    borderRightWidth,
-    borderBottomWidth,
-    ..._style
+    borderColor = theme.grays['300'], backgroundColor = theme.root.backgroundColor, borderTopWidth: borderWidth = theme.borderWidth, borderLeftWidth, borderRightWidth, borderBottomWidth, ..._style
   } = flattenStyle([useComponentStyle('popover'), style]);
 
   const _position = selectPosition(position, layout, windowDimensions);
@@ -160,8 +146,7 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
             borderLeftColor: _position === 'left' ? borderColor : 'transparent',
             borderRightColor: _position === 'right' ? borderColor : 'transparent',
             borderBottomColor: _position === 'bottom' ? borderColor : 'transparent',
-          }}
-        />
+          }} />
         <RNView
           pointerEvents='box-none'
           style={{
@@ -177,72 +162,9 @@ const PopoverBody: React.FC<React.PropsWithChildren<{
             borderLeftColor: _position === 'left' ? backgroundColor : 'transparent',
             borderRightColor: _position === 'right' ? backgroundColor : 'transparent',
             borderBottomColor: _position === 'bottom' ? backgroundColor : 'transparent',
-          }}
-        />
+          }} />
         {children}
       </Animated.View>}
     </>
   );
 };
-
-type PopoverProps = React.ComponentProps<typeof View> & {
-  position?: PopoverPosition;
-  hidden: boolean;
-  render: () => React.ReactNode;
-  extraData?: any;
-  containerStyle?: StyleProp<ViewStyle>;
-};
-
-export const PopoverBase = (
-  _measureInWindow: (view: RNView, callback: MeasureInWindowOnSuccessCallback) => void,
-  _useWindowEvent?: typeof useWindowEvent
-) => createMemoComponent((
-  {
-    position = 'auto',
-    hidden,
-    render,
-    extraData,
-    containerStyle,
-    onLayout,
-    children,
-    ...props
-  }: PopoverProps,
-  forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
-) => {
-
-  const id = React.useId();
-
-  const viewRef = React.useRef<React.ComponentRef<typeof View>>();
-  const ref = useMergeRefs(viewRef, forwardRef);
-
-  const [layout, setLayout] = React.useState<LayoutRectangle>();
-  const popover = React.useMemo(() => layout && (
-    <PopoverBody
-      key={id}
-      hidden={hidden}
-      position={position}
-      layout={layout}
-      style={containerStyle}
-    >{render()}</PopoverBody>
-  ), [layout, hidden, position, containerStyle, extraData]);
-
-  useSetNode(popover);
-
-  const calculate = () => {
-    if (viewRef.current) _measureInWindow(viewRef.current, (x, y, width, height) => setLayout({ x, y, width, height }));
-  }
-
-  if (_useWindowEvent) _useWindowEvent('scroll', () => { calculate(); }, true);
-  const _onLayout = useStableCallback((e: LayoutChangeEvent) => {
-    calculate();
-    if (onLayout) onLayout(e);
-  });
-
-  return (
-    <View
-      ref={ref}
-      onLayout={_onLayout}
-      {...props}
-    >{children}</View>
-  );
-});
