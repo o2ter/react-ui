@@ -77,7 +77,6 @@ export const selectPlatformTextShadow = (style: TextStyle & { textShadow?: strin
     textShadowOffset,
     textShadowRadius,
     textShadow,
-    elevation,
   } = style;
 
   return Platform.select({
@@ -85,10 +84,6 @@ export const selectPlatformTextShadow = (style: TextStyle & { textShadow?: strin
       textShadowColor,
       textShadowOffset,
       textShadowRadius,
-    },
-    android: {
-      textShadowColor,
-      elevation,
     },
     web: {
       boxShadow: textShadow ?? createShadowValue({
