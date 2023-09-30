@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import { Platform, TextStyle, ViewStyle, ShadowStyleIOS } from 'react-native';
+import { Platform, TextStyle, ShadowStyleIOS } from 'react-native';
 import { rgba } from '../internals/color';
 
 const createShadowValue = (shadow: ShadowStyleIOS) => {
@@ -37,7 +37,10 @@ const createShadowValue = (shadow: ShadowStyleIOS) => {
   return `${offsetX} ${offsetY} ${blurRadius} ${color}`;
 };
 
-export const selectPlatformShadow = (style: ViewStyle & { boxShadow?: string }) => {
+export const selectPlatformShadow = (style: TextStyle & {
+  boxShadow?: string;
+  textShadow?: string;
+}) => {
 
   const {
     shadowColor,
@@ -45,52 +48,50 @@ export const selectPlatformShadow = (style: ViewStyle & { boxShadow?: string }) 
     shadowOpacity,
     shadowRadius,
     boxShadow,
-    elevation,
-  } = style;
-
-  return Platform.select({
-    ios: {
-      shadowColor,
-      shadowOffset,
-      shadowOpacity,
-      shadowRadius,
-    },
-    android: {
-      shadowColor,
-      elevation,
-    },
-    web: {
-      boxShadow: boxShadow ?? createShadowValue({
-        shadowColor,
-        shadowOffset,
-        shadowOpacity,
-        shadowRadius,
-      }),
-    },
-    default: {},
-  });
-}
-
-export const selectPlatformTextShadow = (style: TextStyle & { textShadow?: string }) => {
-  const {
     textShadowColor,
     textShadowOffset,
     textShadowRadius,
     textShadow,
+    elevation,
+    ..._style
   } = style;
 
-  return Platform.select({
-    web: {
-      textShadow: textShadow ?? createShadowValue({
-        shadowColor: textShadowColor,
-        shadowOffset: textShadowOffset,
-        shadowRadius: textShadowRadius,
-      }),
-    },
-    default: {
-      textShadowColor,
-      textShadowOffset,
-      textShadowRadius,
-    },
-  });
+  return {
+    ..._style,
+    ...Platform.select({
+      ios: {
+        shadowColor,
+        shadowOffset,
+        shadowOpacity,
+        shadowRadius,
+      },
+      android: {
+        shadowColor,
+        elevation,
+      },
+      web: {
+        boxShadow: boxShadow ?? createShadowValue({
+          shadowColor,
+          shadowOffset,
+          shadowOpacity,
+          shadowRadius,
+        }),
+      },
+      default: {},
+    }),
+    ...Platform.select({
+      web: {
+        textShadow: textShadow ?? createShadowValue({
+          shadowColor: textShadowColor,
+          shadowOffset: textShadowOffset,
+          shadowRadius: textShadowRadius,
+        }),
+      },
+      default: {
+        textShadowColor,
+        textShadowOffset,
+        textShadowRadius,
+      },
+    }),
+  };
 }
