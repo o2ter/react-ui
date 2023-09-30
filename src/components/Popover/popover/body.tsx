@@ -31,6 +31,7 @@ import { useTheme } from '../../../theme';
 import { useComponentStyle } from '../../Style';
 import { flattenStyle } from '../../Style/flatten';
 import { PopoverPosition } from './types';
+import { elevationShadow, selectPlatformShadow } from '../../../shadow';
 
 type PopoverBodyProps = React.PropsWithChildren<{
   hidden: boolean;
@@ -110,6 +111,10 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
         pointerEvents='box-none'
         onLayout={(e) => setContainerLayout(e.nativeEvent.layout)}
         style={[
+          selectPlatformShadow({
+            shadowColor: 'black',
+            ...elevationShadow(6),
+          }),
           {
             left: _pos_x,
             top: _pos_y,
