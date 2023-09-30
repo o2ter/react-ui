@@ -25,10 +25,11 @@
 
 import _ from 'lodash';
 import { StyleSheet } from 'react-native';
+import { selectPlatformShadow } from '../../shadow';
 
 export const style = StyleSheet.create({
 
-  shadow: {
+  shadow: selectPlatformShadow({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -37,7 +38,7 @@ export const style = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
-  },
+  }),
 
   segmentedControlContainer: {
     margin: 4,

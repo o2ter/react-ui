@@ -24,7 +24,16 @@
 //
 
 import _ from 'lodash';
-import normalizeColor from 'normalize-css-color';
+import processColor from '@react-native/normalize-color';
+
+const normalizeColor = (color: number | string) => {
+  const colorInt = processColor(color)!;
+  const r = (colorInt >> 16) & 255;
+  const g = (colorInt >> 8) & 255;
+  const b = colorInt & 255;
+  const a = ((colorInt >> 24) & 255) / 255;
+  return { r, g, b, a };
+};
 
 function _component_hex(c: number) {
   const hex = _.clamp(_.round(c), 0, 255).toString(16);
@@ -45,11 +54,7 @@ export class Color implements ColorType {
 
   constructor(color: string | ColorType) {
 
-    if (_.isString(color)) {
-      const colorInt = normalizeColor(color);
-      color = normalizeColor.rgba(colorInt) as ColorType;
-    }
-
+    if (_.isString(color)) color = normalizeColor(color) as ColorType;
     const { r, g, b } = color ?? {};
 
     if (!_.isFinite(r) || !_.isFinite(g) || !_.isFinite(b))
@@ -102,3 +107,12 @@ export class Color implements ColorType {
 }
 
 export const _hex = (color: string | ColorType) => new Color(color).hex
+
+export const rgba = (
+  color: number | string,
+  opacity: number = 1
+) => {
+  const { r, g, b, a } = normalizeColor(color);
+  const alpha = (a * opacity).toFixed(2);
+  return `rgba(${r},${g},${b},${alpha})`;
+};

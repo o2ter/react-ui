@@ -48,6 +48,7 @@ export const textStyleKeys = [
   'textIndent',
   'textOverflow',
   'textRendering',
+  'textShadow',
   'textShadowColor',
   'textShadowOffset',
   'textShadowRadius',
