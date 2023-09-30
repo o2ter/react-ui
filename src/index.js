@@ -35,4 +35,5 @@ export * from './color';
 export * from './theme';
 export * from './components';
 export * from './hooks';
+export * from './shadow';
 export { createComponent, createMemoComponent } from './internals/utils';
