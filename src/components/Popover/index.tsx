@@ -23,5 +23,6 @@
 //  THE SOFTWARE.
 //
 
+export * from './base';
 export * from './popover';
 export * from './provider';
