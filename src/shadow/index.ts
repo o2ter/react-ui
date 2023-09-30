@@ -44,6 +44,7 @@ export const elevationShadow = (x: number) => ({
   },
   shadowOpacity: Math.round(3.14658 * Math.log(117.576 * x)) / 100,
   shadowRadius: Math.round(0.509881 * x * x + 69.8617 * x + 29.6285) / 100,
+  elevation: x,
 });
 
 export const selectPlatformShadow = (style: TextStyle & {
