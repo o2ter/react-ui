@@ -28,10 +28,10 @@ import processColor from '@react-native/normalize-color';
 
 const normalizeColor = (color: number | string) => {
   const colorInt = processColor(color)!;
-  const r = (colorInt >> 16) & 255;
-  const g = (colorInt >> 8) & 255;
-  const b = colorInt & 255;
-  const a = ((colorInt >> 24) & 255) / 255;
+  const r = (colorInt >> 24) & 255;
+  const g = (colorInt >> 16) & 255;
+  const b = (colorInt >> 8) & 255;
+  const a = (colorInt & 255) / 255;
   return { r, g, b, a };
 };
 
