@@ -31,7 +31,7 @@ import { useMergeRefs, useStableCallback } from 'sugax';
 import { createMemoComponent } from '../../../internals/utils';
 import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
 import type { useWindowEvent } from '../../../hooks/webHooks';
-import { useSetNode } from '../context';
+import { useOverlay } from '../context';
 
 type OverlayProps = React.ComponentProps<typeof View> & {
   render: (layout: LayoutRectangle) => React.ReactNode;
@@ -58,7 +58,7 @@ export const createOverlay = (
   const [layout, setLayout] = React.useState<LayoutRectangle>();
   const overlay = React.useMemo(() => layout && render(layout), [layout, extraData]);
 
-  useSetNode(overlay);
+  useOverlay(overlay);
 
   const calculate = () => {
     if (viewRef.current) _measureInWindow(viewRef.current, (x, y, width, height) => setLayout({ x, y, width, height }));

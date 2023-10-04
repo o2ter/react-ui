@@ -41,7 +41,7 @@ export const OverlayContext = React.createContext<{
 
 OverlayContext.displayName = 'OverlayContext';
 
-export const useSetNode = (
+export const useOverlay = (
   node?: React.ReactNode
 ) => {
 
