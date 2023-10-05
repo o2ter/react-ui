@@ -23,49 +23,50 @@
 //  THE SOFTWARE.
 //
 
+import _ from 'lodash';
 import React from 'react';
-import { useStableCallback } from 'sugax';
 import { createMemoComponent } from '../../internals/utils';
-import { LayoutRectangle } from 'react-native';
-import { PopoverProps } from './types';
-import { PopoverBody } from './body';
-import { Overlay } from '../Overlay';
+import { Popover } from '../Popover';
+import { useComponentStyle } from '../Style';
+import { useStableCallback } from 'sugax';
+import { TextStyleProvider, flattenStyle } from '../index.web';
+import { textStyleKeys } from '../Text/style';
+import { StyleSheet } from 'react-native';
 
-export const Popover = createMemoComponent((
+export const Tooltip = createMemoComponent((
   {
-    position = 'auto',
-    hidden,
-    render,
-    extraData,
     containerStyle,
-    onLayout,
+    render,
     children,
     ...props
-  }: PopoverProps,
-  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Overlay>>
+  }: React.ComponentPropsWithoutRef<typeof Popover>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Popover>>
 ) => {
 
-  const id = React.useId();
+  const defaultStyle = useComponentStyle('tooltip');
+  const _defaultStyle = React.useMemo(() => flattenStyle([{
+    color: 'white',
+    backgroundColor: 'black',
+    borderWidth: 0,
+  }, defaultStyle, containerStyle]), [defaultStyle, containerStyle]);
 
-  const _extraData = [hidden, position, containerStyle, extraData];
-  const _render = useStableCallback((layout: LayoutRectangle) => (
-    <PopoverBody
-      key={id}
-      layout={layout}
-      hidden={hidden}
-      position={position}
-      style={containerStyle}
-    >{render()}</PopoverBody>
+  const _styles = React.useMemo(() => StyleSheet.create({
+    text: _.pick(_defaultStyle, textStyleKeys),
+    container: _.omit(_defaultStyle, textStyleKeys),
+  }), [_defaultStyle]);
+
+  const _render = useStableCallback(() => (
+    <TextStyleProvider style={_styles.text}>{render()}</TextStyleProvider>
   ));
 
   return (
-    <Overlay
+    <Popover
       ref={forwardRef}
       render={_render}
-      extraData={React.useMemo(() => _extraData, _extraData)}
+      containerStyle={_styles.container}
       {...props}
-    >{children}</Overlay>
+    >{children}</Popover>
   );
 }, {
-  displayName: 'Popover',
+  displayName: 'Tooltip',
 });

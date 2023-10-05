@@ -67,6 +67,7 @@ export type ComponentStyles = {
   toastText?: StyleProp<TextStyle>;
 
   popover?: StyleProp<ViewStyle>;
+  tooltip?: StyleProp<ViewStyle>;
 
   formErrorMessage?: StyleProp<TextStyle>;
 

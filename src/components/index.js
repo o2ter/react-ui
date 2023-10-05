@@ -59,6 +59,7 @@ export * from './Modal';
 export { Text } from './Text';
 export { TextStyleProvider } from './Text/style';
 export * from './Toast';
+export * from './Tooltip';
 export { Touchable } from './Touchable';
 export { UncontrolledTextInput } from './UncontrolledTextInput';
 export { View } from './View';

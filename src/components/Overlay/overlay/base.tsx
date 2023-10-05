@@ -77,4 +77,6 @@ export const createOverlay = (
       {...props}
     >{children}</View>
   );
+}, {
+  displayName: 'Overlay',
 });
