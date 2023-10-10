@@ -38,7 +38,16 @@ export type ThemeProviderProps = {
 const decodeVariables = (variables: typeof defaultVariables) => {
 
   const {
-    root, fontSizes: _fontSizes, displayFontSizes: _displayFontSizes, spacer: _spacer, spacers: _spacers, borderWidth: _borderWidth, borderWidths: _borderWidths, borderRadiusBase: _borderRadiusBase, borderRadius: _borderRadius, ...remains
+    root,
+    fontSizes: _fontSizes,
+    displayFontSizes: _displayFontSizes,
+    spacer: _spacer,
+    spacers: _spacers,
+    borderWidth: _borderWidth,
+    borderWidths: _borderWidths,
+    borderRadiusBase: _borderRadiusBase,
+    borderRadius: _borderRadius,
+    ...remains
   } = variables;
 
   const spacer = _.isFunction(_spacer) ? _spacer(root.fontSize) : _spacer;
