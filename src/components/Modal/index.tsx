@@ -45,6 +45,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
   const [modal, setModal] = React.useState<React.ReactElement>();
   const theme = useTheme();
   const modalBackdrop = useComponentStyle('modalBackdrop');
+  const modalContainer = useComponentStyle('modalContainer');
 
   return <ModalContext.Provider value={setModal}>
     {children}
@@ -77,6 +78,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
             web: { position: 'fixed' } as any,
             default: {},
           }),
+          modalContainer,
         ]}>
         {modal}
       </View>

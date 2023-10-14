@@ -51,7 +51,16 @@ export type ComponentStyles = {
   activityIndicatorBackdrop?: StyleProp<ViewStyle>;
 
   button?: StyleProp<TextStyle>;
+
+  offcanvasBackdrop?: StyleProp<ViewStyle>;
+  offcanvasContainer?: StyleProp<ViewStyle>;
+  offcanvasLeftContainer?: StyleProp<ViewStyle>;
+  offcanvasRightContainer?: StyleProp<ViewStyle>;
+  offcanvasTopContainer?: StyleProp<ViewStyle>;
+  offcanvasBottomContainer?: StyleProp<ViewStyle>;
+
   modalBackdrop?: StyleProp<ViewStyle>;
+  modalContainer?: StyleProp<ViewStyle>;
 
   picker?: StyleProp<TextStyle>;
 
