@@ -25,10 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Pressable, StyleSheet, Platform, ViewStyle, StyleProp } from 'react-native';
+import { LayoutRectangle, StyleSheet, Platform, ViewStyle, StyleProp, Animated } from 'react-native';
 
 import { useTheme } from '../../theme';
 import { useComponentStyle } from '../Style';
+import { AnimatedPressable, useFadeAnim } from '../Animated';
 
 type OffcanvasConfig = React.ReactElement | {
   placement?: 'left' | 'right' | 'top' | 'bottom';
@@ -50,6 +51,8 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
 }) => {
 
   const [config, setConfig] = React.useState<OffcanvasConfig>();
+  const [display, setDisplay] = React.useState<OffcanvasConfig>();
+  const [layout, setLayout] = React.useState<LayoutRectangle>();
   const theme = useTheme();
   const offcanvasBackdrop = useComponentStyle('offcanvasBackdrop');
   const offcanvasContainer = useComponentStyle('offcanvasContainer');
@@ -59,12 +62,29 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
   const offcanvasBottomContainer = useComponentStyle('offcanvasBottomContainer');
 
   const element = React.isValidElement(config) ? config : config && 'element' in config ? config.element : undefined;
-  const placement = config && 'placement' in config ? config.placement ?? 'left' : 'left';
+  const fadeAnim = useFadeAnim({
+    visible: !_.isNil(element),
+    setVisible: (v) => {
+      if (v) {
+        setDisplay(current => config ?? current);
+      } else {
+        setDisplay(undefined);
+        setLayout(undefined);
+      }
+    },
+    timing: {
+      duration: theme.offcanvasDuration,
+      easing: theme.offcanvasEasing,
+    }
+  });
+
+  const displayElement = React.isValidElement(display) ? display : display && 'element' in display ? display.element : undefined;
+  const placement = display && 'placement' in display ? display.placement ?? 'left' : 'left';
 
   return <OffcanvasContext.Provider value={setConfig}>
     {children}
-    {React.isValidElement(element) && <>
-      {backdrop === true && <Pressable
+    {React.isValidElement(displayElement) && <>
+      {backdrop === true && <AnimatedPressable
         onPress={() => setConfig(undefined)}
         style={[
           {
@@ -78,9 +98,13 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
           StyleSheet.absoluteFill,
           offcanvasBackdrop,
           config && 'backdropStyle' in config ? config.backdropStyle : {},
+          {
+            opacity: fadeAnim,
+          },
         ]} />}
-      <View
+      <Animated.View
         pointerEvents='box-none'
+        onLayout={(e) => setLayout(e.nativeEvent.layout)}
         style={[
           {
             zIndex: theme.zIndex.offcanvas,
@@ -108,9 +132,16 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
           placement === 'top' && offcanvasTopContainer,
           placement === 'bottom' && offcanvasBottomContainer,
           config && 'containerStyle' in config ? config.containerStyle : {},
+          {
+            opacity: layout ? 1 : 0,
+            ...layout && placement === 'left' ? { left: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.width, 0] }) } : {},
+            ...layout && placement === 'right' ? { right: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.width, 0] }) } : {},
+            ...layout && placement === 'top' ? { top: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.height, 0] }) } : {},
+            ...layout && placement === 'bottom' ? { bottom: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.height, 0] }) } : {},
+          },
         ]}>
-        {element}
-      </View>
+        {displayElement}
+      </Animated.View>
     </>}
   </OffcanvasContext.Provider>;
 };

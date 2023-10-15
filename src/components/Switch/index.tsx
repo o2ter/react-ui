@@ -32,8 +32,7 @@ import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { Modify } from '../../internals/types';
 import { flattenStyle } from '../Style/flatten';
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+import { AnimatedPressable } from '../Animated';
 
 type SwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;

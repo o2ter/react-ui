@@ -32,6 +32,7 @@ import { useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 import { PopoverPosition } from './types';
 import { elevationShadow, selectPlatformShadow } from '../../shadow';
+import { useFadeAnim } from '../Animated';
 
 type PopoverBodyProps = React.PropsWithChildren<{
   hidden: boolean;
@@ -65,20 +66,14 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
   const [containerLayout, setContainerLayout] = React.useState<LayoutRectangle>();
 
   const [visible, setVisible] = React.useState(false);
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
-
-  React.useEffect(() => {
-
-    setVisible(true);
-
-    Animated.timing(fadeAnim, {
-      toValue: hidden ? 0 : 1,
+  const fadeAnim = useFadeAnim({
+    visible: !hidden,
+    setVisible,
+    timing: {
       duration: theme.popoverDuration,
       easing: theme.popoverEasing,
-      useNativeDriver: Platform.OS !== 'web',
-    }).start(() => setVisible(!hidden));
-
-  }, [hidden]);
+    }
+  });
 
   const arrowSize = theme.spacers['2'];
   const {

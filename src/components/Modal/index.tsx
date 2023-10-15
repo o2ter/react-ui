@@ -25,10 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Pressable, StyleSheet, Platform, ViewStyle, StyleProp } from 'react-native';
+import { StyleSheet, Platform, ViewStyle, StyleProp, Animated } from 'react-native';
 
 import { useTheme } from '../../theme';
 import { useComponentStyle } from '../Style';
+import { AnimatedPressable, useFadeAnim } from '../Animated';
 
 type ModalConfig = React.ReactElement | {
   backdropStyle?: StyleProp<ViewStyle>;
@@ -49,16 +50,27 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
 }) => {
 
   const [config, setConfig] = React.useState<ModalConfig>();
+  const [display, setDisplay] = React.useState<ModalConfig>();
   const theme = useTheme();
   const modalBackdrop = useComponentStyle('modalBackdrop');
   const modalContainer = useComponentStyle('modalContainer');
 
   const element = React.isValidElement(config) ? config : config && 'element' in config ? config.element : undefined;
+  const fadeAnim = useFadeAnim({
+    visible: !_.isNil(element),
+    setVisible: (v) => setDisplay(v ? (current => config ?? current) : undefined),
+    timing: {
+      duration: theme.modalDuration,
+      easing: theme.modalEasing,
+    }
+  });
+
+  const displayElement = React.isValidElement(display) ? display : display && 'element' in display ? display.element : undefined;
 
   return <ModalContext.Provider value={setConfig}>
     {children}
-    {React.isValidElement(element) && <>
-      {backdrop === true && <Pressable
+    {React.isValidElement(displayElement) && <>
+      {backdrop === true && <AnimatedPressable
         onPress={() => setConfig(undefined)}
         style={[
           {
@@ -72,8 +84,11 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
           StyleSheet.absoluteFill,
           modalBackdrop,
           config && 'backdropStyle' in config ? config.backdropStyle : {},
+          {
+            opacity: fadeAnim,
+          },
         ]} />}
-      <View
+      <Animated.View
         pointerEvents='box-none'
         style={[
           {
@@ -89,9 +104,12 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
           }),
           modalContainer,
           config && 'containerStyle' in config ? config.containerStyle : {},
+          {
+            opacity: fadeAnim,
+          },
         ]}>
-        {element}
-      </View>
+        {displayElement}
+      </Animated.View>
     </>}
   </ModalContext.Provider>;
 };

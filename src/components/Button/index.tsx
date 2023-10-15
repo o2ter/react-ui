@@ -47,8 +47,7 @@ import { Text } from '../Text';
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+import { AnimatedPressable } from '../Animated';
 
 type ButtonStateCallbackType = PressableStateCallbackType & {
   hovered: boolean;

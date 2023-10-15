@@ -1,5 +1,5 @@
 //
-//  animation.ts
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,22 +23,30 @@
 //  THE SOFTWARE.
 //
 
-import { Easing } from 'react-native';
+import _ from 'lodash';
+import React from 'react';
+import { Animated, Pressable, Platform } from 'react-native';
 
-export const popoverDuration: number = 100;
-export const popoverEasing = Easing.linear;
+export const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export const modalDuration: number = 100;
-export const modalEasing = Easing.linear;
+export const useFadeAnim = (options: {
+  visible: boolean;
+  setVisible: (visible: boolean) => void;
+  timing: Partial<Animated.TimingAnimationConfig>;
+}) => {
 
-export const offcanvasDuration: number = 100;
-export const offcanvasEasing = Easing.linear;
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  React.useEffect(() => {
 
-export const activityIndicatorDuration: number = 250;
-export const activityIndicatorEasing = Easing.linear;
+    options.setVisible(true);
 
-export const buttonDuration: number = 100;
-export const buttonEasing = Easing.linear;
+    Animated.timing(fadeAnim, {
+      toValue: options.visible ? 1 : 0,
+      useNativeDriver: Platform.OS !== 'web',
+      ...options.timing,
+    }).start(() => !options.visible && options.setVisible(false));
 
-export const toastDuration: number = 250;
-export const toastEasing = Easing.linear;
+  }, [options.visible]);
+
+  return fadeAnim;
+}
