@@ -96,6 +96,10 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
             default: {},
           }),
           StyleSheet.absoluteFill,
+          Platform.select({
+            web: { position: 'fixed' } as any,
+            default: {},
+          }),
           offcanvasBackdrop,
           config && 'backdropStyle' in config ? config.backdropStyle : {},
           {

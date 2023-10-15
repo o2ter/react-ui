@@ -82,6 +82,10 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
             default: {},
           }),
           StyleSheet.absoluteFill,
+          Platform.select({
+            web: { position: 'fixed' } as any,
+            default: {},
+          }),
           modalBackdrop,
           config && 'backdropStyle' in config ? config.backdropStyle : {},
           {
