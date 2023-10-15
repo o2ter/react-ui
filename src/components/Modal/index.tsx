@@ -25,12 +25,18 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Pressable, StyleSheet, Platform } from 'react-native';
+import { View, Pressable, StyleSheet, Platform, ViewStyle, StyleProp } from 'react-native';
 
 import { useTheme } from '../../theme';
 import { useComponentStyle } from '../Style';
 
-const ModalContext = React.createContext((element?: React.ReactElement) => { });
+type ModalConfig = React.ReactElement | {
+  backdropStyle?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+  element?: React.ReactElement;
+};
+
+const ModalContext = React.createContext((config?: ModalConfig) => { });
 ModalContext.displayName = 'ModalContext';
 
 export const useModal = () => React.useContext(ModalContext);
@@ -42,16 +48,18 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
   children,
 }) => {
 
-  const [modal, setModal] = React.useState<React.ReactElement>();
+  const [config, setConfig] = React.useState<ModalConfig>();
   const theme = useTheme();
   const modalBackdrop = useComponentStyle('modalBackdrop');
   const modalContainer = useComponentStyle('modalContainer');
 
-  return <ModalContext.Provider value={setModal}>
+  const element = React.isValidElement(config) ? config : config && 'element' in config ? config.element : undefined;
+
+  return <ModalContext.Provider value={setConfig}>
     {children}
-    {React.isValidElement(modal) && <>
+    {React.isValidElement(element) && <>
       {backdrop === true && <Pressable
-        onPress={() => setModal(undefined)}
+        onPress={() => setConfig(undefined)}
         style={[
           {
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
@@ -63,6 +71,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
           }),
           StyleSheet.absoluteFill,
           modalBackdrop,
+          config && 'backdropStyle' in config ? config.backdropStyle : {},
         ]} />}
       <View
         pointerEvents='box-none'
@@ -79,8 +88,9 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
             default: {},
           }),
           modalContainer,
+          config && 'containerStyle' in config ? config.containerStyle : {},
         ]}>
-        {modal}
+        {element}
       </View>
     </>}
   </ModalContext.Provider>;

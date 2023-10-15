@@ -37,7 +37,7 @@ import { textStyleNormalize } from '../Text/style';
 
 type ToastMessage = string | (Error & { code?: number });
 type ToastType = 'success' | 'info' | 'warning' | 'error';
-type ToastOptions = { color: string; icon?: React.ReactNode; timeout?: number; };
+type ToastOptions = { color: string; icon?: React.ReactElement; timeout?: number; };
 
 const ToastContext = React.createContext({
   showError(message: ToastMessage | RecursiveArray<ToastMessage>, timeout?: number) { },
@@ -73,7 +73,7 @@ function toString(message: ToastMessage) {
 
 const ToastBody: React.FC<{
   message: ToastMessage;
-  style: ToastType | { color: string; icon?: React.ReactNode },
+  style: ToastType | { color: string; icon?: React.ReactElement },
   onShow: (x: { dismiss: VoidFunction }) => void;
   onDismiss: VoidFunction;
 }> = ({
@@ -162,7 +162,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren<{
 
     function show_message(
       message: ToastMessage | ReadonlyArray<ToastMessage> | RecursiveArray<ToastMessage>,
-      style: ToastType | { color: string; icon?: React.ReactNode },
+      style: ToastType | { color: string; icon?: React.ReactElement },
       timeout?: number
     ) {
 

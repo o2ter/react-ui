@@ -25,17 +25,19 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Pressable, StyleSheet, Platform } from 'react-native';
+import { View, Pressable, StyleSheet, Platform, ViewStyle, StyleProp } from 'react-native';
 
 import { useTheme } from '../../theme';
 import { useComponentStyle } from '../Style';
 
-type OffcanvasConfig = {
+type OffcanvasConfig = React.ReactElement | {
   placement?: 'left' | 'right' | 'top' | 'bottom';
-  element?: React.ReactNode;
+  backdropStyle?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+  element?: React.ReactElement;
 };
 
-const OffcanvasContext = React.createContext((config: OffcanvasConfig = {}) => { });
+const OffcanvasContext = React.createContext((config?: OffcanvasConfig) => { });
 OffcanvasContext.displayName = 'OffcanvasContext';
 
 export const useOffcanvas = () => React.useContext(OffcanvasContext);
@@ -47,7 +49,7 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
   children,
 }) => {
 
-  const [offcanvas, setOffcanvas] = React.useState<OffcanvasConfig>();
+  const [config, setConfig] = React.useState<OffcanvasConfig>();
   const theme = useTheme();
   const offcanvasBackdrop = useComponentStyle('offcanvasBackdrop');
   const offcanvasContainer = useComponentStyle('offcanvasContainer');
@@ -56,13 +58,14 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
   const offcanvasTopContainer = useComponentStyle('offcanvasTopContainer');
   const offcanvasBottomContainer = useComponentStyle('offcanvasBottomContainer');
 
-  const placement = offcanvas?.placement ?? 'left';
+  const element = React.isValidElement(config) ? config : config && 'element' in config ? config.element : undefined;
+  const placement = config && 'placement' in config ? config.placement ?? 'left' : 'left';
 
-  return <OffcanvasContext.Provider value={setOffcanvas}>
+  return <OffcanvasContext.Provider value={setConfig}>
     {children}
-    {React.isValidElement(offcanvas?.element) && <>
+    {React.isValidElement(element) && <>
       {backdrop === true && <Pressable
-        onPress={() => setOffcanvas(undefined)}
+        onPress={() => setConfig(undefined)}
         style={[
           {
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
@@ -74,6 +77,7 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
           }),
           StyleSheet.absoluteFill,
           offcanvasBackdrop,
+          config && 'backdropStyle' in config ? config.backdropStyle : {},
         ]} />}
       <View
         pointerEvents='box-none'
@@ -103,8 +107,9 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
           placement === 'right' && offcanvasRightContainer,
           placement === 'top' && offcanvasTopContainer,
           placement === 'bottom' && offcanvasBottomContainer,
+          config && 'containerStyle' in config ? config.containerStyle : {},
         ]}>
-        {offcanvas?.element}
+        {element}
       </View>
     </>}
   </OffcanvasContext.Provider>;

@@ -28,7 +28,7 @@ import React from 'react';
 
 export type OverlayConfig = {
   id: string;
-  node?: React.ReactNode;
+  node?: React.ReactElement;
 };
 
 export const OverlayContext = React.createContext<{
@@ -42,7 +42,7 @@ export const OverlayContext = React.createContext<{
 OverlayContext.displayName = 'OverlayContext';
 
 export const useOverlay = (
-  node?: React.ReactNode
+  node?: React.ReactElement
 ) => {
 
   const id = React.useId();
