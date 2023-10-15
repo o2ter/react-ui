@@ -103,7 +103,6 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
           },
         ]} />}
       <Animated.View
-        pointerEvents='box-none'
         onLayout={(e) => setLayout(e.nativeEvent.layout)}
         style={[
           {
