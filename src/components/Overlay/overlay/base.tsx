@@ -34,7 +34,7 @@ import type { useWindowEvent } from '../../../hooks/webHooks';
 import { useOverlay } from '../context';
 
 type OverlayProps = React.ComponentProps<typeof View> & {
-  render: (layout: LayoutRectangle) => React.ReactNode;
+  render: (layout: LayoutRectangle) => React.ReactElement;
   extraData?: any;
 };
 
