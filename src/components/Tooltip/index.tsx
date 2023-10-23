@@ -69,14 +69,16 @@ export const Tooltip = createMemoComponent((
       ref={forwardRef}
       render={_render}
       containerStyle={_styles.container}
-      hidden={hidden || !(hover || press)}
+      hidden={hidden ?? !(hover || press)}
       {...props}
-    ><Pressable
-      onHoverIn={() => setHover(true)}
-      onHoverOut={() => setHover(false)}
-      onPressIn={() => setPress(true)}
-      onPressOut={() => setPress(false)}
-    >{children}</Pressable></Popover>
+    >{_.isNil(hidden) ? (
+      <Pressable
+        onHoverIn={() => setHover(true)}
+        onHoverOut={() => setHover(false)}
+        onPressIn={() => setPress(true)}
+        onPressOut={() => setPress(false)}
+      >{children}</Pressable>
+    ) : children}</Popover>
   );
 }, {
   displayName: 'Tooltip',

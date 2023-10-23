@@ -23,10 +23,11 @@
 //  THE SOFTWARE.
 //
 
+import _ from 'lodash';
 import React from 'react';
 import { useStableCallback } from 'sugax';
 import { createMemoComponent } from '../../internals/utils';
-import { LayoutRectangle } from 'react-native';
+import { Pressable, LayoutRectangle } from 'react-native';
 import { PopoverProps } from './types';
 import { PopoverBody } from './body';
 import { Overlay } from '../Overlay';
@@ -47,12 +48,14 @@ export const Popover = createMemoComponent((
 
   const id = React.useId();
 
-  const _extraData = [hidden, position, containerStyle, extraData];
+  const [press, setPress] = React.useState(false);
+
+  const _extraData = [hidden ?? !press, position, containerStyle, extraData];
   const _render = useStableCallback((layout: LayoutRectangle) => (
     <PopoverBody
       key={id}
       layout={layout}
-      hidden={hidden}
+      hidden={hidden ?? !press}
       position={position}
       style={containerStyle}
     >{render()}</PopoverBody>
@@ -64,7 +67,9 @@ export const Popover = createMemoComponent((
       render={_render}
       extraData={React.useMemo(() => _extraData, _extraData)}
       {...props}
-    >{children}</Overlay>
+    >{_.isNil(hidden) ? (
+      <Pressable onPress={() => setPress(v => !v)}>{children}</Pressable>
+    ) : children}</Overlay>
   );
 }, {
   displayName: 'Popover',

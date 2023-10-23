@@ -31,7 +31,7 @@ export type PopoverPosition = 'auto' | 'top' | 'left' | 'right' | 'bottom';
 
 export type PopoverProps = React.ComponentProps<typeof View> & {
   position?: PopoverPosition;
-  hidden: boolean;
+  hidden?: boolean;
   render: () => React.ReactNode;
   extraData?: any;
   containerStyle?: StyleProp<ViewStyle>;
