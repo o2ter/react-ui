@@ -48,6 +48,7 @@ export const Tooltip = createMemoComponent((
     color: 'white',
     backgroundColor: 'black',
     borderWidth: 0,
+    shadowOpacity: 0,
   }, defaultStyle, containerStyle]), [defaultStyle, containerStyle]);
 
   const _styles = React.useMemo(() => StyleSheet.create({

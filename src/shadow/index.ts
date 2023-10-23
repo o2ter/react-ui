@@ -29,6 +29,7 @@ import { rgba } from '../internals/color';
 
 const createShadowValue = (shadow: ShadowStyleIOS) => {
   const { shadowColor, shadowOffset, shadowOpacity, shadowRadius } = shadow;
+  if (shadowOpacity === 0) return 'none';
   const offsetX = shadowOffset ? `${shadowOffset.width}px` : null;
   const offsetY = shadowOffset ? `${shadowOffset.height}px` : null;
   const blurRadius = shadowRadius ? `${shadowRadius}px` : null;
