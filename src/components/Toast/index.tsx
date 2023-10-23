@@ -34,6 +34,7 @@ import { useSafeAreaInsets } from '../SafeAreaView';
 import { useLocalize } from '@o2ter/i18n';
 import { useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
+import Icon from '../Icon';
 
 type ToastMessage = string | (Error & { code?: number });
 type ToastType = 'success' | 'info' | 'warning' | 'error';
@@ -52,11 +53,11 @@ ToastContext.displayName = 'ToastContext';
 export const useToast = () => React.useContext(ToastContext);
 
 const icons = {
-  success: 'M20 12a8 8 0 0 1-8 8 8 8 0 0 1-8-8 8 8 0 0 1 8-8h2l2-1-4-1A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10M8 10l-1 2 4 4L21 6l-1-1-9 8-3-3Z',
-  info: 'M11 9h2V7h-2m1 13a8 8 0 1 1 0-16 8 8 0 0 1 0 16m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m-1 15h2v-6h-2v6z',
-  warning: 'm12 6 8 13H4l8-13m0-4L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z',
-  error: 'M11 15h2v2h-2zm0-8h2v6h-2zm1-5a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z',
-}
+  success: 'task-alt',
+  info: 'info-outline',
+  warning: 'warning-amber',
+  error: 'error-outline',
+} as const;
 
 const CloseButton: React.FC<{
   color: ColorValue;
@@ -130,7 +131,7 @@ const ToastBody: React.FC<{
       toastStyle,
       { opacity: fadeAnim },
     ]}>
-    {_.isString(style) && <Svg width={24} height={24}><Path fill={color} d={icons[style]} /></Svg>}
+    {_.isString(style) && <Icon iconStyle={{ color }} icon='MaterialIcons' name={icons[style] as any} />}
     {!_.isString(style) && style.icon && <View style={{ width: 24, height: 24 }}>{style.icon}</View>}
     <Text style={textStyleNormalize([
       {
