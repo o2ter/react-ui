@@ -42,6 +42,7 @@ export { Lottie } from './Lottie';
 export * from './Offcanvas';
 export * from './Overlay';
 export { Picker } from './Picker';
+export { Pressable } from './Pressable';
 export * from './Popover';
 export { QRCode } from './QRCode';
 export * from './Radio';
