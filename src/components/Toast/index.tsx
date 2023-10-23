@@ -142,7 +142,9 @@ const ToastBody: React.FC<{
       },
       toastTextStyle,
     ])}>{_message}</Text>
-    <Pressable onPress={_dismiss}><CloseButton color={color} /></Pressable>
+    <Pressable onPress={_dismiss}>
+      <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name='close' />
+    </Pressable>
   </Animated.View>
 }
 
