@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  context.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -24,26 +24,18 @@
 //
 
 import React from 'react';
-import { useRoutes } from 'react-router-dom';
-import { routesBuilder, createRoutesFromChildren } from './routes';
+import { BrowserRouter } from 'react-router-dom';
+import { StaticRouter } from 'react-router-dom/server';
 
-export * from './link';
-export * from './context';
-export * from './routes';
+const NavigatorContext = React.createContext<Record<string, any> | undefined>(undefined);
 
-export const supportsPointerEvent = () => typeof window !== 'undefined' && window.PointerEvent != null;
+export const BrowserNavigator: React.FC<React.PropsWithChildren> = ({ children }) => <BrowserRouter>{children}</BrowserRouter>;
 
-export {
-  useHref,
-  useLocation,
-  useMatch,
-  useNavigate,
-  useParams,
-  useResolvedPath,
-  useLinkClickHandler,
-  NavLink,
-} from 'react-router-dom';
+export const StaticNavigator: React.FC<React.PropsWithChildren<{
+  location: Partial<Location> | string;
+  context?: Record<string, any>;
+}>> = ({ location, context, children }) => <NavigatorContext.Provider value={context}>
+  <StaticRouter location={location}>{children}</StaticRouter>
+</NavigatorContext.Provider>;
 
-export const Navigator: React.FC<React.PropsWithChildren> = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));
-
-Navigator.displayName = 'Navigator';
+export const useNavigatorContext = () => React.useContext(NavigatorContext);

@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  link.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -24,26 +24,33 @@
 //
 
 import React from 'react';
-import { useRoutes } from 'react-router-dom';
-import { routesBuilder, createRoutesFromChildren } from './routes';
+import { Link as _Link } from 'react-router-dom';
+import { Modify } from '../../internals/types';
+import { createMemoComponent } from '../../internals/utils';
+import { supportsPointerEvent } from '.';
 
-export * from './link';
-export * from './context';
-export * from './routes';
+type LinkProps = Modify<React.ComponentPropsWithoutRef<typeof _Link>, {
+  onHoverIn?: React.PointerEventHandler<HTMLAnchorElement>;
+  onHoverOut?: React.PointerEventHandler<HTMLAnchorElement>;
+}>;
 
-export const supportsPointerEvent = () => typeof window !== 'undefined' && window.PointerEvent != null;
+export const Link = createMemoComponent((
+  {
+    onHoverIn, onHoverOut, children, ...props
+  }: LinkProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof _Link>>
+) => {
 
-export {
-  useHref,
-  useLocation,
-  useMatch,
-  useNavigate,
-  useParams,
-  useResolvedPath,
-  useLinkClickHandler,
-  NavLink,
-} from 'react-router-dom';
+  const _supportsPointerEvent = supportsPointerEvent();
 
-export const Navigator: React.FC<React.PropsWithChildren> = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));
+  const extra: Record<string, React.PointerEventHandler<HTMLAnchorElement>> = {};
+  const type = _supportsPointerEvent ? 'Pointer' : 'Mouse';
+  if (onHoverIn) extra[`on${type}Enter`] = onHoverIn;
+  if (onHoverOut) extra[`on${type}Leave`] = onHoverOut;
 
-Navigator.displayName = 'Navigator';
+  return (
+    <_Link ref={forwardRef} {...extra} {...props}>{children}</_Link>
+  );
+}, {
+  displayName: 'Link',
+});

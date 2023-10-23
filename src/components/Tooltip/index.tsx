@@ -31,10 +31,11 @@ import { useComponentStyle } from '../Style';
 import { useStableCallback } from 'sugax';
 import { TextStyleProvider, flattenStyle } from '../index.web';
 import { textStyleKeys } from '../Text/style';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
 export const Tooltip = createMemoComponent((
   {
+    hidden,
     containerStyle,
     render,
     children,
@@ -42,6 +43,9 @@ export const Tooltip = createMemoComponent((
   }: React.ComponentPropsWithoutRef<typeof Popover>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Popover>>
 ) => {
+
+  const [hover, setHover] = React.useState(false);
+  const [press, setPress] = React.useState(false);
 
   const defaultStyle = useComponentStyle('tooltip');
   const _defaultStyle = React.useMemo(() => flattenStyle([{
@@ -65,8 +69,14 @@ export const Tooltip = createMemoComponent((
       ref={forwardRef}
       render={_render}
       containerStyle={_styles.container}
+      hidden={hidden || !(hover || press)}
       {...props}
-    >{children}</Popover>
+    ><Pressable
+      onHoverIn={() => setHover(true)}
+      onHoverOut={() => setHover(false)}
+      onPressIn={() => setPress(true)}
+      onPressOut={() => setPress(false)}
+    >{children}</Pressable></Popover>
   );
 }, {
   displayName: 'Tooltip',

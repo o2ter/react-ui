@@ -27,14 +27,13 @@ import _ from 'lodash';
 import React from 'react';
 
 import {
-  Platform,
   Animated,
-  Pressable,
   PressableProps,
   StyleSheet,
   StyleProp,
   ViewStyle,
   TextStyle,
+  MouseEvent,
   GestureResponderEvent,
   PressableStateCallbackType,
 } from 'react-native';
@@ -62,8 +61,8 @@ type ButtonProps = Modify<PressableProps, {
   title?: string;
   style?: StyleProp<ViewStyle> | ((state: ButtonStateCallbackType) => StyleProp<ViewStyle>);
   titleStyle?: StyleProp<TextStyle> | ((state: ButtonStateCallbackType) => StyleProp<TextStyle>);
-  onHoverIn?: (event: GestureResponderEvent) => void;
-  onHoverOut?: (event: GestureResponderEvent) => void;
+  onHoverIn?: (event: MouseEvent) => void;
+  onHoverOut?: (event: MouseEvent) => void;
   children?: React.ReactNode | ((state: ButtonStateCallbackType) => React.ReactNode);
 }>;
 
@@ -164,20 +163,6 @@ export const Button = createMemoComponent(({
     ? <Animated.Text selectable={false} style={_style}>{title}</Animated.Text>
     : _.isFunction(children) ? () => _wrapped(children(focused)) : _wrapped(children);
 
-  const callbacks: any = Platform.select({
-    web: {
-      onHoverIn: (e: GestureResponderEvent) => {
-        setFocused(state => ({ ...state, hovered: true }));
-        if (_.isFunction(onHoverIn)) onHoverIn(e);
-      },
-      onHoverOut: (e: GestureResponderEvent) => {
-        setFocused(state => ({ ...state, hovered: false }));
-        if (_.isFunction(onHoverOut)) onHoverOut(e);
-      },
-    },
-    default: {},
-  });
-
   return (
     <AnimatedPressable
       ref={forwardRef}
@@ -196,7 +181,15 @@ export const Button = createMemoComponent(({
         setFocused(state => ({ ...state, pressed: false }));
         if (_.isFunction(onPressOut)) onPressOut(e);
       }}
-      {...callbacks} {...props}>
+      onHoverIn={(e) => {
+        setFocused(state => ({ ...state, hovered: true }));
+        if (_.isFunction(onHoverIn)) onHoverIn(e);
+      }}
+      onHoverOut={(e) => {
+        setFocused(state => ({ ...state, hovered: false }));
+        if (_.isFunction(onHoverOut)) onHoverOut(e);
+      }}
+      {...props}>
       {content}
     </AnimatedPressable>
   );
