@@ -29,7 +29,8 @@ import { BrowserRouter, useRoutes, Link as _Link } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 import { Modify } from '../../internals/types';
 import { createMemoComponent } from '../../internals/utils';
-import { supportsPointerEvent } from '../Touchable/index.web';
+
+const supportsPointerEvent = () => typeof window !== 'undefined' && window.PointerEvent != null;
 
 export {
   useHref,

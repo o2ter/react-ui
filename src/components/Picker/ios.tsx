@@ -82,15 +82,13 @@ export const PickerIOS = createMemoComponent(<T = ItemValue>({
           <TouchableOpacity
             onPress={() => _setShowPicker(false)}
             hitSlop={{ top: 4, right: 4, bottom: 4, left: 4 }}>
-            <View testID="needed_for_touchable">
-              <Text style={{
-                color: '#007aff',
-                fontWeight: '600',
-                fontSize: 17,
-                paddingTop: 1,
-                paddingRight: 11,
-              }}>Done</Text>
-            </View>
+            <Text style={{
+              color: '#007aff',
+              fontWeight: '600',
+              fontSize: 17,
+              paddingTop: 1,
+              paddingRight: 11,
+            }}>Done</Text>
           </TouchableOpacity>
         </View>
         <View style={{
