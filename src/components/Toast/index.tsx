@@ -131,8 +131,8 @@ const ToastBody: React.FC<{
       toastStyle,
       { opacity: fadeAnim },
     ]}>
-    {_.isString(style) && <Icon iconStyle={{ color }} icon='MaterialIcons' name={icons[style] as any} />}
-    {!_.isString(style) && style.icon && <View style={{ width: 24, height: 24 }}>{style.icon}</View>}
+    {_.isString(style) && <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name={icons[style] as any} />}
+    {!_.isString(style) && React.isValidElement(style.icon) && style.icon}
     <Text style={textStyleNormalize([
       {
         flex: 1,
