@@ -40,71 +40,52 @@ import Octicons from 'react-native-vector-icons/Fonts/Octicons.ttf';
 import SimpleLineIcons from 'react-native-vector-icons/Fonts/SimpleLineIcons.ttf';
 import Zocial from 'react-native-vector-icons/Fonts/Zocial.ttf';
 
-import styleInject from 'style-inject';
+(() => {
 
-styleInject(`
-@font-face {
-  src: url(${AntDesign});
-  font-family: AntDesign;
-}
-@font-face {
-  src: url(${Entypo});
-  font-family: Entypo;
-}
-@font-face {
-  src: url(${EvilIcons});
-  font-family: EvilIcons;
-}
-@font-face {
-  src: url(${Feather});
-  font-family: Feather;
-}
-@font-face {
-  src: url(${FontAwesome});
-  font-family: FontAwesome;
-}
-@font-face {
-  src: url(${FontAwesome5Solid});
-  font-family: FontAwesome5;
-}
-@font-face {
-  src: url(${FontAwesome5Regular});
-  font-family: FontAwesome5_Regular;
-}
-@font-face {
-  src: url(${FontAwesome5Brands});
-  font-family: FontAwesome5Brands;
-}
-@font-face {
-  src: url(${Fontisto});
-  font-family: Fontisto;
-}
-@font-face {
-  src: url(${Foundation});
-  font-family: Foundation;
-}
-@font-face {
-  src: url(${Ionicons});
-  font-family: Ionicons;
-}
-@font-face {
-  src: url(${MaterialCommunityIcons});
-  font-family: MaterialCommunityIcons;
-}
-@font-face {
-  src: url(${MaterialIcons});
-  font-family: MaterialIcons;
-}
-@font-face {
-  src: url(${Octicons});
-  font-family: Octicons;
-}
-@font-face {
-  src: url(${SimpleLineIcons});
-  font-family: SimpleLineIcons;
-}
-@font-face {
-  src: url(${Zocial});
-  font-family: Zocial;
-}
-`);
+  if (typeof document === 'undefined') return;
+
+  const fonts = {
+    AntDesign,
+    Entypo,
+    EvilIcons,
+    Feather,
+    FontAwesome,
+    FontAwesome5: FontAwesome5Solid,
+    FontAwesome5_Regular: FontAwesome5Regular,
+    FontAwesome5Brands: FontAwesome5Brands,
+    Fontisto,
+    Foundation,
+    Ionicons,
+    MaterialCommunityIcons,
+    MaterialIcons,
+    Octicons,
+    SimpleLineIcons,
+    Zocial,
+  };
+
+  const css = _.map(_.toPairs(fonts), ([name, url]) => `
+    @font-face {
+      src: url(${url});
+      font-family: ${name};
+    }
+  `).join('');
+
+  const head = document.head || document.getElementsByTagName('head')[0];
+  const style = document.createElement('style');
+  head.appendChild(style);
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+
+  for (const url of _.values(fonts)) {
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.href = url;
+    link.as = 'font';
+    head.appendChild(link);
+  }
+  
+})();

@@ -23,7 +23,6 @@
 //  THE SOFTWARE.
 //
 
-export { styleInject } from '../styleInject';
 export * from './index.js';
 export { NodeHandleProvider } from './NodeHandleProvider';
 export * from './Navigator';
