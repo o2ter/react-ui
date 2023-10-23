@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import processColor from '@react-native/normalize-color';
+import processColor from '@react-native/normalize-colors';
 
 const normalizeColor = (color: number | string) => {
   const colorInt = processColor(color)!;
