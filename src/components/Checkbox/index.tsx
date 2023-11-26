@@ -28,26 +28,29 @@ import React from 'react';
 import { Platform, Pressable, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { useTheme } from '../../theme';
 
-import { createMemoComponent } from '../../internals/utils';
+import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import View from '../View';
 import { Path, Svg } from 'react-native-svg';
 import { Modify } from '../../internals/types';
 import { flattenStyle } from '../Style/flatten';
+import { useFocus, useFocusRing } from '../../internals/focus';
 
 type CheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;
   selected?: boolean;
   tabIndex?: number;
-  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<ViewStyle>);
-  children: React.ReactNode | ((state: { selected: boolean; }) => React.ReactNode);
+  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; focus: boolean; }) => StyleProp<ViewStyle>);
+  children: React.ReactNode | ((state: { selected: boolean; focus: boolean; }) => React.ReactNode);
 }>;
 
-export const Checkbox = createMemoComponent((
+export const Checkbox = createComponent((
   {
     classes,
     style,
     selected,
+    onFocus,
+    onBlur,
     children,
     ...props
   }: CheckboxProps,
@@ -56,7 +59,11 @@ export const Checkbox = createMemoComponent((
 
   const theme = useTheme();
   const textStyle = useComponentStyle('text') as TextStyle;
+
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
   const checkboxStyle = useComponentStyle('checkbox', classes, [
+    focused && 'focus',
     selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
   ]);
@@ -97,8 +104,9 @@ export const Checkbox = createMemoComponent((
       borderWidth: theme.borderWidth,
       opacity: props.disabled ? 0.65 : 1,
     },
+    useFocusRing(focused),
     checkboxStyle,
-    _.isFunction(style) ? style({ selected: selected ?? false }) : style,
+    _.isFunction(style) ? style({ selected: selected ?? false, focus: focused }) : style,
   ]);
 
   return (
@@ -109,6 +117,8 @@ export const Checkbox = createMemoComponent((
         web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
         default: {},
       })}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
       {...props}
     >
       <View style={[
@@ -126,7 +136,7 @@ export const Checkbox = createMemoComponent((
           />
         </Svg>}
       </View>
-      {_.isFunction(children) ? children({ selected: selected ?? false }) : children}
+      {_.isFunction(children) ? children({ selected: selected ?? false, focus: focused }) : children}
     </Pressable>
   )
 }, {

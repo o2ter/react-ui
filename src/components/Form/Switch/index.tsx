@@ -31,6 +31,7 @@ import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Switch from '../../Switch';
+import { useFocus } from '../../../internals/focus';
 
 type FormSwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Switch>, {
   name: string | string[];
@@ -44,6 +45,8 @@ export const FormSwitch = createMemoComponent((
     value,
     style,
     onPress,
+    onFocus,
+    onBlur,
     children,
     ...props
   }: FormSwitchProps,
@@ -55,7 +58,10 @@ export const FormSwitch = createMemoComponent((
 
   const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
 
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
   const formSwitchStyle = useComponentStyle('formSwitch', classes, [
+    focused && 'focus',
     selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
@@ -73,6 +79,8 @@ export const FormSwitch = createMemoComponent((
         if (_.isNil(value)) return !state;
         return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state ?? []), value];
       }))}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
       {...props}
     >{children}</Switch>
   )

@@ -27,11 +27,12 @@ import _ from 'lodash';
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ItemValue, PickerNative, PickerProps } from './native';
-import { createMemoComponent } from '../../internals/utils';
+import { createComponent } from '../../internals/utils';
 import { useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
+import { useFocus, useFocusRing } from '../../internals/focus';
 
-export const PickerAndroid = createMemoComponent(<T = ItemValue>({
+export const PickerAndroid = createComponent(<T = ItemValue>({
   classes,
   value,
   items = [],
@@ -44,17 +45,25 @@ export const PickerAndroid = createMemoComponent(<T = ItemValue>({
 }: PickerProps<T>, forwardRef: React.ForwardedRef<Text>) => {
 
   const selected = _.find(items, x => x.value === value);
+
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
   const pickerStyle = useComponentStyle('picker', classes, [
+    focused && 'focus',
     disabled ? 'disabled' : 'enabled',
   ]);
 
   function _setShowPicker(value: boolean) {
-    value ? onFocus() : onBlur();
+    value ? _onFocus() : _onBlur();
   }
 
   return (
     <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
-      <Text ref={forwardRef} style={textStyleNormalize([pickerStyle, style])}>{renderText(selected)}</Text>
+      <Text ref={forwardRef} style={textStyleNormalize([
+        useFocusRing(focused),
+        pickerStyle,
+        _.isFunction(style) ? style({ focus: focused }) : style,
+      ])}>{renderText(selected)}</Text>
       <PickerNative
         value={value}
         items={items}

@@ -32,6 +32,7 @@ import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
+import { useFocus } from '../../../internals/focus';
 
 type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput>, {
   name: string | string[];
@@ -42,6 +43,8 @@ export const FormTextField = createMemoComponent((
     classes,
     name,
     style,
+    onFocus,
+    onBlur,
     ...props
   }: FormTextFieldProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>
@@ -51,7 +54,11 @@ export const FormTextField = createMemoComponent((
   const invalid = !_.isEmpty(error);
 
   const theme = useTheme();
+
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
   const formTextFieldStyle = useComponentStyle('formTextField', classes, [
+    focused && 'focus',
     props.editable ? 'enabled' : 'disabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
@@ -65,6 +72,8 @@ export const FormTextField = createMemoComponent((
       onChangeText={onChange}
       onEndEditing={onEndEditing}
       onSubmitEditing={submit}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
       style={[
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formTextFieldStyle,

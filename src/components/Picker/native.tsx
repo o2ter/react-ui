@@ -45,8 +45,9 @@ type PickerNativeProps<T = ItemValue> = {
   onBlur?: VoidFunction;
 }
 
-export type PickerProps<T = ItemValue> = PickerNativeProps<T> & {
+export type PickerProps<T = ItemValue> = Omit<PickerNativeProps<T>, 'style'> & {
   classes?: ClassNames;
+  style?: StyleProp<TextStyle> | ((state: { focus: boolean; }) => StyleProp<TextStyle>);
 };
 
 export const PickerNative = createMemoComponent(<T = ItemValue>({

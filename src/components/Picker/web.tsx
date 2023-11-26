@@ -27,8 +27,9 @@ import _ from 'lodash';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ItemValue, PickerNative, PickerProps } from './native';
-import { createMemoComponent } from '../../internals/utils';
+import { createComponent } from '../../internals/utils';
 import { useComponentStyle } from '../Style';
+import { useFocus, useFocusRing } from '../../internals/focus';
 
 const _style = StyleSheet.create({
   picker: {
@@ -42,7 +43,7 @@ const _style = StyleSheet.create({
   }
 }) as any;
 
-export const PickerWeb = createMemoComponent(<T = ItemValue>(
+export const PickerWeb = createComponent(<T = ItemValue>(
   {
     classes,
     value,
@@ -56,9 +57,14 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
   }: PickerProps<T>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerNative<T>>>
 ) => {
+
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
   const pickerStyle = useComponentStyle('picker', classes, [
+    focused && 'focus',
     disabled ? 'disabled' : 'enabled',
   ]);
+
   return (
     <PickerNative
       ref={forwardRef}
@@ -67,9 +73,14 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
       disabled={disabled}
       renderText={renderText}
       onValueChange={onValueChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      style={[_style.picker, pickerStyle, style]} />
+      onFocus={_onFocus}
+      onBlur={_onBlur}
+      style={[
+        _style.picker,
+        useFocusRing(focused),
+        pickerStyle,
+        _.isFunction(style) ? style({ focus: focused }) : style,
+      ]} />
   );
 }, {
   displayName: 'Picker',

@@ -31,6 +31,8 @@ import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Checkbox from '../../Checkbox';
+import { useStableCallback } from 'sugax';
+import { useFocus } from '../../../internals/focus';
 
 type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>, {
   name: string | string[];
@@ -44,6 +46,8 @@ export const FormCheckbox = createMemoComponent((
     value,
     style,
     onPress,
+    onFocus,
+    onBlur,
     children,
     ...props
   }: FormCheckboxProps,
@@ -55,7 +59,10 @@ export const FormCheckbox = createMemoComponent((
 
   const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
 
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
   const formCheckboxStyle = useComponentStyle('formCheckbox', classes, [
+    focused && 'focus',
     selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
@@ -73,6 +80,8 @@ export const FormCheckbox = createMemoComponent((
         if (_.isNil(value)) return !state;
         return _.isArray(state) && state.includes(value) ? state.filter(x => x !== value) : [..._.castArray(state ?? []), value];
       }))}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
       {...props}
     >{children}</Checkbox>
   )

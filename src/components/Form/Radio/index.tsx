@@ -31,6 +31,7 @@ import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Radio from '../../Radio';
+import { useFocus } from '../../../internals/focus';
 
 type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Radio>, {
   name: string | string[];
@@ -44,6 +45,8 @@ export const FormRadio = createMemoComponent((
     value,
     style,
     onPress,
+    onFocus,
+    onBlur,
     children,
     ...props
   }: FormRadioProps,
@@ -55,7 +58,10 @@ export const FormRadio = createMemoComponent((
 
   const selected = value === _value;
 
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
   const formRadioStyle = useComponentStyle('formRadio', classes, [
+    focused && 'focus',
     selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
@@ -70,6 +76,8 @@ export const FormRadio = createMemoComponent((
         _.isFunction(style) ? style({ selected: selected ?? false }) : style,
       ]}
       onPress={onPress ?? (() => onChange(value))}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
       {...props}
     >{children}</Radio>
   )

@@ -28,24 +28,27 @@ import React from 'react';
 import { Animated, Easing, Platform, Pressable, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { useTheme } from '../../theme';
 
-import { createMemoComponent } from '../../internals/utils';
+import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { Modify } from '../../internals/types';
 import { flattenStyle } from '../Style/flatten';
 import { AnimatedPressable } from '../Animated';
+import { useFocus, useFocusRing } from '../../internals/focus';
 
 type SwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;
   selected?: boolean;
   tabIndex?: number;
-  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<ViewStyle>);
+  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; focus: boolean; }) => StyleProp<ViewStyle>);
 }>;
 
-export const Switch = createMemoComponent((
+export const Switch = createComponent((
   {
     classes,
     style,
     selected,
+    onFocus,
+    onBlur,
     children,
     ...props
   }: SwitchProps,
@@ -54,7 +57,11 @@ export const Switch = createMemoComponent((
 
   const theme = useTheme();
   const textStyle = useComponentStyle('text') as TextStyle;
+
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
   const switchStyle = useComponentStyle('switch', classes, [
+    focused && 'focus',
     selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
   ]);
@@ -74,6 +81,7 @@ export const Switch = createMemoComponent((
       borderWidth: theme.borderWidth,
       opacity: props.disabled ? 0.65 : 1,
     },
+    useFocusRing(focused),
     switchStyle,
   ]);
 
@@ -101,12 +109,14 @@ export const Switch = createMemoComponent((
             inputRange: [0, 1], outputRange: [theme.grays['300'], theme.themeColors.primary]
           }),
         },
-        _.isFunction(style) ? style({ selected: selected ?? false }) : style,
+        _.isFunction(style) ? style({ selected: selected ?? false, focus: focused }) : style,
       ]}
       {...Platform.select({
         web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
         default: {},
       })}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
       {...props}
     >
       <Animated.View

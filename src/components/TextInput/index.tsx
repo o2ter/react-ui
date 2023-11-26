@@ -25,25 +25,34 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextInput as RNTextInput, TextInputProps as RNTextInputProps } from 'react-native';
+import { TextInput as RNTextInput, TextInputProps as RNTextInputProps, StyleProp, TextStyle } from 'react-native';
 import { useTheme } from '../../theme';
 import { useDefaultInputStyle } from './style';
-import { createMemoComponent } from '../../internals/utils';
+import { createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
+import { useFocus, useFocusRing } from '../../internals/focus';
 
-type TextInputProps = RNTextInputProps & {
+type TextInputProps = Omit<RNTextInputProps, 'style'> & {
   classes?: ClassNames;
+  style?: StyleProp<TextStyle> | ((state: { focus: boolean; }) => StyleProp<TextStyle>);
 };
 
-export const TextInput = createMemoComponent(({
+export const TextInput = createComponent(({
   classes,
   style,
+  onFocus,
+  onBlur,
   ...props
 }: TextInputProps, forwardRef: React.ForwardedRef<RNTextInput>) => {
 
   const theme = useTheme();
-  const textInputStyle = useComponentStyle('textInput', classes);
+
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
+  const textInputStyle = useComponentStyle('textInput', classes, [
+    focused && 'focus',
+  ]);
   const defaultStyle = useDefaultInputStyle(theme);
 
   return (
@@ -51,9 +60,12 @@ export const TextInput = createMemoComponent(({
       ref={forwardRef}
       style={textStyleNormalize([
         defaultStyle,
+        useFocusRing(focused),
         textInputStyle,
-        style,
+        _.isFunction(style) ? style({ focus: focused }) : style,
       ])}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
       {...props} />
   );
 }, {
