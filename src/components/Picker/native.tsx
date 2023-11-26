@@ -47,7 +47,7 @@ type PickerNativeProps<T = ItemValue> = {
 
 export type PickerProps<T = ItemValue> = Omit<PickerNativeProps<T>, 'style'> & {
   classes?: ClassNames;
-  style?: StyleProp<TextStyle> | ((state: { focus: boolean; }) => StyleProp<TextStyle>);
+  style?: StyleProp<TextStyle> | ((state: { focused: boolean; }) => StyleProp<TextStyle>);
 };
 
 export const PickerNative = createMemoComponent(<T = ItemValue>({

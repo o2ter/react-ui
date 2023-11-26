@@ -62,7 +62,7 @@ export const PickerAndroid = createMemoComponent(<T = ItemValue>({
       <Text ref={forwardRef} style={textStyleNormalize([
         useFocusRing(focused),
         pickerStyle,
-        _.isFunction(style) ? style({ focus: focused }) : style,
+        _.isFunction(style) ? style({ focused }) : style,
       ])}>{renderText(selected)}</Text>
       <PickerNative
         value={value}

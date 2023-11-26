@@ -40,8 +40,8 @@ type CheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;
   selected?: boolean;
   tabIndex?: number;
-  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; focus: boolean; }) => StyleProp<ViewStyle>);
-  children: React.ReactNode | ((state: { selected: boolean; focus: boolean; }) => React.ReactNode);
+  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; focused: boolean; }) => StyleProp<ViewStyle>);
+  children: React.ReactNode | ((state: { selected: boolean; focused: boolean; }) => React.ReactNode);
 }>;
 
 export const Checkbox = createMemoComponent((
@@ -109,7 +109,7 @@ export const Checkbox = createMemoComponent((
       default: {},
     }),
     checkboxStyle,
-    _.isFunction(style) ? style({ selected: selected ?? false, focus: focused }) : style,
+    _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
   ]);
 
   return (
@@ -140,7 +140,7 @@ export const Checkbox = createMemoComponent((
           />
         </Svg>}
       </View>
-      {_.isFunction(children) ? children({ selected: selected ?? false, focus: focused }) : children}
+      {_.isFunction(children) ? children({ selected: selected ?? false, focused }) : children}
     </Pressable>
   )
 }, {

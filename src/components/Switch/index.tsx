@@ -39,7 +39,7 @@ type SwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;
   selected?: boolean;
   tabIndex?: number;
-  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; focus: boolean; }) => StyleProp<ViewStyle>);
+  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; focused: boolean; }) => StyleProp<ViewStyle>);
 }>;
 
 export const Switch = createMemoComponent((
@@ -109,7 +109,7 @@ export const Switch = createMemoComponent((
             inputRange: [0, 1], outputRange: [theme.grays['300'], theme.themeColors.primary]
           }),
         },
-        _.isFunction(style) ? style({ selected: selected ?? false, focus: focused }) : style,
+        _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
       ]}
       {...Platform.select({
         web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },

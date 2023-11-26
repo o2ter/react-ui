@@ -79,7 +79,7 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
         _style.picker,
         useFocusRing(focused),
         pickerStyle,
-        _.isFunction(style) ? style({ focus: focused }) : style,
+        _.isFunction(style) ? style({ focused }) : style,
       ]} />
   );
 }, {

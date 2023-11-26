@@ -35,7 +35,7 @@ import { useFocus, useFocusRing } from '../../internals/focus';
 
 type TextInputProps = Omit<RNTextInputProps, 'style'> & {
   classes?: ClassNames;
-  style?: StyleProp<TextStyle> | ((state: { focus: boolean; }) => StyleProp<TextStyle>);
+  style?: StyleProp<TextStyle> | ((state: { focused: boolean; }) => StyleProp<TextStyle>);
 };
 
 export const TextInput = createMemoComponent(({
@@ -43,6 +43,7 @@ export const TextInput = createMemoComponent(({
   style,
   onFocus,
   onBlur,
+  children,
   ...props
 }: TextInputProps, forwardRef: React.ForwardedRef<RNTextInput>) => {
 
@@ -62,11 +63,13 @@ export const TextInput = createMemoComponent(({
         defaultStyle,
         useFocusRing(focused),
         textInputStyle,
-        _.isFunction(style) ? style({ focus: focused }) : style,
+        _.isFunction(style) ? style({ focused }) : style,
       ])}
       onFocus={_onFocus}
       onBlur={_onBlur}
-      {...props} />
+      {...props}>
+      {children}
+    </RNTextInput>
   );
 }, {
   displayName: 'TextInput',
