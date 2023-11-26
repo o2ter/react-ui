@@ -51,6 +51,8 @@ import { AnimatedPressable } from '../Animated';
 
 type ButtonStateCallbackType = PressableStateCallbackType & {
   hovered: boolean;
+  pressed: boolean;
+  focused: boolean;
 };
 
 type ButtonProps = Modify<PressableProps, {
