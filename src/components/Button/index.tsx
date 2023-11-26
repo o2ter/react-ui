@@ -36,6 +36,7 @@ import {
   MouseEvent,
   GestureResponderEvent,
   PressableStateCallbackType,
+  Platform,
 } from 'react-native';
 
 import { useTheme } from '../../theme';
@@ -94,27 +95,30 @@ export const Button = createMemoComponent(({
   onHoverOut,
   onPressIn,
   onPressOut,
+  onFocus,
+  onBlur,
   ...props
 }: ButtonProps, forwardRef: React.ForwardedRef<typeof AnimatedPressable>) => {
 
-  const [focused, setFocused] = React.useState({ hovered: false, pressed: false });
+  const [state, setState] = React.useState({ hovered: false, pressed: false, focused: false });
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
 
     Animated.timing(fadeAnim, {
-      toValue: focused.hovered || focused.pressed ? 1 : 0,
+      toValue: state.hovered || state.pressed || state.focused ? 1 : 0,
       duration: theme.buttonDuration,
       easing: theme.buttonEasing,
       useNativeDriver: false,
     }).start();
 
-  }, [focused.hovered || focused.pressed]);
+  }, [state.hovered || state.pressed || state.focused]);
 
   const theme = useTheme();
   const buttonStyle = useComponentStyle('button', classes, [
-    focused.hovered && 'hover',
-    focused.pressed && 'active',
+    state.hovered && 'hover',
+    state.pressed && 'active',
+    state.focused && 'focus',
     disabled ? 'disabled' : 'enabled',
   ]);
   const selectedColor = color ?? theme.themeColors[variant] ?? theme.colors[variant];
@@ -155,13 +159,13 @@ export const Button = createMemoComponent(({
   const _style = flattenStyle([
     defaultStyle.text,
     _.pick(colors, textStyleKeys) as TextStyle,
-    _.isFunction(titleStyle) ? titleStyle(focused) : titleStyle,
+    _.isFunction(titleStyle) ? titleStyle(state) : titleStyle,
   ]);
   const _wrapped = (children: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
 
   const content = _.isEmpty(children) && !_.isEmpty(title)
     ? <Animated.Text selectable={false} style={_style}>{title}</Animated.Text>
-    : _.isFunction(children) ? () => _wrapped(children(focused)) : _wrapped(children);
+    : _.isFunction(children) ? () => _wrapped(children(state)) : _wrapped(children);
 
   return (
     <AnimatedPressable
@@ -170,24 +174,36 @@ export const Button = createMemoComponent(({
       focusable={!disabled && focusable !== false}
       style={[
         defaultStyle.button,
+        Platform.select({
+          web: { outline: 0 } as any,
+          default: {},
+        }),
         _.omit(colors, textStyleKeys),
-        _.isFunction(style) ? style(focused) : style,
+        _.isFunction(style) ? style(state) : style,
       ]}
       onPressIn={(e: GestureResponderEvent) => {
-        setFocused(state => ({ ...state, pressed: true }));
+        setState(state => ({ ...state, pressed: true }));
         if (_.isFunction(onPressIn)) onPressIn(e);
       }}
       onPressOut={(e: GestureResponderEvent) => {
-        setFocused(state => ({ ...state, pressed: false }));
+        setState(state => ({ ...state, pressed: false }));
         if (_.isFunction(onPressOut)) onPressOut(e);
       }}
       onHoverIn={(e) => {
-        setFocused(state => ({ ...state, hovered: true }));
+        setState(state => ({ ...state, hovered: true }));
         if (_.isFunction(onHoverIn)) onHoverIn(e);
       }}
       onHoverOut={(e) => {
-        setFocused(state => ({ ...state, hovered: false }));
+        setState(state => ({ ...state, hovered: false }));
         if (_.isFunction(onHoverOut)) onHoverOut(e);
+      }}
+      onFocus={(e) => {
+        setState(state => ({ ...state, focused: true }));
+        if (_.isFunction(onFocus)) onFocus(e);
+      }}
+      onBlur={(e) => {
+        setState(state => ({ ...state, focused: false }));
+        if (_.isFunction(onBlur)) onBlur(e);
       }}
       {...props}>
       {content}

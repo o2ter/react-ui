@@ -104,7 +104,10 @@ export const Checkbox = createMemoComponent((
       borderWidth: theme.borderWidth,
       opacity: props.disabled ? 0.65 : 1,
     },
-    useFocusRing(focused),
+    Platform.select({
+      web: { outline: 0 } as any,
+      default: {},
+    }),
     checkboxStyle,
     _.isFunction(style) ? style({ selected: selected ?? false, focus: focused }) : style,
   ]);
@@ -122,6 +125,7 @@ export const Checkbox = createMemoComponent((
       {...props}
     >
       <View style={[
+        useFocusRing(focused),
         _.pick(_style, ...innerStyle),
         { marginTop: _.isNumber(lineHeight) ? (lineHeight - 1) * 0.5 * fontSize : 0 }
       ]}>
