@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ItemValue, PickerNative, PickerProps } from './native';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { useComponentStyle } from '../Style';
 import { useFocus, useFocusRing } from '../../internals/focus';
 
@@ -43,7 +43,7 @@ const _style = StyleSheet.create({
   }
 }) as any;
 
-export const PickerWeb = createComponent(<T = ItemValue>(
+export const PickerWeb = createMemoComponent(<T = ItemValue>(
   {
     classes,
     value,

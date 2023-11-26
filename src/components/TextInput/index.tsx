@@ -28,7 +28,7 @@ import React from 'react';
 import { TextInput as RNTextInput, TextInputProps as RNTextInputProps, StyleProp, TextStyle } from 'react-native';
 import { useTheme } from '../../theme';
 import { useDefaultInputStyle } from './style';
-import { createComponent } from '../../internals/utils';
+import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 import { useFocus, useFocusRing } from '../../internals/focus';
@@ -38,7 +38,7 @@ type TextInputProps = Omit<RNTextInputProps, 'style'> & {
   style?: StyleProp<TextStyle> | ((state: { focus: boolean; }) => StyleProp<TextStyle>);
 };
 
-export const TextInput = createComponent(({
+export const TextInput = createMemoComponent(({
   classes,
   style,
   onFocus,
