@@ -25,12 +25,14 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text, TextProps, Pressable } from 'react-native';
+import { Text, TextProps, Pressable, Platform } from 'react-native';
 import { Modify } from '../../internals/types';
 import { useModal } from '../Modal';
 import { textStyleNormalize } from '../Text/style';
+import Icon from '../Icon';
+import { useTheme } from '../../theme';
 
-type PickerBaseProps = Modify<TextProps, {
+type PickerBaseProps = Modify<TextProps & Pick<React.ComponentPropsWithoutRef<typeof Pressable>, 'onFocus' | 'onBlur'>, {
   text?: string;
   picker?: any;
   disabled?: boolean;
@@ -41,14 +43,33 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
   text,
   picker,
   disabled,
+  onFocus,
+  onBlur,
   ...props
 }, forwardRef) => {
 
   const showModal = useModal();
+  const theme = useTheme();
 
   return (
-    <Pressable ref={forwardRef} onPress={() => { if (!disabled) showModal(picker) }}>
-      <Text style={textStyleNormalize(style)} {...props}>{_.isEmpty(text) ? ' ' : text}</Text>
+    <Pressable
+      ref={forwardRef}
+      onPress={() => { if (!disabled) showModal(picker) }}
+      style={Platform.select({
+        web: { outline: 0 } as any,
+        default: {},
+      })}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    >
+      <Text style={textStyleNormalize(style)} {...props}>
+        <Icon
+          icon='MaterialIcons'
+          name={'edit-calendar' as any}
+          style={{ marginRight: theme.spacer * 0.375 }}
+        />
+        {_.isEmpty(text) ? ' ' : text}
+      </Text>
     </Pressable>
   )
 });

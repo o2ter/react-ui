@@ -73,7 +73,7 @@ export const FormRadio = createMemoComponent((
       selected={selected}
       style={[
         formRadioStyle,
-        _.isFunction(style) ? style({ selected: selected ?? false }) : style,
+        _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
       ]}
       onPress={onPress ?? (() => onChange(value))}
       onFocus={_onFocus}

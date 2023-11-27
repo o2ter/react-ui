@@ -87,7 +87,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
         defaultStyle,
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formPickerStyle,
-        style,
+        _.isFunction(style) ? style({ focused }) : style,
       ]}
       {...props} />
   )

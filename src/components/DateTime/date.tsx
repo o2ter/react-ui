@@ -25,7 +25,6 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextProps } from 'react-native';
 import { useTheme } from '../../theme';
 import { Calendar } from '../Calendar';
 import { PickerBase } from './picker';
@@ -33,9 +32,10 @@ import { Modify } from '../../internals/types';
 import { useDefaultInputStyle } from '../TextInput/style';
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
+import { useFocus, useFocusRing } from '../../internals/focus';
 
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
-type DatePickerProps = Modify<TextProps, DatePickerBaseProps>;
+type DatePickerProps = Modify<React.ComponentPropsWithoutRef<typeof PickerBase>, DatePickerBaseProps>;
 
 export const DatePicker = createMemoComponent((
   {
@@ -45,6 +45,8 @@ export const DatePicker = createMemoComponent((
     max,
     multiple,
     onChange,
+    onFocus,
+    onBlur,
     disabled = false,
     selectable = () => true,
     style,
@@ -56,7 +58,11 @@ export const DatePicker = createMemoComponent((
 
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme);
+
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
   const datePickerStyle = useComponentStyle('datePicker', classes, [
+    focused && 'focus',
     disabled ? 'disabled' : 'enabled',
   ]);
 
@@ -77,7 +83,8 @@ export const DatePicker = createMemoComponent((
           width: '80%',
           maxWidth: 350,
           backgroundColor: 'white',
-        }} />
+        }}
+      />
     );
   }, [value]);
 
@@ -88,11 +95,15 @@ export const DatePicker = createMemoComponent((
       text={date.map(x => x.toString()).join(', ')}
       style={[
         defaultStyle,
+        useFocusRing(focused),
         datePickerStyle,
         style
       ]}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
       picker={<_Calendar />}
-      {...props} />
+      {...props}
+    />
   )
 }, {
   displayName: 'DatePicker',

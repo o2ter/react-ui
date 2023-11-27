@@ -74,7 +74,7 @@ export const FormCheckbox = createMemoComponent((
       selected={selected}
       style={[
         formCheckboxStyle,
-        _.isFunction(style) ? style({ selected: selected ?? false }) : style,
+        _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
       ]}
       onPress={onPress ?? (() => onChange((state: any) => {
         if (_.isNil(value)) return !state;
