@@ -51,6 +51,7 @@ export const TextInput = createMemoComponent(({
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
+  const textStyle = useComponentStyle('text');
   const textInputStyle = useComponentStyle('textInput', classes, [
     focused && 'focus',
   ]);
@@ -62,6 +63,7 @@ export const TextInput = createMemoComponent(({
       style={textStyleNormalize([
         defaultStyle,
         useFocusRing(focused),
+        textStyle,
         textInputStyle,
         _.isFunction(style) ? style({ focused }) : style,
       ])}

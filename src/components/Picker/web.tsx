@@ -30,6 +30,8 @@ import { ItemValue, PickerNative, PickerProps } from './native';
 import { createMemoComponent } from '../../internals/utils';
 import { useComponentStyle } from '../Style';
 import { useFocus, useFocusRing } from '../../internals/focus';
+import { useTheme } from '../../theme';
+import { textStyleNormalize } from '../Text/style';
 
 const _style = StyleSheet.create({
   picker: {
@@ -58,8 +60,11 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerNative<T>>>
 ) => {
 
+  const theme = useTheme();
+
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
+  const textStyle = useComponentStyle('text');
   const pickerStyle = useComponentStyle('picker', classes, [
     focused && 'focus',
     disabled ? 'disabled' : 'enabled',
@@ -75,12 +80,18 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
       onValueChange={onValueChange}
       onFocus={_onFocus}
       onBlur={_onBlur}
-      style={[
+      style={textStyleNormalize([
         _style.picker,
+        {
+          color: theme.root.textColor,
+          fontSize: theme.root.fontSize,
+          lineHeight: theme.root.lineHeight,
+        },
         useFocusRing(focused),
+        textStyle,
         pickerStyle,
         _.isFunction(style) ? style({ focused }) : style,
-      ]} />
+      ])} />
   );
 }, {
   displayName: 'Picker',

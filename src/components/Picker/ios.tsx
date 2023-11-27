@@ -31,6 +31,7 @@ import { createMemoComponent } from '../../internals/utils';
 import { useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 import { useFocus, useFocusRing } from '../../internals/focus';
+import { useTheme } from '../../theme';
 
 export const PickerIOS = createMemoComponent(<T = ItemValue>({
   classes,
@@ -49,8 +50,11 @@ export const PickerIOS = createMemoComponent(<T = ItemValue>({
   const [showPicker, setShowPicker] = React.useState(false);
   const [orientation, setOrientation] = React.useState('portrait');
 
+  const theme = useTheme();
+
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
+  const textStyle = useComponentStyle('text');
   const pickerStyle = useComponentStyle('picker', classes, [
     focused && 'focus',
     disabled ? 'disabled' : 'enabled',
@@ -66,6 +70,12 @@ export const PickerIOS = createMemoComponent(<T = ItemValue>({
       <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
         <Text ref={forwardRef} style={textStyleNormalize([
           useFocusRing(focused),
+          {
+            color: theme.root.textColor,
+            fontSize: theme.root.fontSize,
+            lineHeight: theme.root.lineHeight,
+          },
+          textStyle,
           pickerStyle,
           _.isFunction(style) ? style({ focused }) : style,
         ])}>{renderText(selected)}</Text>

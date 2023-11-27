@@ -31,8 +31,9 @@ import { useTheme } from '../../theme';
 export const useDefaultInputStyle = (theme: ReturnType<typeof useTheme>) => React.useMemo(() => StyleSheet.create({
   style: {
     color: theme.root.textColor,
-    backgroundColor: 'transparent',
     fontSize: theme.root.fontSize,
+    lineHeight: theme.root.lineHeight,
+    backgroundColor: 'transparent',
     borderColor: theme.grays['400'],
     borderWidth: theme.borderWidth,
     borderRadius: theme.borderRadiusBase,
