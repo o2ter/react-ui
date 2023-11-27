@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, ViewProps, Text, Pressable } from 'react-native';
+import { View, ViewProps, Text, Pressable, Platform } from 'react-native';
 import { Picker } from '../Picker';
 import { useTheme } from '../../theme';
 import { DateTime } from 'luxon';
@@ -129,20 +129,32 @@ const CalendarBase = createMemoComponent(({
             }} />
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Pressable onPress={() => {
-            if (current.month === 1) {
-              setCurrent(current => ({ year: current.year - 1, month: 12 }));
-            } else {
-              setCurrent(current => ({ ...current, month: current.month - 1 }));
-            }
-          }}><Icon name='chevron-left' size={theme.root.fontSize * 1.5} /></Pressable>
-          <Pressable onPress={() => {
-            if (current.month === 12) {
-              setCurrent(current => ({ year: current.year + 1, month: 1 }));
-            } else {
-              setCurrent(current => ({ ...current, month: current.month + 1 }));
-            }
-          }}><Icon name='chevron-right' size={theme.root.fontSize * 1.5} /></Pressable>
+          <Pressable
+            {...Platform.select({
+              web: { tabIndex: -1 },
+              default: {},
+            })}
+            onPress={() => {
+              if (current.month === 1) {
+                setCurrent(current => ({ year: current.year - 1, month: 12 }));
+              } else {
+                setCurrent(current => ({ ...current, month: current.month - 1 }));
+              }
+            }}
+          ><Icon name='chevron-left' size={theme.root.fontSize * 1.5} /></Pressable>
+          <Pressable
+            {...Platform.select({
+              web: { tabIndex: -1 },
+              default: {},
+            })}
+            onPress={() => {
+              if (current.month === 12) {
+                setCurrent(current => ({ year: current.year + 1, month: 1 }));
+              } else {
+                setCurrent(current => ({ ...current, month: current.month + 1 }));
+              }
+            }}
+          ><Icon name='chevron-right' size={theme.root.fontSize * 1.5} /></Pressable>
         </View>
       </View>
       <View style={[calendarStyle.weekContainer, calendarWeekContainerStyle]}>

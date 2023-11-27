@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 import { Svg, Circle } from 'react-native-svg';
 import { useTheme } from '../../theme';
 import { DateTime } from 'luxon';
@@ -77,6 +77,10 @@ export const CalendarBody: React.FC<{
         <Pressable
           key={`${id}-day-${day}`}
           style={[calendarStyle.weekdayContainer, calendarWeekdayContainerStyle]}
+          {...Platform.select({
+            web: { tabIndex: -1 },
+            default: {},
+          })}
           onPress={() => { if (selectable(dateToString(year, month, day))) onSelect({ year, month, day }) }}>
           {selected && (
             <Svg viewBox='0 0 100 100' style={[{ zIndex: -1 }, StyleSheet.absoluteFill]}>
