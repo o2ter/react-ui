@@ -163,9 +163,10 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
       setTouched(true);
       if (_.isFunction(onSubmit)) _showError(async () => {
         const _tasks = await Promise.all(_.map(tasks, ({ task, retry }) => task().then(
-          () => ({ status: 'fulfilled' }),
-          (reason) => ({ status: 'rejected', reason, retry }),
+          () => ({ status: 'fulfilled', task }),
+          (reason) => ({ status: 'rejected', reason, task, retry }),
         )));
+        updateTasks(v => _.filter(v, x => !_.some(_tasks, y => x.task === y.task)));
         const rejected = _.filter(_tasks, ({ status }) => status === 'rejected') as any;
         if (!_.isEmpty(rejected)) {
           for (const { retry } of rejected) retry?.();
