@@ -156,6 +156,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     },
     reset: () => {
       setValues(initialValues);
+      updateTasks([]);
       if (_.isFunction(onReset)) _showError(() => onReset(formState));
       setCounts(c => ({ ...c, reset: c.reset + 1 }));
     },
