@@ -31,7 +31,7 @@ import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Switch from '../../Switch';
-import { useFocus } from '../../../internals/focus';
+import { useFocus, useFocusRing } from '../../../internals/focus';
 
 type FormSwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Switch>, {
   name: string | string[];
@@ -72,6 +72,7 @@ export const FormSwitch = createMemoComponent((
       ref={forwardRef}
       selected={selected}
       style={[
+        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
         formSwitchStyle,
         _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
       ]}

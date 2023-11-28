@@ -53,7 +53,10 @@ export const useFocus = <T extends (...args: any) => void>(
   return [focused, _focus, _blur] as const;
 }
 
-export const useFocusRing = (focused: boolean) => {
+export const useFocusRing = (
+  focused: boolean,
+  variant: string = 'primary',
+) => {
   const theme = useTheme();
   const { value, start } = useAnimate(0);
   React.useEffect(() => {
@@ -68,16 +71,16 @@ export const useFocusRing = (focused: boolean) => {
   });
   if (value === 0) return outline;
   return {
-    borderColor: tintColor(theme.themeColors['primary'], 0.5),
+    borderColor: tintColor(theme.themeColors[variant], 0.5),
     ...outline,
     ...selectPlatformShadow({
-      shadowColor: theme.themeColors['primary'],
+      shadowColor: theme.themeColors[variant],
       shadowOffset: {
         width: 0,
         height: 0,
       },
       shadowRadius: 4 * value,
-      boxShadow: `0 0 0 ${4 * value}px ${rgba(theme.themeColors['primary'], 0.25)}`
+      boxShadow: `0 0 0 ${4 * value}px ${rgba(theme.themeColors[variant], 0.25)}`
     }),
   };
 }

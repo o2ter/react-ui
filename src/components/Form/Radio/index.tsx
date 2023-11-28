@@ -31,7 +31,7 @@ import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Radio from '../../Radio';
-import { useFocus } from '../../../internals/focus';
+import { useFocus, useFocusRing } from '../../../internals/focus';
 
 type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Radio>, {
   name: string | string[];
@@ -72,6 +72,7 @@ export const FormRadio = createMemoComponent((
       ref={forwardRef}
       selected={selected}
       style={[
+        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
         formRadioStyle,
         _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
       ]}

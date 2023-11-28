@@ -31,6 +31,7 @@ import { Modify } from '../../../internals/types';
 import { DatePicker } from '../../DateTime';
 import { createMemoComponent } from '../../../internals/utils';
 import { ClassNames, useComponentStyle } from '../../Style';
+import { useFocus, useFocusRing } from '../../../internals/focus';
 
 type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   classes?: ClassNames;
@@ -46,6 +47,8 @@ export const FormDate = createMemoComponent((
     multiple,
     style,
     disabled = false,
+    onFocus,
+    onBlur,
     selectable = () => true,
     children,
     ...props
@@ -57,7 +60,11 @@ export const FormDate = createMemoComponent((
   const invalid = !_.isEmpty(error);
 
   const theme = useTheme();
+
+  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+
   const formDateStyle = useComponentStyle('formDate', classes, [
+    focused && 'focus',
     disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
@@ -72,9 +79,12 @@ export const FormDate = createMemoComponent((
       max={max}
       multiple={multiple}
       onChange={_onChange}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
       selectable={selectable}
       disabled={disabled}
       style={[
+        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formDateStyle,
         style

@@ -34,7 +34,7 @@ import { useEquivalent } from 'sugax';
 import { createMemoComponent } from '../../../internals/utils';
 import { ItemValue } from '../../Picker/native';
 import { useComponentStyle } from '../../Style';
-import { useFocus } from '../../../internals/focus';
+import { useFocus, useFocusRing } from '../../../internals/focus';
 
 type FormPickerProps<T = ItemValue> = Modify<React.ComponentPropsWithoutRef<typeof Picker<T>>, {
   name: string | string[];
@@ -84,6 +84,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
       onFocus={_onFocus}
       onBlur={_onBlur}
       style={[
+        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
         defaultStyle,
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formPickerStyle,

@@ -32,7 +32,7 @@ import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
-import { useFocus } from '../../../internals/focus';
+import { useFocus, useFocusRing } from '../../../internals/focus';
 
 type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput>, {
   name: string | string[];
@@ -76,8 +76,9 @@ export const FormTextField = createMemoComponent((
       onBlur={_onBlur}
       style={[
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
+        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
         formTextFieldStyle,
-        style,
+        _.isFunction(style) ? style({ focused }) : style,
       ]}
       {...props} />
   );

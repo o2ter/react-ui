@@ -32,7 +32,7 @@ import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Checkbox from '../../Checkbox';
 import { useStableCallback } from 'sugax';
-import { useFocus } from '../../../internals/focus';
+import { useFocus, useFocusRing } from '../../../internals/focus';
 
 type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>, {
   name: string | string[];
@@ -73,6 +73,7 @@ export const FormCheckbox = createMemoComponent((
       ref={forwardRef}
       selected={selected}
       style={[
+        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
         formCheckboxStyle,
         _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
       ]}
