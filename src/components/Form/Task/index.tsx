@@ -25,6 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
+import { useAlert } from '../../Alert';
 
 const FormTaskContext = React.createContext<(task: () => Promise<void>) => void>(() => void 0);
 export const FormTaskProvider = FormTaskContext.Provider;
@@ -40,11 +41,16 @@ export const FormTaskRunner: React.FC<FormTaskRunnerProps> = ({
   tasks,
   updateTasks,
 }) => {
+  const { showError } = useAlert();
   React.useEffect(() => {
     const [first] = tasks;
     if (!first) return;
     (async () => {
-      await first();
+      try {
+        await first();
+      } catch (e: any) {
+        showError(e as Error);
+      }
       updateTasks(t => _.filter(t, x => x !== first));
     })();
   }, [tasks]);
