@@ -57,7 +57,7 @@ export const defaultPalette = (
     });
   }),
 
-  toastColors: memoize((color: string) => ({
+  alertColors: memoize((color: string) => ({
     color: theme.themeColors[color] ?? theme.colors[color] ?? color,
     borderColor: theme.themeColors[color] ?? theme.colors[color] ?? color,
     messageColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[800]),

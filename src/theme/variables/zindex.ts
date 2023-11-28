@@ -32,4 +32,4 @@ export const modalBackdrop = 1050;
 export const modal = 1055;
 export const popover = 1070;
 export const indicator = 1080;
-export const toast = 1090;
+export const alert = 1090;

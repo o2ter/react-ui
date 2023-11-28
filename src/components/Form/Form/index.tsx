@@ -28,7 +28,7 @@ import React from 'react';
 import { useFormGroup } from '../Group';
 import { useStableRef } from 'sugax';
 import { ISchema, object, TypeOfSchema, ValidateError } from '@o2ter/valid.js';
-import { useToast } from '../../Toast';
+import { useAlert } from '../../Alert';
 import { createMemoComponent } from '../../../internals/utils';
 
 export type FormState = {
@@ -122,7 +122,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const _schema = React.useMemo(() => object(schema ?? {}), [schema]);
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
 
-  const { showError } = useToast();
+  const { showError } = useAlert();
   const _showError = React.useCallback((resolve: () => any) => {
     (async () => {
       try { await resolve(); } catch (e) {

@@ -40,5 +40,5 @@ export const activityIndicatorEasing = Easing.linear;
 export const buttonDuration: number = 100;
 export const buttonEasing = Easing.linear;
 
-export const toastDuration: number = 250;
-export const toastEasing = Easing.linear;
+export const alertDuration: number = 250;
+export const alertEasing = Easing.linear;

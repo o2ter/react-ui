@@ -72,8 +72,8 @@ export type ComponentStyles = {
   calendarWeekdayContainer?: StyleProp<ViewStyle>;
   calendarWeekday?: StyleProp<TextStyle>;
 
-  toast?: StyleProp<ViewStyle>;
-  toastText?: StyleProp<TextStyle>;
+  alert?: StyleProp<ViewStyle>;
+  alertText?: StyleProp<TextStyle>;
 
   popover?: StyleProp<ViewStyle>;
   tooltip?: StyleProp<ViewStyle>;
