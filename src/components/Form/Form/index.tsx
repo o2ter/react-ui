@@ -30,6 +30,7 @@ import { useStableRef } from 'sugax';
 import { ISchema, object, TypeOfSchema, ValidateError } from '@o2ter/valid.js';
 import { useAlert } from '../../Alert';
 import { createMemoComponent } from '../../../internals/utils';
+import { FormTaskProvider, FormTaskRunner } from '../Task';
 
 export type FormState = {
   values: Record<string, any>;
@@ -119,6 +120,9 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const [values, setValues] = React.useState(initialValues);
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
 
+  const [tasks, updateTasks] = React.useState<(() => Promise<void>)[]>([]);
+  const submitTasks = React.useCallback((task: () => Promise<void>) => updateTasks(t => [...t, task]), []);
+
   const _schema = React.useMemo(() => object(schema ?? {}), [schema]);
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
 
@@ -144,7 +148,14 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     },
     submit: () => {
       setTouched(true);
-      if (_.isFunction(onSubmit)) _showError(() => onSubmit(_schema.cast(values), formState));
+      if (_.isFunction(onSubmit)) _showError(() => new Promise<void>((res, rej) => submitTasks(async () => {
+        try {
+          await onSubmit(_schema.cast(values), formState);
+          res();
+        } catch (e) {
+          rej(e);
+        }
+      })));
       setCounts(c => ({ ...c, submit: c.submit + 1 }));
     },
     action: (action: string) => {
@@ -184,9 +195,14 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
 
   React.useImperativeHandle(forwardRef, () => formState, [formState]);
 
-  return <FormContext.Provider value={formState}>
-    {_.isFunction(children) ? children(formState) : children}
-  </FormContext.Provider>;
+  return (
+    <FormContext.Provider value={formState}>
+      <FormTaskProvider value={submitTasks}>
+        <FormTaskRunner tasks={tasks} updateTasks={updateTasks} />
+        {_.isFunction(children) ? children(formState) : children}
+      </FormTaskProvider>
+    </FormContext.Provider>
+  );
 }, {
   displayName: 'Form',
 });
