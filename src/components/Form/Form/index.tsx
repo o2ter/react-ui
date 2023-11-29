@@ -147,6 +147,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const [nextTick, setNextTick] = React.useState<((x: NextTickParam) => void)[]>([]);
 
   React.useEffect(() => {
+    if (_.isEmpty(nextTick)) return;
     for (const callback of nextTick) callback({ values, formState, schema: _schema, initialValues });
     setNextTick(v => _.filter(v, x => _.every(nextTick, c => c !== x)));
   }, [nextTick]);
