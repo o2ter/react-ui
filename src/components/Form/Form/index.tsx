@@ -138,6 +138,20 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     })();
   }, [showError]);
 
+  type NextTickParam = {
+    values: typeof values;
+    formState: typeof formState;
+    schema: typeof _schema;
+    initialValues: typeof initialValues;
+  };
+  const [nextTick, setNextTick] = React.useState<((x: NextTickParam) => void)[]>([]);
+
+  React.useEffect(() => {
+    const param = { values, formState, schema: _schema, initialValues };
+    for (const callback of nextTick) callback(param);
+    setNextTick(v => _.filter(v, x => _.every(nextTick, c => c !== x)));
+  }, [nextTick]);
+
   const stableRef = useStableRef({
     error: async (error: Error, state: FormState & { preventDefault: VoidFunction }) => {
       if (_.isFunction(onError)) await onError(error, state);
@@ -145,24 +159,30 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     reset: () => {
       _showError(async () => {
         await Promise.all(_.flatMap(listeners, x => x.action === 'reset' ? x.callback() : []));
-        setValues(initialValues);
-        if (_.isFunction(onReset)) _showError(() => onReset(formState));
-        setCounts(c => ({ ...c, reset: c.reset + 1 }));
+        setNextTick(v => [...v, ({ formState, initialValues }) => {
+          setValues(initialValues);
+          if (_.isFunction(onReset)) _showError(() => onReset(formState));
+          setCounts(c => ({ ...c, reset: c.reset + 1 }));
+        }]);
       });
     },
     submit: () => {
       _showError(async () => {
-        setTouched(true);
         await Promise.all(_.flatMap(listeners, x => x.action === 'submit' ? x.callback() : []));
-        if (_.isFunction(onSubmit)) _showError(() => onSubmit(_schema.cast(values), formState));
-        setCounts(c => ({ ...c, submit: c.submit + 1 }));
+        setNextTick(v => [...v, ({ values, formState, schema }) => {
+          setTouched(true);
+          if (_.isFunction(onSubmit)) _showError(() => onSubmit(schema.cast(values), formState));
+          setCounts(c => ({ ...c, submit: c.submit + 1 }));
+        }]);
       });
     },
     action: (action: string) => {
       _showError(async () => {
         await Promise.all(_.flatMap(listeners, x => x.action === action ? x.callback() : []));
-        if (_.isFunction(onAction)) _showError(() => onAction(action, formState));
-        setCounts(c => ({ ...c, actions: { ...c.actions, [action]: (c.actions[action] ?? 0) + 1 } }));
+        setNextTick(v => [...v, ({ formState }) => {
+          if (_.isFunction(onAction)) _showError(() => onAction(action, formState));
+          setCounts(c => ({ ...c, actions: { ...c.actions, [action]: (c.actions[action] ?? 0) + 1 } }));
+        }]);
       });
     },
   });
