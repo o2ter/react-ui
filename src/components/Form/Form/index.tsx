@@ -147,10 +147,26 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const [nextTick, setNextTick] = React.useState<((x: NextTickParam) => void)[]>([]);
 
   React.useEffect(() => {
-    const param = { values, formState, schema: _schema, initialValues };
-    for (const callback of nextTick) callback(param);
+    for (const callback of nextTick) callback({ values, formState, schema: _schema, initialValues });
     setNextTick(v => _.filter(v, x => _.every(nextTick, c => c !== x)));
   }, [nextTick]);
+
+  const actions = {
+    reset: ({ formState, initialValues }: NextTickParam) => {
+      setValues(initialValues);
+      if (_.isFunction(onReset)) _showError(() => onReset(formState));
+      setCounts(c => ({ ...c, reset: c.reset + 1 }));
+    },
+    submit: ({ values, formState, schema }: NextTickParam) => {
+      setTouched(true);
+      if (_.isFunction(onSubmit)) _showError(() => onSubmit(schema.cast(values), formState));
+      setCounts(c => ({ ...c, submit: c.submit + 1 }));
+    },
+    action: ({ formState }: NextTickParam, action: string) => {
+      if (_.isFunction(onAction)) _showError(() => onAction(action, formState));
+      setCounts(c => ({ ...c, actions: { ...c.actions, [action]: (c.actions[action] ?? 0) + 1 } }));
+    },
+  };
 
   const stableRef = useStableRef({
     error: async (error: Error, state: FormState & { preventDefault: VoidFunction }) => {
@@ -158,31 +174,32 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     },
     reset: () => {
       _showError(async () => {
-        await Promise.all(_.flatMap(listeners, x => x.action === 'reset' ? x.callback() : []));
-        setNextTick(v => [...v, ({ formState, initialValues }) => {
-          setValues(initialValues);
-          if (_.isFunction(onReset)) _showError(() => onReset(formState));
-          setCounts(c => ({ ...c, reset: c.reset + 1 }));
-        }]);
+        const resolved = await Promise.all(_.flatMap(listeners, x => x.action === 'reset' ? x.callback() : []));
+        if (_.isEmpty(resolved)) {
+          actions.reset({ values, formState, schema: _schema, initialValues });
+        } else {
+          setNextTick(v => [...v, actions.reset]);
+        }
       });
     },
     submit: () => {
       _showError(async () => {
-        await Promise.all(_.flatMap(listeners, x => x.action === 'submit' ? x.callback() : []));
-        setNextTick(v => [...v, ({ values, formState, schema }) => {
-          setTouched(true);
-          if (_.isFunction(onSubmit)) _showError(() => onSubmit(schema.cast(values), formState));
-          setCounts(c => ({ ...c, submit: c.submit + 1 }));
-        }]);
+        const resolved = await Promise.all(_.flatMap(listeners, x => x.action === 'submit' ? x.callback() : []));
+        if (_.isEmpty(resolved)) {
+          actions.submit({ values, formState, schema: _schema, initialValues });
+        } else {
+          setNextTick(v => [...v, actions.submit]);
+        }
       });
     },
     action: (action: string) => {
       _showError(async () => {
-        await Promise.all(_.flatMap(listeners, x => x.action === action ? x.callback() : []));
-        setNextTick(v => [...v, ({ formState }) => {
-          if (_.isFunction(onAction)) _showError(() => onAction(action, formState));
-          setCounts(c => ({ ...c, actions: { ...c.actions, [action]: (c.actions[action] ?? 0) + 1 } }));
-        }]);
+        const resolved = await Promise.all(_.flatMap(listeners, x => x.action === action ? x.callback() : []));
+        if (_.isEmpty(resolved)) {
+          actions.action({ values, formState, schema: _schema, initialValues }, action);
+        } else {
+          setNextTick(v => [...v, (x) => actions.action(x, action)]);
+        }
       });
     },
   });
