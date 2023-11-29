@@ -31,7 +31,7 @@ import { Modify } from '../../../internals/types';
 import { createMemoComponent } from '../../../internals/utils';
 
 type FormButtonProps = Modify<React.ComponentPropsWithoutRef<typeof Button>, {
-  action?: 'submit' | 'reset';
+  action?: 'submit' | 'reset' | (string & {});
 }>
 
 export const FormButton = createMemoComponent((
@@ -42,7 +42,7 @@ export const FormButton = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Button>>
 ) => {
 
-  const { submit, reset } = useForm();
+  const { submit, reset, action: _action } = useForm();
 
   const defaultProps = {
     submit: {
@@ -59,7 +59,7 @@ export const FormButton = createMemoComponent((
     <Button
       ref={forwardRef}
       title={_.upperCase(action)}
-      {..._.get(defaultProps, action, {})}
+      {..._.get(defaultProps, action, { onPress: () => _action(action) })}
       {...props} />
   );
 }, {

@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
-import { useStableRef } from 'sugax';
+import { Awaitable, useStableRef } from 'sugax';
 import { ISchema, object, TypeOfSchema, ValidateError } from '@o2ter/valid.js';
 import { useAlert } from '../../Alert';
 import { createMemoComponent } from '../../../internals/utils';
@@ -44,6 +44,8 @@ export type FormState = {
   action: (action: string) => void;
   touched: (path: string) => boolean;
   setTouched: (path?: string) => void;
+  addEventListener: (action: string, callback: () => Awaitable<void>) => void;
+  removeEventListener: (action: string, callback: () => Awaitable<void>) => void;
 }
 
 const FormContext = React.createContext<FormState>({
@@ -59,6 +61,8 @@ const FormContext = React.createContext<FormState>({
   action: () => { },
   touched: () => false,
   setTouched: () => { },
+  addEventListener: () => { },
+  removeEventListener: () => { },
 });
 
 FormContext.displayName = 'FormContext';
@@ -101,13 +105,6 @@ type FormProps<S extends Record<string, ISchema<any, any>>> = {
   children: React.ReactNode | ((state: FormState) => React.ReactNode);
 };
 
-const FormTaskContext = React.createContext<(
-  task: () => Promise<void>,
-  retry?: () => void,
-) => void>(() => void 0);
-
-export const useFormTask = () => React.useContext(FormTaskContext);
-
 export const Form = createMemoComponent(<S extends Record<string, ISchema<any, any>>>({
   schema,
   initialValues = object(schema ?? {}).getDefault() ?? {},
@@ -125,16 +122,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const [counts, setCounts] = React.useState({ submit: 0, reset: 0, actions: {} as Record<string, number> });
   const [values, setValues] = React.useState(initialValues);
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
-
-  const [tasks, updateTasks] = React.useState<{
-    task: () => Promise<void>;
-    retry?: () => void;
-  }[]>([]);
-
-  const submitTasks = React.useCallback((
-    task: () => Promise<void>,
-    retry?: () => void,
-  ) => updateTasks(t => [...t, { task, retry }]), []);
+  const [listeners, setListeners] = React.useState<{ action: string; callback: () => Awaitable<void>; }[]>([]);
 
   const _schema = React.useMemo(() => object(schema ?? {}), [schema]);
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
@@ -155,31 +143,33 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
       if (_.isFunction(onError)) await onError(error, state);
     },
     reset: () => {
-      setValues(initialValues);
-      updateTasks([]);
-      if (_.isFunction(onReset)) _showError(() => onReset(formState));
-      setCounts(c => ({ ...c, reset: c.reset + 1 }));
+      _showError(async () => {
+        for (const listener of listeners) {
+          if (listener.action === 'reset') await listener.callback();
+        }
+        setValues(initialValues);
+        if (_.isFunction(onReset)) _showError(() => onReset(formState));
+        setCounts(c => ({ ...c, reset: c.reset + 1 }));
+      });
     },
     submit: () => {
-      setTouched(true);
-      if (_.isFunction(onSubmit)) _showError(async () => {
-        const _tasks = await Promise.all(_.map(tasks, ({ task, retry }) => task().then(
-          () => ({ status: 'fulfilled', task }),
-          (reason) => ({ status: 'rejected', reason, task, retry }),
-        )));
-        updateTasks(v => _.filter(v, x => !_.some(_tasks, y => x.task === y.task)));
-        const rejected = _.filter(_tasks, ({ status }) => status === 'rejected') as any;
-        if (!_.isEmpty(rejected)) {
-          for (const { retry } of rejected) retry?.();
-          throw rejected[0].reason;
+      _showError(async () => {
+        setTouched(true);
+        for (const listener of listeners) {
+          if (listener.action === 'submit') await listener.callback();
         }
-        await onSubmit(_schema.cast(values), formState);
+        if (_.isFunction(onSubmit)) _showError(() => onSubmit(_schema.cast(values), formState));
+        setCounts(c => ({ ...c, submit: c.submit + 1 }));
       });
-      setCounts(c => ({ ...c, submit: c.submit + 1 }));
     },
     action: (action: string) => {
-      if (_.isFunction(onAction)) _showError(() => onAction(action, formState));
-      setCounts(c => ({ ...c, actions: { ...c.actions, [action]: (c.actions[action] ?? 0) + 1 } }));
+      _showError(async () => {
+        for (const listener of listeners) {
+          if (listener.action === action) await listener.callback();
+        }
+        if (_.isFunction(onAction)) _showError(() => onAction(action, formState));
+        setCounts(c => ({ ...c, actions: { ...c.actions, [action]: (c.actions[action] ?? 0) + 1 } }));
+      });
     },
   });
 
@@ -191,6 +181,8 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     reset: () => stableRef.current.reset(),
     action: (action: string) => stableRef.current.action(action),
     setTouched: (path?: string) => setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }),
+    addEventListener: (action: string, callback: () => Awaitable<void>) => setListeners(v => [...v, { action, callback }]),
+    removeEventListener: (action: string, callback: () => Awaitable<void>) => setListeners(v => _.filter(v, x => x.action !== action || x.callback !== callback)),
   }), []);
 
   const formState = React.useMemo(() => ({
@@ -216,9 +208,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
 
   return (
     <FormContext.Provider value={formState}>
-      <FormTaskContext.Provider value={submitTasks}>
-        {_.isFunction(children) ? children(formState) : children}
-      </FormTaskContext.Provider>
+      {_.isFunction(children) ? children(formState) : children}
     </FormContext.Provider>
   );
 }, {
