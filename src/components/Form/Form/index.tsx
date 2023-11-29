@@ -144,9 +144,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     },
     reset: () => {
       _showError(async () => {
-        for (const listener of listeners) {
-          if (listener.action === 'reset') await listener.callback();
-        }
+        await Promise.all(_.flatMap(listeners, x => x.action === 'reset' ? x.callback() : []));
         setValues(initialValues);
         if (_.isFunction(onReset)) _showError(() => onReset(formState));
         setCounts(c => ({ ...c, reset: c.reset + 1 }));
@@ -155,18 +153,14 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     submit: () => {
       _showError(async () => {
         setTouched(true);
-        for (const listener of listeners) {
-          if (listener.action === 'submit') await listener.callback();
-        }
+        await Promise.all(_.flatMap(listeners, x => x.action === 'submit' ? x.callback() : []));
         if (_.isFunction(onSubmit)) _showError(() => onSubmit(_schema.cast(values), formState));
         setCounts(c => ({ ...c, submit: c.submit + 1 }));
       });
     },
     action: (action: string) => {
       _showError(async () => {
-        for (const listener of listeners) {
-          if (listener.action === action) await listener.callback();
-        }
+        await Promise.all(_.flatMap(listeners, x => x.action === action ? x.callback() : []));
         if (_.isFunction(onAction)) _showError(() => onAction(action, formState));
         setCounts(c => ({ ...c, actions: { ...c.actions, [action]: (c.actions[action] ?? 0) + 1 } }));
       });
