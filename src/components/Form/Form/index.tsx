@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
-import { Awaitable, useStableRef } from 'sugax';
+import { useStableRef } from 'sugax';
 import { ISchema, object, TypeOfSchema, ValidateError } from '@o2ter/valid.js';
 import { useAlert } from '../../Alert';
 import { createMemoComponent } from '../../../internals/utils';
@@ -44,8 +44,8 @@ export type FormState = {
   action: (action: string) => void;
   touched: (path: string) => boolean;
   setTouched: (path?: string) => void;
-  addEventListener: (action: string, callback: () => Awaitable<void>) => void;
-  removeEventListener: (action: string, callback: () => Awaitable<void>) => void;
+  addEventListener: (action: string, callback: () => void) => void;
+  removeEventListener: (action: string, callback: () => void) => void;
 }
 
 const FormContext = React.createContext<FormState>({
@@ -122,7 +122,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const [counts, setCounts] = React.useState({ submit: 0, reset: 0, actions: {} as Record<string, number> });
   const [values, setValues] = React.useState(initialValues);
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
-  const [listeners, setListeners] = React.useState<{ action: string; callback: () => Awaitable<void>; }[]>([]);
+  const [listeners, setListeners] = React.useState<{ action: string; callback: () => void; }[]>([]);
 
   const _schema = React.useMemo(() => object(schema ?? {}), [schema]);
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
@@ -181,8 +181,8 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     reset: () => stableRef.current.reset(),
     action: (action: string) => stableRef.current.action(action),
     setTouched: (path?: string) => setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }),
-    addEventListener: (action: string, callback: () => Awaitable<void>) => setListeners(v => [...v, { action, callback }]),
-    removeEventListener: (action: string, callback: () => Awaitable<void>) => setListeners(v => _.filter(v, x => x.action !== action || x.callback !== callback)),
+    addEventListener: (action: string, callback: () => void) => setListeners(v => [...v, { action, callback }]),
+    removeEventListener: (action: string, callback: () => void) => setListeners(v => _.filter(v, x => x.action !== action || x.callback !== callback)),
   }), []);
 
   const formState = React.useMemo(() => ({
