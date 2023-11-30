@@ -65,7 +65,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
       <Text style={textStyleNormalize(style)} {...props}>
         <Icon
           icon='MaterialIcons'
-          name={'edit-calendar' as any}
+          name='edit-calendar'
           style={{ marginRight: theme.spacer * 0.375 }}
         />
         {_.isEmpty(text) ? ' ' : text}

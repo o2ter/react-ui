@@ -37,7 +37,7 @@ import { useTheme } from '../../theme';
 type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {
   classes?: ClassNames;
   icon: Icon;
-  name: keyof (typeof GLYPH_MAPS)[Icon];
+  name: keyof (typeof GLYPH_MAPS)[Icon] | (string & {});
   iconStyle?: StyleProp<TextStyle>;
 }>
 
@@ -47,7 +47,7 @@ const IconBody = <Icon extends keyof typeof GLYPH_MAPS>({
   style,
 }: {
   icon: Icon;
-  name: keyof (typeof GLYPH_MAPS)[Icon];
+  name: keyof (typeof GLYPH_MAPS)[Icon] | (string & {});
   style?: StyleProp<TextStyle>;
 }) => {
 

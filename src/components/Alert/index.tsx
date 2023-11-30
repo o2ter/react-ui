@@ -127,7 +127,7 @@ const AlertBody: React.FC<AlertBodyProps> = ({
       alertStyle,
       { opacity: fadeAnim },
     ]}>
-    {_.isString(style) && <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name={icons[style] as any} />}
+    {_.isString(style) && <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name={icons[style]} />}
     {!_.isString(style) && React.isValidElement(style.icon) && style.icon}
     <Text style={textStyleNormalize([
       {
