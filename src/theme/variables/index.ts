@@ -34,6 +34,8 @@ import * as breakpoint_defaults from './breakpoints';
 import * as zindex_defaults from './zindex';
 import * as animation_defaults from './animation';
 
+export type ThemeColors = keyof typeof theme_color_defaults;
+
 export const defaultVariables = {
 
   colors: color_defaults as Record<keyof typeof color_defaults, string> & Record<string, string>,

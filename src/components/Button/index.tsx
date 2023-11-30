@@ -48,6 +48,7 @@ import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 import { AnimatedPressable } from '../Animated';
+import { ThemeColors } from '../../theme/variables';
 
 type ButtonStateCallbackType = PressableStateCallbackType & {
   hovered: boolean;
@@ -58,7 +59,7 @@ type ButtonStateCallbackType = PressableStateCallbackType & {
 type ButtonProps = Modify<PressableProps, {
   classes?: ClassNames;
   color?: string;
-  variant?: string;
+  variant?: ThemeColors | (string & {});
   outline?: boolean;
   size?: string;
   title?: string;

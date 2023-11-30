@@ -26,7 +26,6 @@
 import _ from 'lodash';
 import React from 'react';
 import { View, Text, Pressable, Animated, Platform, StyleSheet, LayoutAnimation, ColorValue, RecursiveArray } from 'react-native';
-import { Svg, Path } from 'react-native-svg';
 import { useMount } from 'sugax';
 import { ValidateError } from '@o2ter/valid.js';
 import { useTheme } from '../../theme';
@@ -34,11 +33,12 @@ import { useSafeAreaInsets } from '../SafeAreaView';
 import { useLocalize } from '@o2ter/i18n';
 import { useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
+import { ThemeColors } from '../../theme/variables';
 import Icon from '../Icon';
 
 type AlertMessage = string | (Error & { code?: number });
 type AlertType = 'success' | 'info' | 'warning' | 'error';
-type AlertOptions = { color: string; icon?: React.ReactElement; timeout?: number; };
+type AlertOptions = { color: ThemeColors | (string & {}); icon?: React.ReactElement; timeout?: number; };
 
 const AlertContext = React.createContext({
   showError(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { },
@@ -66,144 +66,148 @@ function toString(message: AlertMessage) {
   return `${message}`;
 }
 
-const AlertBody: React.FC<{
+type AlertBodyProps = {
   message: AlertMessage;
   style: AlertType | { color: string; icon?: React.ReactElement },
   onShow: (x: { dismiss: VoidFunction }) => void;
   onDismiss: VoidFunction;
-}> = ({
+};
+
+const AlertBody: React.FC<AlertBodyProps> = ({
   message,
   style,
   onShow,
   onDismiss,
 }) => {
 
-    const fadeAnim = React.useRef(new Animated.Value(0)).current;
-    const theme = useTheme();
-    const alertStyle = useComponentStyle('alert');
-    const alertTextStyle = useComponentStyle('alertText');
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const theme = useTheme();
+  const alertStyle = useComponentStyle('alert');
+  const alertTextStyle = useComponentStyle('alertText');
 
-    function _dismiss() {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: theme.alertDuration,
-        easing: theme.alertEasing,
-        useNativeDriver: Platform.OS !== 'web',
-      }).start(() => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        _.isFunction(onDismiss) && onDismiss();
-      });
-    }
-
-    useMount(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: theme.alertDuration,
-        easing: theme.alertEasing,
-        useNativeDriver: Platform.OS !== 'web',
-      }).start(() => onShow({ dismiss() { _dismiss(); } }));
+  function _dismiss() {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: theme.alertDuration,
+      easing: theme.alertEasing,
+      useNativeDriver: Platform.OS !== 'web',
+    }).start(() => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      _.isFunction(onDismiss) && onDismiss();
     });
-
-    const { color, messageColor, ...alertColorStyle } = theme.palette.alertColors(_.isString(style) ? style : style.color);
-
-    const localize = useLocalize();
-    const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);
-
-    return <Animated.View
-      style={[
-        {
-          marginTop: 8,
-          minWidth: 320,
-          padding: theme.spacer,
-          borderWidth: StyleSheet.hairlineWidth,
-          borderRadius: theme.borderRadiusBase,
-          alignItems: 'center',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        },
-        alertColorStyle,
-        alertStyle,
-        { opacity: fadeAnim },
-      ]}>
-      {_.isString(style) && <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name={icons[style] as any} />}
-      {!_.isString(style) && React.isValidElement(style.icon) && style.icon}
-      <Text style={textStyleNormalize([
-        {
-          flex: 1,
-          marginHorizontal: theme.spacer * 0.5,
-          fontSize: theme.root.fontSize,
-          color: messageColor,
-        },
-        alertTextStyle,
-      ])}>{_message}</Text>
-      <Pressable onPress={_dismiss}>
-        <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name='close' />
-      </Pressable>
-    </Animated.View>
   }
+
+  useMount(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: theme.alertDuration,
+      easing: theme.alertEasing,
+      useNativeDriver: Platform.OS !== 'web',
+    }).start(() => onShow({ dismiss() { _dismiss(); } }));
+  });
+
+  const { color, messageColor, ...alertColorStyle } = theme.palette.alertColors(_.isString(style) ? style : style.color);
+
+  const localize = useLocalize();
+  const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);
+
+  return <Animated.View
+    style={[
+      {
+        marginTop: 8,
+        minWidth: 320,
+        padding: theme.spacer,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: theme.borderRadiusBase,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      },
+      alertColorStyle,
+      alertStyle,
+      { opacity: fadeAnim },
+    ]}>
+    {_.isString(style) && <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name={icons[style] as any} />}
+    {!_.isString(style) && React.isValidElement(style.icon) && style.icon}
+    <Text style={textStyleNormalize([
+      {
+        flex: 1,
+        marginHorizontal: theme.spacer * 0.5,
+        fontSize: theme.root.fontSize,
+        color: messageColor,
+      },
+      alertTextStyle,
+    ])}>{_message}</Text>
+    <Pressable onPress={_dismiss}>
+      <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name='close' />
+    </Pressable>
+  </Animated.View>
+}
 
 AlertBody.displayName = 'AlertBody';
 
-export const AlertProvider: React.FC<React.PropsWithChildren<{
+type AlertProviderProps = React.PropsWithChildren<{
   defaultTimeout?: number;
-}>> = ({
+}>;
+
+export const AlertProvider: React.FC<AlertProviderProps> = ({
   defaultTimeout = 5000,
   children,
 }) => {
 
-    const [elements, setElements] = React.useState({});
-    const insets = useSafeAreaInsets();
-    const theme = useTheme();
+  const [elements, setElements] = React.useState({});
+  const insets = useSafeAreaInsets();
+  const theme = useTheme();
 
-    const provider = React.useMemo(() => {
+  const provider = React.useMemo(() => {
 
-      function show_message(
-        message: AlertMessage | ReadonlyArray<AlertMessage> | RecursiveArray<AlertMessage>,
-        style: AlertType | { color: string; icon?: React.ReactElement },
-        timeout?: number
-      ) {
+    function show_message(
+      message: AlertMessage | ReadonlyArray<AlertMessage> | RecursiveArray<AlertMessage>,
+      style: AlertType | Omit<AlertOptions, 'timeout'>,
+      timeout?: number
+    ) {
 
-        if (_.isNil(message)) return;
-        if (!_.isString(message) && _.isArrayLike(message)) {
-          _.forEach(message, x => show_message(x, style, timeout));
-          return;
-        }
-
-        const id = _.uniqueId();
-
-        setElements(elements => ({
-          ...elements,
-          [id]: <AlertBody key={id} message={message} style={style}
-            onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? defaultTimeout)}
-            onDismiss={() => setElements(elements => _.pickBy(elements, (_val, key) => key != id))} />
-        }));
+      if (_.isNil(message)) return;
+      if (!_.isString(message) && _.isArrayLike(message)) {
+        _.forEach(message, x => show_message(x, style, timeout));
+        return;
       }
 
-      return {
-        showError(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'error', timeout); },
-        showWarning(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'warning', timeout); },
-        showInfo(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'info', timeout); },
-        showSuccess(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'success', timeout); },
-        showAlert(message: AlertMessage | RecursiveArray<AlertMessage>, options: AlertOptions) { show_message(message, options, options.timeout); },
-      };
+      const id = _.uniqueId();
 
-    }, []);
+      setElements(elements => ({
+        ...elements,
+        [id]: <AlertBody key={id} message={message} style={style}
+          onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? defaultTimeout)}
+          onDismiss={() => setElements(elements => _.pickBy(elements, (_val, key) => key != id))} />
+      }));
+    }
 
-    return <AlertContext.Provider value={provider}>
-      {children}
-      {!_.isEmpty(elements) && <View style={[
-        {
-          top: insets.top,
-          alignItems: 'center',
-          alignSelf: 'center',
-          zIndex: theme.zIndex.alert,
-        },
-        Platform.select({
-          web: { position: 'fixed' } as any,
-          default: { position: 'absolute' },
-        }),
-      ]}>{_.values(elements)}</View>}
-    </AlertContext.Provider>;
-  };
+    return {
+      showError(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'error', timeout); },
+      showWarning(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'warning', timeout); },
+      showInfo(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'info', timeout); },
+      showSuccess(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'success', timeout); },
+      showAlert(message: AlertMessage | RecursiveArray<AlertMessage>, options: AlertOptions) { show_message(message, options, options.timeout); },
+    };
+
+  }, []);
+
+  return <AlertContext.Provider value={provider}>
+    {children}
+    {!_.isEmpty(elements) && <View style={[
+      {
+        top: insets.top,
+        alignItems: 'center',
+        alignSelf: 'center',
+        zIndex: theme.zIndex.alert,
+      },
+      Platform.select({
+        web: { position: 'fixed' } as any,
+        default: { position: 'absolute' },
+      }),
+    ]}>{_.values(elements)}</View>}
+  </AlertContext.Provider>;
+};
 
 AlertProvider.displayName = 'AlertProvider';
