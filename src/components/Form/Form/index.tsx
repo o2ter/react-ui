@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
-import { useStableRef } from 'sugax';
+import { useStableCallback, useStableRef } from 'sugax';
 import { ISchema, object, TypeOfSchema, ValidateError } from '@o2ter/valid.js';
 import { useAlert } from '../../Alert';
 import { createMemoComponent } from '../../../internals/utils';
@@ -34,6 +34,7 @@ import { createMemoComponent } from '../../../internals/utils';
 export type FormState = {
   values: Record<string, any>;
   errors: Error[];
+  dirty: boolean;
   submitCount: number;
   resetCount: number;
   actionCounts: Record<string, number>;
@@ -51,6 +52,7 @@ export type FormState = {
 const FormContext = React.createContext<FormState>({
   values: {},
   errors: [],
+  dirty: false,
   submitCount: 0,
   resetCount: 0,
   actionCounts: {},
@@ -119,8 +121,14 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   children
 }: FormProps<S>, forwardRef: React.ForwardedRef<FormState>) => {
 
+  const [_values, _setValues] = React.useState<typeof initialValues>();
+
+  const values = React.useMemo(() => _values ?? initialValues, [initialValues, _values]);
+  const setValues = useStableCallback((
+    update: React.SetStateAction<typeof initialValues>
+  ) => _setValues(v => _.isFunction(update) ? update(v ?? initialValues) : update));
+
   const [counts, setCounts] = React.useState({ submit: 0, reset: 0, actions: {} as Record<string, number> });
-  const [values, setValues] = React.useState(initialValues);
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
   const [listeners, setListeners] = React.useState<{ action: string; callback: () => void; }[]>([]);
 
@@ -140,21 +148,20 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
 
   type NextTickParam = {
     values: typeof values;
-    formState: typeof formState;
     schema: typeof _schema;
-    initialValues: typeof initialValues;
+    formState: typeof formState;
   };
   const [nextTick, setNextTick] = React.useState<((x: NextTickParam) => void)[]>([]);
 
   React.useEffect(() => {
     if (_.isEmpty(nextTick)) return;
-    for (const callback of nextTick) callback({ values, formState, schema: _schema, initialValues });
+    for (const callback of nextTick) callback({ values, formState, schema: _schema });
     setNextTick(v => _.filter(v, x => _.every(nextTick, c => c !== x)));
   }, [nextTick]);
 
   const actions = {
-    reset: ({ formState, initialValues }: NextTickParam) => {
-      setValues(initialValues);
+    reset: ({ formState }: NextTickParam) => {
+      _setValues(undefined);
       if (_.isFunction(onReset)) _showError(() => onReset(formState));
       setCounts(c => ({ ...c, reset: c.reset + 1 }));
     },
@@ -177,7 +184,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
       _showError(async () => {
         const resolved = await Promise.all(_.flatMap(listeners, x => x.action === 'reset' ? x.callback() : []));
         if (_.isEmpty(resolved)) {
-          actions.reset({ values, formState, schema: _schema, initialValues });
+          actions.reset({ values, formState, schema: _schema });
         } else {
           setNextTick(v => [...v, actions.reset]);
         }
@@ -187,7 +194,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
       _showError(async () => {
         const resolved = await Promise.all(_.flatMap(listeners, x => x.action === 'submit' ? x.callback() : []));
         if (_.isEmpty(resolved)) {
-          actions.submit({ values, formState, schema: _schema, initialValues });
+          actions.submit({ values, formState, schema: _schema });
         } else {
           setNextTick(v => [...v, actions.submit]);
         }
@@ -197,7 +204,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
       _showError(async () => {
         const resolved = await Promise.all(_.flatMap(listeners, x => x.action === action ? x.callback() : []));
         if (_.isEmpty(resolved)) {
-          actions.action({ values, formState, schema: _schema, initialValues }, action);
+          actions.action({ values, formState, schema: _schema }, action);
         } else {
           setNextTick(v => [...v, (x) => actions.action(x, action)]);
         }
@@ -220,6 +227,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const formState = React.useMemo(() => ({
     values,
     validate: _validate,
+    get dirty() { return !_.isNil(_values) },
     get submitCount() { return counts.submit },
     get resetCount() { return counts.reset },
     get actionCounts() { return counts.actions },
