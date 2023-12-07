@@ -88,6 +88,8 @@ export const DatePicker = createMemoComponent((
     );
   }, [value]);
 
+  const focusRing = useFocusRing(focused);
+
   return (
     <PickerBase
       ref={forwardRef}
@@ -95,7 +97,7 @@ export const DatePicker = createMemoComponent((
       text={date.map(x => x.toString()).join(', ')}
       style={[
         defaultStyle,
-        useFocusRing(focused),
+        focusRing,
         datePickerStyle,
         style
       ]}

@@ -61,10 +61,12 @@ export const PickerAndroid = createMemoComponent(<T = ItemValue>({
     value ? _onFocus() : _onBlur();
   }
 
+  const focusRing = useFocusRing(focused);
+
   return (
     <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
       <Text ref={forwardRef} style={textStyleNormalize([
-        useFocusRing(focused),
+        focusRing,
         {
           color: theme.root.textColor,
           fontSize: theme.root.fontSize,

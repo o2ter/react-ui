@@ -112,6 +112,8 @@ export const Checkbox = createMemoComponent((
     _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
   ]);
 
+  const focusRing = useFocusRing(focused);
+
   return (
     <Pressable
       ref={forwardRef}
@@ -125,7 +127,7 @@ export const Checkbox = createMemoComponent((
       {...props}
     >
       <View style={[
-        useFocusRing(focused),
+        focusRing,
         _.pick(_style, ...innerStyle),
         { marginTop: _.isNumber(lineHeight) ? (lineHeight - 1) * 0.5 * fontSize : 0 }
       ]}>

@@ -65,6 +65,8 @@ export const FormTextField = createMemoComponent((
 
   const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => { onChange(e.nativeEvent.text); setTouched(); }, []);
 
+  const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
+
   return (
     <TextInput
       ref={forwardRef}
@@ -76,7 +78,7 @@ export const FormTextField = createMemoComponent((
       onBlur={_onBlur}
       style={[
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
-        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
+        touched && focusRing,
         formTextFieldStyle,
         _.isFunction(style) ? style({ focused }) : style,
       ]}

@@ -57,12 +57,14 @@ export const TextInput = createMemoComponent(({
   ]);
   const defaultStyle = useDefaultInputStyle(theme);
 
+  const focusRing = useFocusRing(focused);
+
   return (
     <RNTextInput
       ref={forwardRef}
       style={textStyleNormalize([
         defaultStyle,
-        useFocusRing(focused),
+        focusRing,
         textStyle,
         textInputStyle,
         _.isFunction(style) ? style({ focused }) : style,

@@ -72,6 +72,8 @@ export const Switch = createMemoComponent((
   const size = _.isNumber(lineHeight) ? lineHeight * fontSize : fontSize;
   const animate = React.useRef(new Animated.Value(selected ? 1 : 0)).current;
 
+  const focusRing = useFocusRing(focused);
+
   const _style = flattenStyle([
     {
       width: size * 2,
@@ -81,7 +83,7 @@ export const Switch = createMemoComponent((
       borderWidth: theme.borderWidth,
       opacity: props.disabled ? 0.65 : 1,
     },
-    useFocusRing(focused),
+    focusRing,
     switchStyle,
   ]);
 

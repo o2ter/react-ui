@@ -70,6 +70,8 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
     disabled ? 'disabled' : 'enabled',
   ]);
 
+  const focusRing = useFocusRing(focused);
+
   return (
     <PickerNative
       ref={forwardRef}
@@ -87,7 +89,7 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
           fontSize: theme.root.fontSize,
           lineHeight: theme.root.lineHeight,
         },
-        useFocusRing(focused),
+        focusRing,
         textStyle,
         pickerStyle,
         _.isFunction(style) ? style({ focused }) : style,

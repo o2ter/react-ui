@@ -75,6 +75,8 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
 
   const _onChange = React.useCallback((value: any) => { onChange(value); setTouched(); }, []);
 
+  const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
+
   return (
     <Picker
       ref={forwardRef}
@@ -84,7 +86,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
       onFocus={_onFocus}
       onBlur={_onBlur}
       style={[
-        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
+        touched && focusRing,
         defaultStyle,
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formPickerStyle,

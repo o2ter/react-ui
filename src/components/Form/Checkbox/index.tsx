@@ -68,12 +68,14 @@ export const FormCheckbox = createMemoComponent((
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
+  const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
+
   return (
     <Checkbox
       ref={forwardRef}
       selected={selected}
       style={[
-        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
+        touched && focusRing,
         formCheckboxStyle,
         _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
       ]}

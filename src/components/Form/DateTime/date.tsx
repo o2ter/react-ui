@@ -71,6 +71,8 @@ export const FormDate = createMemoComponent((
 
   const _onChange = React.useCallback((value: any) => { onChange(multiple ? value : _.first(value)); setTouched(); }, []);
 
+  const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
+
   return (
     <DatePicker
       ref={forwardRef}
@@ -84,7 +86,7 @@ export const FormDate = createMemoComponent((
       selectable={selectable}
       disabled={disabled}
       style={[
-        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
+        touched && focusRing,
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formDateStyle,
         style

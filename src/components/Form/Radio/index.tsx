@@ -67,12 +67,14 @@ export const FormRadio = createMemoComponent((
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
+  const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
+
   return (
     <Radio
       ref={forwardRef}
       selected={selected}
       style={[
-        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
+        touched && focusRing,
         formRadioStyle,
         _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
       ]}

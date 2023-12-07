@@ -67,12 +67,14 @@ export const FormSwitch = createMemoComponent((
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
+  const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
+
   return (
     <Switch
       ref={forwardRef}
       selected={selected}
       style={[
-        touched && useFocusRing(focused, invalid ? 'error' : 'primary'),
+        touched && focusRing,
         formSwitchStyle,
         _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
       ]}
