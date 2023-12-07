@@ -126,7 +126,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const values = React.useMemo(() => _values ?? initialValues, [initialValues, _values]);
   const setValues = useStableCallback((
     update: React.SetStateAction<typeof initialValues>
-  ) => _setValues(v => _.isFunction(update) ? update(v ?? initialValues) : update));
+  ) => _setValues(_.isFunction(update) ? v => update(v ?? initialValues) : update));
 
   const [counts, setCounts] = React.useState({ submit: 0, reset: 0, actions: {} as Record<string, number> });
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
