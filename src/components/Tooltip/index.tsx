@@ -29,9 +29,10 @@ import { createMemoComponent } from '../../internals/utils';
 import { Popover } from '../Popover';
 import { useComponentStyle } from '../Style';
 import { useStableCallback } from 'sugax';
-import { TextStyleProvider, flattenStyle } from '../index.web';
+import { TextStyleProvider } from '../Text/style';
 import { textStyleKeys } from '../Text/style';
 import { Pressable, StyleSheet } from 'react-native';
+import { flattenStyle } from '../Style/flatten';
 
 export const Tooltip = createMemoComponent((
   {
