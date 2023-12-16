@@ -31,11 +31,18 @@ const NavigatorContext = React.createContext<Record<string, any> | undefined>(un
 
 export const BrowserNavigator: React.FC<React.PropsWithChildren> = ({ children }) => <BrowserRouter>{children}</BrowserRouter>;
 
-export const StaticNavigator: React.FC<React.PropsWithChildren<{
-  location: Partial<Location> | string;
+type StaticNavigatorProps = React.ComponentPropsWithoutRef<typeof StaticRouter> & {
   context?: Record<string, any>;
-}>> = ({ location, context, children }) => <NavigatorContext.Provider value={context}>
-  <StaticRouter location={location}>{children}</StaticRouter>
-</NavigatorContext.Provider>;
+}
+
+export const StaticNavigator: React.FC<StaticNavigatorProps> = ({
+  context,
+  children,
+  ...props
+}) => (
+  <NavigatorContext.Provider value={context}>
+    <StaticRouter {...props}>{children}</StaticRouter>
+  </NavigatorContext.Provider>
+);
 
 export const useNavigatorContext = () => React.useContext(NavigatorContext);

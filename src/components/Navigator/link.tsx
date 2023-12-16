@@ -27,7 +27,7 @@ import React from 'react';
 import { Link as _Link } from 'react-router-dom';
 import { Modify } from '../../internals/types';
 import { createMemoComponent } from '../../internals/utils';
-import { supportsPointerEvent } from '.';
+import { supportsPointerEvent } from './pointer';
 
 type LinkProps = Modify<React.ComponentPropsWithoutRef<typeof _Link>, {
   onHoverIn?: React.PointerEventHandler<HTMLAnchorElement>;
@@ -40,14 +40,10 @@ export const Link = createMemoComponent((
   }: LinkProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof _Link>>
 ) => {
-
-  const _supportsPointerEvent = supportsPointerEvent();
-
   const extra: Record<string, React.PointerEventHandler<HTMLAnchorElement>> = {};
-  const type = _supportsPointerEvent ? 'Pointer' : 'Mouse';
+  const type = supportsPointerEvent() ? 'Pointer' : 'Mouse';
   if (onHoverIn) extra[`on${type}Enter`] = onHoverIn;
   if (onHoverOut) extra[`on${type}Leave`] = onHoverOut;
-
   return (
     <_Link ref={forwardRef} {...extra} {...props}>{children}</_Link>
   );

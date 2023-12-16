@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  pointer.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -23,26 +23,4 @@
 //  THE SOFTWARE.
 //
 
-import React from 'react';
-import { useRoutes } from 'react-router-dom';
-import { routesBuilder, createRoutesFromChildren } from './routes';
-
-export * from './link';
-export * from './context';
-export * from './routes';
-export * from './pointer';
-
-export {
-  useHref,
-  useLocation,
-  useMatch,
-  useNavigate,
-  useParams,
-  useResolvedPath,
-  useLinkClickHandler,
-  NavLink,
-} from 'react-router-dom';
-
-export const Navigator: React.FC<React.PropsWithChildren> = ({ children }) => useRoutes(routesBuilder(createRoutesFromChildren(children)));
-
-Navigator.displayName = 'Navigator';
+export const supportsPointerEvent = () => typeof window !== 'undefined' && window.PointerEvent != null;
