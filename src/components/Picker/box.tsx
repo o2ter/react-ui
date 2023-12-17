@@ -1,5 +1,5 @@
 //
-//  native.tsx
+//  box.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -26,67 +26,59 @@
 import _ from 'lodash';
 import React from 'react';
 import { StyleProp, TextStyle } from 'react-native';
-import { Picker as RNPicker, PickerItemProps } from '@react-native-picker/picker';
-import { createMemoComponent } from '../../internals/utils';
-import { flattenStyle } from '../Style/flatten';
+import { ClassNames, useComponentStyle } from '../Style';
+import { useFocusRing } from '../../internals/focus';
 import { useTheme } from '../../theme';
-import { ClassNames } from '../Style';
+import { createComponent } from '../../internals/utils';
+import View from '../View';
+import Text from '../Text';
 
-export type ItemValue = number | string;
-
-type PickerNativeProps<T = ItemValue> = {
-  value?: T;
-  items: PickerItemProps<T>[];
-  disabled?: boolean;
-  style?: StyleProp<TextStyle>;
-  onValueChange?: (itemValue: T, itemIndex: number) => void;
-  onFocus?: VoidFunction;
-  onBlur?: VoidFunction;
-}
-
-export type PickerProps<T = ItemValue> = Omit<PickerNativeProps<T>, 'style'> & {
+type PickerBoxProps = React.PropsWithChildren<{
   classes?: ClassNames;
   style?: StyleProp<TextStyle> | ((state: { focused: boolean; }) => StyleProp<TextStyle>);
+  focused: boolean;
+  disabled?: boolean;
   prepend?: React.ReactNode;
   append?: React.ReactNode;
-  renderText?: (label?: PickerItemProps<T>) => any
-};
+}>;
 
-export const PickerNative = createMemoComponent(<T = ItemValue>({
-  value,
-  items,
-  disabled = false,
+export const PickerBox = createComponent(({
+  classes,
   style,
-  onValueChange = () => { },
-  onFocus = () => { },
-  onBlur = () => { },
-}: PickerNativeProps<T>, forwardRef: React.ForwardedRef<RNPicker<T>>) => {
-
-  const id = React.useId();
-  const _style = React.useMemo(() => flattenStyle(style), [style]);
+  focused,
+  disabled,
+  prepend,
+  append,
+  children,
+}: PickerBoxProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>) => {
 
   const theme = useTheme();
 
-  return (
-    <RNPicker
-      ref={forwardRef}
-      style={_style}
-      enabled={!disabled}
-      onValueChange={onValueChange}
-      selectedValue={value}
-      onFocus={onFocus}
-      onBlur={onBlur}>
-      {_.map(items, ({ style, ...props }, index) => (
-        <RNPicker.Item
-          key={`${id}-${index}`}
-          style={[{ fontSize: theme.root.fontSize }, style]}
-          {...props}
-        />
-      ))}
-    </RNPicker>
-  );
-}, {
-  displayName: 'Picker',
-});
+  const textStyle = useComponentStyle('text');
+  const pickerStyle = useComponentStyle('picker', classes, [
+    focused && 'focus',
+    disabled ? 'disabled' : 'enabled',
+  ]);
 
-export default PickerNative;
+  const focusRing = useFocusRing(focused);
+
+  return (
+    <View ref={forwardRef} style={[
+      focusRing,
+      {
+        flexDirection: 'row',
+        gap: theme.spacer * 0.375,
+        color: theme.root.textColor,
+        fontSize: theme.root.fontSize,
+        lineHeight: theme.root.lineHeight,
+      },
+      textStyle,
+      pickerStyle,
+      _.isFunction(style) ? style({ focused }) : style,
+    ]}>
+      {prepend}
+      <Text style={{ flex: 1 }}>{_.isEmpty(children) ? ' ' : children}</Text>
+      {append}
+    </View>
+  );
+});

@@ -25,13 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { ItemValue, PickerNative, PickerProps } from './native';
 import { createMemoComponent } from '../../internals/utils';
-import { useComponentStyle } from '../Style';
-import { textStyleNormalize } from '../Text/style';
-import { useFocus, useFocusRing } from '../../internals/focus';
-import { useTheme } from '../../theme';
+import { useFocus } from '../../internals/focus';
+import { PickerBox } from './box';
 
 export const PickerAndroid = createMemoComponent(<T = ItemValue>({
   classes,
@@ -40,42 +38,33 @@ export const PickerAndroid = createMemoComponent(<T = ItemValue>({
   disabled = false,
   style,
   renderText = (item) => item?.label,
-  onValueChange = () => {},
-  onFocus = () => {},
-  onBlur = () => {},
-}: PickerProps<T>, forwardRef: React.ForwardedRef<Text>) => {
+  onValueChange = () => { },
+  onFocus = () => { },
+  onBlur = () => { },
+  prepend,
+  append,
+}: PickerProps<T>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerBox>>) => {
 
   const selected = _.find(items, x => x.value === value);
-
-  const theme = useTheme();
-
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
-
-  const textStyle = useComponentStyle('text');
-  const pickerStyle = useComponentStyle('picker', classes, [
-    focused && 'focus',
-    disabled ? 'disabled' : 'enabled',
-  ]);
 
   function _setShowPicker(value: boolean) {
     value ? _onFocus() : _onBlur();
   }
 
-  const focusRing = useFocusRing(focused);
-
   return (
     <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
-      <Text ref={forwardRef} style={textStyleNormalize([
-        focusRing,
-        {
-          color: theme.root.textColor,
-          fontSize: theme.root.fontSize,
-          lineHeight: theme.root.lineHeight,
-        },
-        textStyle,
-        pickerStyle,
-        _.isFunction(style) ? style({ focused }) : style,
-      ])}>{renderText(selected)}</Text>
+      <PickerBox
+        ref={forwardRef}
+        classes={classes}
+        style={style}
+        focused={focused}
+        disabled={disabled}
+        prepend={prepend}
+        append={append}
+      >
+        {renderText(selected)}
+      </PickerBox>
       <PickerNative
         value={value}
         items={items}

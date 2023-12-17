@@ -25,13 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Text, TouchableOpacity, Modal } from 'react-native';
+import { View as RNView, Text as RNText, TouchableOpacity, Modal } from 'react-native';
 import { ItemValue, PickerNative, PickerProps } from './native';
 import { createMemoComponent } from '../../internals/utils';
-import { useComponentStyle } from '../Style';
-import { textStyleNormalize } from '../Text/style';
-import { useFocus, useFocusRing } from '../../internals/focus';
-import { useTheme } from '../../theme';
+import { useFocus } from '../../internals/focus';
+import { PickerBox } from './box';
 
 export const PickerIOS = createMemoComponent(<T = ItemValue>({
   classes,
@@ -42,45 +40,37 @@ export const PickerIOS = createMemoComponent(<T = ItemValue>({
   renderText = (item) => item?.label,
   onValueChange = () => {},
   onFocus = () => {},
-  onBlur = () => {},
-}: PickerProps<T>, forwardRef: React.ForwardedRef<Text>) => {
+  onBlur = () => { },
+  prepend,
+  append,
+}: PickerProps<T>, forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerBox>>) => {
 
   const selected = _.find(items, x => x.value === value);
 
   const [showPicker, setShowPicker] = React.useState(false);
   const [orientation, setOrientation] = React.useState('portrait');
 
-  const theme = useTheme();
-
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
-
-  const textStyle = useComponentStyle('text');
-  const pickerStyle = useComponentStyle('picker', classes, [
-    focused && 'focus',
-    disabled ? 'disabled' : 'enabled',
-  ]);
 
   function _setShowPicker(value: boolean) {
     setShowPicker(value);
     value ? _onFocus() : _onBlur();
   }
 
-  const focusRing = useFocusRing(focused);
-
   return (
     <React.Fragment>
       <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
-        <Text ref={forwardRef} style={textStyleNormalize([
-          focusRing,
-          {
-            color: theme.root.textColor,
-            fontSize: theme.root.fontSize,
-            lineHeight: theme.root.lineHeight,
-          },
-          textStyle,
-          pickerStyle,
-          _.isFunction(style) ? style({ focused }) : style,
-        ])}>{renderText(selected)}</Text>
+        <PickerBox
+          ref={forwardRef}
+          classes={classes}
+          style={style}
+          focused={focused}
+          disabled={disabled}
+          prepend={prepend}
+          append={append}
+        >
+          {renderText(selected)}
+        </PickerBox>
       </TouchableOpacity>
       <Modal
         transparent
@@ -89,7 +79,7 @@ export const PickerIOS = createMemoComponent(<T = ItemValue>({
         supportedOrientations={['portrait', 'landscape']}
         onOrientationChange={({ nativeEvent }) => setOrientation(nativeEvent.orientation)}>
         <TouchableOpacity style={{ flex: 1 }} onPress={() => _setShowPicker(false)} />
-        <View style={{
+        <RNView style={{
           height: 45,
           flexDirection: 'row',
           justifyContent: 'flex-end',
@@ -103,22 +93,22 @@ export const PickerIOS = createMemoComponent(<T = ItemValue>({
           <TouchableOpacity
             onPress={() => _setShowPicker(false)}
             hitSlop={{ top: 4, right: 4, bottom: 4, left: 4 }}>
-            <Text style={{
+            <RNText style={{
               color: '#007aff',
               fontWeight: '600',
               fontSize: 17,
               paddingTop: 1,
               paddingRight: 11,
-            }}>Done</Text>
+            }}>Done</RNText>
           </TouchableOpacity>
-        </View>
-        <View style={{
+        </RNView>
+        <RNView style={{
           justifyContent: 'center',
           backgroundColor: '#d0d4da',
           height: orientation === 'portrait' ? 215 : 162,
         }}>
           <PickerNative value={value} items={items} onValueChange={onValueChange} />
-        </View>
+        </RNView>
       </Modal>
     </React.Fragment>
   )

@@ -52,10 +52,11 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
     items = [],
     disabled = false,
     style,
-    renderText = (item) => item?.label,
     onValueChange = () => { },
     onFocus = () => { },
     onBlur = () => { },
+    prepend,
+    append,
   }: PickerProps<T>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof PickerNative<T>>>
 ) => {
@@ -78,7 +79,6 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
       value={value}
       items={items}
       disabled={disabled}
-      renderText={renderText}
       onValueChange={onValueChange}
       onFocus={_onFocus}
       onBlur={_onBlur}
