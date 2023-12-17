@@ -35,9 +35,18 @@ import { createMemoComponent } from '../../../internals/utils';
 import { ItemValue } from '../../Picker/native';
 import { useComponentStyle } from '../../Style';
 import { useFocus, useFocusRing } from '../../../internals/focus';
+import { StyleProp, TextStyle } from 'react-native';
+
+type FormPickerState = {
+  focused: boolean;
+  invalid: boolean;
+  disabled: boolean;
+  valid: boolean;
+};
 
 type FormPickerProps<T = ItemValue> = Modify<React.ComponentPropsWithoutRef<typeof Picker<T>>, {
   name: string | string[];
+  style?: StyleProp<TextStyle> | ((state: FormPickerState) => StyleProp<TextStyle>);
 }>
 
 export const FormPicker = createMemoComponent(<T = ItemValue>(
@@ -46,6 +55,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
     name,
     style,
     items,
+    disabled,
     onFocus,
     onBlur,
     ...props
@@ -63,7 +73,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
 
   const formPickerStyle = useComponentStyle('formPicker', classes, [
     focused && 'focus',
-    props.disabled ? 'disabled' : 'enabled',
+    disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
@@ -77,11 +87,19 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
 
   const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
 
+  const state = {
+    focused,
+    disabled: disabled ?? false,
+    valid: touched && !invalid,
+    invalid: touched && invalid,
+  };
+
   return (
     <Picker
       ref={forwardRef}
       value={value}
       items={items}
+      disabled={disabled}
       onValueChange={_onChange}
       onFocus={_onFocus}
       onBlur={_onBlur}
@@ -90,7 +108,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
         defaultStyle,
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formPickerStyle,
-        _.isFunction(style) ? style({ focused }) : style,
+        _.isFunction(style) ? style(state) : style,
       ]}
       {...props} />
   )
