@@ -32,10 +32,20 @@ import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Switch from '../../Switch';
 import { useFocus, useFocusRing } from '../../../internals/focus';
+import { StyleProp, ViewStyle } from 'react-native';
+
+type FormSwitchState = {
+  selected: boolean;
+  focused: boolean;
+  invalid: boolean;
+  disabled: boolean;
+  valid: boolean;
+};
 
 type FormSwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Switch>, {
   name: string | string[];
   value?: string;
+  style?: StyleProp<ViewStyle> | ((state: FormSwitchState) => StyleProp<ViewStyle>);
 }>;
 
 export const FormSwitch = createMemoComponent((
@@ -44,6 +54,7 @@ export const FormSwitch = createMemoComponent((
     name,
     value,
     style,
+    disabled,
     onPress,
     onFocus,
     onBlur,
@@ -53,30 +64,39 @@ export const FormSwitch = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Switch>>
 ) => {
 
-  const { value: state, error, touched, onChange } = useField(name);
+  const { value: _value, error, touched, onChange } = useField(name);
   const invalid = !_.isEmpty(error);
 
-  const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
+  const selected = _.isNil(value) ? !!_value : _.isArray(_value) && _value.includes(value);
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
   const formSwitchStyle = useComponentStyle('formSwitch', classes, [
     focused && 'focus',
     selected && 'checked',
-    props.disabled ? 'disabled' : 'enabled',
+    disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
   const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
 
+  const state = {
+    focused,
+    selected: selected ?? false,
+    disabled: disabled ?? false,
+    valid: touched && !invalid,
+    invalid: touched && invalid,
+  };
+
   return (
     <Switch
       ref={forwardRef}
       selected={selected}
+      disabled={disabled}
       style={[
         touched && focusRing,
         formSwitchStyle,
-        _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
+        _.isFunction(style) ? style(state) : style,
       ]}
       onPress={onPress ?? (() => onChange((state: any) => {
         if (_.isNil(value)) return !state;

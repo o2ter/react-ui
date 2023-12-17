@@ -26,16 +26,25 @@
 import _ from 'lodash';
 import React from 'react';
 import { useField } from '../Form';
-
 import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Radio from '../../Radio';
 import { useFocus, useFocusRing } from '../../../internals/focus';
+import { StyleProp, ViewStyle } from 'react-native';
+
+type FormRadioState = {
+  selected: boolean;
+  focused: boolean;
+  invalid: boolean;
+  disabled: boolean;
+  valid: boolean;
+};
 
 type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Radio>, {
   name: string | string[];
   value: any;
+  style?: StyleProp<ViewStyle> | ((state: FormRadioState) => StyleProp<ViewStyle>);
 }>;
 
 export const FormRadio = createMemoComponent((
@@ -44,6 +53,7 @@ export const FormRadio = createMemoComponent((
     name,
     value,
     style,
+    disabled,
     onPress,
     onFocus,
     onBlur,
@@ -63,20 +73,29 @@ export const FormRadio = createMemoComponent((
   const formRadioStyle = useComponentStyle('formRadio', classes, [
     focused && 'focus',
     selected && 'checked',
-    props.disabled ? 'disabled' : 'enabled',
+    disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
   const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
 
+  const state = {
+    focused,
+    selected: selected ?? false,
+    disabled: disabled ?? false,
+    valid: touched && !invalid,
+    invalid: touched && invalid,
+  };
+
   return (
     <Radio
       ref={forwardRef}
       selected={selected}
+      disabled={disabled}
       style={[
         touched && focusRing,
         formRadioStyle,
-        _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
+        _.isFunction(style) ? style(state) : style,
       ]}
       onPress={onPress ?? (() => onChange(value))}
       onFocus={_onFocus}

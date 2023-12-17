@@ -31,12 +31,21 @@ import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Checkbox from '../../Checkbox';
-import { useStableCallback } from 'sugax';
 import { useFocus, useFocusRing } from '../../../internals/focus';
+import { StyleProp, ViewStyle } from 'react-native';
+
+type FormCheckboxState = {
+  selected: boolean;
+  focused: boolean;
+  invalid: boolean;
+  disabled: boolean;
+  valid: boolean;
+};
 
 type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>, {
   name: string | string[];
   value?: string;
+  style?: StyleProp<ViewStyle> | ((state: FormCheckboxState) => StyleProp<ViewStyle>);
 }>;
 
 export const FormCheckbox = createMemoComponent((
@@ -45,6 +54,7 @@ export const FormCheckbox = createMemoComponent((
     name,
     value,
     style,
+    disabled,
     onPress,
     onFocus,
     onBlur,
@@ -54,30 +64,39 @@ export const FormCheckbox = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Checkbox>>
 ) => {
 
-  const { value: state, error, touched, onChange } = useField(name);
+  const { value: _value, error, touched, onChange } = useField(name);
   const invalid = !_.isEmpty(error);
 
-  const selected = _.isNil(value) ? !!state : _.isArray(state) && state.includes(value);
+  const selected = _.isNil(value) ? !!_value : _.isArray(_value) && _value.includes(value);
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
   const formCheckboxStyle = useComponentStyle('formCheckbox', classes, [
     focused && 'focus',
     selected && 'checked',
-    props.disabled ? 'disabled' : 'enabled',
+    disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
   const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
 
+  const state = {
+    focused,
+    selected: selected ?? false,
+    disabled: disabled ?? false,
+    valid: touched && !invalid,
+    invalid: touched && invalid,
+  };
+
   return (
     <Checkbox
       ref={forwardRef}
       selected={selected}
+      disabled={disabled}
       style={[
         touched && focusRing,
         formCheckboxStyle,
-        _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
+        _.isFunction(style) ? style(state) : style,
       ]}
       onPress={onPress ?? (() => onChange((state: any) => {
         if (_.isNil(value)) return !state;
