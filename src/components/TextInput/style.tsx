@@ -30,6 +30,7 @@ import { useTheme } from '../../theme';
 
 export const useDefaultInputStyle = (theme: ReturnType<typeof useTheme>) => React.useMemo(() => StyleSheet.create({
   style: {
+    display: 'flex',
     color: theme.root.textColor,
     fontSize: theme.root.fontSize,
     lineHeight: theme.root.lineHeight,

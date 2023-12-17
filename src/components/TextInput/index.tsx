@@ -25,27 +25,52 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextInput as RNTextInput, TextInputProps as RNTextInputProps, StyleProp, TextStyle } from 'react-native';
+import { Platform, Pressable, TextInput as RNTextInput, TextInputProps as RNTextInputProps, StyleProp, TextStyle } from 'react-native';
 import { useTheme } from '../../theme';
 import { useDefaultInputStyle } from './style';
-import { createMemoComponent } from '../../internals/utils';
+import { createMemoComponent, createComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 import { useFocus, useFocusRing } from '../../internals/focus';
+import { useMergeRefs } from 'sugax';
+import View from '../View';
 
 type TextInputProps = Omit<RNTextInputProps, 'style'> & {
   classes?: ClassNames;
   style?: StyleProp<TextStyle> | ((state: { focused: boolean; }) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode;
+  append?: React.ReactNode;
 };
+
+const InnerTextInput = createComponent(({
+  style,
+  children,
+  ...props
+}: RNTextInputProps, forwardRef: React.ForwardedRef<RNTextInput>) => {
+  const defaultStyle = useComponentStyle('text');
+  return (
+    <RNTextInput
+      ref={forwardRef}
+      style={textStyleNormalize([defaultStyle, style])}
+      {...props}>
+      {children}
+    </RNTextInput>
+  );
+});
 
 export const TextInput = createMemoComponent(({
   classes,
   style,
   onFocus,
   onBlur,
+  prepend,
+  append,
   children,
   ...props
 }: TextInputProps, forwardRef: React.ForwardedRef<RNTextInput>) => {
+
+  const inputRef = React.useRef<React.ComponentRef<typeof RNTextInput>>();
+  const ref = useMergeRefs(inputRef, forwardRef);
 
   const theme = useTheme();
 
@@ -59,21 +84,56 @@ export const TextInput = createMemoComponent(({
 
   const focusRing = useFocusRing(focused);
 
+  if (!prepend && !append) {
+    return (
+      <RNTextInput
+        ref={ref}
+        style={textStyleNormalize([
+          defaultStyle,
+          focusRing,
+          textStyle,
+          textInputStyle,
+          _.isFunction(style) ? style({ focused }) : style,
+        ])}
+        onFocus={_onFocus}
+        onBlur={_onBlur}
+        {...props}>
+        {children}
+      </RNTextInput>
+    );
+  }
+
   return (
-    <RNTextInput
-      ref={forwardRef}
-      style={textStyleNormalize([
+    <Pressable onFocus={() => void inputRef.current?.focus()}>
+      <View style={[
+        {
+          flexDirection: 'row',
+          gap: theme.spacer * 0.375,
+        },
         defaultStyle,
         focusRing,
         textStyle,
         textInputStyle,
         _.isFunction(style) ? style({ focused }) : style,
-      ])}
-      onFocus={_onFocus}
-      onBlur={_onBlur}
-      {...props}>
-      {children}
-    </RNTextInput>
+      ]}>
+        {prepend}
+        <InnerTextInput
+          ref={ref}
+          style={[
+            { flex: 1 },
+            Platform.select({
+              web: { outline: 0 } as any,
+              default: {},
+            }),
+          ]}
+          onFocus={_onFocus}
+          onBlur={_onBlur}
+          {...props}>
+          {children}
+        </InnerTextInput>
+        {append}
+      </View>
+    </Pressable>
   );
 }, {
   displayName: 'TextInput',

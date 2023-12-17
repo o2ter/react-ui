@@ -65,16 +65,16 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
       onFocus={onFocus}
       onBlur={onBlur}
     >
-      {_.isString(children) ? (
-        <View style={[{
-          flexDirection: 'row',
-          gap: theme.spacer * 0.375,
-        }, style]}>
-          {prepend}
+      <View style={[{
+        flexDirection: 'row',
+        gap: theme.spacer * 0.375,
+      }, style]}>
+        {prepend}
+        {_.isString(children) ? (
           <Text style={{ flex: 1 }} {...props}>{_.isEmpty(children) ? ' ' : children}</Text>
-          {append}
-        </View>
-      ) : children}
+        ) : children}
+        {append}
+      </View>
     </Pressable>
   )
 });
