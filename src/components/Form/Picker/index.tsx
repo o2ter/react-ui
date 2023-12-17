@@ -110,8 +110,8 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
       prepend={_.isFunction(prepend) ? prepend(state) : prepend}
       append={_.isFunction(append) ? append(state) : append}
       style={[
-        touched && focusRing,
         defaultStyle,
+        touched && focusRing,
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formPickerStyle,
         _.isFunction(style) ? style(state) : style,
