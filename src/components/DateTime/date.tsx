@@ -33,13 +33,20 @@ import { useDefaultInputStyle } from '../TextInput/style';
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { useFocus, useFocusRing } from '../../internals/focus';
+import { StyleProp, TextStyle } from 'react-native';
+
+type DatePickerState = {
+  value?: CalendarValue | CalendarValue[];
+  focused: boolean;
+  disabled: boolean;
+};
 
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
 type DatePickerProps = Modify<Modify<React.ComponentPropsWithoutRef<typeof PickerBase>, DatePickerBaseProps>, {
-  children?: React.ReactNode | ((state: {
-    value?: CalendarValue | CalendarValue[];
-    focused: boolean;
-  }) => React.ReactNode);
+  style?: StyleProp<TextStyle> | ((state: DatePickerState) => StyleProp<TextStyle>);
+  children?: React.ReactNode | ((state: DatePickerState) => React.ReactNode);
+  prepend?: React.ReactNode | ((state: DatePickerState) => React.ReactNode);
+  append?: React.ReactNode | ((state: DatePickerState) => React.ReactNode);
 }>;
 
 export const DatePicker = createMemoComponent((
@@ -49,12 +56,14 @@ export const DatePicker = createMemoComponent((
     min,
     max,
     multiple,
+    prepend,
+    append,
+    style,
+    disabled = false,
     onChange,
     onFocus,
     onBlur,
-    disabled = false,
     selectable = () => true,
-    style,
     children,
     ...props
   }: DatePickerProps & { classes?: ClassNames; },
@@ -95,6 +104,8 @@ export const DatePicker = createMemoComponent((
 
   const focusRing = useFocusRing(focused);
 
+  const state = { focused, disabled, value };
+
   return (
     <PickerBase
       ref={forwardRef}
@@ -103,14 +114,16 @@ export const DatePicker = createMemoComponent((
         defaultStyle,
         focusRing,
         datePickerStyle,
-        style
+        _.isFunction(style) ? style(state) : style,
       ]}
       onFocus={_onFocus}
       onBlur={_onBlur}
       picker={<_Calendar />}
+      prepend={_.isFunction(prepend) ? prepend(state) : prepend}
+      append={_.isFunction(append) ? append(state) : append}
       {...props}
     >
-      {_.isFunction(children) ? children({ focused, value }) : children ?? date.map(x => x.toString()).join(', ')}
+      {_.isFunction(children) ? children(state) : children ?? date.map(x => x.toString()).join(', ')}
     </PickerBase>
   )
 }, {

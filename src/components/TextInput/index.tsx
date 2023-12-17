@@ -35,11 +35,16 @@ import { useFocus, useFocusRing } from '../../internals/focus';
 import { useMergeRefs } from 'sugax';
 import View from '../View';
 
+type TextInputState = {
+  focused: boolean;
+  disabled: boolean;
+};
+
 type TextInputProps = Omit<RNTextInputProps, 'style'> & {
   classes?: ClassNames;
-  style?: StyleProp<TextStyle> | ((state: { focused: boolean; }) => StyleProp<TextStyle>);
-  prepend?: React.ReactNode;
-  append?: React.ReactNode;
+  style?: StyleProp<TextStyle> | ((state: TextInputState) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode | ((state: TextInputState) => React.ReactNode);
+  append?: React.ReactNode | ((state: TextInputState) => React.ReactNode);
 };
 
 const InnerTextInput = createComponent(({
@@ -61,10 +66,11 @@ const InnerTextInput = createComponent(({
 export const TextInput = createMemoComponent(({
   classes,
   style,
-  onFocus,
-  onBlur,
+  editable,
   prepend,
   append,
+  onFocus,
+  onBlur,
   children,
   ...props
 }: TextInputProps, forwardRef: React.ForwardedRef<RNTextInput>) => {
@@ -84,6 +90,8 @@ export const TextInput = createMemoComponent(({
 
   const focusRing = useFocusRing(focused);
 
+  const state = { focused, disabled: !editable };
+
   if (!prepend && !append) {
     return (
       <RNTextInput
@@ -93,8 +101,9 @@ export const TextInput = createMemoComponent(({
           focusRing,
           textStyle,
           textInputStyle,
-          _.isFunction(style) ? style({ focused }) : style,
+          _.isFunction(style) ? style(state) : style,
         ])}
+        editable={editable}
         onFocus={_onFocus}
         onBlur={_onBlur}
         {...props}>
@@ -114,9 +123,9 @@ export const TextInput = createMemoComponent(({
         focusRing,
         textStyle,
         textInputStyle,
-        _.isFunction(style) ? style({ focused }) : style,
+        _.isFunction(style) ? style(state) : style,
       ]}>
-        {prepend}
+        {_.isFunction(prepend) ? prepend(state) : prepend}
         <InnerTextInput
           ref={ref}
           style={[
@@ -126,12 +135,13 @@ export const TextInput = createMemoComponent(({
               default: {},
             }),
           ]}
+          editable={editable}
           onFocus={_onFocus}
           onBlur={_onBlur}
           {...props}>
           {children}
         </InnerTextInput>
-        {append}
+        {_.isFunction(append) ? append(state) : append}
       </View>
     </Pressable>
   );

@@ -32,10 +32,21 @@ import { DatePicker } from '../../DateTime';
 import { createMemoComponent } from '../../../internals/utils';
 import { ClassNames, useComponentStyle } from '../../Style';
 import { useFocus, useFocusRing } from '../../../internals/focus';
+import { StyleProp, TextStyle } from 'react-native';
+
+type FormDateState = {
+  focused: boolean;
+  invalid: boolean;
+  disabled: boolean;
+  valid: boolean;
+};
 
 type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   classes?: ClassNames;
   name: string | string[];
+  style?: StyleProp<TextStyle> | ((state: FormDateState) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode | ((state: FormDateState) => React.ReactNode);
+  append?: React.ReactNode | ((state: FormDateState) => React.ReactNode);
 }>;
 
 export const FormDate = createMemoComponent((
@@ -47,6 +58,8 @@ export const FormDate = createMemoComponent((
     multiple,
     style,
     disabled = false,
+    prepend,
+    append,
     onFocus,
     onBlur,
     selectable = () => true,
@@ -73,6 +86,13 @@ export const FormDate = createMemoComponent((
 
   const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
 
+  const state = {
+    focused,
+    disabled,
+    valid: touched && !invalid,
+    invalid: touched && invalid,
+  };
+
   return (
     <DatePicker
       ref={forwardRef}
@@ -85,11 +105,13 @@ export const FormDate = createMemoComponent((
       onBlur={_onBlur}
       selectable={selectable}
       disabled={disabled}
+      prepend={_.isFunction(prepend) ? prepend(state) : prepend}
+      append={_.isFunction(append) ? append(state) : append}
       style={[
         touched && focusRing,
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formDateStyle,
-        style
+        _.isFunction(style) ? style(state) : style,
       ]}
       {...props} />
   )

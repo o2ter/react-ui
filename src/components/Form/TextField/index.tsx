@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { NativeSyntheticEvent, TextInputEndEditingEventData } from 'react-native';
+import { NativeSyntheticEvent, StyleProp, TextInputEndEditingEventData, TextStyle } from 'react-native';
 import TextInput from '../../TextInput';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
@@ -34,8 +34,18 @@ import { createMemoComponent } from '../../../internals/utils';
 import { useComponentStyle } from '../../Style';
 import { useFocus, useFocusRing } from '../../../internals/focus';
 
+type FormTextFieldState = {
+  focused: boolean;
+  invalid: boolean;
+  disabled: boolean;
+  valid: boolean;
+};
+
 type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput>, {
   name: string | string[];
+  style?: StyleProp<TextStyle> | ((state: FormTextFieldState) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode | ((state: FormTextFieldState) => React.ReactNode);
+  append?: React.ReactNode | ((state: FormTextFieldState) => React.ReactNode);
 }>
 
 export const FormTextField = createMemoComponent((
@@ -43,6 +53,9 @@ export const FormTextField = createMemoComponent((
     classes,
     name,
     style,
+    editable,
+    prepend,
+    append,
     onFocus,
     onBlur,
     ...props
@@ -59,7 +72,7 @@ export const FormTextField = createMemoComponent((
 
   const formTextFieldStyle = useComponentStyle('formTextField', classes, [
     focused && 'focus',
-    props.editable ? 'enabled' : 'disabled',
+    editable ? 'enabled' : 'disabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
@@ -67,20 +80,30 @@ export const FormTextField = createMemoComponent((
 
   const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
 
+  const state = {
+    focused,
+    disabled: !editable,
+    valid: touched && !invalid,
+    invalid: touched && invalid,
+  };
+
   return (
     <TextInput
       ref={forwardRef}
       value={value ?? ''}
+      editable={editable}
       onChangeText={onChange}
       onEndEditing={onEndEditing}
       onSubmitEditing={submit}
       onFocus={_onFocus}
       onBlur={_onBlur}
+      prepend={_.isFunction(prepend) ? prepend(state) : prepend}
+      append={_.isFunction(append) ? append(state) : append}
       style={[
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         touched && focusRing,
         formTextFieldStyle,
-        _.isFunction(style) ? style({ focused }) : style,
+        _.isFunction(style) ? style(state) : style,
       ]}
       {...props} />
   );
