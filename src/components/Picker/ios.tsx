@@ -57,17 +57,19 @@ export const PickerIOS = createMemoComponent(<T = ItemValue>({
     value ? _onFocus() : _onBlur();
   }
 
+  const state = { focused, disabled };
+
   return (
     <React.Fragment>
       <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
         <PickerBox
           ref={forwardRef}
           classes={classes}
-          style={style}
+          style={_.isFunction(style) ? style(state) : style}
           focused={focused}
           disabled={disabled}
-          prepend={prepend}
-          append={append}
+          prepend={_.isFunction(prepend) ? prepend(state) : prepend}
+          append={_.isFunction(append) ? append(state) : append}
         >
           {renderText(selected)}
         </PickerBox>

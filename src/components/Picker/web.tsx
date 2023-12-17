@@ -31,19 +31,8 @@ import { createMemoComponent } from '../../internals/utils';
 import { useComponentStyle } from '../Style';
 import { useFocus, useFocusRing } from '../../internals/focus';
 import { useTheme } from '../../theme';
-import { textStyleNormalize } from '../Text/style';
-
-const _style = StyleSheet.create({
-  picker: {
-    appearance: 'none',
-    backgroundColor: 'transparent',
-    border: '0 solid black',
-    borderRadius: 0,
-    lineHeight: 'normal',
-    margin: 0,
-    padding: 0,
-  }
-}) as any;
+import View from '../View';
+import Text from '../Text';
 
 export const PickerWeb = createMemoComponent(<T = ItemValue>(
   {
@@ -52,6 +41,7 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
     items = [],
     disabled = false,
     style,
+    renderText = (item) => item?.label,
     onValueChange = () => { },
     onFocus = () => { },
     onBlur = () => { },
@@ -63,6 +53,7 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
 
   const theme = useTheme();
 
+  const selected = _.find(items, x => x.value === value);
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
   const textStyle = useComponentStyle('text');
@@ -73,27 +64,43 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
 
   const focusRing = useFocusRing(focused);
 
+  const state = { focused, disabled };
+  const content = renderText(selected);
+
   return (
-    <PickerNative
-      ref={forwardRef}
-      value={value}
-      items={items}
-      disabled={disabled}
-      onValueChange={onValueChange}
-      onFocus={_onFocus}
-      onBlur={_onBlur}
-      style={textStyleNormalize([
-        _style.picker,
-        {
-          color: theme.root.textColor,
-          fontSize: theme.root.fontSize,
-          lineHeight: theme.root.lineHeight,
-        },
-        focusRing,
-        textStyle,
-        pickerStyle,
-        _.isFunction(style) ? style({ focused }) : style,
-      ])} />
+    <View style={[
+      {
+        flexDirection: 'row',
+        gap: theme.spacer * 0.375,
+        color: theme.root.textColor,
+        fontSize: theme.root.fontSize,
+        lineHeight: theme.root.lineHeight,
+      },
+      focusRing,
+      textStyle,
+      pickerStyle,
+      _.isFunction(style) ? style(state) : style,
+    ]}>
+      {_.isFunction(prepend) ? prepend(state) : prepend}
+      <Text style={{ flex: 1 }}>{_.isEmpty(content) ? ' ' : content}</Text>
+      {_.isFunction(append) ? append(state) : append}
+      <PickerNative
+        ref={forwardRef}
+        value={value}
+        items={items}
+        disabled={disabled}
+        onValueChange={onValueChange}
+        onFocus={_onFocus}
+        onBlur={_onBlur}
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            minWidth: '100%',
+            minHeight: '100%',
+            opacity: 0,
+          }
+        ]} />
+    </View>
   );
 }, {
   displayName: 'Picker',

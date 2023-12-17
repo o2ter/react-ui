@@ -52,16 +52,18 @@ export const PickerAndroid = createMemoComponent(<T = ItemValue>({
     value ? _onFocus() : _onBlur();
   }
 
+  const state = { focused, disabled };
+
   return (
     <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>
       <PickerBox
         ref={forwardRef}
         classes={classes}
-        style={style}
+        style={_.isFunction(style) ? style(state) : style}
         focused={focused}
         disabled={disabled}
-        prepend={prepend}
-        append={append}
+        prepend={_.isFunction(prepend) ? prepend(state) : prepend}
+        append={_.isFunction(append) ? append(state) : append}
       >
         {renderText(selected)}
       </PickerBox>
@@ -70,7 +72,8 @@ export const PickerAndroid = createMemoComponent(<T = ItemValue>({
         items={items}
         onValueChange={onValueChange}
         style={[StyleSheet.absoluteFill, {
-          color: 'transparent',
+          minWidth: '100%',
+          minHeight: '100%',
           opacity: 0,
         }]} />
     </TouchableOpacity>
