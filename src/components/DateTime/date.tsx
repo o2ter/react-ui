@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useTheme } from '../../theme';
-import { Calendar } from '../Calendar';
+import { Calendar, CalendarValue } from '../Calendar';
 import { PickerBase } from './picker';
 import { Modify } from '../../internals/types';
 import { useDefaultInputStyle } from '../TextInput/style';
@@ -35,7 +35,12 @@ import { ClassNames, useComponentStyle } from '../Style';
 import { useFocus, useFocusRing } from '../../internals/focus';
 
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
-type DatePickerProps = Modify<React.ComponentPropsWithoutRef<typeof PickerBase>, DatePickerBaseProps>;
+type DatePickerProps = Modify<Modify<React.ComponentPropsWithoutRef<typeof PickerBase>, DatePickerBaseProps>, {
+  children?: React.ReactNode | ((state: {
+    value?: CalendarValue | CalendarValue[];
+    focused: boolean;
+  }) => React.ReactNode);
+}>;
 
 export const DatePicker = createMemoComponent((
   {
@@ -94,7 +99,6 @@ export const DatePicker = createMemoComponent((
     <PickerBase
       ref={forwardRef}
       disabled={disabled}
-      text={date.map(x => x.toString()).join(', ')}
       style={[
         defaultStyle,
         focusRing,
@@ -105,7 +109,9 @@ export const DatePicker = createMemoComponent((
       onBlur={_onBlur}
       picker={<_Calendar />}
       {...props}
-    />
+    >
+      {_.isFunction(children) ? children({ focused, value }) : children ?? date.map(x => x.toString()).join(', ')}
+    </PickerBase>
   )
 }, {
   displayName: 'DatePicker',

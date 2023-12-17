@@ -58,7 +58,7 @@ const month_name = [
   'december',
 ]
 
-type CalendarValue = string | Date | DateTime;
+export type CalendarValue = string | Date | DateTime;
 
 type CalendarProps = Modify<ViewProps, {
   value?: CalendarValue | CalendarValue[];

@@ -25,26 +25,29 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text, TextProps, Pressable, Platform } from 'react-native';
+import { Pressable, Platform } from 'react-native';
 import { Modify } from '../../internals/types';
 import { useModal } from '../Modal';
-import { textStyleNormalize } from '../Text/style';
-import Icon from '../Icon';
 import { useTheme } from '../../theme';
+import View from '../View';
+import Text from '../Text';
 
-type PickerBaseProps = Modify<TextProps & Pick<React.ComponentPropsWithoutRef<typeof Pressable>, 'onFocus' | 'onBlur'>, {
-  text?: string;
+type PickerBaseProps = Modify<React.ComponentPropsWithoutRef<typeof Text> & Pick<React.ComponentPropsWithoutRef<typeof Pressable>, 'onFocus' | 'onBlur'>, {
   picker?: any;
   disabled?: boolean;
+  prepend?: React.ReactNode;
+  append?: React.ReactNode;
 }>
 
 export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>, PickerBaseProps>(({
   style,
-  text,
   picker,
   disabled,
   onFocus,
   onBlur,
+  prepend,
+  append,
+  children,
   ...props
 }, forwardRef) => {
 
@@ -62,14 +65,16 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
       onFocus={onFocus}
       onBlur={onBlur}
     >
-      <Text style={textStyleNormalize(style)} {...props}>
-        <Icon
-          icon='MaterialIcons'
-          name='edit-calendar'
-          style={{ marginRight: theme.spacer * 0.375 }}
-        />
-        {_.isEmpty(text) ? ' ' : text}
-      </Text>
+      {_.isString(children) ? (
+        <View style={[{
+          flexDirection: 'row',
+          gap: theme.spacer * 0.375,
+        }, style]}>
+          {prepend}
+          <Text style={{ flex: 1 }} {...props}>{_.isEmpty(children) ? ' ' : children}</Text>
+          {append}
+        </View>
+      ) : children}
     </Pressable>
   )
 });
