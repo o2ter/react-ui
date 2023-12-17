@@ -45,6 +45,7 @@ type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Radio>, {
   name: string | string[];
   value: any;
   style?: StyleProp<ViewStyle> | ((state: FormRadioState) => StyleProp<ViewStyle>);
+  children?: React.ReactNode | ((state: FormRadioState) => React.ReactNode);
 }>;
 
 export const FormRadio = createMemoComponent((
@@ -101,7 +102,7 @@ export const FormRadio = createMemoComponent((
       onFocus={_onFocus}
       onBlur={_onBlur}
       {...props}
-    >{children}</Radio>
+    >{_.isFunction(children) ? children(state) : children}</Radio>
   )
 }, {
   displayName: 'Form.Radio'

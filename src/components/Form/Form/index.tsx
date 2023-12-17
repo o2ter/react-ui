@@ -104,7 +104,7 @@ type FormProps<S extends Record<string, ISchema<any, any>>> = {
   onAction?: (action: string, state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
   onError?: (error: Error, state: FormState & { preventDefault: VoidFunction }) => void;
-  children: React.ReactNode | ((state: FormState) => React.ReactNode);
+  children?: React.ReactNode | ((state: FormState) => React.ReactNode);
 };
 
 export const Form = createMemoComponent(<S extends Record<string, ISchema<any, any>>>({

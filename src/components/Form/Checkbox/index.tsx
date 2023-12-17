@@ -46,6 +46,7 @@ type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>,
   name: string | string[];
   value?: string;
   style?: StyleProp<ViewStyle> | ((state: FormCheckboxState) => StyleProp<ViewStyle>);
+  children?: React.ReactNode | ((state: FormCheckboxState) => React.ReactNode);
 }>;
 
 export const FormCheckbox = createMemoComponent((
@@ -105,7 +106,7 @@ export const FormCheckbox = createMemoComponent((
       onFocus={_onFocus}
       onBlur={_onBlur}
       {...props}
-    >{children}</Checkbox>
+    >{_.isFunction(children) ? children(state) : children}</Checkbox>
   )
 }, {
   displayName: 'Form.Checkbox'

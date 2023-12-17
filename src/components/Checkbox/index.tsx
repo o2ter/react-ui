@@ -27,7 +27,6 @@ import _ from 'lodash';
 import React from 'react';
 import { Platform, Pressable, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { useTheme } from '../../theme';
-
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import View from '../View';
@@ -36,12 +35,17 @@ import { Modify } from '../../internals/types';
 import { flattenStyle } from '../Style/flatten';
 import { useFocus, useFocusRing } from '../../internals/focus';
 
+type CheckboxState = {
+  selected: boolean;
+  focused: boolean;
+};
+
 type CheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;
   selected?: boolean;
   tabIndex?: number;
-  style?: StyleProp<ViewStyle> | ((state: { selected: boolean; focused: boolean; }) => StyleProp<ViewStyle>);
-  children: React.ReactNode | ((state: { selected: boolean; focused: boolean; }) => React.ReactNode);
+  style?: StyleProp<ViewStyle> | ((state: CheckboxState) => StyleProp<ViewStyle>);
+  children?: React.ReactNode | ((state: CheckboxState) => React.ReactNode);
 }>;
 
 export const Checkbox = createMemoComponent((
@@ -70,6 +74,8 @@ export const Checkbox = createMemoComponent((
 
   const fontSize = textStyle.fontSize ?? theme.root.fontSize;
   const lineHeight = textStyle.lineHeight ?? theme.root.lineHeight;
+
+  const state = { selected: selected ?? false, focused };
 
   const innerStyle = [
     'width',
@@ -109,7 +115,7 @@ export const Checkbox = createMemoComponent((
       default: {},
     }),
     checkboxStyle,
-    _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
+    _.isFunction(style) ? style(state) : style,
   ]);
 
   const focusRing = useFocusRing(focused);
@@ -142,7 +148,7 @@ export const Checkbox = createMemoComponent((
           />
         </Svg>}
       </View>
-      {_.isFunction(children) ? children({ selected: selected ?? false, focused }) : children}
+      {_.isFunction(children) ? children(state) : children}
     </Pressable>
   )
 }, {

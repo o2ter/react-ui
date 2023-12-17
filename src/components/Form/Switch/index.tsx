@@ -46,6 +46,7 @@ type FormSwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Switch>, {
   name: string | string[];
   value?: string;
   style?: StyleProp<ViewStyle> | ((state: FormSwitchState) => StyleProp<ViewStyle>);
+  children?: React.ReactNode | ((state: FormSwitchState) => React.ReactNode);
 }>;
 
 export const FormSwitch = createMemoComponent((
@@ -105,7 +106,7 @@ export const FormSwitch = createMemoComponent((
       onFocus={_onFocus}
       onBlur={_onBlur}
       {...props}
-    >{children}</Switch>
+    >{_.isFunction(children) ? children(state) : children}</Switch>
   )
 }, {
   displayName: 'Form.Switch'

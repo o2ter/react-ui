@@ -164,7 +164,7 @@ export const Button = createMemoComponent(({
     _.pick(colors, textStyleKeys) as TextStyle,
     _.isFunction(titleStyle) ? titleStyle(state) : titleStyle,
   ]);
-  const _wrapped = (children: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
+  const _wrapped = (children?: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
 
   const content = _.isEmpty(children) && !_.isEmpty(title)
     ? <Animated.Text selectable={false} style={_style}>{title}</Animated.Text>

@@ -48,7 +48,7 @@ export const Route: React.FC<{
 
 Route.displayName = 'Route';
 
-export function createRoutesFromChildren(children: React.ReactNode) {
+export function createRoutesFromChildren(children?: React.ReactNode) {
 
   const routes: any[] = [];
 
