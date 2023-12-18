@@ -42,6 +42,7 @@ type TextInputState = {
 
 type TextInputProps = Omit<RNTextInputProps, 'style'> & {
   classes?: ClassNames;
+  variant?: 'outline' | 'underlined' | 'unstyled';
   style?: StyleProp<TextStyle> | ((state: TextInputState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: TextInputState) => React.ReactNode);
   append?: React.ReactNode | ((state: TextInputState) => React.ReactNode);
@@ -66,6 +67,7 @@ const InnerTextInput = createComponent(({
 export const TextInput = createMemoComponent(({
   classes,
   style,
+  variant,
   editable,
   prepend,
   append,
@@ -86,7 +88,7 @@ export const TextInput = createMemoComponent(({
   const textInputStyle = useComponentStyle('textInput', classes, [
     focused && 'focus',
   ]);
-  const defaultStyle = useDefaultInputStyle(theme);
+  const defaultStyle = useDefaultInputStyle(theme, variant);
 
   const focusRing = useFocusRing(focused);
 

@@ -28,8 +28,11 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { useTheme } from '../../theme';
 
-export const useDefaultInputStyle = (theme: ReturnType<typeof useTheme>) => React.useMemo(() => StyleSheet.create({
-  style: {
+export const useDefaultInputStyle = (
+  theme: ReturnType<typeof useTheme>,
+  variant?: 'outline' | 'underlined' | 'unstyled',
+) => React.useMemo(() => StyleSheet.create({
+  outline: {
     display: 'flex',
     color: theme.root.textColor,
     fontSize: theme.root.fontSize,
@@ -40,5 +43,23 @@ export const useDefaultInputStyle = (theme: ReturnType<typeof useTheme>) => Reac
     borderRadius: theme.borderRadiusBase,
     paddingVertical: theme.spacer * 0.375,
     paddingHorizontal: theme.spacer * 0.75,
-  }
-}).style, [theme]);
+  },
+  underlined: {
+    display: 'flex',
+    color: theme.root.textColor,
+    fontSize: theme.root.fontSize,
+    lineHeight: theme.root.lineHeight,
+    backgroundColor: 'transparent',
+    borderColor: theme.grays['400'],
+    borderBottomWidth: theme.borderWidth,
+    paddingVertical: theme.spacer * 0.375,
+    paddingHorizontal: theme.spacer * 0.75,
+  },
+  unstyled: {
+    display: 'flex',
+    color: theme.root.textColor,
+    fontSize: theme.root.fontSize,
+    lineHeight: theme.root.lineHeight,
+    backgroundColor: 'transparent',
+  },
+})[variant ?? 'outline'], [theme, variant]);

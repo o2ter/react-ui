@@ -46,6 +46,7 @@ type FormPickerState = {
 
 type FormPickerProps<T = ItemValue> = Modify<React.ComponentPropsWithoutRef<typeof Picker<T>>, {
   name: string | string[];
+  variant?: 'outline' | 'underlined' | 'unstyled';
   style?: StyleProp<TextStyle> | ((state: FormPickerState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: FormPickerState) => React.ReactNode);
   append?: React.ReactNode | ((state: FormPickerState) => React.ReactNode);
@@ -57,6 +58,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
     name,
     baseStyle,
     style,
+    variant,
     items,
     disabled,
     prepend,
@@ -72,7 +74,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
   const invalid = !_.isEmpty(error);
 
   const theme = useTheme();
-  const defaultStyle = useDefaultInputStyle(theme);
+  const defaultStyle = useDefaultInputStyle(theme, variant);
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 

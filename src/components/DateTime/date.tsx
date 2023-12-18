@@ -43,6 +43,7 @@ type DatePickerState = {
 
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
 type DatePickerProps = Modify<Modify<React.ComponentPropsWithoutRef<typeof PickerBase>, DatePickerBaseProps>, {
+  variant?: 'outline' | 'underlined' | 'unstyled';
   style?: StyleProp<TextStyle> | ((state: DatePickerState) => StyleProp<TextStyle>);
   children?: React.ReactNode | ((state: DatePickerState) => React.ReactNode);
   prepend?: React.ReactNode | ((state: DatePickerState) => React.ReactNode);
@@ -59,6 +60,7 @@ export const DatePicker = createMemoComponent((
     prepend,
     append,
     style,
+    variant,
     disabled = false,
     onChange,
     onFocus,
@@ -71,7 +73,7 @@ export const DatePicker = createMemoComponent((
 ) => {
 
   const theme = useTheme();
-  const defaultStyle = useDefaultInputStyle(theme);
+  const defaultStyle = useDefaultInputStyle(theme, variant);
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
