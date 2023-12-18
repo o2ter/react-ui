@@ -40,6 +40,7 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
     value,
     items = [],
     disabled = false,
+    baseStyle,
     style,
     renderText = (item) => item?.label,
     onValueChange = () => { },
@@ -69,6 +70,7 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
 
   return (
     <View style={[
+      baseStyle,
       {
         flexDirection: 'row',
         gap: theme.spacer * 0.375,

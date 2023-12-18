@@ -55,6 +55,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
   {
     classes,
     name,
+    baseStyle,
     style,
     items,
     disabled,
@@ -109,8 +110,8 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
       onBlur={_onBlur}
       prepend={_.isFunction(prepend) ? prepend(state) : prepend}
       append={_.isFunction(append) ? append(state) : append}
+      baseStyle={[defaultStyle, baseStyle]}
       style={[
-        _.omit(defaultStyle, 'borderColor'),
         touched && focusRing,
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
         formPickerStyle,

@@ -36,6 +36,7 @@ export const PickerAndroid = createMemoComponent(<T = ItemValue>({
   value,
   items = [],
   disabled = false,
+  baseStyle,
   style,
   renderText = (item) => item?.label,
   onValueChange = () => { },
@@ -59,7 +60,7 @@ export const PickerAndroid = createMemoComponent(<T = ItemValue>({
       <PickerBox
         ref={forwardRef}
         classes={classes}
-        style={_.isFunction(style) ? style(state) : style}
+        style={[baseStyle, _.isFunction(style) ? style(state) : style]}
         focused={focused}
         disabled={disabled}
         prepend={_.isFunction(prepend) ? prepend(state) : prepend}

@@ -51,6 +51,7 @@ type PickerNativeProps<T = ItemValue> = {
 
 export type PickerProps<T = ItemValue> = Omit<PickerNativeProps<T>, 'style'> & {
   classes?: ClassNames;
+  baseStyle?: StyleProp<TextStyle>;
   style?: StyleProp<TextStyle> | ((state: PickerState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: PickerState) => React.ReactNode);
   append?: React.ReactNode | ((state: PickerState) => React.ReactNode);
