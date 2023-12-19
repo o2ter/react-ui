@@ -104,16 +104,18 @@ export const Button = createMemoComponent(({
   const [state, setState] = React.useState({ hovered: false, pressed: false, focused: false });
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
+  const _focused = state.hovered || state.pressed || state.focused;
+
   React.useEffect(() => {
 
     Animated.timing(fadeAnim, {
-      toValue: state.hovered || state.pressed || state.focused ? 1 : 0,
+      toValue: _focused ? 1 : 0,
       duration: theme.buttonDuration,
       easing: theme.buttonEasing,
       useNativeDriver: false,
     }).start();
 
-  }, [state.hovered || state.pressed || state.focused]);
+  }, [_focused]);
 
   const theme = useTheme();
   const buttonStyle = useComponentStyle('button', classes, [
@@ -211,6 +213,7 @@ export const Button = createMemoComponent(({
       fontSize: theme.fontSizes[size] ?? theme.root.fontSize,
       fontWeight: theme.fontWeights['normal'] ?? theme.root.fontWeight,
     } as TextStyle,
+    variant === 'link' && _focused && { textDecorationLine: 'underline' } as TextStyle,
     variant !== 'unstyled' && {
       paddingHorizontal: 12,
       paddingVertical: 6,
