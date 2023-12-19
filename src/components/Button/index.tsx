@@ -137,10 +137,30 @@ export const Button = createMemoComponent(({
         backgroundColor: fromColors.backgroundColor,
         borderColor: fromColors.borderColor,
       },
+      subtle: {
+        color: fromColors.color,
+        backgroundColor: fromColors.backgroundColor,
+        borderColor: fromColors.borderColor,
+      },
       outline: {
         color: selectedColor,
         backgroundColor: transparent(selectedColor, 0),
         borderColor: selectedColor,
+      },
+      link: {
+        color: selectedColor,
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+      },
+      ghost: {
+        color: selectedColor,
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+      },
+      unstyled: {
+        color: selectedColor,
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
       },
     }[variant];
 
@@ -150,10 +170,30 @@ export const Button = createMemoComponent(({
         backgroundColor: toColors.backgroundColor,
         borderColor: toColors.borderColor,
       },
+      subtle: {
+        color: toColors.color,
+        backgroundColor: toColors.backgroundColor,
+        borderColor: toColors.borderColor,
+      },
       outline: {
         color: toColors.color,
         backgroundColor: selectedColor,
         borderColor: selectedColor,
+      },
+      link: {
+        color: selectedColor,
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+      },
+      ghost: {
+        color: selectedColor,
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+      },
+      unstyled: {
+        color: selectedColor,
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
       },
     }[variant];
 
