@@ -46,11 +46,11 @@ export const FormButton = createMemoComponent((
 
   const defaultProps = {
     submit: {
-      variant: 'primary',
+      color: 'primary',
       onPress: submit,
     },
     reset: {
-      variant: 'danger',
+      color: 'danger',
       onPress: reset,
     },
   }
