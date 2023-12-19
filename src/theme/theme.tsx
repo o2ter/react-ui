@@ -38,6 +38,7 @@ const computedTheme = (
       if (_.isNil(palette)) palette = base.palette(computed);
       return palette;
     },
+    get pickColor() { return (c: string) => computed.themeColors[c] ?? computed.colors[c] ?? c; },
   }, base.decoded);
   return computed;
 }

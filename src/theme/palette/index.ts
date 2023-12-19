@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import { ThemeVariables } from '../variables';
-import { ColorType, colorContrast, shiftColor, shadeColor, tintColor } from '../../color';
+import { ColorType, colorContrast, shiftColor, shadeColor, tintColor, transparent, mixColor } from '../../color';
 import { _hex } from '../../internals/color';
 
 const memoize = <T extends (...args: any) => any>(func: T): T => _.memoize(func);
@@ -38,30 +38,80 @@ export const _colorContrast = (theme: ThemeVariables) => (background: string | C
 );
 
 export const defaultPalette = (
-  theme: ThemeVariables & { colorContrast: ReturnType<typeof _colorContrast> }
+  theme: ThemeVariables & {
+    colorContrast: ReturnType<typeof _colorContrast>;
+    pickColor: (c: string) => string;
+  }
 ) => ({
 
-  buttonColors: memoize((color: string) => ({
-    color: theme.colorContrast(color),
-    backgroundColor: color,
-    borderColor: color,
-  })),
+  buttonColors: memoize((color: string) => {
+    const _color = theme.colorContrast(color);
+    return {
+      solid: {
+        color: _color,
+        backgroundColor: color,
+        borderColor: color,
+      },
+      subtle: {
+        color: _color,
+        backgroundColor: mixColor(color, _color, 0.4),
+        borderColor: mixColor(color, _color, 0.4),
+      },
+      outline: {
+        color: color,
+        backgroundColor: transparent(color, 0),
+        borderColor: color,
+      },
+      link: {
+        color: color,
+      },
+      ghost: {
+        color: color,
+        backgroundColor: transparent(color, 0),
+      },
+      unstyled: {
+        color: color,
+      },
+    };
+  }),
 
   buttonFocusedColors: memoize((color: string) => {
     const _color = theme.colorContrast(color);
     const _color2 = _color === _hex(theme.colorContrastLight) ? shadeColor(color, 0.2) : tintColor(color, 0.2);
-    return ({
-      color: _color,
-      backgroundColor: _color2,
-      borderColor: _color2,
-    });
+    return {
+      solid: {
+        color: _color,
+        backgroundColor: _color2,
+        borderColor: _color2,
+      },
+      subtle: {
+        color: _color,
+        backgroundColor: mixColor(color, _color, 0.6),
+        borderColor: mixColor(color, _color, 0.6),
+      },
+      outline: {
+        color: _color,
+        backgroundColor: color,
+        borderColor: color,
+      },
+      link: {
+        color: color,
+      },
+      ghost: {
+        color: color,
+        backgroundColor: transparent(color, 0.5),
+      },
+      unstyled: {
+        color: color,
+      },
+    };
   }),
 
   alertColors: memoize((color: string) => ({
-    color: theme.themeColors[color] ?? theme.colors[color] ?? color,
-    borderColor: theme.themeColors[color] ?? theme.colors[color] ?? color,
-    messageColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[800]),
-    backgroundColor: shiftColor(theme.themeColors[color] ?? theme.colors[color] ?? color, theme.colorWeights[100]),
+    color: theme.pickColor(color),
+    borderColor: theme.pickColor(color),
+    messageColor: shiftColor(theme.pickColor(color), theme.colorWeights[800]),
+    backgroundColor: shiftColor(theme.pickColor(color), theme.colorWeights[100]),
   })),
 
 });

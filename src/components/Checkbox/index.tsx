@@ -44,6 +44,7 @@ type CheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;
   selected?: boolean;
   tabIndex?: number;
+  focusRingColor?: string;
   style?: StyleProp<ViewStyle> | ((state: CheckboxState) => StyleProp<ViewStyle>);
   children?: React.ReactNode | ((state: CheckboxState) => React.ReactNode);
 }>;
@@ -53,6 +54,7 @@ export const Checkbox = createMemoComponent((
     classes,
     style,
     selected,
+    focusRingColor,
     onFocus,
     onBlur,
     children,
@@ -118,7 +120,7 @@ export const Checkbox = createMemoComponent((
     _.isFunction(style) ? style(state) : style,
   ]);
 
-  const focusRing = useFocusRing(focused);
+  const focusRing = useFocusRing(focused, focusRingColor ?? 'primary');
 
   return (
     <Pressable

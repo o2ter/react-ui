@@ -71,16 +71,16 @@ export const useFocusRing = (
   });
   if (value === 0) return outline;
   return {
-    borderColor: tintColor(theme.themeColors[color], 0.5),
+    borderColor: tintColor(theme.pickColor(color), 0.5),
     ...outline,
     ...selectPlatformShadow({
-      shadowColor: theme.themeColors[color],
+      shadowColor: theme.pickColor(color),
       shadowOffset: {
         width: 0,
         height: 0,
       },
       shadowRadius: 4 * value,
-      boxShadow: `0 0 0 ${4 * value}px ${rgba(theme.themeColors[color], 0.25)}`
+      boxShadow: `0 0 0 ${4 * value}px ${rgba(theme.pickColor(color), 0.25)}`
     }),
   };
 }

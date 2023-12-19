@@ -124,7 +124,7 @@ export const Button = createMemoComponent(({
     state.focused && 'focus',
     disabled ? 'disabled' : 'enabled',
   ]);
-  const selectedColor = theme.themeColors[color] ?? theme.colors[color] ?? color;
+  const selectedColor = theme.pickColor(color);
 
   const colors = React.useMemo(() => {
 
@@ -134,70 +134,15 @@ export const Button = createMemoComponent(({
     const _interpolate = (c1: string, c2: string) => c1 === c2 ? c1 : fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
 
     const _from = {
-      solid: {
-        color: fromColors.color,
-        backgroundColor: fromColors.backgroundColor,
-        borderColor: fromColors.borderColor,
-      },
-      subtle: {
-        color: fromColors.color,
-        backgroundColor: mixColor(selectedColor, theme.colorContrast(selectedColor), 0.4),
-        borderColor: mixColor(selectedColor, theme.colorContrast(selectedColor), 0.4),
-      },
-      outline: {
-        color: selectedColor,
-        backgroundColor: transparent(selectedColor, 0),
-        borderColor: selectedColor,
-      },
-      link: {
-        color: selectedColor,
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-      },
-      ghost: {
-        color: selectedColor,
-        backgroundColor: transparent(selectedColor, 0),
-        borderColor: 'transparent',
-      },
-      unstyled: {
-        color: selectedColor,
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-      },
-    }[variant];
-
+      borderColor: 'transparent',
+      backgroundColor: 'transparent',
+      ...fromColors[variant],
+    };
     const _to = {
-      solid: {
-        color: toColors.color,
-        backgroundColor: toColors.backgroundColor,
-        borderColor: toColors.borderColor,
-      },
-      subtle: {
-        color: toColors.color,
-        backgroundColor: mixColor(selectedColor, theme.colorContrast(selectedColor), 0.6),
-        borderColor: mixColor(selectedColor, theme.colorContrast(selectedColor), 0.6),
-      },
-      outline: {
-        color: toColors.color,
-        backgroundColor: selectedColor,
-        borderColor: selectedColor,
-      },
-      link: {
-        color: selectedColor,
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-      },
-      ghost: {
-        color: selectedColor,
-        backgroundColor: transparent(selectedColor, 0.5),
-        borderColor: 'transparent',
-      },
-      unstyled: {
-        color: selectedColor,
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-      },
-    }[variant];
+      borderColor: 'transparent',
+      backgroundColor: 'transparent',
+      ...toColors[variant],
+    };
 
     return {
       color: _from.color === _to.color ? _to.color : _interpolate(_from.color, _to.color),
