@@ -220,7 +220,7 @@ export const Button = createMemoComponent(({
       opacity: disabled ? 0.65 : 1,
     },
     colors.borderColor !== 'transparent' && { borderWidth: theme.borderWidth },
-    colors.borderColor !== 'transparent' && colors.backgroundColor !== 'transparent' && { borderRadius: theme.borderRadiusBase },
+    (colors.borderColor !== 'transparent' || colors.backgroundColor !== 'transparent') && { borderRadius: theme.borderRadiusBase },
     buttonStyle,
   ]), [theme, size, disabled]);
 
