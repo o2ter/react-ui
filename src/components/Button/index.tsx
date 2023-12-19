@@ -187,7 +187,7 @@ export const Button = createMemoComponent(({
       },
       ghost: {
         color: selectedColor,
-        backgroundColor: 'transparent',
+        backgroundColor: transparent(selectedColor, 0.5),
         borderColor: 'transparent',
       },
       unstyled: {
