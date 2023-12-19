@@ -208,14 +208,16 @@ export const Button = createMemoComponent(({
   const _defaultStyle = React.useMemo(() => flattenStyle([
     {
       textAlign: 'center',
-      paddingHorizontal: 12,
-      paddingVertical: 6,
-      borderWidth: theme.borderWidth,
-      borderRadius: theme.borderRadiusBase,
       fontSize: theme.fontSizes[size] ?? theme.root.fontSize,
       fontWeight: theme.fontWeights['normal'] ?? theme.root.fontWeight,
-      opacity: disabled ? 0.65 : 1,
     } as TextStyle,
+    variant !== 'unstyled' && {
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      opacity: disabled ? 0.65 : 1,
+    },
+    colors.borderColor !== 'transparent' && { borderWidth: theme.borderWidth },
+    colors.borderColor !== 'transparent' && colors.backgroundColor !== 'transparent' && { borderRadius: theme.borderRadiusBase },
     buttonStyle,
   ]), [theme, size, disabled]);
 
