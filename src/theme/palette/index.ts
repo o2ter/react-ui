@@ -99,7 +99,7 @@ export const defaultPalette = (
       },
       ghost: {
         color: color,
-        backgroundColor: transparent(color, 0.5),
+        backgroundColor: transparent(color, 0.2),
       },
       unstyled: {
         color: color,
