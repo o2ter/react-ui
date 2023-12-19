@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import { ThemeVariables } from '../variables';
-import { ColorType, colorContrast, shiftColor, shadeColor, tintColor, transparent, mixColor } from '../../color';
+import { ColorType, colorContrast, shiftColor, shadeColor, tintColor, transparent } from '../../color';
 import { _hex } from '../../internals/color';
 
 const memoize = <T extends (...args: any) => any>(func: T): T => _.memoize(func);
@@ -53,9 +53,9 @@ export const defaultPalette = (
         borderColor: color,
       },
       subtle: {
-        color: _color,
-        backgroundColor: mixColor(color, _color, 0.4),
-        borderColor: mixColor(color, _color, 0.4),
+        color: shadeColor(color, 0.6),
+        backgroundColor: tintColor(color, 0.8),
+        borderColor: tintColor(color, 0.8),
       },
       outline: {
         color: color,
@@ -85,9 +85,9 @@ export const defaultPalette = (
         borderColor: _color2,
       },
       subtle: {
-        color: _color,
-        backgroundColor: mixColor(color, _color, 0.6),
-        borderColor: mixColor(color, _color, 0.6),
+        color: shadeColor(color, 0.6),
+        backgroundColor: tintColor(color, 0.6),
+        borderColor: tintColor(color, 0.6),
       },
       outline: {
         color: _color,
