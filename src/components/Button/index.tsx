@@ -40,7 +40,7 @@ import {
 } from 'react-native';
 
 import { useTheme } from '../../theme';
-import { transparent } from '../../color';
+import { transparent, mixColor } from '../../color';
 import { textStyleKeys } from '../Text/style';
 import { Modify } from '../../internals/types';
 import { Text } from '../Text';
@@ -141,8 +141,8 @@ export const Button = createMemoComponent(({
       },
       subtle: {
         color: fromColors.color,
-        backgroundColor: fromColors.backgroundColor,
-        borderColor: fromColors.borderColor,
+        backgroundColor: mixColor(selectedColor, theme.colorContrast(selectedColor), 0.4),
+        borderColor: mixColor(selectedColor, theme.colorContrast(selectedColor), 0.4),
       },
       outline: {
         color: selectedColor,
@@ -174,8 +174,8 @@ export const Button = createMemoComponent(({
       },
       subtle: {
         color: toColors.color,
-        backgroundColor: toColors.backgroundColor,
-        borderColor: toColors.borderColor,
+        backgroundColor: mixColor(selectedColor, theme.colorContrast(selectedColor), 0.6),
+        borderColor: mixColor(selectedColor, theme.colorContrast(selectedColor), 0.6),
       },
       outline: {
         color: toColors.color,
