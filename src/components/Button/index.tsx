@@ -58,9 +58,8 @@ type ButtonStateCallbackType = PressableStateCallbackType & {
 
 type ButtonProps = Modify<PressableProps, {
   classes?: ClassNames;
-  color?: string;
-  variant?: ThemeColors | (string & {});
-  outline?: boolean;
+  color?: ThemeColors | (string & {});
+  variant?: 'solid' | 'subtle' | 'outline' | 'link' | 'ghost' | 'unstyled';
   size?: string;
   title?: string;
   style?: StyleProp<ViewStyle> | ((state: ButtonStateCallbackType) => StyleProp<ViewStyle>);
@@ -84,9 +83,8 @@ const ButtonText = Animated.createAnimatedComponent(createMemoComponent((
 
 export const Button = createMemoComponent(({
   classes,
-  color,
-  variant = 'primary',
-  outline = false,
+  color = 'primary',
+  variant = 'solid',
   size = 'normal',
   title,
   style,
@@ -124,7 +122,7 @@ export const Button = createMemoComponent(({
     state.focused && 'focus',
     disabled ? 'disabled' : 'enabled',
   ]);
-  const selectedColor = color ?? theme.themeColors[variant] ?? theme.colors[variant];
+  const selectedColor = theme.themeColors[color] ?? theme.colors[color] ?? color;
 
   const colors = React.useMemo(() => {
 
@@ -132,13 +130,40 @@ export const Button = createMemoComponent(({
     const toColors = theme.palette.buttonFocusedColors(selectedColor);
 
     const _interpolate = (c1: string, c2: string) => c1 === c2 ? c1 : fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [c1, c2] });
+
+    const _from = {
+      solid: {
+        color: fromColors.color,
+        backgroundColor: fromColors.backgroundColor,
+        borderColor: fromColors.borderColor,
+      },
+      outline: {
+        color: selectedColor,
+        backgroundColor: transparent(selectedColor, 0),
+        borderColor: selectedColor,
+      },
+    }[variant];
+
+    const _to = {
+      solid: {
+        color: toColors.color,
+        backgroundColor: toColors.backgroundColor,
+        borderColor: toColors.borderColor,
+      },
+      outline: {
+        color: toColors.color,
+        backgroundColor: selectedColor,
+        borderColor: selectedColor,
+      },
+    }[variant];
+
     return {
-      color: _interpolate(outline ? selectedColor : fromColors.color, toColors.color),
-      backgroundColor: outline ? _interpolate(transparent(selectedColor, 0), selectedColor) : _interpolate(fromColors.backgroundColor, toColors.backgroundColor),
-      borderColor: outline ? selectedColor : _interpolate(fromColors.borderColor, toColors.borderColor),
+      color: _from.color === _to.color ? _to.color : _interpolate(_from.color, _to.color),
+      backgroundColor: _from.backgroundColor === _to.backgroundColor ? _to.backgroundColor : _interpolate(_from.backgroundColor, _to.backgroundColor),
+      borderColor: _from.borderColor === _to.borderColor ? _to.borderColor : _interpolate(_from.borderColor, _to.borderColor),
     };
 
-  }, [theme, selectedColor, outline]);
+  }, [theme, selectedColor, variant]);
 
   const _defaultStyle = React.useMemo(() => flattenStyle([
     {
