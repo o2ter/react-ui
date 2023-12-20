@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { selectionKeys, DataSheetState, Position, Range } from '../types';
+import { selectionKeys, DataSheetState, Position } from '../types';
 
 const DataSheetStateContext = React.createContext<{
   state: ReturnType<typeof calculate>;
@@ -101,6 +101,7 @@ export const useDataSheetState = () => {
   return React.useMemo(() => ({
     state,
     setState,
+    selectionDeps: [state.selectingRows, state.selectedRows, state.selectingCells],
     isRowSelected: (row: number) => (
       _.isEmpty(state.selectingRows) ? _.includes(state.selectedRows, row) : _.includes(state.selectingRows, row)
     ),

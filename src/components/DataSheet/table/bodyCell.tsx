@@ -52,7 +52,7 @@ export const BodyCell = createMemoComponent(({
   children,
 }: BodyCellProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof DataSheetCell>>) => {
 
-  const { state, setState, isRowSelected, isCellSelected, isCellEditing } = useDataSheetState();
+  const { state, selectionDeps, setState, isRowSelected, isCellSelected, isCellEditing } = useDataSheetState();
 
   const _style = React.useMemo(() => flattenCSSStyle([{
     padding: 0,
@@ -68,7 +68,7 @@ export const BodyCell = createMemoComponent(({
     borderBottomStyle: isRowSelected(row + 1) || isCellSelected(row + 1, col) ? 'double' : 'solid',
     borderBottomColor: isRowSelected(row + 1) || isCellSelected(row + 1, col) ? '#2185D0' : '#DDD',
     backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
-  }, state.editing ? {} : { cursor: 'cell' }, style]), [state, row, rowNumbers, style]);
+  }, state.editing ? {} : { cursor: 'cell' }, style]), [state.editing, ...selectionDeps, row, rowNumbers, style]);
 
   const _selectedStyle = React.useMemo(() => flattenCSSStyle([{
     padding: 0,
@@ -80,7 +80,7 @@ export const BodyCell = createMemoComponent(({
     borderStyle: 'double',
     borderColor: '#2185D0',
     backgroundColor: row % 2 == 0 ? 'white' : '#F6F8FF',
-  }, state.editing ? {} : { cursor: 'cell' }, selectedStyle]), [state, row, rowNumbers, selectedStyle]);
+  }, state.editing ? {} : { cursor: 'cell' }, selectedStyle]), [state.editing, row, rowNumbers, selectedStyle]);
 
   const allowEdit = _.isFunction(allowEditForCell) ? allowEditForCell(row, col) : !!allowEditForCell;
   const doubleClick = React.useCallback(() => setState({ editing: { row, col } }), []);
