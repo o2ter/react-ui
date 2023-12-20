@@ -29,7 +29,7 @@ import { useDataSheetState } from '../provider/state';
 import { flattenCSSStyle } from '../styles';
 import { DataSheetCell } from './cell';
 import { StyleProp } from 'react-native';
-import { createMemoComponent } from '../../../internals/utils';
+import { createComponent } from '../../../internals/utils';
 
 type BodyCellProps = React.PropsWithChildren<{
   row: number;
@@ -41,7 +41,7 @@ type BodyCellProps = React.PropsWithChildren<{
   allowEditForCell?: boolean | ((row: number, col: number) => boolean);
 }>
 
-export const BodyCell = createMemoComponent(({
+export const BodyCell = createComponent(({
   row,
   col,
   rowNumbers,
