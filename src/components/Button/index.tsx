@@ -158,6 +158,7 @@ export const Button = createMemoComponent(({
 
   const _defaultStyle = React.useMemo(() => flattenStyle([
     {
+      justifyContent: 'center',
       flexDirection: 'row',
       gap: theme.spacer * 0.375,
       textAlign: 'center',
