@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { View, Text, Pressable, Animated, Platform, StyleSheet, LayoutAnimation, ColorValue, RecursiveArray } from 'react-native';
+import { View, Text, Pressable, Animated, Platform, StyleSheet, LayoutAnimation, RecursiveArray } from 'react-native';
 import { useMount } from 'sugax';
 import { ValidateError } from '@o2ter/valid.js';
 import { useTheme } from '../../theme';
