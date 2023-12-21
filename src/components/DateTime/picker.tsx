@@ -25,11 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Pressable, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { Modify } from '../../internals/types';
+import { Pressable } from '../Pressable';
 import { useModal } from '../Modal';
 import { useTheme } from '../../theme';
-import View from '../View';
 import Text from '../Text';
 
 type PickerBaseProps = Modify<React.ComponentPropsWithoutRef<typeof Text> & Pick<React.ComponentPropsWithoutRef<typeof Pressable>, 'onFocus' | 'onBlur'>, {
@@ -58,23 +58,25 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
     <Pressable
       ref={forwardRef}
       onPress={() => { if (!disabled) showModal(picker) }}
-      style={Platform.select({
-        web: { outline: 0 } as any,
-        default: {},
-      })}
+      style={[
+        {
+          flexDirection: 'row',
+          gap: theme.spacer * 0.375,
+        },
+        Platform.select({
+          web: { outline: 0 } as any,
+          default: {},
+        }),
+        style
+      ]}
       onFocus={onFocus}
       onBlur={onBlur}
     >
-      <View style={[{
-        flexDirection: 'row',
-        gap: theme.spacer * 0.375,
-      }, style]}>
-        {prepend}
-        {_.isString(children) ? (
-          <Text style={{ flex: 1 }} {...props}>{_.isEmpty(children) ? ' ' : children}</Text>
-        ) : children}
-        {append}
-      </View>
+      {prepend}
+      {_.isString(children) ? (
+        <Text style={{ flex: 1 }} {...props}>{_.isEmpty(children) ? ' ' : children}</Text>
+      ) : children}
+      {append}
     </Pressable>
   )
 });
