@@ -64,6 +64,8 @@ type ButtonProps = Modify<PressableProps, {
   title?: string;
   style?: StyleProp<ViewStyle> | ((state: ButtonStateCallbackType) => StyleProp<ViewStyle>);
   titleStyle?: StyleProp<TextStyle> | ((state: ButtonStateCallbackType) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode;
+  append?: React.ReactNode;
   onHoverIn?: (event: MouseEvent) => void;
   onHoverOut?: (event: MouseEvent) => void;
   children?: React.ReactNode | ((state: ButtonStateCallbackType) => React.ReactNode);
@@ -91,6 +93,8 @@ export const Button = createMemoComponent(({
   titleStyle,
   disabled,
   focusable,
+  prepend,
+  append,
   children,
   onHoverIn,
   onHoverOut,
@@ -154,6 +158,8 @@ export const Button = createMemoComponent(({
 
   const _defaultStyle = React.useMemo(() => flattenStyle([
     {
+      flexDirection: 'row',
+      gap: theme.spacer * 0.375,
       textAlign: 'center',
       fontSize: theme.fontSizes[size] ?? theme.root.fontSize,
       fontWeight: theme.fontWeights['normal'] ?? theme.root.fontWeight,
@@ -224,7 +230,9 @@ export const Button = createMemoComponent(({
         if (_.isFunction(onBlur)) onBlur(e);
       }}
       {...props}>
-      {content}
+      {prepend}
+      {_.isFunction(content) ? content() : content}
+      {append}
     </AnimatedPressable>
   );
 }, {
