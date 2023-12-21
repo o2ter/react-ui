@@ -40,7 +40,6 @@ import {
 } from 'react-native';
 
 import { useTheme } from '../../theme';
-import { transparent, mixColor } from '../../color';
 import { textStyleKeys } from '../Text/style';
 import { Modify } from '../../internals/types';
 import { Text } from '../Text';
@@ -158,6 +157,7 @@ export const Button = createMemoComponent(({
 
   const _defaultStyle = React.useMemo(() => flattenStyle([
     {
+      alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
       gap: theme.spacer * 0.375,
