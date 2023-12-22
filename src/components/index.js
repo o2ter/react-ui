@@ -37,6 +37,7 @@ export { Icon } from './Icon';
 export * from './Icons';
 export * as Icons from './Icons';
 export { Image } from './Image';
+export { InputGroup } from './InputGroup';
 export { List } from './List';
 export { Lottie } from './Lottie';
 export * from './Offcanvas';
