@@ -144,7 +144,7 @@ export const InputGroup = createMemoComponent((
       ]}
       {...props}
     >
-      {_.map(flapMapChildren(children), (child, i) => (
+      {React.Children.map(flapMapChildren(children), (child, i) => (
         <InputGroupItem index={i} length={length}>{child}</InputGroupItem>
       ))}
     </View>
