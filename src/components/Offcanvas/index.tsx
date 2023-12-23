@@ -101,7 +101,7 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
             default: {},
           }),
           offcanvasBackdrop,
-          config && 'backdropStyle' in config ? config.backdropStyle : {},
+          display && 'backdropStyle' in display ? display.backdropStyle : {},
           {
             opacity: fadeAnim,
           },
@@ -134,7 +134,7 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
           placement === 'right' && offcanvasRightContainer,
           placement === 'top' && offcanvasTopContainer,
           placement === 'bottom' && offcanvasBottomContainer,
-          config && 'containerStyle' in config ? config.containerStyle : {},
+          display && 'containerStyle' in display ? display.containerStyle : {},
           {
             opacity: layout ? 1 : 0,
             ...layout && placement === 'left' ? { left: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.width, 0] }) } : {},

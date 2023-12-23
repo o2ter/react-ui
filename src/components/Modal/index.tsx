@@ -87,7 +87,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
             default: {},
           }),
           modalBackdrop,
-          config && 'backdropStyle' in config ? config.backdropStyle : {},
+          display && 'backdropStyle' in display ? display.backdropStyle : {},
           {
             opacity: fadeAnim,
           },
@@ -107,7 +107,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
             default: {},
           }),
           modalContainer,
-          config && 'containerStyle' in config ? config.containerStyle : {},
+          display && 'containerStyle' in display ? display.containerStyle : {},
           {
             opacity: fadeAnim,
           },
