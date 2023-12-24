@@ -41,6 +41,7 @@ export const Image = createMemoComponent((
   {
     classes,
     source,
+    defaultSource = source,
     style,
     ...props
   }: ImageProps,
@@ -84,6 +85,7 @@ export const Image = createMemoComponent((
   return <ImageBase
     ref={forwardRef}
     source={source}
+    defaultSource={defaultSource}
     style={[_.pickBy({ width: _width, height: _height, aspectRatio }, v => !_.isNil(v)), _style]}
     {...props} />;
 }, {
