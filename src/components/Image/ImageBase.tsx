@@ -31,18 +31,27 @@ import { flattenStyle } from '../Style/flatten';
 
 const _FastImage = FastImage as any;
 
-export const ImageBase = React.forwardRef<Image, ImageProps>((
-  props,
-  forwardRef
-) => {
+export const ImageBase = React.forwardRef<Image, ImageProps>(({
+  defaultSource,
+  ...props
+}, forwardRef) => {
 
   const _style = flattenStyle(props.style);
 
   if (_style.width && _style.height) {
     if (!_.isNumber(props.blurRadius) || props.blurRadius <= 0)
-      return <_FastImage ref={forwardRef} {...props} />;
+      return <_FastImage
+        ref={forwardRef}
+        defaultSource={_.isNumber(defaultSource) ? defaultSource : undefined}
+        {...props}
+      />;
   }
-  return <Image ref={forwardRef} {...props} />;
+
+  return <Image
+    ref={forwardRef}
+    defaultSource={defaultSource}
+    {...props}
+  />;
 });
 
 export default ImageBase;
