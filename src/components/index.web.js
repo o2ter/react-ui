@@ -29,3 +29,4 @@ export * from './Navigator';
 export * from './CodeMirror';
 export * from './DataSheet';
 export * from './UploadInput';
+export { __FONTS__ } from './Icons/fonts';
