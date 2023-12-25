@@ -36,10 +36,15 @@ export const UploadInput: React.FC<UploadInputProps> = ({ children, style, ...pr
   const ref = React.useRef<React.ComponentRef<'input'>>(null);
   return (
     <>
-      <input ref={ref} type='file' style={{ display: 'none', ...style ?? {} }} {...props} />
       <UploadInputContext.Provider value={ref}>
         {_.isFunction(children) ? children(ref) : children}
       </UploadInputContext.Provider>
+      <input ref={ref} type='file' style={{
+        position: 'absolute',
+        inset: 0,
+        opacity: 0,
+        ...style ?? {},
+      }} {...props} />
     </>
   );
 }
