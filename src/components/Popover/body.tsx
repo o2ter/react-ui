@@ -111,7 +111,7 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
       {visible && <Animated.View
         pointerEvents='box-none'
         onLayout={(e) => setContainerLayout(e.nativeEvent.layout)}
-        style={[
+        style={flattenStyle([
           selectPlatformShadow({
             shadowColor: 'black',
             ...elevationShadow(6),
@@ -135,7 +135,7 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
             default: { position: 'absolute' },
           }),
           _style,
-        ]}
+        ])}
       >
         <RNView
           pointerEvents='box-none'

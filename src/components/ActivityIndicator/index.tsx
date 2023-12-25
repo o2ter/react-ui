@@ -30,6 +30,7 @@ import { Animated, View, ActivityIndicator as RNActivityIndicator, StyleSheet, P
 
 import { useTheme } from '../../theme';
 import { useComponentStyle } from '../Style';
+import { flattenStyle } from '../Style/flatten';
 
 const ActivityIndicatorContext = React.createContext<{
   setTasks: React.Dispatch<React.SetStateAction<string[]>>;
@@ -117,7 +118,7 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
     {children}
     {visible && <Animated.View
       pointerEvents={passThroughEvents ? 'none' : 'auto'}
-      style={[
+      style={flattenStyle([
         {
           opacity: fadeAnim,
           zIndex: theme.zIndex.indicator,
@@ -129,7 +130,7 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
           default: {},
         }),
         defaultStyle,
-      ]}>
+      ])}>
       {backdrop === true ? <View style={[
         style.activityIndicatorBackdrop,
         defaultBackdropStyle

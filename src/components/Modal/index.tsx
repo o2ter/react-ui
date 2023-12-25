@@ -30,6 +30,7 @@ import { StyleSheet, Platform, ViewStyle, StyleProp, Animated } from 'react-nati
 import { useTheme } from '../../theme';
 import { useComponentStyle } from '../Style';
 import { AnimatedPressable, useFadeAnim } from '../Animated';
+import { flattenStyle } from '../Style/flatten';
 
 type ModalConfig = React.ReactElement | {
   backdropStyle?: StyleProp<ViewStyle>;
@@ -72,7 +73,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
     {React.isValidElement(displayElement) && <>
       {backdrop === true && <AnimatedPressable
         onPress={() => setConfig(undefined)}
-        style={[
+        style={flattenStyle([
           {
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
             zIndex: theme.zIndex.modalBackdrop,
@@ -91,7 +92,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
           {
             opacity: fadeAnim,
           },
-        ]} />}
+        ])} />}
       <Animated.View
         pointerEvents='box-none'
         style={[

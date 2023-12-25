@@ -34,6 +34,7 @@ import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
+import { flattenStyle } from '../Style/flatten';
 
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
@@ -73,7 +74,7 @@ export const FlatList = createMemoComponent(<ItemT = any>(
       extraData={extraData}
       numColumns={numColumns}
       renderItem={_renderItem}
-      style={[scrollableStyle, style]}
+      style={flattenStyle([scrollableStyle, style])}
       contentContainerStyle={[scrollableContentContainerStyle, contentContainerStyle]}
       columnWrapperStyle={numColumns > 1 ? [flatlistColumnWrapperStyle, columnWrapperStyle] : undefined}
       refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : undefined}

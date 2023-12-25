@@ -29,6 +29,7 @@ import { RefreshControlBase, RefreshControlProps } from 'react-native';
 import { Modify } from '../../internals/types';
 import { ClassNames, useComponentStyle } from '../Style';
 import { createMemoComponent } from '../../internals/utils';
+import { flattenStyle } from '../Style/flatten';
 
 type AsyncRefreshControlProps = Modify<Omit<RefreshControlProps, 'refreshing'>, {
   classes?: ClassNames;
@@ -62,7 +63,7 @@ export const AsyncRefreshControl = (
   return <RefreshControl
     ref={forwardRef}
     refreshing={refreshing}
-    style={[defaultStyle, style]}
+    style={flattenStyle([defaultStyle, style])}
     onRefresh={() => { if (_.isFunction(onRefresh)) _onRefresh(onRefresh, setRefreshing) }}
     {...props} />;
 }, {

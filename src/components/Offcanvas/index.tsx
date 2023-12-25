@@ -30,6 +30,7 @@ import { LayoutRectangle, StyleSheet, Platform, ViewStyle, StyleProp, Animated }
 import { useTheme } from '../../theme';
 import { useComponentStyle } from '../Style';
 import { AnimatedPressable, useFadeAnim } from '../Animated';
+import { flattenStyle } from '../Style/flatten';
 
 type OffcanvasConfig = React.ReactElement | {
   placement?: 'left' | 'right' | 'top' | 'bottom';
@@ -86,7 +87,7 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
     {React.isValidElement(displayElement) && <>
       {backdrop === true && <AnimatedPressable
         onPress={() => setConfig(undefined)}
-        style={[
+        style={flattenStyle([
           {
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
             zIndex: theme.zIndex.offcanvasBackdrop,
@@ -105,10 +106,10 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
           {
             opacity: fadeAnim,
           },
-        ]} />}
+        ])} />}
       <Animated.View
         onLayout={(e) => setLayout(e.nativeEvent.layout)}
-        style={[
+        style={flattenStyle([
           {
             zIndex: theme.zIndex.offcanvas,
             borderColor: theme.grays['300'],
@@ -142,7 +143,7 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
             ...layout && placement === 'top' ? { top: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.height, 0] }) } : {},
             ...layout && placement === 'bottom' ? { bottom: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.height, 0] }) } : {},
           },
-        ]}>
+        ])}>
         {displayElement}
       </Animated.View>
     </>}

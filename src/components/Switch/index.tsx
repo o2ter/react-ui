@@ -101,7 +101,7 @@ export const Switch = createMemoComponent((
   return (
     <AnimatedPressable
       ref={forwardRef}
-      style={[
+      style={flattenStyle([
         _style,
         {
           backgroundColor: animate.interpolate({
@@ -112,7 +112,7 @@ export const Switch = createMemoComponent((
           }),
         },
         _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
-      ]}
+      ])}
       {...Platform.select({
         web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
         default: {},

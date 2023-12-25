@@ -39,6 +39,7 @@ import { Modify } from '../../internals/types';
 import { useMergeRefs } from 'sugax';
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
+import { flattenStyle } from '../Style/flatten';
 
 const ScrollViewBase: typeof RNScrollView = KeyboardAwareScrollable(RNScrollView);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
@@ -95,8 +96,8 @@ export const ScrollView = createMemoComponent(({
 
   return <ScrollViewBase
     ref={ref}
-    style={[scrollableStyle, style]}
-    contentContainerStyle={[scrollableContentContainerStyle, contentContainerStyle]}
+    style={flattenStyle([scrollableStyle, style])}
+    contentContainerStyle={flattenStyle([scrollableContentContainerStyle, contentContainerStyle])}
     onLayout={(event) => {
       setLayout(event.nativeEvent.layout);
       if (_.isFunction(onLayout)) onLayout(event);

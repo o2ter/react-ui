@@ -29,6 +29,7 @@ import { Pressable as RNPressable, PressableProps as RNPressableProps } from 're
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { TextStyleProvider } from '../Text/style';
+import { flattenStyle } from '../Style/flatten';
 
 type PressableProps = RNPressableProps & {
   classes?: ClassNames;
@@ -47,7 +48,7 @@ export const Pressable = createMemoComponent((
   return (
     <RNPressable
       ref={forwardRef}
-      style={(state) => [viewStyle, _.isFunction(style) ? style(state) : style]}
+      style={(state) => flattenStyle([viewStyle, _.isFunction(style) ? style(state) : style])}
       {...props}>
       {(state) => (
         <TextStyleProvider

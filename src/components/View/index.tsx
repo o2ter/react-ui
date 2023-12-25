@@ -29,6 +29,7 @@ import { View as RNView, ViewProps as RNViewProps } from 'react-native';
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
 import { TextStyleProvider } from '../Text/style';
+import { flattenStyle } from '../Style/flatten';
 
 type ViewProps = RNViewProps & {
   classes?: ClassNames;
@@ -44,7 +45,7 @@ export const View = createMemoComponent(({
   return (
     <RNView
       ref={forwardRef}
-      style={[viewStyle, style]}
+      style={flattenStyle([viewStyle, style])}
       {...props}>
       <TextStyleProvider classes={classes} style={style}>{children}</TextStyleProvider>
     </RNView>

@@ -35,6 +35,7 @@ import { useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 import { ThemeColors } from '../../theme/variables';
 import Icon from '../Icon';
+import { flattenStyle } from '../Style/flatten';
 
 type AlertMessage = string | (Error & { code?: number });
 type AlertType = 'success' | 'info' | 'warning' | 'error';
@@ -112,7 +113,7 @@ const AlertBody: React.FC<AlertBodyProps> = ({
   const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);
 
   return <Animated.View
-    style={[
+    style={flattenStyle([
       {
         marginTop: 8,
         minWidth: 320,
@@ -126,7 +127,7 @@ const AlertBody: React.FC<AlertBodyProps> = ({
       alertColorStyle,
       alertStyle,
       { opacity: fadeAnim },
-    ]}>
+    ])}>
     {_.isString(style) && <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name={icons[style]} />}
     {!_.isString(style) && React.isValidElement(style.icon) && style.icon}
     <Text style={textStyleNormalize([

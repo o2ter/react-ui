@@ -197,7 +197,7 @@ export const Button = createMemoComponent(({
       ref={forwardRef}
       disabled={disabled}
       focusable={!disabled && focusable !== false}
-      style={[
+      style={flattenStyle([
         defaultStyle.button,
         Platform.select({
           web: { outline: 0 } as any,
@@ -205,7 +205,7 @@ export const Button = createMemoComponent(({
         }),
         _.omit(colors, textStyleKeys),
         _.isFunction(style) ? style(state) : style,
-      ]}
+      ])}
       onPressIn={(e: GestureResponderEvent) => {
         setState(state => ({ ...state, pressed: true }));
         if (_.isFunction(onPressIn)) onPressIn(e);

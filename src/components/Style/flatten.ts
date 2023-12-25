@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import { StyleProp, ViewStyle } from 'react-native';
 
-const normalize = <T extends ViewStyle>(style: T): T => {
+const normalize = <T>(style: T): T => {
   const {
     margin,
     marginHorizontal = margin,
@@ -58,7 +58,7 @@ const normalize = <T extends ViewStyle>(style: T): T => {
     borderTopRightRadius = borderRadius,
     borderBottomRightRadius = borderRadius,
     ..._style
-  } = style;
+  } = style as any;
   return {
     ..._style,
     ..._.isNil(marginTop) ? {} : { marginTop },
@@ -84,12 +84,12 @@ const normalize = <T extends ViewStyle>(style: T): T => {
   } as T;
 }
 
-const _flatten = <T extends ViewStyle>(styles?: StyleProp<T>): T[] => {
+const _flatten = <T>(styles?: StyleProp<T>): T[] => {
   if (_.isArray(styles)) return _.flatMap(styles, v => _flatten(v as any));
   if (_.isNumber(styles)) return [styles.__registeredStyleBrand];
   return styles ? [styles] : [];
 }
 
-export const flattenStyle = <T extends ViewStyle>(styles?: StyleProp<T>) => {
+export const flattenStyle = <T>(styles?: StyleProp<T>) => {
   return _.reduce(_flatten(styles), (acc, style) => ({ ...normalize(acc), ...normalize(style) }), {} as T);
 }

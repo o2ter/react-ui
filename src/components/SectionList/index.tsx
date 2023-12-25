@@ -35,6 +35,7 @@ import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, useComponentStyle } from '../Style';
+import { flattenStyle } from '../Style/flatten';
 
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
 
@@ -71,7 +72,7 @@ export const SectionList = createMemoComponent(<ItemT = any, SectionT = DefaultS
       data={data}
       extraData={extraData}
       renderItem={_renderItem}
-      style={[scrollableStyle, style]}
+      style={flattenStyle([scrollableStyle, style])}
       contentContainerStyle={[scrollableContentContainerStyle, contentContainerStyle]}
       refreshControl={_.isFunction(onRefresh) ? <RefreshControl onRefresh={onRefresh} {...refreshControlProps} /> : undefined}
       {...props} />

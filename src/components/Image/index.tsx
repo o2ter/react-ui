@@ -86,7 +86,10 @@ export const Image = createMemoComponent((
     ref={forwardRef}
     source={source}
     defaultSource={defaultSource}
-    style={[_.pickBy({ width: _width, height: _height, aspectRatio }, v => !_.isNil(v)), _style]}
+    style={flattenStyle([
+      _.pickBy({ width: _width, height: _height, aspectRatio }, v => !_.isNil(v)) as ImageStyle,
+      _style,
+    ])}
     {...props} />;
 }, {
   displayName: 'Image',
