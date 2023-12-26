@@ -50,6 +50,7 @@ type FormPickerProps<T = ItemValue> = Modify<React.ComponentPropsWithoutRef<type
   style?: StyleProp<TextStyle> | ((state: FormPickerState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: FormPickerState) => React.ReactNode);
   append?: React.ReactNode | ((state: FormPickerState) => React.ReactNode);
+  validate?: (value: any) => void;
 }>
 
 export const FormPicker = createMemoComponent(<T = ItemValue>(
@@ -65,13 +66,16 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
     append,
     onFocus,
     onBlur,
+    validate,
     ...props
   }: FormPickerProps<T>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Picker<T>>>
 ) => {
 
-  const { value, error, touched, setTouched, onChange } = useField(name);
+  const { value, error, touched, setTouched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
+
+  useValidator(validate);
 
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme, variant);

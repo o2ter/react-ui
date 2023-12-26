@@ -47,6 +47,7 @@ type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>,
   value?: string;
   style?: StyleProp<ViewStyle> | ((state: FormCheckboxState) => StyleProp<ViewStyle>);
   children?: React.ReactNode | ((state: FormCheckboxState) => React.ReactNode);
+  validate?: (value: any) => void;
 }>;
 
 export const FormCheckbox = createMemoComponent((
@@ -59,14 +60,17 @@ export const FormCheckbox = createMemoComponent((
     onPress,
     onFocus,
     onBlur,
+    validate,
     children,
     ...props
   }: FormCheckboxProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Checkbox>>
 ) => {
 
-  const { value: _value, error, touched, onChange } = useField(name);
+  const { value: _value, error, touched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
+
+  useValidator(validate);
 
   const selected = _.isNil(value) ? !!_value : _.isArray(_value) && _value.includes(value);
 

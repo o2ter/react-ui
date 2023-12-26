@@ -46,6 +46,7 @@ type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Radio>, {
   value: any;
   style?: StyleProp<ViewStyle> | ((state: FormRadioState) => StyleProp<ViewStyle>);
   children?: React.ReactNode | ((state: FormRadioState) => React.ReactNode);
+  validate?: (value: any) => void;
 }>;
 
 export const FormRadio = createMemoComponent((
@@ -58,14 +59,17 @@ export const FormRadio = createMemoComponent((
     onPress,
     onFocus,
     onBlur,
+    validate,
     children,
     ...props
   }: FormRadioProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Radio>>
 ) => {
 
-  const { value: _value, error, touched, onChange } = useField(name);
+  const { value: _value, error, touched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
+
+  useValidator(validate);
 
   const selected = value === _value;
 

@@ -46,6 +46,7 @@ type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput
   style?: StyleProp<TextStyle> | ((state: FormTextFieldState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: FormTextFieldState) => React.ReactNode);
   append?: React.ReactNode | ((state: FormTextFieldState) => React.ReactNode);
+  validate?: (value: any) => void;
 }>
 
 export const FormTextField = createMemoComponent((
@@ -58,13 +59,16 @@ export const FormTextField = createMemoComponent((
     append,
     onFocus,
     onBlur,
+    validate,
     ...props
   }: FormTextFieldProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>
 ) => {
 
-  const { value, error, touched, setTouched, onChange, submit } = useField(name);
+  const { value, error, touched, setTouched, onChange, submit, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
+
+  useValidator(validate);
 
   const theme = useTheme();
 

@@ -47,6 +47,7 @@ type FormListProps = {
   extraData?: any;
   keyExtractor?: (item: any, index: number, data: any[]) => string;
   renderItem: (x: { item: any, index: number, data: any[], actions: ReturnType<typeof useFormList> }) => any;
+  validate?: (value: any) => void;
   ListComponent?: React.ComponentType<React.PropsWithChildren<{
     data: any[];
     actions: ReturnType<typeof useFormList>;
@@ -58,11 +59,14 @@ export const FormList = createMemoComponent(({
   extraData,
   keyExtractor,
   renderItem,
+  validate,
   ListComponent = ({ children }) => <>{children}</>,
 }: FormListProps, forwardRef: React.ForwardedRef<ReturnType<typeof useFormList>>) => {
 
-  const { value, onChange } = useField(name);
+  const { value, onChange, useValidator } = useField(name);
   const data = React.useMemo(() => _.castArray(value ?? []), [value]);
+
+  useValidator(validate);
 
   const actions = React.useMemo(() => ({
     create: (item: any, index?: number) => {

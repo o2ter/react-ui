@@ -47,7 +47,7 @@ export type FormState = {
   setTouched: (path?: string) => void;
   addEventListener: (action: string, callback: () => void) => void;
   removeEventListener: (action: string, callback: () => void) => void;
-}
+};
 
 const FormContext = React.createContext<FormState>({
   values: {},
@@ -68,6 +68,16 @@ const FormContext = React.createContext<FormState>({
 });
 
 FormContext.displayName = 'FormContext';
+
+type FormInternalState = {
+  setExtraError: (id: string, error?: Error) => void;
+};
+
+const FormInternalContext = React.createContext<FormInternalState>({
+  setExtraError: () => { },
+});
+
+FormInternalContext.displayName = 'FormInternalContext';
 
 const defaultValidation = (validate: (value: any) => ValidateError[]) => {
 
@@ -122,6 +132,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
 }: FormProps<S>, forwardRef: React.ForwardedRef<FormState>) => {
 
   const [_values, _setValues] = React.useState<typeof initialValues>();
+  const [extraError, setExtraError] = React.useState<{ id: string; error: Error; }[]>([]);
 
   const values = React.useMemo(() => _values ?? initialValues, [initialValues, _values]);
   const setValues = useStableCallback((
@@ -231,10 +242,10 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     get submitCount() { return counts.submit },
     get resetCount() { return counts.reset },
     get actionCounts() { return counts.actions },
-    get errors() { return _validate(values) },
+    get errors() { return [..._validate(values), ..._.map(extraError, x => x.error)] },
     touched: (path: string) => _.isBoolean(touched) ? touched : touched[path] ?? false,
     ...formAction,
-  }), [counts, values, _validate, touched]);
+  }), [counts, values, _validate, touched, extraError]);
 
   const [initState] = React.useState(formState);
   React.useEffect(() => {
@@ -246,9 +257,21 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
 
   React.useImperativeHandle(forwardRef, () => formState, [formState]);
 
+  const formInternalState: FormInternalState = React.useMemo(() => ({
+    setExtraError: (id, error) => {
+      if (error) {
+        setExtraError(v => [..._.filter(v, x => x.id !== id), { id: id, error }]);
+      } else {
+        setExtraError(v => _.filter(v, x => x.id !== id));
+      }
+    },
+  }), []);
+
   return (
     <FormContext.Provider value={formState}>
-      {_.isFunction(children) ? children(formState) : children}
+      <FormInternalContext.Provider value={formInternalState}>
+        {_.isFunction(children) ? children(formState) : children}
+      </FormInternalContext.Provider>
     </FormContext.Provider>
   );
 }, {
@@ -271,12 +294,35 @@ export const useField = (name: string | string[]) => {
   const onChange = React.useCallback((value: React.SetStateAction<any>) => setValue(path, value), [path]);
   const _setTouched = React.useCallback(() => setTouched(path), [path]);
 
+  const { setExtraError } = React.useContext(FormInternalContext);
+
+  const uniqId = React.useId();
+  const [error, setError] = React.useState<Error>();
+  React.useEffect(() => {
+    setExtraError(uniqId, error);
+    return () => setExtraError(uniqId);
+  }, [values]);
+
+  const useValidator = useStableCallback((
+    validator?: (value: any) => void
+  ) => {
+    React.useEffect(() => {
+      try {
+        validator?.(_.get(values, path));
+        setError(undefined);
+      } catch (e) {
+        setError(e as Error);
+      }
+    }, [values]);
+  });
+
   return {
     form: formState,
     value: _.get(values, path),
-    get error() { return validate(values, path) },
+    get error() { return _.compact([...validate(values, path), error]) },
     get touched() { return touched(path) },
     setTouched: _setTouched,
+    useValidator,
     onChange,
     submit,
     reset,

@@ -47,6 +47,7 @@ type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   style?: StyleProp<TextStyle> | ((state: FormDateState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: FormDateState) => React.ReactNode);
   append?: React.ReactNode | ((state: FormDateState) => React.ReactNode);
+  validate?: (value: any) => void;
 }>;
 
 export const FormDate = createMemoComponent((
@@ -63,14 +64,17 @@ export const FormDate = createMemoComponent((
     onFocus,
     onBlur,
     selectable = () => true,
+    validate,
     children,
     ...props
   }: FormDateProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>
 ) => {
 
-  const { value, error, touched, setTouched, onChange } = useField(name);
+  const { value, error, touched, setTouched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
+
+  useValidator(validate);
 
   const theme = useTheme();
 

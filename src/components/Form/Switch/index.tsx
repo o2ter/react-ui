@@ -47,6 +47,7 @@ type FormSwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Switch>, {
   value?: string;
   style?: StyleProp<ViewStyle> | ((state: FormSwitchState) => StyleProp<ViewStyle>);
   children?: React.ReactNode | ((state: FormSwitchState) => React.ReactNode);
+  validate?: (value: any) => void;
 }>;
 
 export const FormSwitch = createMemoComponent((
@@ -59,14 +60,17 @@ export const FormSwitch = createMemoComponent((
     onPress,
     onFocus,
     onBlur,
+    validate,
     children,
     ...props
   }: FormSwitchProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Switch>>
 ) => {
 
-  const { value: _value, error, touched, onChange } = useField(name);
+  const { value: _value, error, touched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
+
+  useValidator(validate);
 
   const selected = _.isNil(value) ? !!_value : _.isArray(_value) && _value.includes(value);
 

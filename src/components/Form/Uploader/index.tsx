@@ -19,6 +19,7 @@ type FormUploaderState<F, U> = {
 type FormUploaderProps<F, U> = {
   name: string | string[];
   onUpload: FormUploaderCallback<F, U>;
+  validate?: (value: any) => void;
   children: React.ReactNode | ((state: FormUploaderState<F, U>) => React.ReactNode);
 };
 
@@ -28,16 +29,20 @@ export const FormUploader = <
 >({
   name,
   onUpload,
+  validate,
   children
 }: FormUploaderProps<File, Uploaded>) => {
   const {
     onChange,
     setTouched,
+    useValidator,
     form: {
       addEventListener,
       removeEventListener,
     },
   } = useField(name);
+
+  useValidator(validate);
 
   const [uploads, setUploads] = React.useState<FormUpload<File, Uploaded>[]>();
 
