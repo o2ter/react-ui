@@ -48,6 +48,8 @@ export type SelectOption<T> = {
   prepend?: React.ReactNode;
 };
 
+type ListProps<T> = Partial<React.ComponentPropsWithoutRef<typeof SectionList<SelectOption<T>>>>;
+
 type SelectProps<T> = {
   classes?: ClassNames;
   value?: T[];
@@ -66,16 +68,7 @@ type SelectProps<T> = {
   onValueChange?: (selected: SelectOption<T>[]) => void;
   onFocus?: VoidFunction;
   onBlur?: VoidFunction;
-  ListHeaderComponent?:
-  | React.ComponentType
-  | React.ReactElement
-  | null
-  | undefined;
-  ListFooterComponent?:
-  | React.ComponentType
-  | React.ReactElement
-  | null
-  | undefined;
+  listProps?: Omit<ListProps<T>, 'renderItem'>;
 };
 
 const _SelectOption = <T = any>({
@@ -103,8 +96,7 @@ export const Select = createMemoComponent(<T = any>(
     onBlur = () => { },
     prepend,
     append,
-    ListHeaderComponent,
-    ListFooterComponent,
+    listProps = {},
   }: SelectProps<T>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
 ) => {
@@ -172,21 +164,7 @@ export const Select = createMemoComponent(<T = any>(
         borderRadius: theme.borderRadiusBase,
         padding: 0,
       }}
-      render={(layout) => sections.length === 1 && !_.isEmpty(sections[0].label) ? (
-        <FlatList
-          data={sections[0].data}
-          extraData={sections}
-          style={{
-            minWidth: layout.width,
-            maxHeight: 0.5 * windowDimensions.height,
-          }}
-          renderItem={({ item }) => (
-            <_SelectOption {...item} />
-          )}
-          ListHeaderComponent={ListHeaderComponent}
-          ListFooterComponent={ListFooterComponent}
-        />
-      ) : (
+      render={(layout) => (
         <SectionList
           sections={sections}
           extraData={sections}
@@ -194,14 +172,11 @@ export const Select = createMemoComponent(<T = any>(
             minWidth: layout.width,
             maxHeight: 0.5 * windowDimensions.height,
           }}
-          renderSectionHeader={({ section }) => (
-            <Text>{section.label}</Text>
-          )}
-          renderItem={({ item }) => (
-            <_SelectOption {...item} />
-          )}
-          ListHeaderComponent={ListHeaderComponent}
-          ListFooterComponent={ListFooterComponent}
+          renderSectionHeader={sections.length === 1 && !_.isEmpty(sections[0].label) ? (
+            ({ section }) => <Text>{section.label}</Text>
+          ) : undefined}
+          renderItem={({ item }) => <_SelectOption {...item} />}
+          {...listProps}
         />
       )}
     >
