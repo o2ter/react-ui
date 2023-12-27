@@ -77,7 +77,7 @@ export const PickerBox = createComponent(({
       _.isFunction(style) ? style({ focused }) : style,
     ]}>
       {prepend}
-      <Text style={{ flex: 1 }}>{_.isEmpty(children) ? ' ' : children}</Text>
+      <Text style={{ flex: 1 }}>{children || ' '}</Text>
       {append}
     </View>
   );

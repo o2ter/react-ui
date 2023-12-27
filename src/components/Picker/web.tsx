@@ -84,7 +84,7 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
       _.isFunction(style) ? style(state) : style,
     ]}>
       {_.isFunction(prepend) ? prepend(state) : prepend}
-      <Text style={{ flex: 1 }}>{_.isEmpty(content) ? ' ' : content}</Text>
+      <Text style={{ flex: 1 }}>{content || ' '}</Text>
       {_.isFunction(append) ? append(state) : append}
       <PickerNative
         ref={forwardRef}

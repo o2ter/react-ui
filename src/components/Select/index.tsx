@@ -36,7 +36,9 @@ import { Popover } from '../Popover';
 import { useDefaultInputStyle } from '../TextInput/style';
 import { ListProps, SelectOption, SelectState } from './types';
 import { SelectListBody } from './list';
-import { useStableRef } from 'sugax';
+import { useStableCallback } from 'sugax';
+import { MaterialIcons as Icon } from '../Icons';
+import View from '../View';
 
 type SelectProps<T> = {
   classes?: ClassNames;
@@ -64,19 +66,43 @@ type SelectProps<T> = {
 type SelectBodyProps<T> = {
   value?: SelectOption<T>[];
   multiple?: boolean;
+  onRemove: (item: SelectOption<T>) => void
 };
 
 const SelectBody = <T = any>({
   value,
   multiple,
+  onRemove,
 }: SelectBodyProps<T>) => {
-
-  if (multiple) {
-
+  const theme = useTheme();
+  if (multiple && !_.isEmpty(value)) {
+    return (
+      <View style={{
+        flexDirection: 'row',
+        maxWidth: '100%',
+        flexWrap: 'wrap',
+        gap: 2,
+      }}>
+        {_.map(value, (item) => (
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: theme.grays['200'],
+            borderRadius: theme.borderRadiusBase,
+            paddingHorizontal: 8,
+            gap: theme.spacer * 0.375,
+          }}>
+            <Text>{item.label || ' '}</Text>
+            <Pressable onPress={() => onRemove(item)}>
+              <Icon color={theme.grays['400']} size={16} name='close' />
+            </Pressable>
+          </View>
+        ))}
+      </View>
+    );
   }
-
   return (
-    <Text>{_.first(value)?.label}</Text>
+    <Text>{_.first(value)?.label || ' '}</Text>
   );
 }
 
@@ -155,7 +181,10 @@ export const Select = createMemoComponent(<T = any>(
   }, [options]);
 
   const extraData = React.useMemo(() => [sections, value], [sections, value]);
-  const callbackRef = useStableRef({ onValueChange, onChange });
+  const _onChange = useStableCallback((selected: SelectOption<T>[]) => {
+    onValueChange(_.map(selected, x => x.value));
+    onChange(selected);
+  });
 
   return (
     <_StyleContext.Consumer>
@@ -183,10 +212,11 @@ export const Select = createMemoComponent(<T = any>(
                 sections={sections}
                 extraData={extraData}
                 onSelect={(v) => {
-                  const _value = _.uniq(multiple ? [...value ?? [], v.value] : [v.value]);
+                  const _value = multiple
+                    ? _.includes(value, v.value) ? _.filter(value, x => x !== v.value) : [...value ?? [], v.value]
+                    : [v.value];
                   const selected = findItems(_value, _.flatMap(sections, x => x.data));
-                  callbackRef.current.onValueChange(_.map(selected, x => x.value));
-                  callbackRef.current.onChange(selected);
+                  _onChange(selected);
                 }}
                 {...listProps}
               />
@@ -218,6 +248,11 @@ export const Select = createMemoComponent(<T = any>(
               <SelectBody
                 multiple={multiple}
                 value={findItems(value ?? [], _.flatMap(sections, x => x.data))}
+                onRemove={(v) => { 
+                  const _value = _.filter(value, x => x !== v.value);
+                  const selected = findItems(_value, _.flatMap(sections, x => x.data));
+                  _onChange(selected);
+                }}
               />
             )}
             {_.isFunction(append) ? append(state) : append}

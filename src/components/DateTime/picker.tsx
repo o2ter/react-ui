@@ -74,7 +74,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
     >
       {prepend}
       {_.isString(children) ? (
-        <Text style={{ flex: 1 }} {...props}>{_.isEmpty(children) ? ' ' : children}</Text>
+        <Text style={{ flex: 1 }} {...props}>{children || ' '}</Text>
       ) : children}
       {append}
     </Pressable>
