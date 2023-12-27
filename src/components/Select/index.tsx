@@ -183,6 +183,8 @@ export const Select = createMemoComponent(<T = any>(
           renderItem={({ item }) => (
             <_SelectOption {...item} />
           )}
+          ListHeaderComponent={ListHeaderComponent}
+          ListFooterComponent={ListFooterComponent}
         />
       ) : (
         <SectionList
@@ -198,6 +200,8 @@ export const Select = createMemoComponent(<T = any>(
           renderItem={({ item }) => (
             <_SelectOption {...item} />
           )}
+          ListHeaderComponent={ListHeaderComponent}
+          ListFooterComponent={ListFooterComponent}
         />
       )}
     >
