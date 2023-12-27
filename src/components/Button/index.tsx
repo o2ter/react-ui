@@ -46,7 +46,7 @@ import { Text } from '../Text';
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, _useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
-import { _AnimatedPressable } from '../_Animated';
+import { _AnimatedPressable, _useToggleAnim } from '../_Animated';
 import { ThemeColors } from '../../theme/variables';
 
 type ButtonStateCallbackType = PressableStateCallbackType & {
@@ -104,23 +104,20 @@ export const Button = createMemoComponent(({
   ...props
 }: ButtonProps, forwardRef: React.ForwardedRef<typeof _AnimatedPressable>) => {
 
-  const [state, setState] = React.useState({ hovered: false, pressed: false, focused: false });
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const theme = useTheme();
 
+  const [state, setState] = React.useState({ hovered: false, pressed: false, focused: false });
   const _focused = state.hovered || state.pressed || state.focused;
 
-  React.useEffect(() => {
-
-    Animated.timing(fadeAnim, {
-      toValue: _focused ? 1 : 0,
+  const fadeAnim = _useToggleAnim({
+    value: _focused,
+    timing: {
       duration: theme.buttonDuration,
       easing: theme.buttonEasing,
       useNativeDriver: false,
-    }).start();
+    },
+  });
 
-  }, [_focused]);
-
-  const theme = useTheme();
   const buttonStyle = _useComponentStyle('button', classes, [
     state.hovered && 'hover',
     state.pressed && 'active',

@@ -64,6 +64,7 @@ type _ComponentStyles = {
 
   picker?: StyleProp<TextStyle>;
   select?: StyleProp<TextStyle>;
+  selectItem?: StyleProp<TextStyle>;
 
   checkbox?: StyleProp<TextStyle>;
   radio?: StyleProp<TextStyle>;
@@ -103,7 +104,7 @@ export type ComponentStyles = { [K in keyof _ComponentStyles]: _ComponentStyles[
 
 type _StyleProp = StyleProp<ViewStyle | TextStyle | ImageStyle>;
 
-const StyleContext = React.createContext<{
+export const _StyleContext = React.createContext<{
   components: ComponentStyles;
   classes: Record<string, _StyleProp>;
 }>({ components: {}, classes: {} });
@@ -125,7 +126,7 @@ export const StyleProvider: React.FC<React.PropsWithChildren<{
   components,
   classes,
 }) => {
-    const parent = React.useContext(StyleContext);
+    const parent = React.useContext(_StyleContext);
     const _components = useEquivalent(components);
     const _classes = useEquivalent(classes);
     const value = React.useMemo(() => ({
@@ -133,7 +134,7 @@ export const StyleProvider: React.FC<React.PropsWithChildren<{
       classes: _classes ? StyleSheet.create(mergeStyle(parent.classes, _classes)) : parent.classes,
     }), [parent, _components, _classes]);
     return (
-      <StyleContext.Provider value={value}>{children}</StyleContext.Provider>
+      <_StyleContext.Provider value={value}>{children}</_StyleContext.Provider>
     );
   }
 
@@ -154,7 +155,7 @@ export const _useComponentStyle = (
   classNames?: ClassNames,
   selectors?: Selectors,
 ) => {
-  const { components, classes } = React.useContext(StyleContext);
+  const { components, classes } = React.useContext(_StyleContext);
   const sel = _.sortedUniq(_.compact(_.flattenDeep([selectors])).sort());
   const names = flattenClassNames(classNames, sel);
   return React.useMemo(() => {
@@ -171,7 +172,7 @@ export const useStyle = (
   classNames?: ClassNames,
   selectors?: Selectors,
 ) => {
-  const { classes } = React.useContext(StyleContext);
+  const { classes } = React.useContext(_StyleContext);
   const names = flattenClassNames(classNames, selectors);
   return React.useMemo(() => {
     const styles = _.values(_.pickBy(classes, (v, k) => _.includes(names, k)));
@@ -179,4 +180,4 @@ export const useStyle = (
   }, [classes, names.join(' ')]);
 }
 
-export const useAllStyle = () => React.useContext(StyleContext);
+export const useAllStyle = () => React.useContext(_StyleContext);

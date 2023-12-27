@@ -26,6 +26,8 @@
 import _ from 'lodash';
 import React from 'react';
 import SectionList from '../SectionList';
+import { ClassNames } from '../Style';
+import { StyleProp, TextStyle } from 'react-native';
 
 export type ListProps<T> = Partial<React.ComponentPropsWithoutRef<typeof SectionList<SelectOption<T>>>>;
 
@@ -35,8 +37,18 @@ export type SelectState<T> = {
   disabled: boolean;
 };
 
+type SelectOptionState = {
+  selected: boolean;
+  hovered: boolean;
+  pressed: boolean;
+  focused: boolean;
+};
+
 export type SelectOption<T> = {
+  classes?: ClassNames;
   label?: string;
   value: T;
   prepend?: React.ReactNode;
+  render?: (state: SelectOptionState) => React.ReactNode;
+  style?: StyleProp<TextStyle> | ((state: SelectOptionState) => StyleProp<TextStyle>);
 };

@@ -36,7 +36,7 @@ import { _Date, dateToString } from './date';
 import { calendarStyle } from './style';
 import { CalendarBody } from './body';
 
-import { MaterialCommunityIcons as Icon } from '../Icons';
+import { MaterialIcons as Icon } from '../Icons';
 
 import Localization from '../../locales';
 import { createMemoComponent } from '../../internals/utils';

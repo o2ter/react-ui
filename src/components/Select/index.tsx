@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Platform, StyleProp, TextStyle } from 'react-native';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle, _StyleContext } from '../Style';
 import { Pressable } from '../Pressable';
 import { useFocus, useFocusRing } from '../../internals/focus';
 import { useTheme } from '../../theme';
@@ -132,62 +132,69 @@ export const Select = createMemoComponent(<T = any>(
   const callbackRef = useStableRef({ onValueChange, onChange });
 
   return (
-    <Popover
-      hidden={hidden && !_.isEmpty(sections)}
-      position={['top', 'bottom']}
-      arrow={arrow ?? false}
-      shadow={shadow ?? false}
-      onTouchOutside={() => { setHidden(true); }}
-      extraData={extraData}
-      containerStyle={{
-        display: 'flex',
-        borderColor: theme.grays['400'],
-        borderWidth: theme.borderWidth,
-        borderRadius: theme.borderRadiusBase,
-        padding: 0,
-      }}
-      render={(layout) => (
-        <SelectListBody
-          value={value}
-          layout={layout}
-          sections={sections}
+    <_StyleContext.Consumer>
+      {(_style) => (
+        <Popover
+          hidden={hidden && !_.isEmpty(sections)}
+          position={['top', 'bottom']}
+          arrow={arrow ?? false}
+          shadow={shadow ?? false}
+          onTouchOutside={() => { setHidden(true); }}
           extraData={extraData}
-          listProps={listProps}
-          onSelect={(v) => { 
-            const opts = _.flatMap(sections, x => x.data);
-            const _value = _.uniq(multiple ? [...value ?? [], v] : [v]);
-            const selected = _.compact(_.map(_value, x => _.find(opts, o => o.value === x)));
-            callbackRef.current.onValueChange(_.map(selected, x => x.value));
-            callbackRef.current.onChange(selected);
+          containerStyle={{
+            display: 'flex',
+            borderColor: theme.grays['400'],
+            borderWidth: theme.borderWidth,
+            borderRadius: theme.borderRadiusBase,
+            padding: 0,
           }}
-        />
+          render={(layout) => (
+            <_StyleContext.Provider value={_style}>
+              <SelectListBody
+                value={value}
+                layout={layout}
+                theme={theme}
+                sections={sections}
+                extraData={extraData}
+                onSelect={(v) => {
+                  const opts = _.flatMap(sections, x => x.data);
+                  const _value = _.uniq(multiple ? [...value ?? [], v.value] : [v.value]);
+                  const selected = _.compact(_.map(_value, x => _.find(opts, o => o.value === x)));
+                  callbackRef.current.onValueChange(_.map(selected, x => x.value));
+                  callbackRef.current.onChange(selected);
+                }}
+                {...listProps}
+              />
+            </_StyleContext.Provider>
+          )}
+        >
+          <Pressable
+            ref={forwardRef}
+            style={[
+              defaultStyle,
+              {
+                flexDirection: 'row',
+                gap: theme.spacer * 0.375,
+              },
+              Platform.select({
+                web: { outline: 0 } as any,
+                default: {},
+              }),
+              focusRing,
+              textStyle,
+              selectStyle,
+              _.isFunction(style) ? style(state) : style,
+            ]}
+            onFocus={_onFocus}
+            onBlur={_onBlur}
+          >
+            {_.isFunction(prepend) ? prepend(state) : prepend}
+            <Text style={{ flex: 1 }}>test</Text>
+            {_.isFunction(append) ? append(state) : append}
+          </Pressable>
+        </Popover>
       )}
-    >
-      <Pressable
-        ref={forwardRef}
-        style={[
-          defaultStyle,
-          {
-            flexDirection: 'row',
-            gap: theme.spacer * 0.375,
-          },
-          Platform.select({
-            web: { outline: 0 } as any,
-            default: {},
-          }),
-          focusRing,
-          textStyle,
-          selectStyle,
-          _.isFunction(style) ? style(state) : style,
-        ]}
-        onFocus={_onFocus}
-        onBlur={_onBlur}
-      >
-        {_.isFunction(prepend) ? prepend(state) : prepend}
-        <Text style={{ flex: 1 }}>test</Text>
-        {_.isFunction(append) ? append(state) : append}
-      </Pressable>
-    </Popover>
+    </_StyleContext.Consumer>
   );
 }, {
   displayName: 'Select',

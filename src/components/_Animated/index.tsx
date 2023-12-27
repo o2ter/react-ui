@@ -29,18 +29,39 @@ import { Animated, Pressable, Platform } from 'react-native';
 
 export const _AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
+export const _useToggleAnim = (options: {
+  value: boolean;
+  timing: Partial<Animated.TimingAnimationConfig>;
+}) => {
+
+  const anim = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+
+    Animated.timing(anim, {
+      toValue: options.value ? 1 : 0,
+      useNativeDriver: Platform.OS !== 'web',
+      ...options.timing,
+    }).start();
+
+  }, [options.value]);
+
+  return anim
+}
+
 export const _useFadeAnim = (options: {
   visible: boolean;
   setVisible: (visible: boolean) => void;
   timing: Partial<Animated.TimingAnimationConfig>;
 }) => {
 
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const anim = React.useRef(new Animated.Value(0)).current;
+
   React.useEffect(() => {
 
     options.setVisible(true);
 
-    Animated.timing(fadeAnim, {
+    Animated.timing(anim, {
       toValue: options.visible ? 1 : 0,
       useNativeDriver: Platform.OS !== 'web',
       ...options.timing,
@@ -48,5 +69,5 @@ export const _useFadeAnim = (options: {
 
   }, [options.visible]);
 
-  return fadeAnim;
+  return anim;
 }

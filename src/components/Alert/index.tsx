@@ -34,7 +34,7 @@ import { useLocalize } from '@o2ter/i18n';
 import { _useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 import { ThemeColors } from '../../theme/variables';
-import Icon from '../Icon';
+import { MaterialIcons as Icon } from '../Icons';
 import { flattenStyle } from '../Style/flatten';
 
 type AlertMessage = string | (Error & { code?: number });
@@ -128,7 +128,7 @@ const AlertBody: React.FC<AlertBodyProps> = ({
       alertStyle,
       { opacity: fadeAnim },
     ])}>
-    {_.isString(style) && <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name={icons[style]} />}
+    {_.isString(style) && <Icon color={color} size={24} name={icons[style]} />}
     {!_.isString(style) && React.isValidElement(style.icon) && style.icon}
     <Text style={textStyleNormalize([
       {
@@ -140,7 +140,7 @@ const AlertBody: React.FC<AlertBodyProps> = ({
       alertTextStyle,
     ])}>{_message}</Text>
     <Pressable onPress={_dismiss}>
-      <Icon iconStyle={{ color, fontSize: 24 }} icon='MaterialIcons' name='close' />
+      <Icon color={color} size={24} name='close' />
     </Pressable>
   </Animated.View>
 }
