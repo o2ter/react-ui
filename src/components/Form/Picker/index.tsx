@@ -94,7 +94,10 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
 
   }, [useEquivalent(_.map(items, x => x.value))]);
 
-  const _onChange = React.useCallback((value: any) => { onChange(value); setTouched(); }, []);
+  const _onChange = React.useCallback((value: any) => {
+    onChange(value);
+    setTouched();
+  }, []);
 
   const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
 

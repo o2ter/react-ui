@@ -25,10 +25,12 @@
 
 import _ from 'lodash';
 import React from 'react';
+import { GestureResponderEvent } from 'react-native';
 
 export type OverlayConfig = {
   id: string;
   node?: React.ReactElement;
+  onTouchOutside: (event: GestureResponderEvent) => void;
 };
 
 export const OverlayContext = React.createContext<{
@@ -42,18 +44,21 @@ export const OverlayContext = React.createContext<{
 OverlayContext.displayName = 'OverlayContext';
 
 export const useOverlay = (
-  node?: React.ReactElement
+  node?: React.ReactElement,
+  onTouchOutside?: (event: GestureResponderEvent) => void
 ) => {
 
   const id = React.useId();
   const { setNodes } = React.useContext(OverlayContext);
 
+  const _onTouchOutside = onTouchOutside ?? (() => { });
+
   React.useEffect(() => {
-    setNodes(nodes => [...nodes, { id, node }]);
+    setNodes(nodes => [...nodes, { id, node, onTouchOutside: _onTouchOutside }]);
     return () => setNodes(nodes => _.filter(nodes, x => x.id !== id));
   }, []);
 
   React.useEffect(() => {
-    setNodes(nodes => _.map(nodes, x => x.id === id ? { id, node } : x));
+    setNodes(nodes => _.map(nodes, x => x.id === id ? { id, node, onTouchOutside: _onTouchOutside } : x));
   }, [node]);
 }

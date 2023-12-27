@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import View from '../../View';
-import { MeasureInWindowOnSuccessCallback, View as RNView } from 'react-native';
+import { GestureResponderEvent, MeasureInWindowOnSuccessCallback, View as RNView } from 'react-native';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import { createMemoComponent } from '../../../internals/utils';
 import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
@@ -36,6 +36,7 @@ import { useOverlay } from '../context';
 type OverlayProps = React.ComponentProps<typeof View> & {
   render: (layout: LayoutRectangle) => React.ReactElement;
   extraData?: any;
+  onTouchOutside?: (event: GestureResponderEvent) => void;
 };
 
 export const createOverlay = (
@@ -46,6 +47,7 @@ export const createOverlay = (
     render,
     extraData,
     onLayout,
+    onTouchOutside,
     children,
     ...props
   }: OverlayProps,
@@ -58,7 +60,8 @@ export const createOverlay = (
   const [layout, setLayout] = React.useState<LayoutRectangle>();
   const overlay = React.useMemo(() => layout && render(layout), [layout, extraData]);
 
-  useOverlay(overlay);
+  const _onTouchOutside = useStableCallback(onTouchOutside ?? (() => { }));
+  useOverlay(overlay, _onTouchOutside);
 
   const calculate = () => {
     if (viewRef.current) _measureInWindow(viewRef.current, (x, y, width, height) => setLayout({ x, y, width, height }));

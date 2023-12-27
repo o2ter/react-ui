@@ -80,7 +80,10 @@ export const FormTextField = createMemoComponent((
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
-  const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => { onChange(e.nativeEvent.text); setTouched(); }, []);
+  const onEndEditing = React.useCallback((e: NativeSyntheticEvent<TextInputEndEditingEventData>) => {
+    onChange(e.nativeEvent.text);
+    setTouched();
+  }, []);
 
   const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
 

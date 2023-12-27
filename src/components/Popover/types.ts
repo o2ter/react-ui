@@ -25,14 +25,18 @@
 
 import React from 'react';
 import View from '../View';
-import { StyleProp, ViewStyle } from 'react-native';
+import { GestureResponderEvent, StyleProp, ViewStyle } from 'react-native';
 
-export type PopoverPosition = 'auto' | 'top' | 'left' | 'right' | 'bottom';
+type _PopoverPosition = 'top' | 'left' | 'right' | 'bottom';
+export type PopoverPosition = 'auto' | _PopoverPosition | _PopoverPosition[];
 
 export type PopoverProps = React.ComponentProps<typeof View> & {
   position?: PopoverPosition;
   hidden?: boolean;
+  arrow?: boolean;
+  shadow?: boolean | number;
   render: () => React.ReactNode;
+  onTouchOutside?: (event: GestureResponderEvent) => void;
   extraData?: any;
   containerStyle?: StyleProp<ViewStyle>;
 };

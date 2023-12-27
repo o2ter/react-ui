@@ -25,6 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
+import { View } from 'react-native';
 import { OverlayConfig, OverlayContext } from './context';
 
 export const OverlayProvider: React.FC<React.PropsWithChildren<{}>> = ({
@@ -35,7 +36,12 @@ export const OverlayProvider: React.FC<React.PropsWithChildren<{}>> = ({
   const values = React.useMemo(() => ({ nodes, setNodes }), [nodes]);
 
   return <OverlayContext.Provider value={values}>
-    {children}
+    <View
+      onStartShouldSetResponder={(e) => {
+        for (const node of nodes) node.onTouchOutside(e);
+        return false;
+      }}
+    >{children}</View>
     {_.compact(_.map(nodes, ({ node }) => node))}
   </OverlayContext.Provider>;
 };

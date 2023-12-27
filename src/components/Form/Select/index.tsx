@@ -1,5 +1,5 @@
 //
-//  date.tsx
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
@@ -27,48 +27,43 @@ import _ from 'lodash';
 import React from 'react';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
+import { Select, SelectOption } from '../../Select';
 import { Modify } from '../../../internals/types';
-import { DatePicker } from '../../DateTime';
 import { createMemoComponent } from '../../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../../Style';
+import { _useComponentStyle } from '../../Style';
 import { useFocus, useFocusRing } from '../../../internals/focus';
 import { StyleProp, TextStyle } from 'react-native';
 
-type FormDateState = {
+type FormSelectState = {
   focused: boolean;
   invalid: boolean;
   disabled: boolean;
   valid: boolean;
 };
 
-type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
-  classes?: ClassNames;
+type FormSelectProps<T> = Modify<React.ComponentPropsWithoutRef<typeof Select<T>>, {
   name: string | string[];
-  style?: StyleProp<TextStyle> | ((state: FormDateState) => StyleProp<TextStyle>);
-  prepend?: React.ReactNode | ((state: FormDateState) => React.ReactNode);
-  append?: React.ReactNode | ((state: FormDateState) => React.ReactNode);
+  style?: StyleProp<TextStyle> | ((state: FormSelectState) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode | ((state: FormSelectState) => React.ReactNode);
+  append?: React.ReactNode | ((state: FormSelectState) => React.ReactNode);
   validate?: (value: any) => void;
-}>;
+}>
 
-export const FormDate = createMemoComponent((
+export const FormSelect = createMemoComponent(<T = any>(
   {
     classes,
     name,
-    min,
-    max,
-    multiple,
     style,
-    disabled = false,
+    options,
+    disabled,
     prepend,
     append,
     onFocus,
     onBlur,
-    selectable = () => true,
     validate,
-    children,
     ...props
-  }: FormDateProps,
-  forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>
+  }: FormSelectProps<T>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Select<T>>>
 ) => {
 
   const { value, error, touched, setTouched, onChange, useValidator } = useField(name);
@@ -80,14 +75,14 @@ export const FormDate = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const formDateStyle = _useComponentStyle('formDate', classes, [
+  const formSelectStyle = _useComponentStyle('formSelect', classes, [
     focused && 'focus',
     disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
-  const _onChange = React.useCallback((value: any) => {
-    onChange(multiple ? value : _.first(value));
+  const _onChange = React.useCallback((value: SelectOption<T>[]) => {
+    onChange(_.map(value, x => x.value));
     setTouched();
   }, []);
 
@@ -95,35 +90,32 @@ export const FormDate = createMemoComponent((
 
   const state = {
     focused,
-    disabled,
+    disabled: disabled ?? false,
     valid: touched && !invalid,
     invalid: touched && invalid,
   };
 
   return (
-    <DatePicker
+    <Select
       ref={forwardRef}
       value={value}
-      min={min}
-      max={max}
-      multiple={multiple}
-      onChange={_onChange}
+      options={options}
+      disabled={disabled}
+      onValueChange={_onChange}
       onFocus={_onFocus}
       onBlur={_onBlur}
-      selectable={selectable}
-      disabled={disabled}
       prepend={_.isFunction(prepend) ? prepend(state) : prepend}
       append={_.isFunction(append) ? append(state) : append}
       style={[
         touched && focusRing,
         touched && invalid ? { borderColor: theme.themeColors.danger } : {},
-        formDateStyle,
+        formSelectStyle,
         _.isFunction(style) ? style(state) : style,
       ]}
       {...props} />
   )
 }, {
-  displayName: 'Form.Date'
+  displayName: 'Form.Select'
 });
 
-export default FormDate;
+export default FormSelect;

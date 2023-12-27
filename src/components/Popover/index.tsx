@@ -36,6 +36,8 @@ export const Popover = createMemoComponent((
   {
     position = 'auto',
     hidden,
+    arrow,
+    shadow,
     render,
     extraData,
     containerStyle,
@@ -56,6 +58,8 @@ export const Popover = createMemoComponent((
       key={id}
       layout={layout}
       hidden={hidden ?? !press}
+      arrow={arrow ?? true}
+      shadow={shadow ?? true}
       position={position}
       style={containerStyle}
     >{render()}</PopoverBody>
