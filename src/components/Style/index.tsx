@@ -29,7 +29,7 @@ import { StyleSheet, StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-n
 import { useEquivalent } from 'sugax';
 import { flattenStyle } from './flatten';
 
-export type ComponentStyles = {
+type _ComponentStyles = {
 
   view?: StyleProp<ViewStyle>;
   text?: StyleProp<TextStyle>;
@@ -81,54 +81,24 @@ export type ComponentStyles = {
   formErrorMessage?: StyleProp<TextStyle>;
 
   formCheckbox?: StyleProp<TextStyle>;
-  'formCheckbox:invalid'?: StyleProp<TextStyle>;
-  'formCheckbox:valid'?: StyleProp<TextStyle>;
-  'formCheckbox:disabled'?: StyleProp<TextStyle>;
-  'formCheckbox:enabled'?: StyleProp<TextStyle>;
-
   formRadio?: StyleProp<TextStyle>;
-  'formRadio:invalid'?: StyleProp<TextStyle>;
-  'formRadio:valid'?: StyleProp<TextStyle>;
-  'formRadio:disabled'?: StyleProp<TextStyle>;
-  'formRadio:enabled'?: StyleProp<TextStyle>;
-
   formSwitch?: StyleProp<TextStyle>;
-  'formSwitch:invalid'?: StyleProp<TextStyle>;
-  'formSwitch:valid'?: StyleProp<TextStyle>;
-  'formSwitch:disabled'?: StyleProp<TextStyle>;
-  'formSwitch:enabled'?: StyleProp<TextStyle>;
-
   formPicker?: StyleProp<TextStyle>;
-  'formPicker:invalid'?: StyleProp<TextStyle>;
-  'formPicker:valid'?: StyleProp<TextStyle>;
-  'formPicker:disabled'?: StyleProp<TextStyle>;
-  'formPicker:enabled'?: StyleProp<TextStyle>;
-
+  formSelect?: StyleProp<TextStyle>;
   formPlainSegmentedControl?: StyleProp<ViewStyle>;
-  'formPlainSegmentedControl:invalid'?: StyleProp<ViewStyle>;
-  'formPlainSegmentedControl:valid'?: StyleProp<ViewStyle>;
-  'formPlainSegmentedControl:disabled'?: StyleProp<ViewStyle>;
-  'formPlainSegmentedControl:enabled'?: StyleProp<ViewStyle>;
-
   formSegmentedControl?: StyleProp<ViewStyle>;
-  'formSegmentedControl:invalid'?: StyleProp<ViewStyle>;
-  'formSegmentedControl:valid'?: StyleProp<ViewStyle>;
-  'formSegmentedControl:disabled'?: StyleProp<ViewStyle>;
-  'formSegmentedControl:enabled'?: StyleProp<ViewStyle>;
-
   formTextField?: StyleProp<TextStyle>;
-  'formTextField:invalid'?: StyleProp<TextStyle>;
-  'formTextField:valid'?: StyleProp<TextStyle>;
-  'formTextField:disabled'?: StyleProp<TextStyle>;
-  'formTextField:enabled'?: StyleProp<TextStyle>;
-
   formDate?: StyleProp<TextStyle>;
-  'formDate:invalid'?: StyleProp<TextStyle>;
-  'formDate:valid'?: StyleProp<TextStyle>;
-  'formDate:disabled'?: StyleProp<TextStyle>;
-  'formDate:enabled'?: StyleProp<TextStyle>;
 
 };
+
+type _Selector = 'active' | 'hover' | 'focus' | 'checked' | 'invalid' | 'valid' | 'disabled' | 'enabled';
+
+export type ClassNames = string | _.Falsey | ClassNames[];
+export type Selectors = _Selector | _.Falsey | Selectors[];
+
+export type ComponentStyles = { [K in keyof _ComponentStyles]: _ComponentStyles[K]; } &
+  { [K in keyof _ComponentStyles as `${K}:${_Selector}`]: _ComponentStyles[K]; };
 
 type _StyleProp = StyleProp<ViewStyle | TextStyle | ImageStyle>;
 
@@ -167,9 +137,6 @@ export const StyleProvider: React.FC<React.PropsWithChildren<{
   }
 
 StyleProvider.displayName = 'StyleProvider';
-
-export type ClassNames = string | _.Falsey | ClassNames[];
-export type Selectors = string | _.Falsey | Selectors[];
 
 const flattenClassNames = (
   classNames?: ClassNames,
