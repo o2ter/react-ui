@@ -31,7 +31,7 @@ import { _useComponentStyle } from '../Style';
 import { useStableCallback } from 'sugax';
 import { TextStyleProvider } from '../Text/style';
 import { textStyleKeys } from '../Text/style';
-import { Pressable, StyleSheet } from 'react-native';
+import { LayoutRectangle, Pressable, StyleSheet } from 'react-native';
 import { flattenStyle } from '../Style/flatten';
 
 export const Tooltip = createMemoComponent((
@@ -61,8 +61,8 @@ export const Tooltip = createMemoComponent((
     container: _.omit(_defaultStyle, textStyleKeys),
   }), [_defaultStyle]);
 
-  const _render = useStableCallback(() => (
-    <TextStyleProvider style={_styles.text}>{render()}</TextStyleProvider>
+  const _render = useStableCallback((layout: LayoutRectangle) => (
+    <TextStyleProvider style={_styles.text}>{render(layout)}</TextStyleProvider>
   ));
 
   return (

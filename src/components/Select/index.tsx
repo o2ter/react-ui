@@ -34,6 +34,8 @@ import { useTheme } from '../../theme';
 import Text from '../Text';
 import { Popover } from '../Popover';
 import { useDefaultInputStyle } from '../TextInput/style';
+import FlatList from '../FlatList';
+import SectionList from '../SectionList';
 
 type SelectState = {
   focused: boolean;
@@ -49,7 +51,10 @@ export type SelectOption<T> = {
 type SelectProps<T> = {
   classes?: ClassNames;
   value?: T[];
-  options: SelectOption<T>[] | { label: string; options: SelectOption<T>[]; }[];
+  options: SelectOption<T>[] | {
+    label: string;
+    options: SelectOption<T>[];
+  }[];
   disabled?: boolean;
   multiple?: boolean;
   arrow?: boolean;
@@ -72,6 +77,15 @@ type SelectProps<T> = {
   | null
   | undefined;
 };
+
+const _SelectOption = <T = any>({
+  label
+}: SelectOption<T>) => {
+
+  return (
+    <Text>{label}</Text>
+  );
+}
 
 export const Select = createMemoComponent(<T = any>(
   {
@@ -116,13 +130,39 @@ export const Select = createMemoComponent(<T = any>(
     if (focused && !disabled) setHidden(false);
   }, [focused, disabled]);
 
+  const sections = React.useMemo(() => {
+
+    const sections: {
+      label: string;
+      data: SelectOption<T>[];
+    }[] = [];
+    let opts: SelectOption<T>[] = [];
+
+    for (const opt of options) {
+      if ('options' in opt) {
+        if (!_.isEmpty(opts)) {
+          sections.push({ label: '', data: opts });
+          opts = [];
+        }
+        if (!_.isEmpty(opt.options)) sections.push({ label: opt.label, data: opt.options });
+      } else {
+        opts.push(opt);
+      }
+    }
+
+    if (!_.isEmpty(opts)) sections.push({ label: '', data: opts });
+    return sections;
+
+  }, [options]);
+
   return (
     <Popover
-      hidden={hidden}
+      hidden={hidden && !_.isEmpty(sections)}
       position={['top', 'bottom']}
       arrow={arrow ?? false}
       shadow={shadow ?? false}
       onTouchOutside={() => { setHidden(true); }}
+      extraData={sections}
       containerStyle={{
         display: 'flex',
         borderColor: theme.grays['400'],
@@ -130,8 +170,25 @@ export const Select = createMemoComponent(<T = any>(
         borderRadius: theme.borderRadiusBase,
         padding: 0,
       }}
-      render={() => (
-        <Text>test</Text>
+      render={(layout) => sections.length === 1 && !_.isEmpty(sections[0].label) ? (
+        <FlatList
+          data={sections[0].data}
+          extraData={sections}
+          renderItem={({ item }) => (
+            <_SelectOption {...item} />
+          )}
+        />
+      ) : (
+        <SectionList
+          sections={sections}
+          extraData={sections}
+          renderSectionHeader={({ section }) => (
+            <Text>{section.label}</Text>
+          )}
+          renderItem={({ item }) => (
+            <_SelectOption {...item} />
+          )}
+        />
       )}
     >
       <Pressable
