@@ -34,6 +34,7 @@ import Button from './Button';
 import Picker from './Picker';
 import Checkbox from './Checkbox';
 import Radio from './Radio';
+import Select from '../Select';
 import Switch from './Switch';
 import FormUploader from './Uploader';
 
@@ -49,6 +50,7 @@ const Form = _.assign(FormBase, {
   Picker,
   Checkbox,
   Radio,
+  Select,
   Switch,
   Date: FormDate,
   _Uploader: FormUploader,
