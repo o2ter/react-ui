@@ -113,7 +113,7 @@ const SelectListListItem = <T = any>({
       onFocus={() => { setState(state => ({ ...state, focused: true })); }}
       onBlur={() => { setState(state => ({ ...state, focused: false })); }}
     >
-      {prepend}
+      {_.isFunction(prepend) ? prepend(_state) : prepend}
       <View style={{ flex: 1 }}>
         {_.isFunction(render) ? render(_state) : (
           <Text>{label}</Text>

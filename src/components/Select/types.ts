@@ -48,7 +48,7 @@ export type SelectOption<T> = {
   classes?: ClassNames;
   label?: string;
   value: T;
-  prepend?: React.ReactNode;
+  prepend?: React.ReactNode | ((state: SelectOptionState) => React.ReactNode);
   render?: (state: SelectOptionState) => React.ReactNode;
   style?: StyleProp<TextStyle> | ((state: SelectOptionState) => StyleProp<TextStyle>);
 };
