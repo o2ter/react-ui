@@ -27,7 +27,8 @@ import _ from 'lodash';
 import React from 'react';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
-import { Select, SelectOption } from '../../Select';
+import { Select } from '../../Select';
+import { SelectOption } from '../../Select/types';
 import { Modify } from '../../../internals/types';
 import { createMemoComponent } from '../../../internals/utils';
 import { _useComponentStyle } from '../../Style';
@@ -81,8 +82,8 @@ export const FormSelect = createMemoComponent(<T = any>(
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
-  const _onChange = React.useCallback((value: SelectOption<T>[]) => {
-    onChange(_.map(value, x => x.value));
+  const _onChange = React.useCallback((value: T[]) => {
+    onChange(value);
     setTouched();
   }, []);
 

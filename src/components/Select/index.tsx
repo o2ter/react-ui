@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Platform, StyleProp, TextStyle, useWindowDimensions } from 'react-native';
+import { Platform, StyleProp, TextStyle } from 'react-native';
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, _useComponentStyle } from '../Style';
 import { Pressable } from '../Pressable';
@@ -34,21 +34,9 @@ import { useTheme } from '../../theme';
 import Text from '../Text';
 import { Popover } from '../Popover';
 import { useDefaultInputStyle } from '../TextInput/style';
-import SectionList from '../SectionList';
-
-type SelectState<T> = {
-  value: T[];
-  focused: boolean;
-  disabled: boolean;
-};
-
-export type SelectOption<T> = {
-  label?: string;
-  value: T;
-  prepend?: React.ReactNode;
-};
-
-type ListProps<T> = Partial<React.ComponentPropsWithoutRef<typeof SectionList<SelectOption<T>>>>;
+import { ListProps, SelectOption, SelectState } from './types';
+import { SelectListBody } from './list';
+import { useStableRef } from 'sugax';
 
 type SelectProps<T> = {
   classes?: ClassNames;
@@ -65,20 +53,12 @@ type SelectProps<T> = {
   style?: StyleProp<TextStyle> | ((state: SelectState<T>) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
   append?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
-  onValueChange?: (selected: SelectOption<T>[]) => void;
+  onValueChange?: (value: T[]) => void;
+  onChange?: (selected: SelectOption<T>[]) => void;
   onFocus?: VoidFunction;
   onBlur?: VoidFunction;
   listProps?: Omit<ListProps<T>, 'renderItem'>;
 };
-
-const _SelectOption = <T = any>({
-  label
-}: SelectOption<T>) => {
-
-  return (
-    <Text>{label}</Text>
-  );
-}
 
 export const Select = createMemoComponent(<T = any>(
   {
@@ -92,6 +72,7 @@ export const Select = createMemoComponent(<T = any>(
     style,
     variant,
     onValueChange = () => { },
+    onChange = () => { },
     onFocus = () => { },
     onBlur = () => { },
     prepend,
@@ -147,7 +128,8 @@ export const Select = createMemoComponent(<T = any>(
 
   }, [options]);
 
-  const windowDimensions = useWindowDimensions();
+  const extraData = React.useMemo(() => [sections, value], [sections, value]);
+  const callbackRef = useStableRef({ onValueChange, onChange });
 
   return (
     <Popover
@@ -156,7 +138,7 @@ export const Select = createMemoComponent(<T = any>(
       arrow={arrow ?? false}
       shadow={shadow ?? false}
       onTouchOutside={() => { setHidden(true); }}
-      extraData={sections}
+      extraData={extraData}
       containerStyle={{
         display: 'flex',
         borderColor: theme.grays['400'],
@@ -165,18 +147,19 @@ export const Select = createMemoComponent(<T = any>(
         padding: 0,
       }}
       render={(layout) => (
-        <SectionList
+        <SelectListBody
+          value={value}
+          layout={layout}
           sections={sections}
-          extraData={sections}
-          style={{
-            minWidth: layout.width,
-            maxHeight: 0.5 * windowDimensions.height,
+          extraData={extraData}
+          listProps={listProps}
+          onSelect={(v) => { 
+            const opts = _.flatMap(sections, x => x.data);
+            const _value = _.uniq(multiple ? [...value ?? [], v] : [v]);
+            const selected = _.compact(_.map(_value, x => _.find(opts, o => o.value === x)));
+            callbackRef.current.onValueChange(_.map(selected, x => x.value));
+            callbackRef.current.onChange(selected);
           }}
-          renderSectionHeader={sections.length === 1 && !_.isEmpty(sections[0].label) ? (
-            ({ section }) => <Text>{section.label}</Text>
-          ) : undefined}
-          renderItem={({ item }) => <_SelectOption {...item} />}
-          {...listProps}
         />
       )}
     >
