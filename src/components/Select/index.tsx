@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Platform, StyleProp, TextStyle } from 'react-native';
+import { Platform, StyleProp, TextStyle, useWindowDimensions } from 'react-native';
 import { createMemoComponent } from '../../internals/utils';
 import { ClassNames, _useComponentStyle } from '../Style';
 import { Pressable } from '../Pressable';
@@ -155,6 +155,8 @@ export const Select = createMemoComponent(<T = any>(
 
   }, [options]);
 
+  const windowDimensions = useWindowDimensions();
+
   return (
     <Popover
       hidden={hidden && !_.isEmpty(sections)}
@@ -176,6 +178,7 @@ export const Select = createMemoComponent(<T = any>(
           extraData={sections}
           style={{
             minWidth: layout.width,
+            maxHeight: 0.5 * windowDimensions.height,
           }}
           renderItem={({ item }) => (
             <_SelectOption {...item} />
@@ -187,6 +190,7 @@ export const Select = createMemoComponent(<T = any>(
           extraData={sections}
           style={{
             minWidth: layout.width,
+            maxHeight: 0.5 * windowDimensions.height,
           }}
           renderSectionHeader={({ section }) => (
             <Text>{section.label}</Text>
