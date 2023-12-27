@@ -174,6 +174,9 @@ export const Select = createMemoComponent(<T = any>(
         <FlatList
           data={sections[0].data}
           extraData={sections}
+          style={{
+            minWidth: layout.width,
+          }}
           renderItem={({ item }) => (
             <_SelectOption {...item} />
           )}
@@ -182,6 +185,9 @@ export const Select = createMemoComponent(<T = any>(
         <SectionList
           sections={sections}
           extraData={sections}
+          style={{
+            minWidth: layout.width,
+          }}
           renderSectionHeader={({ section }) => (
             <Text>{section.label}</Text>
           )}
