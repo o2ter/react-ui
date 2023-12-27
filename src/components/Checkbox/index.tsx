@@ -28,7 +28,7 @@ import React from 'react';
 import { Platform, Pressable, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { useTheme } from '../../theme';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import View from '../View';
 import { Path, Svg } from 'react-native-svg';
 import { Modify } from '../../internals/types';
@@ -64,11 +64,11 @@ export const Checkbox = createMemoComponent((
 ) => {
 
   const theme = useTheme();
-  const textStyle = useComponentStyle('text') as TextStyle;
+  const textStyle = _useComponentStyle('text') as TextStyle;
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const checkboxStyle = useComponentStyle('checkbox', classes, [
+  const checkboxStyle = _useComponentStyle('checkbox', classes, [
     focused && 'focus',
     selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',

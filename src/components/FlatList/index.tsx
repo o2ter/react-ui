@@ -33,7 +33,7 @@ import {
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
@@ -62,9 +62,9 @@ export const FlatList = createMemoComponent(<ItemT = any>(
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof RNFlatList<ItemT>>>
 ) => {
 
-  const scrollableStyle = useComponentStyle('scrollable', classes);
-  const scrollableContentContainerStyle = useComponentStyle('scrollableContentContainer');
-  const flatlistColumnWrapperStyle = useComponentStyle('flatlistColumnWrapper');
+  const scrollableStyle = _useComponentStyle('scrollable', classes);
+  const scrollableContentContainerStyle = _useComponentStyle('scrollableContentContainer');
+  const flatlistColumnWrapperStyle = _useComponentStyle('flatlistColumnWrapper');
   const _renderItem = React.useCallback(renderItem ?? (() => <></>), [data, extraData]);
 
   return (

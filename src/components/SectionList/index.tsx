@@ -34,7 +34,7 @@ import {
 import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
@@ -63,8 +63,8 @@ export const SectionList = createMemoComponent(<ItemT = any, SectionT = DefaultS
 
   const _renderItem = React.useCallback(renderItem ?? (() => <></>), [data, extraData]);
 
-  const scrollableStyle = useComponentStyle('scrollable', classes);
-  const scrollableContentContainerStyle = useComponentStyle('scrollableContentContainer');
+  const scrollableStyle = _useComponentStyle('scrollable', classes);
+  const scrollableContentContainerStyle = _useComponentStyle('scrollableContentContainer');
 
   return (
     <RNSectionList

@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { RefreshControlBase, RefreshControlProps } from 'react-native';
 import { Modify } from '../../internals/types';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { createMemoComponent } from '../../internals/utils';
 import { flattenStyle } from '../Style/flatten';
 
@@ -58,7 +58,7 @@ export const AsyncRefreshControl = (
 ) => {
 
   const [refreshing, setRefreshing] = React.useState(false);
-  const defaultStyle = useComponentStyle('refreshControl', classes, refreshing && 'active');
+  const defaultStyle = _useComponentStyle('refreshControl', classes, refreshing && 'active');
 
   return <RefreshControl
     ref={forwardRef}

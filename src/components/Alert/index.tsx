@@ -31,7 +31,7 @@ import { ValidateError } from '@o2ter/valid.js';
 import { useTheme } from '../../theme';
 import { useSafeAreaInsets } from '../SafeAreaView';
 import { useLocalize } from '@o2ter/i18n';
-import { useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 import { ThemeColors } from '../../theme/variables';
 import Icon from '../Icon';
@@ -83,8 +83,8 @@ const AlertBody: React.FC<AlertBodyProps> = ({
 
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const theme = useTheme();
-  const alertStyle = useComponentStyle('alert');
-  const alertTextStyle = useComponentStyle('alertText');
+  const alertStyle = _useComponentStyle('alert');
+  const alertTextStyle = _useComponentStyle('alertText');
 
   function _dismiss() {
     Animated.timing(fadeAnim, {

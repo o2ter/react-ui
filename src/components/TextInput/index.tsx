@@ -29,7 +29,7 @@ import { Platform, Pressable, TextInput as RNTextInput, TextInputProps as RNText
 import { useTheme } from '../../theme';
 import { useDefaultInputStyle } from './style';
 import { createMemoComponent, createComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 import { useFocus, useFocusRing } from '../../internals/focus';
 import { useMergeRefs } from 'sugax';
@@ -53,7 +53,7 @@ const InnerTextInput = createComponent(({
   children,
   ...props
 }: RNTextInputProps, forwardRef: React.ForwardedRef<RNTextInput>) => {
-  const defaultStyle = useComponentStyle('text');
+  const defaultStyle = _useComponentStyle('text');
   return (
     <RNTextInput
       ref={forwardRef}
@@ -84,8 +84,8 @@ export const TextInput = createMemoComponent(({
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const textStyle = useComponentStyle('text');
-  const textInputStyle = useComponentStyle('textInput', classes, [
+  const textStyle = _useComponentStyle('text');
+  const textInputStyle = _useComponentStyle('textInput', classes, [
     focused && 'focus',
   ]);
   const defaultStyle = useDefaultInputStyle(theme, variant);

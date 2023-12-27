@@ -27,9 +27,9 @@ import _ from 'lodash';
 import React from 'react';
 import { Animated, Pressable, Platform } from 'react-native';
 
-export const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+export const _AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export const useFadeAnim = (options: {
+export const _useFadeAnim = (options: {
   visible: boolean;
   setVisible: (visible: boolean) => void;
   timing: Partial<Animated.TimingAnimationConfig>;

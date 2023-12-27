@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { useField } from '../Form';
 import { createMemoComponent } from '../../../internals/utils';
-import { useComponentStyle } from '../../Style';
+import { _useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Radio from '../../Radio';
 import { useFocus, useFocusRing } from '../../../internals/focus';
@@ -75,7 +75,7 @@ export const FormRadio = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const formRadioStyle = useComponentStyle('formRadio', classes, [
+  const formRadioStyle = _useComponentStyle('formRadio', classes, [
     focused && 'focus',
     selected && 'checked',
     disabled ? 'disabled' : 'enabled',

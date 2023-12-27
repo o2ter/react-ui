@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { createMemoComponent } from '../../internals/utils';
 import { Popover } from '../Popover';
-import { useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
 import { useStableCallback } from 'sugax';
 import { TextStyleProvider } from '../Text/style';
 import { textStyleKeys } from '../Text/style';
@@ -48,7 +48,7 @@ export const Tooltip = createMemoComponent((
   const [hover, setHover] = React.useState(false);
   const [press, setPress] = React.useState(false);
 
-  const defaultStyle = useComponentStyle('tooltip');
+  const defaultStyle = _useComponentStyle('tooltip');
   const _defaultStyle = React.useMemo(() => flattenStyle([{
     color: 'white',
     backgroundColor: 'black',

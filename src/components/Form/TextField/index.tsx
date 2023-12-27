@@ -31,7 +31,7 @@ import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { createMemoComponent } from '../../../internals/utils';
-import { useComponentStyle } from '../../Style';
+import { _useComponentStyle } from '../../Style';
 import { useFocus, useFocusRing } from '../../../internals/focus';
 
 type FormTextFieldState = {
@@ -74,7 +74,7 @@ export const FormTextField = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const formTextFieldStyle = useComponentStyle('formTextField', classes, [
+  const formTextFieldStyle = _useComponentStyle('formTextField', classes, [
     focused && 'focus',
     editable ? 'enabled' : 'disabled',
     touched && (invalid ? 'invalid' : 'valid'),

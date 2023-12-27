@@ -28,7 +28,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ItemValue, PickerNative, PickerProps } from './native';
 import { createMemoComponent } from '../../internals/utils';
-import { useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
 import { useFocus, useFocusRing } from '../../internals/focus';
 import { useTheme } from '../../theme';
 import View from '../View';
@@ -57,8 +57,8 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
   const selected = _.find(items, x => x.value === value);
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const textStyle = useComponentStyle('text');
-  const pickerStyle = useComponentStyle('picker', classes, [
+  const textStyle = _useComponentStyle('text');
+  const pickerStyle = _useComponentStyle('picker', classes, [
     focused && 'focus',
     disabled ? 'disabled' : 'enabled',
   ]);

@@ -28,11 +28,11 @@ import React from 'react';
 import { View as RNView, Platform, useWindowDimensions, ScaledSize, StyleProp, ViewStyle, Animated } from 'react-native';
 import { LayoutRectangle } from 'react-native';
 import { useTheme } from '../../theme';
-import { useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 import { PopoverPosition } from './types';
 import { elevationShadow, selectPlatformShadow } from '../../shadow';
-import { useFadeAnim } from '../Animated';
+import { _useFadeAnim } from '../_Animated';
 
 type PopoverBodyProps = React.PropsWithChildren<{
   hidden: boolean;
@@ -66,7 +66,7 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
   const [containerLayout, setContainerLayout] = React.useState<LayoutRectangle>();
 
   const [visible, setVisible] = React.useState(false);
-  const fadeAnim = useFadeAnim({
+  const fadeAnim = _useFadeAnim({
     visible: !hidden,
     setVisible,
     timing: {
@@ -84,7 +84,7 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
     borderRightWidth,
     borderBottomWidth,
     ..._style
-  } = flattenStyle([useComponentStyle('popover'), style]);
+  } = flattenStyle([_useComponentStyle('popover'), style]);
 
   const _position = selectPosition(position, layout, windowDimensions);
   const containerWidth = containerLayout?.width ?? 0;

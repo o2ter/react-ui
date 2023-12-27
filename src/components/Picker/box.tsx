@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { StyleProp, TextStyle } from 'react-native';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { useFocusRing } from '../../internals/focus';
 import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';
@@ -54,8 +54,8 @@ export const PickerBox = createComponent(({
 
   const theme = useTheme();
 
-  const textStyle = useComponentStyle('text');
-  const pickerStyle = useComponentStyle('picker', classes, [
+  const textStyle = _useComponentStyle('text');
+  const pickerStyle = _useComponentStyle('picker', classes, [
     focused && 'focus',
     disabled ? 'disabled' : 'enabled',
   ]);

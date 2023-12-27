@@ -28,8 +28,8 @@ import React from 'react';
 import { StyleSheet, Platform, ViewStyle, StyleProp, Animated } from 'react-native';
 
 import { useTheme } from '../../theme';
-import { useComponentStyle } from '../Style';
-import { AnimatedPressable, useFadeAnim } from '../Animated';
+import { _useComponentStyle } from '../Style';
+import { _AnimatedPressable, _useFadeAnim } from '../_Animated';
 import { flattenStyle } from '../Style/flatten';
 
 type ModalConfig = React.ReactElement | {
@@ -53,11 +53,11 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
   const [config, setConfig] = React.useState<ModalConfig>();
   const [display, setDisplay] = React.useState<ModalConfig>();
   const theme = useTheme();
-  const modalBackdrop = useComponentStyle('modalBackdrop');
-  const modalContainer = useComponentStyle('modalContainer');
+  const modalBackdrop = _useComponentStyle('modalBackdrop');
+  const modalContainer = _useComponentStyle('modalContainer');
 
   const element = React.isValidElement(config) ? config : config && 'element' in config ? config.element : undefined;
-  const fadeAnim = useFadeAnim({
+  const fadeAnim = _useFadeAnim({
     visible: !_.isNil(element),
     setVisible: (v) => setDisplay(v ? (current => config ?? current) : undefined),
     timing: {
@@ -71,7 +71,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{
   return <ModalContext.Provider value={setConfig}>
     {children}
     {React.isValidElement(displayElement) && <>
-      {backdrop === true && <AnimatedPressable
+      {backdrop === true && <_AnimatedPressable
         onPress={() => setConfig(undefined)}
         style={flattenStyle([
           {

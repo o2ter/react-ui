@@ -44,9 +44,9 @@ import { textStyleKeys } from '../Text/style';
 import { Modify } from '../../internals/types';
 import { Text } from '../Text';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
-import { AnimatedPressable } from '../Animated';
+import { _AnimatedPressable } from '../_Animated';
 import { ThemeColors } from '../../theme/variables';
 
 type ButtonStateCallbackType = PressableStateCallbackType & {
@@ -102,7 +102,7 @@ export const Button = createMemoComponent(({
   onFocus,
   onBlur,
   ...props
-}: ButtonProps, forwardRef: React.ForwardedRef<typeof AnimatedPressable>) => {
+}: ButtonProps, forwardRef: React.ForwardedRef<typeof _AnimatedPressable>) => {
 
   const [state, setState] = React.useState({ hovered: false, pressed: false, focused: false });
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
@@ -121,7 +121,7 @@ export const Button = createMemoComponent(({
   }, [_focused]);
 
   const theme = useTheme();
-  const buttonStyle = useComponentStyle('button', classes, [
+  const buttonStyle = _useComponentStyle('button', classes, [
     state.hovered && 'hover',
     state.pressed && 'active',
     state.focused && 'focus',
@@ -193,7 +193,7 @@ export const Button = createMemoComponent(({
     : _.isFunction(children) ? () => _wrapped(children(state)) : _wrapped(children);
 
   return (
-    <AnimatedPressable
+    <_AnimatedPressable
       ref={forwardRef}
       disabled={disabled}
       focusable={!disabled && focusable !== false}
@@ -234,7 +234,7 @@ export const Button = createMemoComponent(({
       {prepend}
       {_.isFunction(content) ? content() : content}
       {append}
-    </AnimatedPressable>
+    </_AnimatedPressable>
   );
 }, {
   displayName: 'Button',

@@ -32,7 +32,7 @@ import { DateTime } from 'luxon';
 
 import { _Date, dateToString } from './date';
 import { calendarStyle } from './style';
-import { useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 
 export const CalendarBody: React.FC<{
@@ -52,9 +52,9 @@ export const CalendarBody: React.FC<{
     const id = React.useId();
 
     const theme = useTheme();
-    const calendarWeekdayStyle = useComponentStyle('calendarWeekday');
-    const calendarWeekContainerStyle = useComponentStyle('calendarWeekContainer');
-    const calendarWeekdayContainerStyle = useComponentStyle('calendarWeekdayContainer');
+  const calendarWeekdayStyle = _useComponentStyle('calendarWeekday');
+  const calendarWeekContainerStyle = _useComponentStyle('calendarWeekContainer');
+  const calendarWeekdayContainerStyle = _useComponentStyle('calendarWeekdayContainer');
   
     const monthObj = DateTime.fromObject({ year, month, day: 1 } as any);
     const daysInMonth = monthObj.daysInMonth;

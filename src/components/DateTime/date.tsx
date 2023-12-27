@@ -31,7 +31,7 @@ import { PickerBase } from './picker';
 import { Modify } from '../../internals/types';
 import { useDefaultInputStyle } from '../TextInput/style';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { useFocus, useFocusRing } from '../../internals/focus';
 import { StyleProp, TextStyle } from 'react-native';
 
@@ -77,7 +77,7 @@ export const DatePicker = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const datePickerStyle = useComponentStyle('datePicker', classes, [
+  const datePickerStyle = _useComponentStyle('datePicker', classes, [
     focused && 'focus',
     disabled ? 'disabled' : 'enabled',
   ]);

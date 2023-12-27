@@ -28,8 +28,8 @@ import React from 'react';
 import { LayoutRectangle, StyleSheet, Platform, ViewStyle, StyleProp, Animated } from 'react-native';
 
 import { useTheme } from '../../theme';
-import { useComponentStyle } from '../Style';
-import { AnimatedPressable, useFadeAnim } from '../Animated';
+import { _useComponentStyle } from '../Style';
+import { _AnimatedPressable, _useFadeAnim } from '../_Animated';
 import { flattenStyle } from '../Style/flatten';
 
 type OffcanvasConfig = React.ReactElement | {
@@ -55,15 +55,15 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
   const [display, setDisplay] = React.useState<OffcanvasConfig>();
   const [layout, setLayout] = React.useState<LayoutRectangle>();
   const theme = useTheme();
-  const offcanvasBackdrop = useComponentStyle('offcanvasBackdrop');
-  const offcanvasContainer = useComponentStyle('offcanvasContainer');
-  const offcanvasLeftContainer = useComponentStyle('offcanvasLeftContainer');
-  const offcanvasRightContainer = useComponentStyle('offcanvasRightContainer');
-  const offcanvasTopContainer = useComponentStyle('offcanvasTopContainer');
-  const offcanvasBottomContainer = useComponentStyle('offcanvasBottomContainer');
+  const offcanvasBackdrop = _useComponentStyle('offcanvasBackdrop');
+  const offcanvasContainer = _useComponentStyle('offcanvasContainer');
+  const offcanvasLeftContainer = _useComponentStyle('offcanvasLeftContainer');
+  const offcanvasRightContainer = _useComponentStyle('offcanvasRightContainer');
+  const offcanvasTopContainer = _useComponentStyle('offcanvasTopContainer');
+  const offcanvasBottomContainer = _useComponentStyle('offcanvasBottomContainer');
 
   const element = React.isValidElement(config) ? config : config && 'element' in config ? config.element : undefined;
-  const fadeAnim = useFadeAnim({
+  const fadeAnim = _useFadeAnim({
     visible: !_.isNil(element),
     setVisible: (v) => {
       if (v) {
@@ -85,7 +85,7 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
   return <OffcanvasContext.Provider value={setConfig}>
     {children}
     {React.isValidElement(displayElement) && <>
-      {backdrop === true && <AnimatedPressable
+      {backdrop === true && <_AnimatedPressable
         onPress={() => setConfig(undefined)}
         style={flattenStyle([
           {

@@ -28,7 +28,7 @@ import React from 'react';
 import { useField } from '../Form';
 
 import { createMemoComponent } from '../../../internals/utils';
-import { useComponentStyle } from '../../Style';
+import { _useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Switch from '../../Switch';
 import { useFocus, useFocusRing } from '../../../internals/focus';
@@ -76,7 +76,7 @@ export const FormSwitch = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const formSwitchStyle = useComponentStyle('formSwitch', classes, [
+  const formSwitchStyle = _useComponentStyle('formSwitch', classes, [
     focused && 'focus',
     selected && 'checked',
     disabled ? 'disabled' : 'enabled',

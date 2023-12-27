@@ -28,7 +28,7 @@ import React from 'react';
 import { useField } from '../Form';
 
 import { createMemoComponent } from '../../../internals/utils';
-import { useComponentStyle } from '../../Style';
+import { _useComponentStyle } from '../../Style';
 import { Modify } from '../../../internals/types';
 import Checkbox from '../../Checkbox';
 import { useFocus, useFocusRing } from '../../../internals/focus';
@@ -76,7 +76,7 @@ export const FormCheckbox = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const formCheckboxStyle = useComponentStyle('formCheckbox', classes, [
+  const formCheckboxStyle = _useComponentStyle('formCheckbox', classes, [
     focused && 'focus',
     selected && 'checked',
     disabled ? 'disabled' : 'enabled',

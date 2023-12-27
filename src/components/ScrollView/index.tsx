@@ -38,7 +38,7 @@ import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { useMergeRefs } from 'sugax';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 
 const ScrollViewBase: typeof RNScrollView = KeyboardAwareScrollable(RNScrollView);
@@ -91,8 +91,8 @@ export const ScrollView = createMemoComponent(({
     horizontal,
   }), [layoutMeasurement, contentSize, scroll, horizontal]);
 
-  const scrollableStyle = useComponentStyle('scrollable', classes);
-  const scrollableContentContainerStyle = useComponentStyle('scrollableContentContainer');
+  const scrollableStyle = _useComponentStyle('scrollable', classes);
+  const scrollableContentContainerStyle = _useComponentStyle('scrollableContentContainer');
 
   return <ScrollViewBase
     ref={ref}

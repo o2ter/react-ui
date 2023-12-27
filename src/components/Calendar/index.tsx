@@ -40,7 +40,7 @@ import { MaterialCommunityIcons as Icon } from '../Icons';
 
 import Localization from '../../locales';
 import { createMemoComponent } from '../../internals/utils';
-import { useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 
 const month_name = [
@@ -80,8 +80,8 @@ const CalendarBase = createMemoComponent(({
 }: CalendarProps, forwardRef: React.ForwardedRef<View>) => {
 
   const theme = useTheme();
-  const calendarWeekContainerStyle = useComponentStyle('calendarWeekContainer');
-  const calendarWeekdayStyle = useComponentStyle('calendarWeekday');
+  const calendarWeekContainerStyle = _useComponentStyle('calendarWeekContainer');
+  const calendarWeekdayStyle = _useComponentStyle('calendarWeekday');
 
   const locale = Localization.useLocalize();
 

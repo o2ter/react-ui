@@ -32,7 +32,7 @@ import { useField } from '../Form';
 import { Modify } from '../../../internals/types';
 import { useTheme } from '../../../theme';
 import { createMemoComponent } from '../../../internals/utils';
-import { ClassNames, useComponentStyle } from '../../Style';
+import { ClassNames, _useComponentStyle } from '../../Style';
 import { textStyleNormalize } from '../../Text/style';
 
 type FormErrorMessageProps = Modify<TextProps, {
@@ -49,7 +49,7 @@ export const FormErrorMessage = createMemoComponent(({
 
   const { error, touched } = useField(name);
   const theme = useTheme();
-  const formErrorMessageStyle = useComponentStyle('formErrorMessage', classes);
+  const formErrorMessageStyle = _useComponentStyle('formErrorMessage', classes);
 
   const path = _.toPath(name);
   const _error = error.find(x => x instanceof ValidateError ? _.isEqual(x.path, path) : true) ?? _.first(error);

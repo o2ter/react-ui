@@ -33,7 +33,7 @@ import { useDefaultInputStyle } from '../../TextInput/style';
 import { useEquivalent } from 'sugax';
 import { createMemoComponent } from '../../../internals/utils';
 import { ItemValue } from '../../Picker/native';
-import { useComponentStyle } from '../../Style';
+import { _useComponentStyle } from '../../Style';
 import { useFocus, useFocusRing } from '../../../internals/focus';
 import { StyleProp, TextStyle } from 'react-native';
 
@@ -82,7 +82,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const formPickerStyle = useComponentStyle('formPicker', classes, [
+  const formPickerStyle = _useComponentStyle('formPicker', classes, [
     focused && 'focus',
     disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),

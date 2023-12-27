@@ -30,7 +30,7 @@ import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { DatePicker } from '../../DateTime';
 import { createMemoComponent } from '../../../internals/utils';
-import { ClassNames, useComponentStyle } from '../../Style';
+import { ClassNames, _useComponentStyle } from '../../Style';
 import { useFocus, useFocusRing } from '../../../internals/focus';
 import { StyleProp, TextStyle } from 'react-native';
 
@@ -80,7 +80,7 @@ export const FormDate = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const formDateStyle = useComponentStyle('formDate', classes, [
+  const formDateStyle = _useComponentStyle('formDate', classes, [
     focused && 'focus',
     disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),

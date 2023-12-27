@@ -29,10 +29,10 @@ import { Animated, Easing, Platform, Pressable, StyleProp, TextStyle, ViewStyle 
 import { useTheme } from '../../theme';
 
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { Modify } from '../../internals/types';
 import { flattenStyle } from '../Style/flatten';
-import { AnimatedPressable } from '../Animated';
+import { _AnimatedPressable } from '../_Animated';
 import { useFocus, useFocusRing } from '../../internals/focus';
 
 type SwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
@@ -56,11 +56,11 @@ export const Switch = createMemoComponent((
 ) => {
 
   const theme = useTheme();
-  const textStyle = useComponentStyle('text') as TextStyle;
+  const textStyle = _useComponentStyle('text') as TextStyle;
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const switchStyle = useComponentStyle('switch', classes, [
+  const switchStyle = _useComponentStyle('switch', classes, [
     focused && 'focus',
     selected && 'checked',
     props.disabled ? 'disabled' : 'enabled',
@@ -99,7 +99,7 @@ export const Switch = createMemoComponent((
   }, [selected]);
 
   return (
-    <AnimatedPressable
+    <_AnimatedPressable
       ref={forwardRef}
       style={flattenStyle([
         _style,
@@ -132,7 +132,7 @@ export const Switch = createMemoComponent((
           }),
         }}
       />
-    </AnimatedPressable>
+    </_AnimatedPressable>
   )
 }, {
   displayName: 'Switch'

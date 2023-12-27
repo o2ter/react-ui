@@ -28,7 +28,7 @@ import React from 'react';
 import { Text as RNText, TextProps as RNTextProps } from 'react-native';
 import { useTheme } from '../../theme';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { TextStyleProvider, textStyleNormalize } from './style';
 
 type TextProps = RNTextProps & {
@@ -42,7 +42,7 @@ export const Text = createMemoComponent(({
   ...props
 }: TextProps, forwardRef: React.ForwardedRef<RNText>) => {
   const theme = useTheme();
-  const textStyle = useComponentStyle('text', classes);
+  const textStyle = _useComponentStyle('text', classes);
   return (
     <RNText
       ref={forwardRef}

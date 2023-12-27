@@ -29,7 +29,7 @@ import { Image as RNImage, ImageProps as RNImageProps, ImageURISource, ImageRequ
 import ImageBase from './ImageBase';
 import { Modify } from '../../internals/types';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, useComponentStyle } from '../Style';
+import { ClassNames, _useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
 
 type ImageProps = Modify<RNImageProps, {
@@ -48,7 +48,7 @@ export const Image = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof ImageBase>>
 ) => {
 
-  const imageStyle = useComponentStyle('image', classes) as ImageStyle;
+  const imageStyle = _useComponentStyle('image', classes) as ImageStyle;
   const {
     width,
     height,

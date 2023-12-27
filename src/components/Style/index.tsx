@@ -63,6 +63,7 @@ type _ComponentStyles = {
   modalContainer?: StyleProp<ViewStyle>;
 
   picker?: StyleProp<TextStyle>;
+  select?: StyleProp<TextStyle>;
 
   checkbox?: StyleProp<TextStyle>;
   radio?: StyleProp<TextStyle>;
@@ -148,7 +149,7 @@ const flattenClassNames = (
   return [..._classNames, ..._.flatMap(_classNames, c => _.map(_selectors, s => `${c}:${s}`))];
 }
 
-export const useComponentStyle = (
+export const _useComponentStyle = (
   component: keyof ComponentStyles,
   classNames?: ClassNames,
   selectors?: Selectors,
