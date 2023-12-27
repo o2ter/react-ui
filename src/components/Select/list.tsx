@@ -115,7 +115,9 @@ const SelectListListItem = <T = any>({
     >
       {prepend}
       <View style={{ flex: 1 }}>
-        {_.isFunction(render) ? render(_state) : (<Text>{label}</Text>)}
+        {_.isFunction(render) ? render(_state) : (
+          <Text>{label}</Text>
+        )}
       </View>
       {selected && <Icon color={theme.themeColors.primary} size={16} name='done' />}
     </_AnimatedPressable>

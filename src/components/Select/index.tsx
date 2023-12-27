@@ -57,8 +57,33 @@ type SelectProps<T> = {
   onChange?: (selected: SelectOption<T>[]) => void;
   onFocus?: VoidFunction;
   onBlur?: VoidFunction;
+  render?: (state: SelectState<T>) => React.ReactNode;
   listProps?: Omit<ListProps<T>, 'renderItem'>;
 };
+
+type SelectBodyProps<T> = {
+  value?: SelectOption<T>[];
+  multiple?: boolean;
+};
+
+const SelectBody = <T = any>({
+  value,
+  multiple,
+}: SelectBodyProps<T>) => {
+
+  if (multiple) {
+
+  }
+
+  return (
+    <Text>{_.first(value)?.label}</Text>
+  );
+}
+
+const findItems = <T = any>(
+  value: T[],
+  options: SelectOption<T>[],
+) => _.compact(_.map(value, x => _.find(options, o => o.value === x)));
 
 export const Select = createMemoComponent(<T = any>(
   {
@@ -77,6 +102,7 @@ export const Select = createMemoComponent(<T = any>(
     onBlur = () => { },
     prepend,
     append,
+    render,
     listProps = {},
   }: SelectProps<T>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
@@ -157,9 +183,8 @@ export const Select = createMemoComponent(<T = any>(
                 sections={sections}
                 extraData={extraData}
                 onSelect={(v) => {
-                  const opts = _.flatMap(sections, x => x.data);
                   const _value = _.uniq(multiple ? [...value ?? [], v.value] : [v.value]);
-                  const selected = _.compact(_.map(_value, x => _.find(opts, o => o.value === x)));
+                  const selected = findItems(_value, _.flatMap(sections, x => x.data));
                   callbackRef.current.onValueChange(_.map(selected, x => x.value));
                   callbackRef.current.onChange(selected);
                 }}
@@ -189,7 +214,12 @@ export const Select = createMemoComponent(<T = any>(
             onBlur={_onBlur}
           >
             {_.isFunction(prepend) ? prepend(state) : prepend}
-            <Text style={{ flex: 1 }}>test</Text>
+            {_.isFunction(render) ? render(state) : (
+              <SelectBody
+                multiple={multiple}
+                value={findItems(value ?? [], _.flatMap(sections, x => x.data))}
+              />
+            )}
             {_.isFunction(append) ? append(state) : append}
           </Pressable>
         </Popover>
