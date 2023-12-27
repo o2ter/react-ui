@@ -65,7 +65,7 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
 
   const focusRing = useFocusRing(focused);
 
-  const state = { focused, disabled };
+  const state = { focused, disabled, value };
   const content = renderText(selected);
 
   return (

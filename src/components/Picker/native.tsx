@@ -34,7 +34,8 @@ import { ClassNames } from '../Style';
 
 export type ItemValue = number | string;
 
-type PickerState = {
+type PickerState<T> = {
+  value?: T;
   focused: boolean;
   disabled: boolean;
 };
@@ -52,9 +53,9 @@ type PickerNativeProps<T = ItemValue> = {
 export type PickerProps<T = ItemValue> = Omit<PickerNativeProps<T>, 'style'> & {
   classes?: ClassNames;
   baseStyle?: StyleProp<TextStyle>;
-  style?: StyleProp<TextStyle> | ((state: PickerState) => StyleProp<TextStyle>);
-  prepend?: React.ReactNode | ((state: PickerState) => React.ReactNode);
-  append?: React.ReactNode | ((state: PickerState) => React.ReactNode);
+  style?: StyleProp<TextStyle> | ((state: PickerState<T>) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode | ((state: PickerState<T>) => React.ReactNode);
+  append?: React.ReactNode | ((state: PickerState<T>) => React.ReactNode);
   renderText?: (label?: PickerItemProps<T>) => any
 };
 

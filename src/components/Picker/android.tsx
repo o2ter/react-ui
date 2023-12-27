@@ -53,7 +53,7 @@ export const PickerAndroid = createMemoComponent(<T = ItemValue>({
     value ? _onFocus() : _onBlur();
   }
 
-  const state = { focused, disabled };
+  const state = { focused, disabled, value };
 
   return (
     <TouchableOpacity activeOpacity={1} onPress={() => { if (!disabled) _setShowPicker(true) }}>

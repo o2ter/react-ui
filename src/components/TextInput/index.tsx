@@ -36,6 +36,7 @@ import { useMergeRefs } from 'sugax';
 import View from '../View';
 
 type TextInputState = {
+  value: string;
   focused: boolean;
   disabled: boolean;
 };
@@ -67,6 +68,7 @@ const InnerTextInput = createComponent(({
 export const TextInput = createMemoComponent(({
   classes,
   style,
+  value,
   variant,
   editable,
   prepend,
@@ -92,12 +94,13 @@ export const TextInput = createMemoComponent(({
 
   const focusRing = useFocusRing(focused);
 
-  const state = { focused, disabled: !editable };
+  const state = { focused, disabled: !editable, value: value ?? '' };
 
   if (!prepend && !append) {
     return (
       <RNTextInput
         ref={ref}
+        value={value}
         style={textStyleNormalize([
           defaultStyle,
           focusRing,
@@ -130,6 +133,7 @@ export const TextInput = createMemoComponent(({
         {_.isFunction(prepend) ? prepend(state) : prepend}
         <InnerTextInput
           ref={ref}
+          value={value}
           style={[
             { flex: 1 },
             Platform.select({

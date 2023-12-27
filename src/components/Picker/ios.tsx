@@ -58,7 +58,7 @@ export const PickerIOS = createMemoComponent(<T = ItemValue>({
     value ? _onFocus() : _onBlur();
   }
 
-  const state = { focused, disabled };
+  const state = { focused, disabled, value };
 
   return (
     <React.Fragment>

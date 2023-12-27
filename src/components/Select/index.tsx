@@ -34,10 +34,10 @@ import { useTheme } from '../../theme';
 import Text from '../Text';
 import { Popover } from '../Popover';
 import { useDefaultInputStyle } from '../TextInput/style';
-import FlatList from '../FlatList';
 import SectionList from '../SectionList';
 
-type SelectState = {
+type SelectState<T> = {
+  value: T[];
   focused: boolean;
   disabled: boolean;
 };
@@ -62,9 +62,9 @@ type SelectProps<T> = {
   arrow?: boolean;
   shadow?: boolean | number;
   variant?: 'outline' | 'underlined' | 'unstyled';
-  style?: StyleProp<TextStyle> | ((state: SelectState) => StyleProp<TextStyle>);
-  prepend?: React.ReactNode | ((state: SelectState) => React.ReactNode);
-  append?: React.ReactNode | ((state: SelectState) => React.ReactNode);
+  style?: StyleProp<TextStyle> | ((state: SelectState<T>) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
+  append?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
   onValueChange?: (selected: SelectOption<T>[]) => void;
   onFocus?: VoidFunction;
   onBlur?: VoidFunction;
@@ -114,7 +114,7 @@ export const Select = createMemoComponent(<T = any>(
 
   const focusRing = useFocusRing(focused);
 
-  const state = { focused, disabled };
+  const state = { focused, disabled, value: value ?? [] };
 
   const [hidden, setHidden] = React.useState(true);
 

@@ -35,6 +35,7 @@ import { _useComponentStyle } from '../../Style';
 import { useFocus, useFocusRing } from '../../../internals/focus';
 
 type FormTextFieldState = {
+  value: string;
   focused: boolean;
   invalid: boolean;
   disabled: boolean;
@@ -88,6 +89,7 @@ export const FormTextField = createMemoComponent((
   const focusRing = useFocusRing(focused, invalid ? 'error' : 'primary');
 
   const state = {
+    value: value ?? '',
     focused,
     disabled: !editable,
     valid: touched && !invalid,
