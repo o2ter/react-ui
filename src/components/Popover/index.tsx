@@ -62,7 +62,7 @@ export const Popover = createMemoComponent((
       shadow={shadow ?? true}
       position={position}
       style={containerStyle}
-    >{render()}</PopoverBody>
+    >{render(layout)}</PopoverBody>
   ));
 
   return (
