@@ -70,10 +70,12 @@ const FormContext = React.createContext<FormState>({
 FormContext.displayName = 'FormContext';
 
 type FormInternalState = {
+  extraError: (id: string) => Error | undefined;
   setExtraError: (id: string, error?: Error) => void;
 };
 
 const FormInternalContext = React.createContext<FormInternalState>({
+  extraError: () => void 0,
   setExtraError: () => { },
 });
 
@@ -258,6 +260,9 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   React.useImperativeHandle(forwardRef, () => formState, [formState]);
 
   const formInternalState: FormInternalState = React.useMemo(() => ({
+    extraError: (id) => { 
+      return _.find(extraError, x => x.id === id)?.error;
+    },
     setExtraError: (id, error) => {
       if (error) {
         setExtraError(v => [..._.filter(v, x => x.id !== id), { id: id, error }]);
@@ -265,7 +270,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
         setExtraError(v => _.filter(v, x => x.id !== id));
       }
     },
-  }), []);
+  }), [extraError]);
 
   return (
     <FormContext.Provider value={formState}>
@@ -290,36 +295,33 @@ export const useField = (name: string | string[]) => {
   const formState = useForm();
   const { values, setValue, validate, touched, setTouched, submit, reset, groupPath } = formState;
   const path = [...groupPath, ..._.toPath(name)].join('.');
+  const value = _.get(values, path);
 
   const onChange = React.useCallback((value: React.SetStateAction<any>) => setValue(path, value), [path]);
   const _setTouched = React.useCallback(() => setTouched(path), [path]);
 
-  const { setExtraError } = React.useContext(FormInternalContext);
+  const { extraError, setExtraError } = React.useContext(FormInternalContext);
 
   const uniqId = React.useId();
-  const [error, setError] = React.useState<Error>();
-  // React.useEffect(() => {
-  //   setExtraError(uniqId, error);
-  //   return () => setExtraError(uniqId);
-  // }, [values]);
+  React.useEffect(() => { return () => setExtraError(uniqId); }, []);
 
   const useValidator = useStableCallback((
     validator?: (value: any) => void
   ) => {
     React.useEffect(() => {
       try {
-        validator?.(_.get(values, path));
-        setError(undefined);
+        validator?.(value);
+        setExtraError(uniqId, undefined);
       } catch (e) {
-        setError(e as Error);
+        setExtraError(uniqId, e as Error);
       }
-    }, [values]);
+    }, [value]);
   });
 
   return {
+    value,
     form: formState,
-    value: _.get(values, path),
-    get error() { return _.compact([...validate(values, path), error]) },
+    get error() { return _.compact([...validate(values, path), extraError(uniqId)]) },
     get touched() { return touched(path) },
     setTouched: _setTouched,
     useValidator,
