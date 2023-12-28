@@ -298,10 +298,10 @@ export const useField = (name: string | string[]) => {
 
   const uniqId = React.useId();
   const [error, setError] = React.useState<Error>();
-  React.useEffect(() => {
-    setExtraError(uniqId, error);
-    return () => setExtraError(uniqId);
-  }, [values]);
+  // React.useEffect(() => {
+  //   setExtraError(uniqId, error);
+  //   return () => setExtraError(uniqId);
+  // }, [values]);
 
   const useValidator = useStableCallback((
     validator?: (value: any) => void

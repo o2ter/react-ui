@@ -36,7 +36,7 @@ import { Popover } from '../Popover';
 import { useDefaultInputStyle } from '../TextInput/style';
 import { ListProps, SelectOption, SelectState } from './types';
 import { SelectListBody } from './list';
-import { useStableCallback } from 'sugax';
+import { useMergeRefs, useStableCallback } from 'sugax';
 import { MaterialIcons as Icon } from '../Icons';
 import View from '../View';
 
@@ -138,6 +138,9 @@ export const Select = createMemoComponent(<T = any>(
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
 ) => {
 
+  const pressableRef = React.useRef<React.ComponentRef<typeof Pressable>>();
+  const ref = useMergeRefs(pressableRef, forwardRef);
+
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme, variant);
 
@@ -198,7 +201,10 @@ export const Select = createMemoComponent(<T = any>(
           position={position}
           arrow={arrow ?? false}
           shadow={shadow ?? false}
-          onTouchOutside={() => { setHidden(true); }}
+          onTouchOutside={(e) => {
+            if (pressableRef.current === e.target as any) return;
+            setHidden(true);
+          }}
           extraData={extraData}
           containerStyle={{
             display: 'flex',
@@ -228,7 +234,7 @@ export const Select = createMemoComponent(<T = any>(
           )}
         >
           <Pressable
-            ref={forwardRef}
+            ref={ref}
             style={[
               defaultStyle,
               {

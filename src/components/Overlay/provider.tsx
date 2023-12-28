@@ -37,7 +37,7 @@ export const OverlayProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   return <OverlayContext.Provider value={values}>
     <View
-      onStartShouldSetResponder={(e) => {
+      onStartShouldSetResponderCapture={(e) => {
         for (const node of nodes) node.onTouchOutside(e);
         return false;
       }}
