@@ -125,7 +125,7 @@ export const Select = createMemoComponent(<T = any>(
     shadow,
     style,
     variant,
-    position = 'top',
+    position = 'bottom',
     onValueChange = () => { },
     onChange = () => { },
     onFocus = () => { },
