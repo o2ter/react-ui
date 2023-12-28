@@ -54,7 +54,7 @@ type SelectProps<T> = {
   arrow?: boolean;
   shadow?: boolean | number;
   variant?: 'outline' | 'underlined' | 'unstyled';
-  position?: SelectPosition[];
+  position?: SelectPosition | SelectPosition[];
   style?: StyleProp<TextStyle> | ((state: SelectState<T>) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
   append?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
@@ -125,7 +125,7 @@ export const Select = createMemoComponent(<T = any>(
     shadow,
     style,
     variant,
-    position = ['top', 'bottom'],
+    position = 'top',
     onValueChange = () => { },
     onChange = () => { },
     onFocus = () => { },
