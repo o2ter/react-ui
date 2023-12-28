@@ -150,7 +150,7 @@ export const SelectListBody = ({
         ({ section }) => (
           <Text
             style={{
-              color: theme.grays['300'],
+              color: theme.grays['400'],
               fontSize: theme.fontSizes['small'],
               margin: 4,
             }}
