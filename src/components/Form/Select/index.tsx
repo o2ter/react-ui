@@ -28,7 +28,6 @@ import React from 'react';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
 import { Select } from '../../Select';
-import { SelectOption } from '../../Select/types';
 import { Modify } from '../../../internals/types';
 import { createMemoComponent } from '../../../internals/utils';
 import { _useComponentStyle } from '../../Style';
@@ -36,6 +35,7 @@ import { useFocus, useFocusRing } from '../../../internals/focus';
 import { StyleProp, TextStyle } from 'react-native';
 
 type FormSelectState = {
+  value: any[];
   focused: boolean;
   invalid: boolean;
   disabled: boolean;
@@ -94,6 +94,7 @@ export const FormSelect = createMemoComponent(<T = any>(
     disabled: disabled ?? false,
     valid: touched && !invalid,
     invalid: touched && invalid,
+    value: value ?? [],
   };
 
   return (
