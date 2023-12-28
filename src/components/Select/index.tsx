@@ -40,6 +40,8 @@ import { useStableCallback } from 'sugax';
 import { MaterialIcons as Icon } from '../Icons';
 import View from '../View';
 
+type SelectPosition = 'top' | 'bottom';
+
 type SelectProps<T> = {
   classes?: ClassNames;
   value?: T[];
@@ -52,6 +54,7 @@ type SelectProps<T> = {
   arrow?: boolean;
   shadow?: boolean | number;
   variant?: 'outline' | 'underlined' | 'unstyled';
+  position?: SelectPosition[];
   style?: StyleProp<TextStyle> | ((state: SelectState<T>) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
   append?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
@@ -122,6 +125,7 @@ export const Select = createMemoComponent(<T = any>(
     shadow,
     style,
     variant,
+    position = ['top', 'bottom'],
     onValueChange = () => { },
     onChange = () => { },
     onFocus = () => { },
@@ -191,7 +195,7 @@ export const Select = createMemoComponent(<T = any>(
       {(_style) => (
         <Popover
           hidden={hidden && !_.isEmpty(sections)}
-          position={['top', 'bottom']}
+          position={position}
           arrow={arrow ?? false}
           shadow={shadow ?? false}
           onTouchOutside={() => { setHidden(true); }}
