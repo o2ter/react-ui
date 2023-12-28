@@ -133,7 +133,7 @@ export const SelectListBody = ({
   ...props
 }: SelectListBodyProps<any>) => {
 
-  const isSection = sections.length === 1 && !_.isEmpty(sections[0].label);
+  const isSection = sections.length !== 1 || !_.isEmpty(sections[0].label);
   const windowDimensions = useWindowDimensions();
 
   return (
