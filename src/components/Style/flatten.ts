@@ -24,7 +24,7 @@
 //
 
 import _ from 'lodash';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp } from 'react-native';
 
 const normalize = <T>(style: T): T => {
   const {
