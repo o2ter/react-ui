@@ -32,6 +32,8 @@ import { useTheme } from '../../theme';
 import Button from '../Button';
 import { DatePicker } from '../DateTime';
 import TextInput from '../TextInput';
+import Picker from '../Picker';
+import Select from '../Select';
 import { Form } from '../Form';
 import { StyleProp, ViewStyle } from 'react-native';
 
@@ -44,9 +46,12 @@ const InputTypes = [
   Button,
   DatePicker,
   TextInput,
+  Picker,
+  Select,
   Form.Button,
   Form.Date,
   Form.Picker,
+  Form.Select,
   Form.TextField,
 ];
 
