@@ -179,8 +179,8 @@ export const Button = createMemoComponent(({
   }), [_defaultStyle]);
 
   const _style = flattenStyle([
-    defaultStyle.text,
     _.pick(colors, textStyleKeys) as TextStyle,
+    defaultStyle.text,
     _.isFunction(titleStyle) ? titleStyle(state) : titleStyle,
   ]);
   const _wrapped = (children?: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
@@ -195,12 +195,12 @@ export const Button = createMemoComponent(({
       disabled={disabled}
       focusable={!disabled && focusable !== false}
       style={flattenStyle([
+        _.omit(colors, textStyleKeys),
         defaultStyle.button,
         Platform.select({
           web: { outline: 0 } as any,
           default: {},
         }),
-        _.omit(colors, textStyleKeys),
         _.isFunction(style) ? style(state) : style,
       ])}
       onPressIn={(e: GestureResponderEvent) => {
