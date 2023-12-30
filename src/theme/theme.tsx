@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { ThemePalette, _colorContrast } from './palette';
 import { ThemeBaseContext, ThemeBaseProvider, ThemeProviderProps } from './provider/base';
+import { shiftColor } from '../color';
 
 const computedTheme = (
   base: React.ContextType<typeof ThemeBaseContext>
@@ -38,7 +39,24 @@ const computedTheme = (
       if (_.isNil(palette)) palette = base.palette(computed);
       return palette;
     },
-    get pickColor() { return (c: string) => computed.themeColors[c] ?? computed.colors[c] ?? c; },
+    get _colors(): Record<string, string> {
+      const colors = {
+        ...computed.themeColors,
+        ...computed.colors,
+      };
+      return {
+        black: '#000000',
+        white: '#ffffff',
+        ...colors,
+        ..._.fromPairs(_.flatMap(colors, (v, k) => _.map(computed.colorWeights, (s, w) => [`${k}-${w}`, shiftColor(v, s)]))),
+        ..._.fromPairs(_.map(computed.grays, (c, w) => [`gray-${w}`, c])),
+      };
+    },
+    get pickColor() {
+      return (c: string) => {
+        return computed._colors[c] ?? c;
+      }
+    },
   }, base.decoded);
   return computed;
 }
