@@ -26,6 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useNavigatorContext } from './context';
+import { useLocation, Location } from 'react-router-dom';
 
 function invariant(cond: boolean, message: string): any {
   if (!cond) throw new Error(message);
@@ -33,9 +34,9 @@ function invariant(cond: boolean, message: string): any {
 
 export const Route: React.FC<{
   component: any;
-  statusCode?: number;
-  title?: string;
-  meta?: Record<string, string>;
+  statusCode?: number | ((location: Location) => number);
+  title?: string | ((location: Location) => string);
+  meta?: Record<string, string> | ((location: Location) => Record<string, string>);
   caseSensitive?: boolean;
   index?: boolean;
   path?: string;
@@ -80,22 +81,32 @@ export function createRoutesFromChildren(children?: React.ReactNode) {
 }
 
 const RouteObject: React.FC<React.PropsWithChildren<React.ComponentPropsWithoutRef<typeof Route>>> = ({
-  component: Component, statusCode, title, meta = {}, children, ...props
+  component: Component,
+  statusCode,
+  title,
+  meta = {},
+  children,
+  ...props
 }) => {
 
   const NavigatorContext = useNavigatorContext();
+  const location = useLocation();
+
+  const _statusCode = _.isFunction(statusCode) ? statusCode(location) : statusCode;
+  const _title = _.isFunction(title) ? title(location) : title;
+  const _meta = _.isFunction(meta) ? meta(location) : meta;
 
   if (NavigatorContext) {
     for (const [key, value] of Object.entries(props)) {
       NavigatorContext[key] = value;
     }
-    NavigatorContext.statusCode = statusCode;
-    NavigatorContext.title = title;
-    NavigatorContext.meta = meta;
+    NavigatorContext.statusCode = _statusCode;
+    NavigatorContext.title = _title;
+    NavigatorContext.meta = _meta;
   }
 
-  if (globalThis.document && _.isString(title)) {
-    document.title = title;
+  if (globalThis.document && _.isString(_title)) {
+    document.title = _title;
   }
 
   return <Component {...props}>{children}</Component>;
