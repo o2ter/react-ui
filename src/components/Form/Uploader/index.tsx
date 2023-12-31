@@ -1,7 +1,7 @@
 //
 //  index.tsx
 //
-//  Copyright (c) 2021 - 2023 O2ter Limited. All rights reserved.
+//  Copyright (c) 2021 - 2024 O2ter Limited. All rights reserved.
 //
 
 import _ from 'lodash';
