@@ -31,7 +31,6 @@ import { ClassNames, _useComponentStyle, _StyleContext } from '../Style';
 import { Pressable } from '../Pressable';
 import { useFocus, useFocusRing } from '../../internals/focus';
 import { useTheme } from '../../theme';
-import Text from '../Text';
 import { Popover } from '../Popover';
 import { useDefaultInputStyle } from '../TextInput/style';
 import { ListProps, SelectOption, SelectState } from './types';
@@ -39,6 +38,7 @@ import { SelectListBody } from './list';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import { MaterialIcons as Icon } from '../Icons';
 import View from '../View';
+import Text from '../Text';
 import List from '../List';
 
 type SelectPosition = 'top' | 'bottom';
