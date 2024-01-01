@@ -106,8 +106,7 @@ const SelectBody = <T = any>({
               </Pressable>
             </View>
           )}
-        >
-        </List>
+        />
       </View>
     );
   }
