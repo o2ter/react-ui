@@ -39,6 +39,7 @@ import { SelectListBody } from './list';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import { MaterialIcons as Icon } from '../Icons';
 import View from '../View';
+import List from '../List';
 
 type SelectPosition = 'top' | 'bottom';
 
@@ -86,21 +87,27 @@ const SelectBody = <T = any>({
         flexWrap: 'wrap',
         gap: 2,
       }}>
-        {_.map(value, (item) => (
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: theme.grays['200'],
-            borderRadius: theme.borderRadiusBase,
-            paddingHorizontal: 8,
-            gap: theme.spacer * 0.375,
-          }}>
-            <Text>{item.label || ' '}</Text>
-            <Pressable onPress={() => onRemove(item)}>
-              <Icon color={theme.grays['400']} size={16} name='close' />
-            </Pressable>
-          </View>
-        ))}
+        <List
+          data={value ?? []}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: theme.grays['200'],
+                borderRadius: theme.borderRadiusBase,
+                paddingHorizontal: 8,
+                gap: theme.spacer * 0.375,
+              }}
+            >
+              <Text>{item.label || ' '}</Text>
+              <Pressable onPress={() => onRemove(item)}>
+                <Icon color={theme.grays['400']} size={16} name='close' />
+              </Pressable>
+            </View>
+          )}
+        >
+        </List>
       </View>
     );
   }
