@@ -44,6 +44,7 @@ type FormTextFieldState = {
 
 type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput>, {
   name: string | string[];
+  roles?: string[];
   style?: StyleProp<TextStyle> | ((state: FormTextFieldState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: FormTextFieldState) => React.ReactNode);
   append?: React.ReactNode | ((state: FormTextFieldState) => React.ReactNode);
@@ -54,6 +55,7 @@ export const FormTextField = createMemoComponent((
   {
     classes,
     name,
+    roles,
     style,
     editable,
     prepend,
@@ -66,7 +68,7 @@ export const FormTextField = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>
 ) => {
 
-  const { value, error, touched, setTouched, onChange, submit, useValidator } = useField(name);
+  const { value, roles: _roles, error, touched, setTouched, onChange, submit, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -75,9 +77,11 @@ export const FormTextField = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
+  const _disabled = !(editable ?? true) || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+
   const formTextFieldStyle = _useComponentStyle('formTextField', classes, [
     focused && 'focus',
-    editable ? 'enabled' : 'disabled',
+    _disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
@@ -91,7 +95,7 @@ export const FormTextField = createMemoComponent((
   const state = {
     value: value ?? '',
     focused,
-    disabled: !editable,
+    disabled: _disabled,
     valid: touched && !invalid,
     invalid: touched && invalid,
   };
@@ -100,7 +104,7 @@ export const FormTextField = createMemoComponent((
     <TextInput
       ref={forwardRef}
       value={value ?? ''}
-      editable={editable}
+      editable={!_disabled}
       onChangeText={onChange}
       onEndEditing={onEndEditing}
       onSubmitEditing={submit}

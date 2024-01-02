@@ -45,6 +45,7 @@ type FormCheckboxState = {
 type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>, {
   name: string | string[];
   value?: string;
+  roles?: string[];
   style?: StyleProp<ViewStyle> | ((state: FormCheckboxState) => StyleProp<ViewStyle>);
   children?: React.ReactNode | ((state: FormCheckboxState) => React.ReactNode);
   validate?: (value: any) => void;
@@ -55,6 +56,7 @@ export const FormCheckbox = createMemoComponent((
     classes,
     name,
     value,
+    roles,
     style,
     disabled,
     onPress,
@@ -67,7 +69,7 @@ export const FormCheckbox = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Checkbox>>
 ) => {
 
-  const { value: _value, error, touched, onChange, useValidator } = useField(name);
+  const { value: _value, roles: _roles, error, touched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -76,17 +78,19 @@ export const FormCheckbox = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
+  const _disabled = disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+
   const formCheckboxStyle = _useComponentStyle('formCheckbox', classes, [
     focused && 'focus',
     selected && 'checked',
-    disabled ? 'disabled' : 'enabled',
+    _disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
   const state = {
     focused,
     selected: selected ?? false,
-    disabled: disabled ?? false,
+    disabled: _disabled,
     valid: touched && !invalid,
     invalid: touched && invalid,
   };
@@ -95,7 +99,7 @@ export const FormCheckbox = createMemoComponent((
     <Checkbox
       ref={forwardRef}
       selected={selected}
-      disabled={disabled}
+      disabled={_disabled}
       focusRingColor={touched && invalid ? 'error' : 'primary'}
       style={[
         formCheckboxStyle,

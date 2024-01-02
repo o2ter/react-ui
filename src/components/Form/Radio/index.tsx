@@ -44,6 +44,7 @@ type FormRadioState = {
 type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Radio>, {
   name: string | string[];
   value: any;
+  roles?: string[];
   style?: StyleProp<ViewStyle> | ((state: FormRadioState) => StyleProp<ViewStyle>);
   children?: React.ReactNode | ((state: FormRadioState) => React.ReactNode);
   validate?: (value: any) => void;
@@ -54,6 +55,7 @@ export const FormRadio = createMemoComponent((
     classes,
     name,
     value,
+    roles,
     style,
     disabled,
     onPress,
@@ -66,7 +68,7 @@ export const FormRadio = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Radio>>
 ) => {
 
-  const { value: _value, error, touched, onChange, useValidator } = useField(name);
+  const { value: _value, roles: _roles, error, touched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -75,17 +77,19 @@ export const FormRadio = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
+  const _disabled = disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+
   const formRadioStyle = _useComponentStyle('formRadio', classes, [
     focused && 'focus',
     selected && 'checked',
-    disabled ? 'disabled' : 'enabled',
+    _disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
   const state = {
     focused,
     selected: selected ?? false,
-    disabled: disabled ?? false,
+    disabled: _disabled,
     valid: touched && !invalid,
     invalid: touched && invalid,
   };
@@ -94,7 +98,7 @@ export const FormRadio = createMemoComponent((
     <Radio
       ref={forwardRef}
       selected={selected}
-      disabled={disabled}
+      disabled={_disabled}
       focusRingColor={touched && invalid ? 'error' : 'primary'}
       style={[
         formRadioStyle,

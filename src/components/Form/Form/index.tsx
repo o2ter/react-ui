@@ -26,12 +26,13 @@
 import _ from 'lodash';
 import React from 'react';
 import { useFormGroup } from '../Group';
-import { useStableCallback, useStableRef } from 'sugax';
+import { useEquivalent, useStableCallback, useStableRef } from 'sugax';
 import { ISchema, object, TypeOfSchema, ValidateError } from '@o2ter/valid.js';
 import { useAlert } from '../../Alert';
 import { createMemoComponent } from '../../../internals/utils';
 
 export type FormState = {
+  roles?: string[];
   values: Record<string, any>;
   errors: Error[];
   dirty: boolean;
@@ -108,6 +109,7 @@ const defaultValidation = (validate: (value: any) => ValidateError[]) => {
 type FormProps<S extends Record<string, ISchema<any, any>>> = {
   schema?: S;
   initialValues?: TypeOfSchema<ReturnType<typeof object<S>>>;
+  roles?: string[];
   validate?: (value: any, path?: string) => Error[];
   validateOnMount?: boolean;
   onReset?: (state: FormState) => void;
@@ -122,6 +124,7 @@ type FormProps<S extends Record<string, ISchema<any, any>>> = {
 export const Form = createMemoComponent(<S extends Record<string, ISchema<any, any>>>({
   schema,
   initialValues = object(schema ?? {}).getDefault() ?? {},
+  roles,
   validate,
   validateOnMount,
   onReset = () => { },
@@ -238,6 +241,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   }), []);
 
   const formState = React.useMemo(() => ({
+    roles,
     values,
     validate: _validate,
     get dirty() { return !_.isNil(_values) },
@@ -247,7 +251,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     get errors() { return [..._validate(values), ..._.map(extraError, x => x.error)] },
     touched: (path: string) => _.isBoolean(touched) ? touched : touched[path] ?? false,
     ...formAction,
-  }), [counts, values, _validate, touched, extraError]);
+  }), [useEquivalent(roles), counts, values, _validate, touched, extraError]);
 
   const [initState] = React.useState(formState);
   React.useEffect(() => {
@@ -293,7 +297,7 @@ export const useForm = () => ({
 export const useField = (name: string | string[]) => {
 
   const formState = useForm();
-  const { values, setValue, validate, touched, setTouched, submit, reset, groupPath } = formState;
+  const { roles, values, setValue, validate, touched, setTouched, submit, reset, groupPath } = formState;
   const path = [...groupPath, ..._.toPath(name)].join('.');
   const value = _.get(values, path);
 
@@ -321,6 +325,7 @@ export const useField = (name: string | string[]) => {
   return {
     value,
     form: formState,
+    roles,
     get error() { return _.compact([...validate(values, path), extraError(uniqId)]) },
     get touched() { return touched(path) },
     setTouched: _setTouched,

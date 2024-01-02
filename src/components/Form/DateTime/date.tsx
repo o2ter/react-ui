@@ -44,6 +44,7 @@ type FormDateState = {
 type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   classes?: ClassNames;
   name: string | string[];
+  roles?: string[];
   style?: StyleProp<TextStyle> | ((state: FormDateState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: FormDateState) => React.ReactNode);
   append?: React.ReactNode | ((state: FormDateState) => React.ReactNode);
@@ -54,6 +55,7 @@ export const FormDate = createMemoComponent((
   {
     classes,
     name,
+    roles,
     min,
     max,
     multiple,
@@ -71,7 +73,7 @@ export const FormDate = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>
 ) => {
 
-  const { value, error, touched, setTouched, onChange, useValidator } = useField(name);
+  const { value, roles: _roles, error, touched, setTouched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -80,9 +82,11 @@ export const FormDate = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
+  const _disabled = disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+
   const formDateStyle = _useComponentStyle('formDate', classes, [
     focused && 'focus',
-    disabled ? 'disabled' : 'enabled',
+    _disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
@@ -95,7 +99,7 @@ export const FormDate = createMemoComponent((
 
   const state = {
     focused,
-    disabled,
+    disabled: _disabled,
     valid: touched && !invalid,
     invalid: touched && invalid,
   };
@@ -111,7 +115,7 @@ export const FormDate = createMemoComponent((
       onFocus={_onFocus}
       onBlur={_onBlur}
       selectable={selectable}
-      disabled={disabled}
+      disabled={_disabled}
       prepend={_.isFunction(prepend) ? prepend(state) : prepend}
       append={_.isFunction(append) ? append(state) : append}
       style={[

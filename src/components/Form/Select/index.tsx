@@ -44,6 +44,7 @@ type FormSelectState = {
 
 type FormSelectProps<T> = Modify<React.ComponentPropsWithoutRef<typeof Select<T>>, {
   name: string | string[];
+  roles?: string[];
   style?: StyleProp<TextStyle> | ((state: FormSelectState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: FormSelectState) => React.ReactNode);
   append?: React.ReactNode | ((state: FormSelectState) => React.ReactNode);
@@ -54,6 +55,7 @@ export const FormSelect = createMemoComponent(<T = any>(
   {
     classes,
     name,
+    roles,
     style,
     options,
     disabled,
@@ -67,7 +69,7 @@ export const FormSelect = createMemoComponent(<T = any>(
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Select<T>>>
 ) => {
 
-  const { value, error, touched, setTouched, onChange, useValidator } = useField(name);
+  const { value, roles: _roles, error, touched, setTouched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -76,9 +78,11 @@ export const FormSelect = createMemoComponent(<T = any>(
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
+  const _disabled = disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+
   const formSelectStyle = _useComponentStyle('formSelect', classes, [
     focused && 'focus',
-    disabled ? 'disabled' : 'enabled',
+    _disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
@@ -91,7 +95,7 @@ export const FormSelect = createMemoComponent(<T = any>(
 
   const state = {
     focused,
-    disabled: disabled ?? false,
+    disabled: _disabled,
     valid: touched && !invalid,
     invalid: touched && invalid,
     value: value ?? [],
@@ -102,7 +106,7 @@ export const FormSelect = createMemoComponent(<T = any>(
       ref={forwardRef}
       value={value}
       options={options}
-      disabled={disabled}
+      disabled={_disabled}
       onValueChange={_onChange}
       onFocus={_onFocus}
       onBlur={_onBlur}

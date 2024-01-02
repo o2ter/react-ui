@@ -46,6 +46,7 @@ type FormPickerState = {
 
 type FormPickerProps<T = ItemValue> = Modify<React.ComponentPropsWithoutRef<typeof Picker<T>>, {
   name: string | string[];
+  roles?: string[];
   variant?: 'outline' | 'underlined' | 'unstyled';
   style?: StyleProp<TextStyle> | ((state: FormPickerState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: FormPickerState) => React.ReactNode);
@@ -57,6 +58,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
   {
     classes,
     name,
+    roles,
     baseStyle,
     style,
     variant,
@@ -72,7 +74,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Picker<T>>>
 ) => {
 
-  const { value, error, touched, setTouched, onChange, useValidator } = useField(name);
+  const { value, roles: _roles, error, touched, setTouched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -82,9 +84,11 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
+  const _disabled = disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+
   const formPickerStyle = _useComponentStyle('formPicker', classes, [
     focused && 'focus',
-    disabled ? 'disabled' : 'enabled',
+    _disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
@@ -103,7 +107,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
 
   const state = {
     focused,
-    disabled: disabled ?? false,
+    disabled: _disabled,
     valid: touched && !invalid,
     invalid: touched && invalid,
   };
@@ -113,7 +117,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
       ref={forwardRef}
       value={value}
       items={items}
-      disabled={disabled}
+      disabled={_disabled}
       onValueChange={_onChange}
       onFocus={_onFocus}
       onBlur={_onBlur}

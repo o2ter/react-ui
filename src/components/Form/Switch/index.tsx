@@ -45,6 +45,7 @@ type FormSwitchState = {
 type FormSwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Switch>, {
   name: string | string[];
   value?: string;
+  roles?: string[];
   style?: StyleProp<ViewStyle> | ((state: FormSwitchState) => StyleProp<ViewStyle>);
   children?: React.ReactNode | ((state: FormSwitchState) => React.ReactNode);
   validate?: (value: any) => void;
@@ -55,6 +56,7 @@ export const FormSwitch = createMemoComponent((
     classes,
     name,
     value,
+    roles,
     style,
     disabled,
     onPress,
@@ -67,7 +69,7 @@ export const FormSwitch = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Switch>>
 ) => {
 
-  const { value: _value, error, touched, onChange, useValidator } = useField(name);
+  const { value: _value, roles: _roles, error, touched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -76,10 +78,12 @@ export const FormSwitch = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
+  const _disabled = disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+
   const formSwitchStyle = _useComponentStyle('formSwitch', classes, [
     focused && 'focus',
     selected && 'checked',
-    disabled ? 'disabled' : 'enabled',
+    _disabled ? 'disabled' : 'enabled',
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
@@ -88,7 +92,7 @@ export const FormSwitch = createMemoComponent((
   const state = {
     focused,
     selected: selected ?? false,
-    disabled: disabled ?? false,
+    disabled: _disabled,
     valid: touched && !invalid,
     invalid: touched && invalid,
   };
@@ -97,7 +101,7 @@ export const FormSwitch = createMemoComponent((
     <Switch
       ref={forwardRef}
       selected={selected}
-      disabled={disabled}
+      disabled={_disabled}
       style={[
         touched && focusRing,
         formSwitchStyle,
