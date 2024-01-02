@@ -30,7 +30,7 @@ import { LayoutRectangle } from 'react-native';
 import { useTheme } from '../../theme';
 import { _useComponentStyle } from '../Style';
 import { flattenStyle } from '../Style/flatten';
-import { PopoverPosition } from './types';
+import { PopoverPosition, PopoverAlignment } from './types';
 import { elevationShadow, selectPlatformShadow } from '../../shadow';
 import { _useFadeAnim } from '../_Animated';
 
@@ -39,6 +39,7 @@ type PopoverBodyProps = React.PropsWithChildren<{
   arrow: boolean;
   shadow: boolean | number;
   position: PopoverPosition;
+  alignment: PopoverAlignment;
   layout: LayoutRectangle;
   style?: StyleProp<ViewStyle>;
 }>;
@@ -64,6 +65,7 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
   arrow,
   shadow,
   position,
+  alignment,
   layout,
   style,
   children,

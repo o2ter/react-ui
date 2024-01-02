@@ -35,6 +35,7 @@ import { Overlay } from '../Overlay';
 export const Popover = createMemoComponent((
   {
     position = 'auto',
+    alignment = 'auto',
     hidden,
     arrow,
     shadow,
@@ -61,6 +62,7 @@ export const Popover = createMemoComponent((
       arrow={arrow ?? true}
       shadow={shadow ?? true}
       position={position}
+      alignment={alignment}
       style={containerStyle}
     >{render(layout)}</PopoverBody>
   ));

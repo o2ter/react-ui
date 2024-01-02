@@ -42,6 +42,7 @@ import Text from '../Text';
 import List from '../List';
 
 type SelectPosition = 'top' | 'bottom';
+type SelectAlignment = 'left' | 'right';
 
 type SelectProps<T> = {
   classes?: ClassNames;
@@ -56,6 +57,7 @@ type SelectProps<T> = {
   shadow?: boolean | number;
   variant?: 'outline' | 'underlined' | 'unstyled';
   position?: SelectPosition | SelectPosition[];
+  alignment?: SelectAlignment | SelectAlignment[];
   style?: StyleProp<TextStyle> | ((state: SelectState<T>) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
   append?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
@@ -132,6 +134,7 @@ export const Select = createMemoComponent(<T = any>(
     style,
     variant,
     position = 'bottom',
+    alignment = ['left', 'right'],
     onValueChange = () => { },
     onChange = () => { },
     onFocus = () => { },
@@ -205,6 +208,7 @@ export const Select = createMemoComponent(<T = any>(
         <Popover
           hidden={hidden && !_.isEmpty(sections)}
           position={position}
+          alignment={alignment}
           arrow={arrow ?? false}
           shadow={shadow ?? false}
           onTouchOutside={(e) => {

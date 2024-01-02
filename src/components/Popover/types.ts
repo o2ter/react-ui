@@ -28,10 +28,13 @@ import View from '../View';
 import { GestureResponderEvent, LayoutRectangle, StyleProp, ViewStyle } from 'react-native';
 
 type _PopoverPosition = 'top' | 'left' | 'right' | 'bottom';
+type _PopoverAlignment = 'top' | 'left' | 'right' | 'bottom';
 export type PopoverPosition = 'auto' | _PopoverPosition | _PopoverPosition[];
+export type PopoverAlignment = 'auto' | _PopoverAlignment | _PopoverAlignment[];
 
 export type PopoverProps = React.ComponentProps<typeof View> & {
   position?: PopoverPosition;
+  alignment?: PopoverAlignment;
   hidden?: boolean;
   arrow?: boolean;
   shadow?: boolean | number;
