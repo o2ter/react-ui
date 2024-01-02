@@ -100,18 +100,34 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
   const containerWidth = containerLayout?.width ?? 0;
   const containerHeight = containerLayout?.height ?? 0;
 
-  const _pos_x = {
+  let _pos_x = {
     top: layout.x + 0.5 * layout.width - 0.5 * containerWidth,
     left: layout.x - containerWidth - arrowSize,
     right: layout.x + layout.width + arrowSize + borderWidth,
     bottom: layout.x + 0.5 * layout.width - 0.5 * containerWidth,
   }[_position];
-  const _pos_y = {
+  let _pos_y = {
     top: layout.y - containerHeight - arrowSize,
     left: layout.y + 0.5 * layout.height - 0.5 * containerHeight,
     right: layout.y + 0.5 * layout.height - 0.5 * containerHeight,
     bottom: layout.y + layout.height + arrowSize + borderWidth,
   }[_position];
+
+  const _position_vertical = _position === 'top' || _position === 'bottom';
+  const _position_horizontal = _position === 'left' || _position === 'right';
+
+  if (alignment === 'auto') alignment = ['top', 'left', 'right', 'bottom'];
+  alignment = _.castArray(alignment);
+
+  if (_position_vertical && _.includes(alignment, 'left') && _pos_x < 0) {
+    _pos_x = layout.x;
+  } else if (_position_vertical && _.includes(alignment, 'right') && _pos_x + containerWidth > windowDimensions.width) {
+    _pos_x = layout.x + layout.width - containerWidth;
+  } else if (_position_horizontal && _.includes(alignment, 'top') && _pos_y < 0) {
+    _pos_y = layout.y;
+  } else if (_position_horizontal && _.includes(alignment, 'bottom') && _pos_y + containerHeight > windowDimensions.height) {
+    _pos_y = layout.y + layout.height - containerHeight;
+  }
 
   const _arrow_pos_x = _position === 'left' ? containerWidth : _position === 'right' ? -arrowSize : 0.5 * containerWidth - arrowSize;
   const _arrow_pos_y = _position === 'top' ? containerHeight : _position === 'bottom' ? -arrowSize : 0.5 * containerHeight - arrowSize;
