@@ -33,6 +33,7 @@ export const FormUploader = <
   children
 }: FormUploaderProps<File, Uploaded>) => {
   const {
+    value,
     onChange,
     setTouched,
     useValidator,
@@ -44,7 +45,7 @@ export const FormUploader = <
 
   useValidator(validate);
 
-  const [uploads, setUploads] = React.useState<FormUpload<File, Uploaded>[]>();
+  const [uploads, setUploads] = React.useState<FormUpload<File, Uploaded>[]>(_.castArray(value));
 
   React.useEffect(() => {
     if (_.isNil(uploads)) return;
