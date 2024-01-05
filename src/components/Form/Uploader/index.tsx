@@ -45,10 +45,11 @@ export const FormUploader = <
 
   useValidator(validate);
 
-  const [uploads, setUploads] = React.useState<FormUpload<File, Uploaded>[]>(_.castArray(value ?? []));
+  const initial = React.useMemo(() => _.castArray(value ?? []), []);
+  const [uploads, setUploads] = React.useState<FormUpload<File, Uploaded>[]>(initial);
 
   React.useEffect(() => {
-    if (_.isNil(uploads)) return;
+    if (uploads === initial) return;
     onChange(_.filter(uploads, x => !(x instanceof FormUploadHandler)));
     setTouched();
   }, [uploads]);
