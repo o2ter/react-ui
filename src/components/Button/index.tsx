@@ -53,6 +53,7 @@ type ButtonStateCallbackType = PressableStateCallbackType & {
   hovered: boolean;
   pressed: boolean;
   focused: boolean;
+  activated: boolean;
 };
 
 type ButtonProps = Modify<PressableProps, {
@@ -61,6 +62,7 @@ type ButtonProps = Modify<PressableProps, {
   variant?: 'solid' | 'subtle' | 'outline' | 'link' | 'ghost' | 'unstyled';
   size?: string;
   title?: string;
+  activated?: boolean;
   style?: StyleProp<ViewStyle> | ((state: ButtonStateCallbackType) => StyleProp<ViewStyle>);
   titleStyle?: StyleProp<TextStyle> | ((state: ButtonStateCallbackType) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: ButtonStateCallbackType) => React.ReactNode);
@@ -92,6 +94,7 @@ export const Button = createMemoComponent(({
   titleStyle,
   disabled,
   focusable,
+  activated,
   prepend,
   append,
   children,
@@ -107,7 +110,8 @@ export const Button = createMemoComponent(({
   const theme = useTheme();
 
   const [state, setState] = React.useState({ hovered: false, pressed: false, focused: false });
-  const _focused = state.hovered || state.pressed || state.focused;
+  const _focused = activated || state.hovered || state.pressed || state.focused;
+  const _state = { ...state, activated: activated ?? false };
 
   const fadeAnim = _useToggleAnim({
     value: _focused,
@@ -120,7 +124,7 @@ export const Button = createMemoComponent(({
 
   const buttonStyle = _useComponentStyle('button', classes, [
     state.hovered && 'hover',
-    state.pressed && 'active',
+    (activated || state.pressed) && 'active',
     state.focused && 'focus',
     disabled ? 'disabled' : 'enabled',
   ]);
@@ -181,13 +185,13 @@ export const Button = createMemoComponent(({
   const _style = flattenStyle([
     _.pick(colors, textStyleKeys) as TextStyle,
     defaultStyle.text,
-    _.isFunction(titleStyle) ? titleStyle(state) : titleStyle,
+    _.isFunction(titleStyle) ? titleStyle(_state) : titleStyle,
   ]);
   const _wrapped = (children?: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
 
   const content = _.isEmpty(children) && !_.isEmpty(title)
     ? <Animated.Text selectable={false} style={_style}>{title}</Animated.Text>
-    : _.isFunction(children) ? () => _wrapped(children(state)) : _wrapped(children);
+    : _.isFunction(children) ? () => _wrapped(children(_state)) : _wrapped(children);
 
   return (
     <_AnimatedPressable
@@ -201,7 +205,7 @@ export const Button = createMemoComponent(({
           web: { outline: 0 } as any,
           default: {},
         }),
-        _.isFunction(style) ? style(state) : style,
+        _.isFunction(style) ? style(_state) : style,
       ])}
       onPressIn={(e: GestureResponderEvent) => {
         setState(state => ({ ...state, pressed: true }));
@@ -228,9 +232,9 @@ export const Button = createMemoComponent(({
         if (_.isFunction(onBlur)) onBlur(e);
       }}
       {...props}>
-      {_.isFunction(prepend) ? prepend(state) : prepend}
+      {_.isFunction(prepend) ? prepend(_state) : prepend}
       {_.isFunction(content) ? content() : content}
-      {_.isFunction(append) ? append(state) : append}
+      {_.isFunction(append) ? append(_state) : append}
     </_AnimatedPressable>
   );
 }, {
