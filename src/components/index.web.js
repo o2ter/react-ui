@@ -24,7 +24,6 @@
 //
 
 export * from './index.js';
-export { NodeHandleProvider } from './NodeHandleProvider';
 export * from './Navigator';
 export * from './CodeMirror';
 export * from './DataSheet';
