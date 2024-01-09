@@ -32,7 +32,7 @@ import { StyleProp, TextStyle } from 'react-native';
 export type ListProps<T> = Partial<React.ComponentPropsWithoutRef<typeof SectionList<SelectOption<T>>>>;
 
 export type SelectState<T> = {
-  value: T[];
+  value: T;
   focused: boolean;
   disabled: boolean;
 };

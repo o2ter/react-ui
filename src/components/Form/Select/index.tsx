@@ -27,37 +27,38 @@ import _ from 'lodash';
 import React from 'react';
 import { useField } from '../Form';
 import { useTheme } from '../../../theme';
-import { Select } from '../../Select';
+import { Select, SelectValue } from '../../Select';
 import { Modify } from '../../../internals/types';
 import { createMemoComponent } from '../../../internals/utils';
 import { _useComponentStyle } from '../../Style';
 import { useFocus, useFocusRing } from '../../../internals/focus';
 import { StyleProp, TextStyle } from 'react-native';
 
-type FormSelectState = {
-  value: any[];
+type FormSelectState<T> = {
+  value: T;
   focused: boolean;
   invalid: boolean;
   disabled: boolean;
   valid: boolean;
 };
 
-type FormSelectProps<T> = Modify<React.ComponentPropsWithoutRef<typeof Select<T>>, {
+type FormSelectProps<T, M extends boolean> = Modify<React.ComponentPropsWithoutRef<typeof Select<T, M>>, {
   name: string | string[];
   roles?: string[];
-  style?: StyleProp<TextStyle> | ((state: FormSelectState) => StyleProp<TextStyle>);
-  prepend?: React.ReactNode | ((state: FormSelectState) => React.ReactNode);
-  append?: React.ReactNode | ((state: FormSelectState) => React.ReactNode);
+  style?: StyleProp<TextStyle> | ((state: FormSelectState<SelectValue<T, M>>) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode | ((state: FormSelectState<SelectValue<T, M>>) => React.ReactNode);
+  append?: React.ReactNode | ((state: FormSelectState<SelectValue<T, M>>) => React.ReactNode);
   validate?: (value: any) => void;
 }>
 
-export const FormSelect = createMemoComponent(<T = any>(
+export const FormSelect = createMemoComponent(<T = any, M extends boolean = false>(
   {
     classes,
     name,
     roles,
     style,
     options,
+    multiple,
     disabled,
     prepend,
     append,
@@ -65,8 +66,8 @@ export const FormSelect = createMemoComponent(<T = any>(
     onBlur,
     validate,
     ...props
-  }: FormSelectProps<T>,
-  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Select<T>>>
+  }: FormSelectProps<T, M>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Select<T, M>>>
 ) => {
 
   const { value, roles: _roles, error, touched, setTouched, onChange, useValidator } = useField(name);
@@ -86,7 +87,7 @@ export const FormSelect = createMemoComponent(<T = any>(
     touched && (invalid ? 'invalid' : 'valid'),
   ]);
 
-  const _onChange = React.useCallback((value: T[]) => {
+  const _onChange = React.useCallback((value: T[] | T | undefined) => {
     onChange(value);
     setTouched();
   }, []);
@@ -98,7 +99,7 @@ export const FormSelect = createMemoComponent(<T = any>(
     disabled: _disabled,
     valid: touched && !invalid,
     invalid: touched && invalid,
-    value: value ?? [],
+    value: multiple ? value ?? [] : value,
   };
 
   return (
@@ -106,6 +107,7 @@ export const FormSelect = createMemoComponent(<T = any>(
       ref={forwardRef}
       value={value}
       options={options}
+      multiple={multiple}
       disabled={_disabled}
       onValueChange={_onChange}
       onFocus={_onFocus}

@@ -44,33 +44,35 @@ import List from '../List';
 type SelectPosition = 'top' | 'bottom';
 type SelectAlignment = 'left' | 'right';
 
-type SelectProps<T> = {
+export type SelectValue<T, M extends boolean> = M extends true ? T[] : T | undefined;
+
+type SelectProps<T, M extends boolean> = {
   classes?: ClassNames;
-  value?: T[];
+  value?: SelectValue<T, M>;
   options: SelectOption<T>[] | {
     label: string;
     options: SelectOption<T>[];
   }[];
   disabled?: boolean;
-  multiple?: boolean;
+  multiple?: M;
   arrow?: boolean;
   shadow?: boolean | number;
   variant?: 'outline' | 'underlined' | 'unstyled';
   position?: SelectPosition | SelectPosition[];
   alignment?: SelectAlignment | SelectAlignment[];
-  style?: StyleProp<TextStyle> | ((state: SelectState<T>) => StyleProp<TextStyle>);
-  prepend?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
-  append?: React.ReactNode | ((state: SelectState<T>) => React.ReactNode);
-  onValueChange?: (value: T[]) => void;
-  onChange?: (selected: SelectOption<T>[]) => void;
+  style?: StyleProp<TextStyle> | ((state: SelectState<SelectValue<T, M>>) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode | ((state: SelectState<SelectValue<T, M>>) => React.ReactNode);
+  append?: React.ReactNode | ((state: SelectState<SelectValue<T, M>>) => React.ReactNode);
+  onValueChange?: (value: SelectValue<T, M>) => void;
+  onChange?: (selected: SelectValue<SelectOption<T>, M>) => void;
   onFocus?: VoidFunction;
   onBlur?: VoidFunction;
-  render?: (state: SelectState<T>) => React.ReactNode;
+  render?: (state: SelectState<SelectValue<T, M>>) => React.ReactNode;
   listProps?: Omit<ListProps<T>, 'renderItem'>;
 };
 
 type SelectBodyProps<T> = {
-  value?: SelectOption<T>[];
+  value: SelectOption<T>[];
   multiple?: boolean;
   onRemove: (item: SelectOption<T>) => void
 };
@@ -90,7 +92,7 @@ const SelectBody = <T = any>({
         gap: 2,
       }}>
         <List
-          data={value ?? []}
+          data={value}
           renderItem={({ item }) => (
             <View
               style={{
@@ -122,7 +124,7 @@ const findItems = <T = any>(
   options: SelectOption<T>[],
 ) => _.compact(_.map(value, x => _.find(options, o => o.value === x)));
 
-export const Select = createMemoComponent(<T = any>(
+export const Select = createMemoComponent(<T = any, M extends boolean = false>(
   {
     classes,
     value,
@@ -143,7 +145,7 @@ export const Select = createMemoComponent(<T = any>(
     append,
     render,
     listProps = {},
-  }: SelectProps<T>,
+  }: SelectProps<T, M>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
 ) => {
 
@@ -163,7 +165,11 @@ export const Select = createMemoComponent(<T = any>(
 
   const focusRing = useFocusRing(focused);
 
-  const state = { focused, disabled, value: value ?? [] };
+  const state = {
+    focused,
+    disabled,
+    value: multiple ? value ?? [] : value,
+  } as SelectState<SelectValue<T, M>>;
 
   const [hidden, setHidden] = React.useState(true);
 
@@ -198,9 +204,11 @@ export const Select = createMemoComponent(<T = any>(
 
   const extraData = React.useMemo(() => [sections, value], [sections, value]);
   const _onChange = useStableCallback((selected: SelectOption<T>[]) => {
-    onValueChange(_.map(selected, x => x.value));
-    onChange(selected);
+    onValueChange(multiple ? _.map(selected, x => x.value) : _.first(selected)?.value as any);
+    onChange(multiple ? selected : _.first(selected) as any);
   });
+
+  const _value = _.castArray(value ?? []) as T[];
 
   return (
     <_StyleContext.Consumer>
@@ -226,16 +234,16 @@ export const Select = createMemoComponent(<T = any>(
           render={(layout) => (
             <_StyleContext.Provider value={_style}>
               <SelectListBody
-                value={value}
+                value={_value}
                 layout={layout}
                 theme={theme}
                 sections={sections}
                 extraData={extraData}
                 onSelect={(v) => {
-                  const _value = multiple
-                    ? _.includes(value, v.value) ? _.filter(value, x => x !== v.value) : [...value ?? [], v.value]
+                  const _val = multiple
+                    ? _.includes(_value, v.value) ? _.filter(_value, x => x !== v.value) : [..._value ?? [], v.value]
                     : [v.value];
-                  const selected = findItems(_value, _.flatMap(sections, x => x.data));
+                  const selected = findItems(_val, _.flatMap(sections, x => x.data));
                   _onChange(selected);
                 }}
                 {...listProps}
@@ -267,10 +275,10 @@ export const Select = createMemoComponent(<T = any>(
             {_.isFunction(render) ? render(state) : (
               <SelectBody
                 multiple={multiple}
-                value={findItems(value ?? [], _.flatMap(sections, x => x.data))}
+                value={findItems(_value, _.flatMap(sections, x => x.data))}
                 onRemove={(v) => { 
-                  const _value = _.filter(value, x => x !== v.value);
-                  const selected = findItems(_value, _.flatMap(sections, x => x.data));
+                  const _val = _.filter(_value, x => x !== v.value);
+                  const selected = findItems(_val, _.flatMap(sections, x => x.data));
                   _onChange(selected);
                 }}
               />
