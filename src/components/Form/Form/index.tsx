@@ -123,7 +123,7 @@ type FormProps<S extends Record<string, ISchema<any, any>>> = {
 
 export const Form = createMemoComponent(<S extends Record<string, ISchema<any, any>>>({
   schema,
-  initialValues = object(schema ?? {}).getDefault() ?? {},
+  initialValues,
   roles,
   validate,
   validateOnMount,
@@ -136,13 +136,14 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   children
 }: FormProps<S>, forwardRef: React.ForwardedRef<FormState>) => {
 
-  const [_values, _setValues] = React.useState<typeof initialValues>();
+  const _initialValues = React.useMemo(() => initialValues ?? object(schema ?? {}).getDefault() ?? {}, [initialValues]);
+  const [_values, _setValues] = React.useState<typeof _initialValues>();
   const [extraError, setExtraError] = React.useState<{ id: string; error: Error; }[]>([]);
 
-  const values = React.useMemo(() => _values ?? initialValues, [initialValues, _values]);
+  const values = React.useMemo(() => _values ?? _initialValues, [_initialValues, _values]);
   const setValues = useStableCallback((
-    update: React.SetStateAction<typeof initialValues>
-  ) => _setValues(_.isFunction(update) ? v => update(v ?? initialValues) : update));
+    update: React.SetStateAction<typeof _initialValues>
+  ) => _setValues(_.isFunction(update) ? v => update(v ?? _initialValues) : update));
 
   const [counts, setCounts] = React.useState({ submit: 0, reset: 0, actions: {} as Record<string, number> });
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
