@@ -60,7 +60,7 @@
     "babel-loader": "^9.1.2",
     "rollup": "^3.10.0",
     "rollup-plugin-dts": "^5.1.1",
-    "sugax": "^1.0.92",
+    "sugax": "^1.0.93",
     "tslib": "^2.4.1",
     "typescript": "^4.9.4"
   }

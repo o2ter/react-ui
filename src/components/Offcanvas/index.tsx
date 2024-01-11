@@ -25,11 +25,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { LayoutRectangle, StyleSheet, Platform, ViewStyle, StyleProp, Animated } from 'react-native';
+import { View, Pressable, LayoutRectangle, StyleSheet, Platform, ViewStyle, StyleProp } from 'react-native';
 
 import { useTheme } from '../../theme';
 import { _useComponentStyle } from '../Style';
-import { _AnimatedPressable, _useFadeAnim } from '../_Animated';
 import { flattenStyle } from '../Style/flatten';
 import { useAnimate } from 'sugax';
 
@@ -89,7 +88,7 @@ export const OffcanvasProvider: React.FC<OffcanvasProviderProps> = ({
   return <OffcanvasContext.Provider value={setConfig}>
     {children}
     {React.isValidElement(displayElement) && <>
-      {backdrop === true && <_AnimatedPressable
+      {backdrop === true && <Pressable
         onPress={() => setConfig(undefined)}
         style={flattenStyle([
           {
@@ -111,7 +110,7 @@ export const OffcanvasProvider: React.FC<OffcanvasProviderProps> = ({
             opacity: fadeAnim,
           },
         ])} />}
-      <Animated.View
+      <View
         onLayout={(e) => setLayout(e.nativeEvent.layout)}
         style={flattenStyle([
           {
@@ -149,7 +148,7 @@ export const OffcanvasProvider: React.FC<OffcanvasProviderProps> = ({
           },
         ])}>
         {displayElement}
-      </Animated.View>
+      </View>
     </>}
   </OffcanvasContext.Provider>;
 };
