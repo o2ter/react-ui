@@ -2279,10 +2279,10 @@ style-mod@^4.0.0:
   resolved "https://registry.yarnpkg.com/style-mod/-/style-mod-4.0.0.tgz#97e7c2d68b592975f2ca7a63d0dd6fcacfe35a01"
   integrity sha512-OPhtyEjyyN9x3nhPsu76f52yUGXiZcgvsrFVtvTkyGRQJ0XK+GPc6ov1z+lRpbeabka+MYEQxOYRnt5nF30aMw==
 
-sugax@^1.0.90:
-  version "1.0.90"
-  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.90.tgz#77e16d84c4e1cd57ba7858c43255c152edde072d"
-  integrity sha512-ru+7mmWcl7dhIVwMSwOwUly33fM+jcld4hxRNlC/piwwkbytnfbN693mtBuA89MwI73HgbTPqlEpbI9aph7tmg==
+sugax@^1.0.92:
+  version "1.0.92"
+  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.92.tgz#710a466b739ff2788e10ac2824a71cc09276682e"
+  integrity sha512-ayJxMnA9mS33C1FV1OZnwoySXaDxCEjtmYKxunf7qHioEobG+Ye43a4jp/TmYHLV+SKfPOTz3bmK3IURzPOHnA==
 
 supports-color@^5.3.0:
   version "5.5.0"

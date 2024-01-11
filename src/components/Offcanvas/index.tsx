@@ -31,6 +31,7 @@ import { useTheme } from '../../theme';
 import { _useComponentStyle } from '../Style';
 import { _AnimatedPressable, _useFadeAnim } from '../_Animated';
 import { flattenStyle } from '../Style/flatten';
+import { useAnimate } from 'sugax';
 
 type OffcanvasConfig = React.ReactElement | {
   placement?: 'left' | 'right' | 'top' | 'bottom';
@@ -44,9 +45,11 @@ OffcanvasContext.displayName = 'OffcanvasContext';
 
 export const useOffcanvas = () => React.useContext(OffcanvasContext);
 
-export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
+type OffcanvasProviderProps = React.PropsWithChildren<{
   backdrop?: boolean;
-}>> = ({
+}>;
+
+export const OffcanvasProvider: React.FC<OffcanvasProviderProps> = ({
   backdrop = true,
   children,
 }) => {
@@ -63,21 +66,22 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
   const offcanvasBottomContainer = _useComponentStyle('offcanvasBottomContainer');
 
   const element = React.isValidElement(config) ? config : config && 'element' in config ? config.element : undefined;
-  const fadeAnim = _useFadeAnim({
-    visible: !_.isNil(element),
-    setVisible: (v) => {
-      if (v) {
-        setDisplay(current => config ?? current);
-      } else {
-        setDisplay(undefined);
-        setLayout(undefined);
-      }
-    },
-    timing: {
+  const { value: fadeAnim, start } = useAnimate(0);
+  React.useEffect(() => {
+    start({
+      toValue: _.isNil(element) ? 0 : 1,
       duration: theme.offcanvasDuration,
       easing: theme.offcanvasEasing,
-    }
-  });
+      onCompleted: () => {
+        if (_.isNil(element)) {
+          setDisplay(undefined);
+          setLayout(undefined);
+        } else {
+          setDisplay(current => config ?? current);
+        }
+      }
+    });
+  }, [_.isNil(element)]);
 
   const displayElement = React.isValidElement(display) ? display : display && 'element' in display ? display.element : undefined;
   const placement = display && 'placement' in display ? display.placement ?? 'left' : 'left';
@@ -138,10 +142,10 @@ export const OffcanvasProvider: React.FC<React.PropsWithChildren<{
           display && 'containerStyle' in display ? display.containerStyle : {},
           {
             opacity: layout ? 1 : 0,
-            ...layout && placement === 'left' ? { left: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.width, 0] }) } : {},
-            ...layout && placement === 'right' ? { right: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.width, 0] }) } : {},
-            ...layout && placement === 'top' ? { top: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.height, 0] }) } : {},
-            ...layout && placement === 'bottom' ? { bottom: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [-layout.height, 0] }) } : {},
+            ...layout && placement === 'left' ? { left: (fadeAnim - 1) * layout.width } : {},
+            ...layout && placement === 'right' ? { right: (fadeAnim - 1) * layout.width } : {},
+            ...layout && placement === 'top' ? { top: (fadeAnim - 1) * layout.height } : {},
+            ...layout && placement === 'bottom' ? { bottom: (fadeAnim - 1) * layout.height } : {},
           },
         ])}>
         {displayElement}
