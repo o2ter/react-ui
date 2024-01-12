@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { flattenStyle } from './flatten';
 import { ComponentStyles, _StyleProp, ClassNames, Selectors } from './types';
-import { _StyleContext } from './provider';
+import { _CSSNameContext, _StyleContext } from './provider';
 
 export * from './provider';
 
@@ -39,6 +39,26 @@ const flattenClassNames = (
   const _classNames = _.sortedUniq(flatted.sort());
   const _selectors = _.sortedUniq(_.compact(_.flattenDeep([selectors])).sort());
   return [..._classNames, ..._.flatMap(_classNames, c => _.map(_selectors, s => `${c}:${s}`))];
+}
+
+export const _useCSSComponentStyle = (
+  component: keyof ComponentStyles,
+  classNames?: ClassNames,
+  selectors?: Selectors,
+) => {
+  const cssNames = React.useContext(_CSSNameContext);
+  const { components, classes } = React.useContext(_StyleContext);
+  const sel = _.sortedUniq(_.compact(_.flattenDeep([selectors])).sort());
+  const names = flattenClassNames(classNames, sel);
+  return React.useMemo(() => [
+    components[component],
+    ...sel.map(s => components[`${component}:${s}` as keyof ComponentStyles]),
+    ..._.compact(_.map(classes,
+      (v, k) => _.includes(names, k) ?
+        _.includes(cssNames, k) ? { $$css: true, [k]: k } as _StyleProp : v
+        : undefined
+    )),
+  ], [components, classes, component, names.join(' ')]);
 }
 
 export const _useComponentStyle = (

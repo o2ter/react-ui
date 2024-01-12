@@ -68,7 +68,7 @@ export const StyleProvider: React.FC<StyleProviderProps> = ({
 
 StyleProvider.displayName = 'StyleProvider';
 
-const _CSSNameContext = React.createContext<string[]>([]);
+export const _CSSNameContext = React.createContext<string[]>([]);
 
 type _CSSNameProviderProps = React.PropsWithChildren<{
   classes: string[];

@@ -29,7 +29,7 @@ import { View as RNView, Platform, useWindowDimensions, ScaledSize, StyleProp, V
 import { LayoutRectangle } from 'react-native';
 import { useTheme } from '../../theme';
 import { _useComponentStyle } from '../Style';
-import { normalizeStyle } from '../Style/flatten';
+import { flattenStyle } from '../Style/flatten';
 import { PopoverPosition, PopoverAlignment } from './types';
 import { elevationShadow, selectPlatformShadow } from '../../shadow';
 import { _useFadeAnim } from '../_Animated';
@@ -94,7 +94,7 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
     borderRightWidth,
     borderBottomWidth,
     ..._style
-  } = normalizeStyle([_useComponentStyle('popover'), style]);
+  } = flattenStyle([_useComponentStyle('popover'), style]);
 
   const _position = selectPosition(position, layout, windowDimensions);
   const containerWidth = containerLayout?.width ?? 0;
@@ -137,7 +137,7 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
       {visible && <Animated.View
         pointerEvents='box-none'
         onLayout={(e) => setContainerLayout(e.nativeEvent.layout)}
-        style={normalizeStyle([
+        style={flattenStyle([
           !!shadow && selectPlatformShadow({
             shadowColor: 'black',
             ...elevationShadow(_.isNumber(shadow) ? shadow : 6),
