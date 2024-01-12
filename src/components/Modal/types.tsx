@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  types.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2024 O2ter Limited. All rights reserved.
@@ -25,31 +25,13 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { useOffcanvas } from './provider';
-import { _OffcanvasConfig } from './types';
+import { ViewStyle, StyleProp } from 'react-native';
 
-export * from './provider';
-
-type OffcanvasProps = Omit<_OffcanvasConfig, 'element'> & {
-  visible: boolean;
-  children: React.ReactElement;
+export type _ModalConfig = {
+  backdropStyle?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+  element?: React.ReactElement;
+  onDismiss?: () => void;
 };
 
-export const Offcanvas: React.FC<OffcanvasProps> = ({
-  visible,
-  children,
-  onDismiss,
-  ...config
-}) => {
-  const setOffcanvas = useOffcanvas();
-  React.useEffect(() => {
-    setOffcanvas(visible ? {
-      element: children,
-      onDismiss: onDismiss ?? (() => { }),
-      ...config,
-    } : undefined);
-  }, [visible, children]);
-  return (
-    <></>
-  );
-}
+export type ModalConfig = React.ReactElement | _ModalConfig;
