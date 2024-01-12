@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import SectionList from '../SectionList';
-import { ClassNames } from '../Style';
+import { ClassNames } from '../Style/types';
 import { StyleProp, TextStyle } from 'react-native';
 
 export type ListProps<T> = Partial<React.ComponentPropsWithoutRef<typeof SectionList<SelectOption<T>>>>;

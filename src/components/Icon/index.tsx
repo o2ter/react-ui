@@ -31,7 +31,8 @@ import { GLYPH_MAPS, ICON_SETS } from '../Icons';
 import { Modify } from '../../internals/types';
 import { textStyleKeys, textStyleNormalize } from '../Text/style';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 import { useTheme } from '../../theme';
 
 type IconProps<Icon extends keyof typeof GLYPH_MAPS> = Modify<TextProps, {

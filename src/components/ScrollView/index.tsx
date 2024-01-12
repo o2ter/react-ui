@@ -38,8 +38,9 @@ import { AsyncRefreshControl } from '../AsyncRefreshControl';
 import { Modify } from '../../internals/types';
 import { useMergeRefs } from 'sugax';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
-import { flattenStyle } from '../Style/flatten';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
+import { normalizeStyle } from '../Style/flatten';
 
 const ScrollViewBase: typeof RNScrollView = KeyboardAwareScrollable(RNScrollView);
 const RefreshControl = AsyncRefreshControl(RNRefreshControl);
@@ -96,8 +97,8 @@ export const ScrollView = createMemoComponent(({
 
   return <ScrollViewBase
     ref={ref}
-    style={flattenStyle([scrollableStyle, style])}
-    contentContainerStyle={flattenStyle([scrollableContentContainerStyle, contentContainerStyle])}
+    style={normalizeStyle([scrollableStyle, style])}
+    contentContainerStyle={normalizeStyle([scrollableContentContainerStyle, contentContainerStyle])}
     onLayout={(event) => {
       setLayout(event.nativeEvent.layout);
       if (_.isFunction(onLayout)) onLayout(event);

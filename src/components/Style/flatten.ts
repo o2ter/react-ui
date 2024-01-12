@@ -90,6 +90,10 @@ const _flatten = <T>(styles?: StyleProp<T>): T[] => {
   return styles ? [styles] : [];
 }
 
+export const normalizeStyle = <T>(styles?: StyleProp<T>) => {
+  return _.map(_flatten(styles), (style) => normalize(style));
+}
+
 export const flattenStyle = <T>(styles?: StyleProp<T>) => {
-  return _.reduce(_flatten(styles), (acc, style) => ({ ...normalize(acc), ...normalize(style) }), {} as T);
+  return _.reduce(normalizeStyle(styles), (acc, style) => ({ ...acc, ...style }), {} as T);
 }

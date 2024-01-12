@@ -29,7 +29,8 @@ import { Platform, Pressable, TextInput as RNTextInput, TextInputProps as RNText
 import { useTheme } from '../../theme';
 import { useDefaultInputStyle } from './style';
 import { createMemoComponent, createComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 import { textStyleNormalize } from '../Text/style';
 import { useFocus, useFocusRing } from '../../internals/focus';
 import { useMergeRefs } from 'sugax';

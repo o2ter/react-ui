@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { TextInputProps as RNTextInputProps } from 'react-native';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames } from '../Style';
+import { ClassNames } from '../Style/types';
 import TextInput from '../TextInput';
 
 type TextInputProps = RNTextInputProps & {

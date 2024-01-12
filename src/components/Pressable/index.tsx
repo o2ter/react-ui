@@ -27,9 +27,10 @@ import _ from 'lodash';
 import React from 'react';
 import { Pressable as RNPressable, PressableProps as RNPressableProps } from 'react-native';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 import { TextStyleProvider } from '../Text/style';
-import { flattenStyle } from '../Style/flatten';
+import { normalizeStyle } from '../Style/flatten';
 
 type PressableProps = RNPressableProps & {
   classes?: ClassNames;
@@ -48,7 +49,7 @@ export const Pressable = createMemoComponent((
   return (
     <RNPressable
       ref={forwardRef}
-      style={(state) => flattenStyle([viewStyle, _.isFunction(style) ? style(state) : style])}
+      style={(state) => normalizeStyle([viewStyle, _.isFunction(style) ? style(state) : style])}
       {...props}>
       {(state) => (
         <TextStyleProvider

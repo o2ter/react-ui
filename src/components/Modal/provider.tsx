@@ -29,7 +29,7 @@ import { View, Pressable, StyleSheet, Platform } from 'react-native';
 
 import { useTheme } from '../../theme';
 import { _useComponentStyle } from '../Style';
-import { flattenStyle } from '../Style/flatten';
+import { normalizeStyle } from '../Style/flatten';
 import { useAnimate } from 'sugax';
 import { ModalConfig } from './types';
 
@@ -78,7 +78,7 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({
     {React.isValidElement(displayElement) && <>
       {backdrop === true && <Pressable
         onPress={onDismiss ?? (() => setConfig(undefined))}
-        style={flattenStyle([
+        style={normalizeStyle([
           {
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
             zIndex: theme.zIndex.modalBackdrop,

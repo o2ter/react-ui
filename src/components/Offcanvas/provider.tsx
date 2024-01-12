@@ -29,7 +29,7 @@ import { View, Pressable, LayoutRectangle, StyleSheet, Platform } from 'react-na
 
 import { useTheme } from '../../theme';
 import { _useComponentStyle } from '../Style';
-import { flattenStyle } from '../Style/flatten';
+import { normalizeStyle } from '../Style/flatten';
 import { useAnimate } from 'sugax';
 import { OffcanvasConfig } from './types';
 
@@ -85,7 +85,7 @@ export const OffcanvasProvider: React.FC<OffcanvasProviderProps> = ({
     {React.isValidElement(displayElement) && <>
       {backdrop === true && <Pressable
         onPress={onDismiss ?? (() => setConfig(undefined))}
-        style={flattenStyle([
+        style={normalizeStyle([
           {
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
             zIndex: theme.zIndex.offcanvasBackdrop,
@@ -107,7 +107,7 @@ export const OffcanvasProvider: React.FC<OffcanvasProviderProps> = ({
         ])} />}
       <View
         onLayout={(e) => setLayout(e.nativeEvent.layout)}
-        style={flattenStyle([
+        style={normalizeStyle([
           {
             zIndex: theme.zIndex.offcanvas,
             borderColor: theme.grays['300'],

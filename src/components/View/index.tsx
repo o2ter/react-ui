@@ -27,9 +27,10 @@ import _ from 'lodash';
 import React from 'react';
 import { View as RNView, ViewProps as RNViewProps } from 'react-native';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 import { TextStyleProvider } from '../Text/style';
-import { flattenStyle } from '../Style/flatten';
+import { normalizeStyle } from '../Style/flatten';
 
 type ViewProps = RNViewProps & {
   classes?: ClassNames;
@@ -45,7 +46,7 @@ export const View = createMemoComponent(({
   return (
     <RNView
       ref={forwardRef}
-      style={flattenStyle([viewStyle, style])}
+      style={normalizeStyle([viewStyle, style])}
       {...props}>
       <TextStyleProvider classes={classes} style={style}>{children}</TextStyleProvider>
     </RNView>

@@ -30,7 +30,8 @@ import { View, ViewProps, ViewStyle, useWindowDimensions, LayoutRectangle, Scale
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Modify } from '../../internals/types';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 import { flattenStyle } from '../Style/flatten';
 export { SafeAreaProvider, useSafeAreaInsets, useSafeAreaFrame, withSafeAreaInsets } from 'react-native-safe-area-context';
 

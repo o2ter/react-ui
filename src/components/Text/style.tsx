@@ -27,7 +27,8 @@ import _ from 'lodash';
 import React from 'react';
 import { TextStyle, StyleProp } from 'react-native';
 import { flattenStyle } from '../Style/flatten';
-import { ClassNames, StyleProvider, useStyle } from '../Style';
+import { StyleProvider, useStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 
 export const textStyleKeys = [
   'color',

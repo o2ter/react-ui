@@ -44,8 +44,9 @@ import { textStyleKeys } from '../Text/style';
 import { Modify } from '../../internals/types';
 import { Text } from '../Text';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
-import { flattenStyle } from '../Style/flatten';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
+import { normalizeStyle, flattenStyle } from '../Style/flatten';
 import { _AnimatedPressable, _useToggleAnim } from '../_Animated';
 import { ThemeColors } from '../../theme/variables';
 
@@ -198,7 +199,7 @@ export const Button = createMemoComponent(({
       ref={forwardRef}
       disabled={disabled}
       focusable={!disabled && focusable !== false}
-      style={flattenStyle([
+      style={normalizeStyle([
         _.omit(colors, textStyleKeys),
         defaultStyle.button,
         Platform.select({

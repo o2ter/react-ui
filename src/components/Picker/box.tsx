@@ -26,7 +26,8 @@
 import _ from 'lodash';
 import React from 'react';
 import { StyleProp, TextStyle } from 'react-native';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 import { useFocusRing } from '../../internals/focus';
 import { useTheme } from '../../theme';
 import { createComponent } from '../../internals/utils';

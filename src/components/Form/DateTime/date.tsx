@@ -30,7 +30,8 @@ import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { DatePicker } from '../../DateTime';
 import { createMemoComponent } from '../../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../../Style';
+import { _useComponentStyle } from '../../Style';
+import { ClassNames } from '../../Style/types';
 import { useFocus, useFocusRing } from '../../../internals/focus';
 import { StyleProp, TextStyle } from 'react-native';
 

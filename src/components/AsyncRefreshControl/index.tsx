@@ -27,9 +27,10 @@ import _ from 'lodash';
 import React from 'react';
 import { RefreshControlBase, RefreshControlProps } from 'react-native';
 import { Modify } from '../../internals/types';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 import { createMemoComponent } from '../../internals/utils';
-import { flattenStyle } from '../Style/flatten';
+import { normalizeStyle } from '../Style/flatten';
 
 type AsyncRefreshControlProps = Modify<Omit<RefreshControlProps, 'refreshing'>, {
   classes?: ClassNames;
@@ -63,7 +64,7 @@ export const AsyncRefreshControl = (
   return <RefreshControl
     ref={forwardRef}
     refreshing={refreshing}
-    style={flattenStyle([defaultStyle, style])}
+    style={normalizeStyle([defaultStyle, style])}
     onRefresh={() => { if (_.isFunction(onRefresh)) _onRefresh(onRefresh, setRefreshing) }}
     {...props} />;
 }, {

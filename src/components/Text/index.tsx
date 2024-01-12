@@ -28,7 +28,8 @@ import React from 'react';
 import { Text as RNText, TextProps as RNTextProps } from 'react-native';
 import { useTheme } from '../../theme';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 import { TextStyleProvider, textStyleNormalize } from './style';
 
 type TextProps = RNTextProps & {

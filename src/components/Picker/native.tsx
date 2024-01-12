@@ -28,9 +28,9 @@ import React from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import { Picker as RNPicker, PickerItemProps } from '@react-native-picker/picker';
 import { createMemoComponent } from '../../internals/utils';
-import { flattenStyle } from '../Style/flatten';
+import { normalizeStyle } from '../Style/flatten';
 import { useTheme } from '../../theme';
-import { ClassNames } from '../Style';
+import { ClassNames } from '../Style/types';
 
 export type ItemValue = number | string;
 
@@ -70,7 +70,7 @@ export const PickerNative = createMemoComponent(<T = ItemValue>({
 }: PickerNativeProps<T>, forwardRef: React.ForwardedRef<RNPicker<T>>) => {
 
   const id = React.useId();
-  const _style = React.useMemo(() => flattenStyle(style), [style]);
+  const _style = React.useMemo(() => normalizeStyle(style), [style]);
 
   const theme = useTheme();
 

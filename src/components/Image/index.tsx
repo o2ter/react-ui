@@ -29,7 +29,8 @@ import { Image as RNImage, ImageProps as RNImageProps, ImageURISource, ImageRequ
 import ImageBase from './ImageBase';
 import { Modify } from '../../internals/types';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 import { flattenStyle } from '../Style/flatten';
 
 type ImageProps = Modify<RNImageProps, {

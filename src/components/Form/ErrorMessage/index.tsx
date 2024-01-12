@@ -32,7 +32,8 @@ import { useField } from '../Form';
 import { Modify } from '../../../internals/types';
 import { useTheme } from '../../../theme';
 import { createMemoComponent } from '../../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../../Style';
+import { _useComponentStyle } from '../../Style';
+import { ClassNames } from '../../Style/types';
 import { textStyleNormalize } from '../../Text/style';
 
 type FormErrorMessageProps = Modify<TextProps, {

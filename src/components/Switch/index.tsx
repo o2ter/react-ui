@@ -29,9 +29,10 @@ import { Animated, Easing, Platform, Pressable, StyleProp, TextStyle, ViewStyle 
 import { useTheme } from '../../theme';
 
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames, _useComponentStyle } from '../Style';
+import { _useComponentStyle } from '../Style';
+import { ClassNames } from '../Style/types';
 import { Modify } from '../../internals/types';
-import { flattenStyle } from '../Style/flatten';
+import { normalizeStyle } from '../Style/flatten';
 import { _AnimatedPressable } from '../_Animated';
 import { useFocus, useFocusRing } from '../../internals/focus';
 
@@ -74,7 +75,7 @@ export const Switch = createMemoComponent((
 
   const focusRing = useFocusRing(focused);
 
-  const _style = flattenStyle([
+  const _style = normalizeStyle([
     {
       width: size * 2,
       height: size,
@@ -101,7 +102,7 @@ export const Switch = createMemoComponent((
   return (
     <_AnimatedPressable
       ref={forwardRef}
-      style={flattenStyle([
+      style={normalizeStyle([
         _style,
         {
           backgroundColor: animate.interpolate({
