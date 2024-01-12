@@ -48,6 +48,7 @@ export const Modal: React.FC<ModalProps> = ({
       onDismiss: onDismiss ?? (() => { }),
       ...config,
     } : undefined);
+    return () => setModal();
   }, [visible, children]);
   return (
     <></>

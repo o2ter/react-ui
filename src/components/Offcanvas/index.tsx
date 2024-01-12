@@ -48,6 +48,7 @@ export const Offcanvas: React.FC<OffcanvasProps> = ({
       onDismiss: onDismiss ?? (() => { }),
       ...config,
     } : undefined);
+    return () => setOffcanvas();
   }, [visible, children]);
   return (
     <></>
