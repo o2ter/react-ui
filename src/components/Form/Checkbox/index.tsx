@@ -44,7 +44,7 @@ type FormCheckboxState = {
 
 type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>, {
   name: string | string[];
-  value?: string;
+  value?: any;
   roles?: string[];
   style?: StyleProp<ViewStyle> | ((state: FormCheckboxState) => StyleProp<ViewStyle>);
   children?: React.ReactNode | ((state: FormCheckboxState) => React.ReactNode);
