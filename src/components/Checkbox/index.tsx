@@ -146,7 +146,7 @@ export const Checkbox = createMemoComponent((
         {selected && <Svg width='100%' height='100%' viewBox='0 0 20 20'>
           <Path
             fill='none'
-            stroke='white'
+            stroke={theme.colorContrast(theme.pickColor(color))}
             strokeWidth='3'
             strokeLinecap='round'
             strokeLinejoin='round'
