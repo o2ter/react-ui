@@ -35,6 +35,7 @@ import { Circle, Svg } from 'react-native-svg';
 import { Modify } from '../../internals/types';
 import { flattenStyle } from '../Style/flatten';
 import { useFocus, useFocusRing } from '../../internals/focus';
+import { ThemeColors } from '../../theme/variables';
 
 type RadioState = {
   selected: boolean;
@@ -43,6 +44,7 @@ type RadioState = {
 
 type RadioProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;
+  color?: ThemeColors | (string & {});
   selected?: boolean;
   tabIndex?: number;
   focusRingColor?: string;
@@ -53,6 +55,7 @@ type RadioProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
 export const Radio = createMemoComponent((
   {
     classes,
+    color = 'primary',
     style,
     selected,
     focusRingColor,
@@ -108,8 +111,8 @@ export const Radio = createMemoComponent((
       width: fontSize,
       height: fontSize,
       borderRadius: 0.5 * fontSize,
-      backgroundColor: selected ? theme.themeColors.primary : theme.root.backgroundColor,
-      borderColor: selected ? theme.themeColors.primary : theme.grays['300'],
+      backgroundColor: selected ? theme.pickColor(color) : theme.root.backgroundColor,
+      borderColor: selected ? theme.pickColor(color) : theme.grays['300'],
       borderWidth: theme.borderWidth,
       opacity: props.disabled ? 0.65 : 1,
     },
