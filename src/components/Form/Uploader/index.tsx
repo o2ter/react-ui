@@ -45,11 +45,13 @@ export const FormUploader = <
 
   useValidator(validate);
 
+  const initial = _.castArray(value ?? []);
+
   const [_uploads, setUploads] = React.useState<FormUpload<File, Uploaded>[]>();
-  const uploads = React.useMemo(() => _uploads ?? _.castArray(value ?? []), [_uploads, value]);
+  const uploads = React.useMemo(() => _uploads ?? initial, [_uploads, value]);
 
   React.useEffect(() => {
-    if (uploads === _.castArray(value ?? [])) return;
+    if (uploads === initial) return;
     onChange(_.filter(uploads, x => !(x instanceof FormUploadHandler)));
     setTouched();
   }, [uploads]);
@@ -74,13 +76,13 @@ export const FormUploader = <
         setUploads(x => x ? _.map(x, v => v === handler ? uploaded : v) : [uploaded]);
       }
     ));
-    setUploads(x => x ? [...x, ...uploads] : uploads);
+    setUploads(x => [...x ?? initial, ...uploads]);
     uploads.forEach(x => x.startUpload());
   });
 
   const state: FormUploaderState<File, Uploaded> = React.useMemo(() => ({
-    uploads: uploads ?? [],
-    setUploads: (v) => setUploads(_.isFunction(v) ? (x) => v(x ?? []) : v ?? []),
+    uploads,
+    setUploads: (v) => setUploads(_.isFunction(v) ? (x) => v(x ?? initial) : v ?? []),
     submitFiles,
   }), [uploads]);
 
