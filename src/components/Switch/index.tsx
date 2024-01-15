@@ -43,7 +43,7 @@ type SwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   style?: StyleProp<ViewStyle> | ((state: { selected: boolean; focused: boolean; }) => StyleProp<ViewStyle>);
 }>;
 
-export const Switch = createMemoComponent((
+export const Switch = /*#__PURE__*/ createMemoComponent((
   {
     classes,
     style,

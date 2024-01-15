@@ -41,7 +41,7 @@ type FormErrorMessageProps = Modify<TextProps, {
   name: string | string[];
 }>
 
-export const FormErrorMessage = createMemoComponent(({
+export const FormErrorMessage = /*#__PURE__*/ createMemoComponent(({
   classes,
   name,
   style,

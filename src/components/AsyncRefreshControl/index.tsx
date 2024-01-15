@@ -46,7 +46,7 @@ async function _onRefresh(
   setRefreshing(false);
 }
 
-export const AsyncRefreshControl = (
+export const AsyncRefreshControl = /*#__PURE__*/ (
   RefreshControl: typeof RefreshControlBase
 ) => createMemoComponent((
   {

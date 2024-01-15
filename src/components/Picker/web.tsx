@@ -34,7 +34,7 @@ import { useTheme } from '../../theme';
 import View from '../View';
 import Text from '../Text';
 
-export const PickerWeb = createMemoComponent(<T = ItemValue>(
+export const PickerWeb = /*#__PURE__*/ createMemoComponent(<T = ItemValue>(
   {
     classes,
     value,

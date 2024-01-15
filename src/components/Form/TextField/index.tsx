@@ -51,7 +51,7 @@ type FormTextFieldProps = Modify<React.ComponentPropsWithoutRef<typeof TextInput
   validate?: (value: any) => void;
 }>
 
-export const FormTextField = createMemoComponent((
+export const FormTextField = /*#__PURE__*/ createMemoComponent((
   {
     classes,
     name,

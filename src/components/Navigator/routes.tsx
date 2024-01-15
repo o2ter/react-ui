@@ -41,7 +41,7 @@ export const Route: React.FC<{
   index?: boolean;
   path?: string;
   id?: string;
-}> = () => invariant(
+}> = /*#__PURE__*/ () => invariant(
   false,
   `A <Route> is only ever to be used as the child of <Navigator> element, ` +
   `never rendered directly. Please wrap your <Route> in a <Navigator>.`

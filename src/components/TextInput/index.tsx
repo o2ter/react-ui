@@ -50,7 +50,7 @@ type TextInputProps = Omit<RNTextInputProps, 'style'> & {
   append?: React.ReactNode | ((state: TextInputState) => React.ReactNode);
 };
 
-const InnerTextInput = createComponent(({
+const InnerTextInput = /*#__PURE__*/ createComponent(({
   style,
   children,
   ...props
@@ -66,7 +66,7 @@ const InnerTextInput = createComponent(({
   );
 });
 
-export const TextInput = createMemoComponent(({
+export const TextInput = /*#__PURE__*/ createMemoComponent(({
   classes,
   style,
   value,

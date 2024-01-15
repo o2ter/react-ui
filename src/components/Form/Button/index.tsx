@@ -34,7 +34,7 @@ type FormButtonProps = Modify<React.ComponentPropsWithoutRef<typeof Button>, {
   action?: 'submit' | 'reset' | (string & {});
 }>
 
-export const FormButton = createMemoComponent((
+export const FormButton = /*#__PURE__*/ createMemoComponent((
   {
     action = 'submit',
     ...props

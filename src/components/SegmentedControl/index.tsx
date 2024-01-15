@@ -45,7 +45,7 @@ type SegmentedControlBaseProps<T = any> = Modify<ViewProps, {
 
 type SegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { tabStyle?: StyleProp<ViewStyle>; }>
 
-export const SegmentedControl = createMemoComponent(({
+export const SegmentedControl = /*#__PURE__*/ createMemoComponent(({
   value,
   style,
   onChange,
@@ -109,7 +109,7 @@ export const SegmentedControl = createMemoComponent(({
 
 type PlainSegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { color?: string; }>
 
-export const PlainSegmentedControl = createMemoComponent(({
+export const PlainSegmentedControl = /*#__PURE__*/ createMemoComponent(({
   value,
   style,
   color = '#2196F3',

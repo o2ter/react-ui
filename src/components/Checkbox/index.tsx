@@ -52,7 +52,7 @@ type CheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   children?: React.ReactNode | ((state: CheckboxState) => React.ReactNode);
 }>;
 
-export const Checkbox = createMemoComponent((
+export const Checkbox = /*#__PURE__*/ createMemoComponent((
   {
     classes,
     color = 'primary',

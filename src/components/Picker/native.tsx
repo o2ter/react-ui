@@ -59,7 +59,7 @@ export type PickerProps<T = ItemValue> = Omit<PickerNativeProps<T>, 'style'> & {
   renderText?: (label?: PickerItemProps<T>) => any
 };
 
-export const PickerNative = createMemoComponent(<T = ItemValue>({
+export const PickerNative = /*#__PURE__*/ createMemoComponent(<T = ItemValue>({
   value,
   items,
   disabled = false,

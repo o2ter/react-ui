@@ -54,7 +54,7 @@ type FormListProps = {
   }>>;
 }
 
-export const FormList = createMemoComponent(({
+export const FormList = /*#__PURE__*/ createMemoComponent(({
   name,
   extraData,
   keyExtractor,

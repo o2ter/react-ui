@@ -59,7 +59,7 @@ class _ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 }
 
-export const ErrorBoundary = createMemoComponent((
+export const ErrorBoundary = /*#__PURE__*/ createMemoComponent((
   props: ErrorBoundaryProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof _ErrorBoundary>>
 ) => <_ErrorBoundary ref={forwardRef} {...props} />, {

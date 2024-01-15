@@ -65,7 +65,7 @@ type SafeAreaViewProps = Modify<ViewProps, {
   edges: InsetEdge[]
 }>
 
-export const SafeAreaView = createMemoComponent(({
+export const SafeAreaView = /*#__PURE__*/ createMemoComponent(({
   classes,
   style,
   edges,

@@ -51,7 +51,7 @@ type FormCheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Checkbox>,
   validate?: (value: any) => void;
 }>;
 
-export const FormCheckbox = createMemoComponent((
+export const FormCheckbox = /*#__PURE__*/ createMemoComponent((
   {
     classes,
     name,

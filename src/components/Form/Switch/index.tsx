@@ -51,7 +51,7 @@ type FormSwitchProps = Modify<React.ComponentPropsWithoutRef<typeof Switch>, {
   validate?: (value: any) => void;
 }>;
 
-export const FormSwitch = createMemoComponent((
+export const FormSwitch = /*#__PURE__*/ createMemoComponent((
   {
     classes,
     name,

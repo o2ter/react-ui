@@ -52,7 +52,7 @@ type RadioProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   children?: React.ReactNode | ((state: RadioState) => React.ReactNode);
 }>;
 
-export const Radio = createMemoComponent((
+export const Radio = /*#__PURE__*/ createMemoComponent((
   {
     classes,
     color = 'primary',

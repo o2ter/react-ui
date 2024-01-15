@@ -30,7 +30,7 @@ import { SVGProps } from './types';
 import { createMemoComponent } from '../../internals/utils';
 import { flattenStyle } from '../Style/flatten';
 
-export const SVG = createMemoComponent(({
+export const SVG = /*#__PURE__*/ createMemoComponent(({
   source,
   style,
   ...props

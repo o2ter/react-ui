@@ -36,7 +36,7 @@ type TextProps = RNTextProps & {
   classes?: ClassNames;
 };
 
-export const Text = createMemoComponent(({
+export const Text = /*#__PURE__*/ createMemoComponent(({
   classes,
   style,
   children,

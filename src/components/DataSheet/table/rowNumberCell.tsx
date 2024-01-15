@@ -45,7 +45,7 @@ type RowNumberCellProps = React.PropsWithChildren<{
   highlightColor: string;
 }>
 
-export const RowNumberCell = createMemoComponent(({
+export const RowNumberCell = /*#__PURE__*/ createMemoComponent(({
   row,
   stickyRowNumbers,
   style,

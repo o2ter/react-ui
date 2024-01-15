@@ -45,7 +45,7 @@ type BarcodeProps = Modify<SvgProps, {
   backgroundColor?: ColorValue;
 }>
 
-export const Barcode = createMemoComponent(({
+export const Barcode = /*#__PURE__*/ createMemoComponent(({
   value = '',
   format = 'CODE128',
   options = {},

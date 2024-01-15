@@ -121,7 +121,7 @@ type FormProps<S extends Record<string, ISchema<any, any>>> = {
   children?: React.ReactNode | ((state: FormState) => React.ReactNode);
 };
 
-export const Form = createMemoComponent(<S extends Record<string, ISchema<any, any>>>({
+export const Form = /*#__PURE__*/ createMemoComponent(<S extends Record<string, ISchema<any, any>>>({
   schema,
   initialValues,
   roles,
