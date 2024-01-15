@@ -27,7 +27,7 @@ import _ from 'lodash';
 import { createOverlay } from './base';
 import { useWindowEvent } from '../../../hooks/webHooks';
 
-export const Overlay = createOverlay(
+export const Overlay = /*#__PURE__*/ createOverlay(
   (view, callback) => view.measureInWindow((x, y, width, height) => callback(x + window.scrollX, y + window.scrollY, width, height)),
   useWindowEvent,
 );
