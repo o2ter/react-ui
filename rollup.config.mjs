@@ -12,6 +12,7 @@ const rollupPlugins = [
       'createComponent',
       'createMemoComponent',
       'StyleSheet.create',
+      'React.forwardRef',
       'React.createContext',
       'Animated.createAnimatedComponent',
     ],
