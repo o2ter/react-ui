@@ -31,6 +31,12 @@ import { ISchema, object, TypeOfSchema, ValidateError } from '@o2ter/valid.js';
 import { useAlert } from '../../Alert';
 import { createMemoComponent } from '../../../internals/utils';
 
+const cloneValue = (x: any): any => {
+  if (_.isArray(x)) return x.map(v => cloneValue(v));
+  if (_.isPlainObject(x)) return _.mapValues(x, v => cloneValue(v));
+  return x;
+}
+
 export type FormState = {
   roles?: string[];
   values: Record<string, any>;
@@ -231,7 +237,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
 
   const formAction = React.useMemo(() => ({
     setValue: (path: string, value: React.SetStateAction<any>) => setValues(
-      values => _.set(_.cloneDeep(values), path, _.isFunction(value) ? value(_.get(values, path)) : value)
+      values => _.set(cloneValue(values), path, _.isFunction(value) ? value(_.get(values, path)) : value)
     ),
     submit: () => stableRef.current.submit(),
     reset: () => stableRef.current.reset(),
