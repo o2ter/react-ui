@@ -35,7 +35,7 @@ import barcodes from 'jsbarcode/src/barcodes';
 import { createMemoComponent } from '../../internals/utils';
 
 export type BarcodeFormat = keyof typeof barcodes;
-export const BarcodeFormats = _.keys(barcodes) as BarcodeFormat[];
+export const BarcodeFormats = /* #__PURE__ */ _.keys(barcodes) as BarcodeFormat[];
 
 type BarcodeProps = Modify<SvgProps, {
   value?: string;
