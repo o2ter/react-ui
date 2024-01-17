@@ -85,7 +85,7 @@ const StickyContainer: React.FC<{
 
 StickyContainer.displayName = 'StickyContainer';
 
-export const StickyView = /*#__PURE__*/ createMemoComponent(({
+export const StickyView = createMemoComponent(({
   onLayout,
   stickyContainerStyle,
   stickyView,

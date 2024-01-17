@@ -36,7 +36,7 @@ type ViewProps = RNViewProps & {
   classes?: ClassNames;
 };
 
-export const View = /*#__PURE__*/ createMemoComponent(({
+export const View = createMemoComponent(({
   classes,
   style,
   children,

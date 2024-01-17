@@ -4,8 +4,18 @@ import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
 import dts from 'rollup-plugin-dts';
+import { PluginPure } from 'rollup-plugin-pure';
 
 const rollupPlugins = [
+  PluginPure({
+    functions: [
+      'createComponent',
+      'createMemoComponent',
+      'StyleSheet.create',
+      'React.createContext',
+      'Animated.createAnimatedComponent',
+    ],
+  }),
   typescript({ declaration: false }),
   babel({
     babelrc: false,

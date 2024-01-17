@@ -69,7 +69,7 @@ type CalendarProps = Modify<ViewProps, {
   onChange?: (date: string[]) => void;
 }>
 
-const CalendarBase = /*#__PURE__*/ createMemoComponent(({
+const CalendarBase = createMemoComponent(({
   value,
   min,
   max,

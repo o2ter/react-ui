@@ -38,7 +38,7 @@ type QRCodeProps = Modify<SvgProps, {
   backgroundColor?: ColorValue;
 }>
 
-export const QRCode = /*#__PURE__*/ createMemoComponent(({
+export const QRCode = createMemoComponent(({
   value = '',
   options = {},
   color = 'black',

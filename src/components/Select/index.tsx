@@ -125,7 +125,7 @@ const findItems = <T = any>(
   options: SelectOption<T>[],
 ) => _.compact(_.map(value, x => _.find(options, o => o.value === x)));
 
-export const Select = /*#__PURE__*/ createMemoComponent(<T = any, M extends boolean = false>(
+export const Select = createMemoComponent(<T = any, M extends boolean = false>(
   {
     classes,
     value,

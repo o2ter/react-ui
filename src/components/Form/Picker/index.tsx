@@ -54,7 +54,7 @@ type FormPickerProps<T = ItemValue> = Modify<React.ComponentPropsWithoutRef<type
   validate?: (value: any) => void;
 }>
 
-export const FormPicker = /*#__PURE__*/ createMemoComponent(<T = ItemValue>(
+export const FormPicker = createMemoComponent(<T = ItemValue>(
   {
     classes,
     name,

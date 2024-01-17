@@ -32,7 +32,7 @@ import { PopoverProps } from './types';
 import { PopoverBody } from './body';
 import { Overlay } from '../Overlay';
 
-export const Popover = /*#__PURE__*/ createMemoComponent((
+export const Popover = createMemoComponent((
   {
     position = 'auto',
     alignment = 'auto',

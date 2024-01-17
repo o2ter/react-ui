@@ -34,7 +34,7 @@ import { textStyleKeys } from '../Text/style';
 import { LayoutRectangle, Pressable, StyleSheet } from 'react-native';
 import { flattenStyle } from '../Style/flatten';
 
-export const Tooltip = /*#__PURE__*/ createMemoComponent((
+export const Tooltip = createMemoComponent((
   {
     hidden,
     containerStyle,

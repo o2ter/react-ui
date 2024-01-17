@@ -34,7 +34,7 @@ type LinkProps = Modify<React.ComponentPropsWithoutRef<typeof _Link>, {
   onHoverOut?: React.PointerEventHandler<HTMLAnchorElement>;
 }>;
 
-export const Link = /*#__PURE__*/ createMemoComponent((
+export const Link = createMemoComponent((
   {
     onHoverIn, onHoverOut, children, ...props
   }: LinkProps,

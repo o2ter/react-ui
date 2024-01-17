@@ -31,7 +31,7 @@ import { DataSheetTable } from './table/table';
 import { DataSheetRefProvider } from './provider/ref';
 import { createMemoComponent } from '../../internals/utils';
 
-export const DataSheet = /*#__PURE__*/ createMemoComponent(<T extends object>({
+export const DataSheet = createMemoComponent(<T extends object>({
   columnMinWidth = 64,
   rowNumbers = true,
   stickyHeader = true,

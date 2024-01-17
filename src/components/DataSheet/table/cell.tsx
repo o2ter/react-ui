@@ -35,7 +35,7 @@ type DataSheetCellProps = React.ComponentPropsWithoutRef<'td'> & {
   isEditing?: boolean;
 };
 
-export const DataSheetCell = /*#__PURE__*/ createMemoComponent(({
+export const DataSheetCell = createMemoComponent(({
   style,
   selectedStyle,
   selected,

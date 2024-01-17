@@ -85,7 +85,7 @@ const ButtonText = Animated.createAnimatedComponent(createMemoComponent((
   );
 }));
 
-export const Button = /*#__PURE__*/ createMemoComponent(({
+export const Button = createMemoComponent(({
   classes,
   color = 'primary',
   variant = 'solid',

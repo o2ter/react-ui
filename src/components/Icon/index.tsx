@@ -69,7 +69,7 @@ const IconBody = <Icon extends keyof typeof GLYPH_MAPS>({
   );
 }
 
-export const Icon = /*#__PURE__*/ createMemoComponent(<Icon extends keyof typeof GLYPH_MAPS>(
+export const Icon = createMemoComponent(<Icon extends keyof typeof GLYPH_MAPS>(
   {
     classes,
     icon,

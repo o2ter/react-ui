@@ -34,7 +34,7 @@ type LottieProps = Modify<AnimatedLottieViewProps, {
   source: AnimationObject;
 }>
 
-export const Lottie = /*#__PURE__*/ createMemoComponent(({
+export const Lottie = createMemoComponent(({
   source,
   style,
   duration = 0,

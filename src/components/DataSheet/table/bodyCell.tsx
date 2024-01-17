@@ -41,7 +41,7 @@ type BodyCellProps = React.PropsWithChildren<{
   allowEditForCell?: boolean | ((row: number, col: number) => boolean);
 }>
 
-export const BodyCell = /*#__PURE__*/ createComponent(({
+export const BodyCell = createComponent(({
   row,
   col,
   rowNumbers,

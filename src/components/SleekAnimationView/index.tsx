@@ -38,7 +38,7 @@ type SleekAnimationViewProps = Modify<Omit<React.ComponentPropsWithoutRef<typeof
   resizeMode?: ImageResizeMode;
 }>
 
-export const SleekAnimationView = /*#__PURE__*/ createMemoComponent((
+export const SleekAnimationView = createMemoComponent((
   {
     backgroundContainerStyle,
     backgroundStyle,

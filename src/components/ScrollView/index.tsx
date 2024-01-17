@@ -63,7 +63,7 @@ type ScrollViewProps = Modify<RNScrollViewProps, {
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const ScrollView = /*#__PURE__*/ createMemoComponent(({
+export const ScrollView = createMemoComponent(({
   classes,
   onRefresh,
   onLayout,

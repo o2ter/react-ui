@@ -46,7 +46,7 @@ type SectionListProps<ItemT = any, SectionT = DefaultSectionT> = Modify<RNSectio
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const SectionList = /*#__PURE__*/ createMemoComponent(<ItemT = any, SectionT = DefaultSectionT>(
+export const SectionList = createMemoComponent(<ItemT = any, SectionT = DefaultSectionT>(
   {
     classes,
     data,

@@ -45,7 +45,7 @@ type FlatListProps<ItemT = any> = Modify<RNFlatListProps<ItemT>, {
   refreshControlProps?: Omit<React.ComponentPropsWithoutRef<typeof RefreshControl>, 'onRefresh'>;
 }>
 
-export const FlatList = /*#__PURE__*/ createMemoComponent(<ItemT = any>(
+export const FlatList = createMemoComponent(<ItemT = any>(
   {
     classes,
     data,

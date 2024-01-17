@@ -38,7 +38,7 @@ type ImageProps = Modify<RNImageProps, {
   source: ImageURISource | ImageRequireSource;
 }>
 
-export const Image = /*#__PURE__*/ createMemoComponent((
+export const Image = createMemoComponent((
   {
     classes,
     source,

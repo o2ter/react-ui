@@ -52,7 +52,7 @@ type FormDateProps = Modify<React.ComponentPropsWithoutRef<typeof DatePicker>, {
   validate?: (value: any) => void;
 }>;
 
-export const FormDate = /*#__PURE__*/ createMemoComponent((
+export const FormDate = createMemoComponent((
   {
     classes,
     name,

@@ -50,7 +50,7 @@ type FormRadioProps = Modify<React.ComponentPropsWithoutRef<typeof Radio>, {
   validate?: (value: any) => void;
 }>;
 
-export const FormRadio = /*#__PURE__*/ createMemoComponent((
+export const FormRadio = createMemoComponent((
   {
     classes,
     name,

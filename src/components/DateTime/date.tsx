@@ -51,7 +51,7 @@ type DatePickerProps = Modify<Modify<React.ComponentPropsWithoutRef<typeof Picke
   append?: React.ReactNode | ((state: DatePickerState) => React.ReactNode);
 }>;
 
-export const DatePicker = /*#__PURE__*/ createMemoComponent((
+export const DatePicker = createMemoComponent((
   {
     classes,
     value,

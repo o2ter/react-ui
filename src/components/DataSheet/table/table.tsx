@@ -56,7 +56,7 @@ const createHandle = ({ state, clearSelection, endEditing }: ReturnType<typeof u
   endEditing,
 });
 
-export const DataSheetTable = /*#__PURE__*/ createMemoComponent(<T extends object>(
+export const DataSheetTable = createMemoComponent(<T extends object>(
   props: DataSheetProps<T>,
   forwardRef: React.ForwardedRef<ReturnType<typeof createHandle>>,
 ) => {

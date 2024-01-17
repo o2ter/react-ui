@@ -54,7 +54,7 @@ type CodeMirrorProps = Modify<React.ComponentPropsWithoutRef<typeof View>, {
   keymaps?: any[];
 }>
 
-export const CodeMirror = /*#__PURE__*/ createMemoComponent((
+export const CodeMirror = createMemoComponent((
   {
     theme,
     darkMode = false,

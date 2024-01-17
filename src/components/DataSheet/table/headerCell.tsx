@@ -37,7 +37,7 @@ type DataSheetHeaderCellProps = React.ComponentPropsWithoutRef<'th'> & {
   onColumnWidthChange?: (width: number) => void;
 };
 
-export const DataSheetHeaderCell = /*#__PURE__*/ createMemoComponent(({
+export const DataSheetHeaderCell = createMemoComponent(({
   label,
   style,
   borderSize = 1,

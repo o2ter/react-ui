@@ -31,7 +31,7 @@ import { createMemoComponent } from '../../internals/utils';
 import { useFocus } from '../../internals/focus';
 import { PickerBox } from './box';
 
-export const PickerAndroid = /*#__PURE__*/ createMemoComponent(<T = ItemValue>({
+export const PickerAndroid = createMemoComponent(<T = ItemValue>({
   classes,
   value,
   items = [],

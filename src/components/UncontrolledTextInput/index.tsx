@@ -34,7 +34,7 @@ type TextInputProps = RNTextInputProps & {
   classes?: ClassNames;
 };
 
-export const UncontrolledTextInput = /*#__PURE__*/ createMemoComponent(({
+export const UncontrolledTextInput = createMemoComponent(({
   classes,
   value,
   style,

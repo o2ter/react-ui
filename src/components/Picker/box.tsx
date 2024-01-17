@@ -43,7 +43,7 @@ type PickerBoxProps = React.PropsWithChildren<{
   append?: React.ReactNode;
 }>;
 
-export const PickerBox = /*#__PURE__*/ createComponent(({
+export const PickerBox = createComponent(({
   classes,
   style,
   focused,

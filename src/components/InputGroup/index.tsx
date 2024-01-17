@@ -128,7 +128,7 @@ const flapMapChildren = (
     flapMapChildren(c.props.children) : c
 )));
 
-export const InputGroup = /*#__PURE__*/ createMemoComponent((
+export const InputGroup = createMemoComponent((
   {
     style,
     children,

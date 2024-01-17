@@ -36,7 +36,7 @@ type PressableProps = RNPressableProps & {
   classes?: ClassNames;
 };
 
-export const Pressable = /*#__PURE__*/ createMemoComponent((
+export const Pressable = createMemoComponent((
   {
     classes,
     style,
