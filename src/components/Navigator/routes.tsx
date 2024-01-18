@@ -33,7 +33,10 @@ function invariant(cond: boolean, message: string): any {
 }
 
 export const Route: React.FC<{
-  component: any;
+  component: React.ComponentType<any>;
+  layout?: React.ComponentType<{
+    children?: React.ReactNode;
+  }>;
   statusCode?: number | ((location: Location) => number);
   title?: string | ((location: Location) => string);
   meta?: Record<string, string> | ((location: Location) => Record<string, string>);
@@ -82,12 +85,16 @@ export function createRoutesFromChildren(children?: React.ReactNode) {
 
 const RouteObject: React.FC<React.PropsWithChildren<React.ComponentPropsWithoutRef<typeof Route>>> = ({
   component: Component,
-  statusCode,
-  title,
-  meta = {},
+  layout: Layout = React.Fragment,
   children,
   ...props
 }) => {
+
+  const {
+    statusCode,
+    title,
+    meta = {},
+  } = props;
 
   const NavigatorContext = useNavigatorContext();
   const location = useLocation();
@@ -109,7 +116,11 @@ const RouteObject: React.FC<React.PropsWithChildren<React.ComponentPropsWithoutR
     document.title = _title;
   }
 
-  return <Component {...props}>{children}</Component>;
+  return (
+    <Layout>
+      <Component {...props}>{children}</Component>
+    </Layout>
+  );
 };
 
 RouteObject.displayName = 'RouteObject';
