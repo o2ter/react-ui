@@ -111,11 +111,11 @@ export const Button = createMemoComponent(({
   const theme = useTheme();
 
   const [state, setState] = React.useState({ hovered: false, pressed: false, focused: false });
-  const _focused = activated || state.hovered || state.pressed || state.focused;
+  const _activated = activated || state.hovered || state.pressed || (_.isNil(activated) && state.focused);
   const _state = { ...state, activated: activated ?? false };
 
   const fadeAnim = _useToggleAnim({
-    value: _focused,
+    value: _activated,
     timing: {
       duration: theme.buttonDuration,
       easing: theme.buttonEasing,
@@ -167,7 +167,7 @@ export const Button = createMemoComponent(({
       fontSize: theme.fontSizes[size] ?? theme.root.fontSize,
       fontWeight: theme.fontWeights['normal'] ?? theme.root.fontWeight,
     } as TextStyle,
-    variant === 'link' && _focused && { textDecorationLine: 'underline' } as TextStyle,
+    variant === 'link' && _activated && { textDecorationLine: 'underline' } as TextStyle,
     variant !== 'unstyled' && {
       paddingHorizontal: 12,
       paddingVertical: 6,
@@ -176,7 +176,7 @@ export const Button = createMemoComponent(({
     colors.borderColor !== 'transparent' && { borderWidth: theme.borderWidth },
     (colors.borderColor !== 'transparent' || colors.backgroundColor !== 'transparent') && { borderRadius: theme.borderRadiusBase },
     buttonStyle,
-  ]), [theme, size, disabled, _focused]);
+  ]), [theme, size, disabled, _activated]);
 
   const defaultStyle = React.useMemo(() => StyleSheet.create({
     text: _.pick(_defaultStyle, textStyleKeys),
