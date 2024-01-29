@@ -209,7 +209,7 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
     onChange(multiple ? selected : _.first(selected) as any);
   });
 
-  const _value = _.castArray(value ?? []) as T[];
+  const _value = (multiple ? _.castArray(value ?? []) : [value]) as T[];
 
   return (
     <_StyleContext.Consumer>
@@ -242,7 +242,7 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
                 extraData={extraData}
                 onSelect={(v) => {
                   const _val = multiple
-                    ? _.includes(_value, v.value) ? _.filter(_value, x => x !== v.value) : [..._value ?? [], v.value]
+                    ? _.includes(_value, v.value) ? _.filter(_value, x => x !== v.value) : [..._value, v.value]
                     : [v.value];
                   const selected = findItems(_val, _.flatMap(sections, x => x.data));
                   _onChange(selected);
