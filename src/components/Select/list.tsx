@@ -44,13 +44,13 @@ type SelectListBodyProps<T> = Omit<ListProps<T>, 'renderItem'> & {
   onSelect: (option: SelectOption<T>) => void
 };
 
-type SelectListListItemProps<T> = SelectOption<any> & {
+type SelectListItemProps<T> = SelectOption<any> & {
   selected: boolean;
   theme: ReturnType<typeof useTheme>;
   onPress: () => void;
 };
 
-const SelectListListItem = <T = any>({
+const SelectListItem = <T = any>({
   classes,
   label,
   selected,
@@ -59,7 +59,7 @@ const SelectListListItem = <T = any>({
   prepend,
   render,
   onPress,
-}: SelectListListItemProps<T>) => {
+}: SelectListItemProps<T>) => {
 
   const [state, setState] = React.useState({ hovered: false, pressed: false, focused: false });
   const _focused = state.hovered || state.pressed || state.focused;
@@ -158,7 +158,7 @@ export const SelectListBody = ({
         )
       ) : undefined}
       renderItem={({ item }) => (
-        <SelectListListItem
+        <SelectListItem
           theme={theme}
           selected={_.some(value, x => item.value === x)}
           onPress={() => onSelect(item)}
