@@ -269,6 +269,7 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
               selectStyle,
               _.isFunction(style) ? style(state) : style,
             ]}
+            disabled={disabled}
             onFocus={_onFocus}
             onBlur={_onBlur}
           >
