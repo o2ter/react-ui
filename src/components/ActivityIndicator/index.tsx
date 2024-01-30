@@ -108,7 +108,9 @@ export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
       duration: theme.activityIndicatorDuration,
       easing: theme.activityIndicatorEasing,
       useNativeDriver: Platform.OS !== 'web',
-    }).start(() => setVisible(!_.isEmpty(tasks)));
+    }).start(({ finished }) => {
+      if (finished) setVisible(!_.isEmpty(tasks));
+    });
 
   }, [_.isEmpty(tasks)]);
 

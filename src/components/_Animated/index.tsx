@@ -65,7 +65,9 @@ export const _useFadeAnim = (options: {
       toValue: options.visible ? 1 : 0,
       useNativeDriver: Platform.OS !== 'web',
       ...options.timing,
-    }).start(() => !options.visible && options.setVisible(false));
+    }).start(({ finished }) => { 
+      if (finished && !options.visible) options.setVisible(false);
+    });
 
   }, [options.visible]);
 
