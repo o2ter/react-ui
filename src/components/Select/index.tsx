@@ -136,7 +136,7 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
     shadow,
     style,
     variant,
-    position = 'bottom',
+    position = ['top', 'bottom'],
     alignment = ['left', 'right'],
     onValueChange = () => { },
     onChange = () => { },
