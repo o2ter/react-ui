@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { useTheme } from '../../theme';
 import { Calendar, CalendarValue } from '../Calendar';
-import { PickerBase } from './picker';
+import { PickerBase, PopoverConfig } from './picker';
 import { Modify } from '../../internals/types';
 import { useDefaultInputStyle } from '../TextInput/style';
 import { createMemoComponent } from '../../internals/utils';
@@ -45,6 +45,7 @@ type DatePickerState = {
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
 type DatePickerProps = Modify<Modify<React.ComponentPropsWithoutRef<typeof PickerBase>, DatePickerBaseProps>, {
   variant?: 'outline' | 'underlined' | 'unstyled';
+  popover?: boolean | PopoverConfig;
   style?: StyleProp<TextStyle> | ((state: DatePickerState) => StyleProp<TextStyle>);
   children?: React.ReactNode | ((state: DatePickerState) => React.ReactNode);
   prepend?: React.ReactNode | ((state: DatePickerState) => React.ReactNode);
@@ -62,6 +63,7 @@ export const DatePicker = createMemoComponent((
     append,
     style,
     variant,
+    popover = false,
     disabled = false,
     onChange,
     onFocus,
@@ -97,7 +99,7 @@ export const DatePicker = createMemoComponent((
         onChange={setValue}
         selectable={selectable}
         style={{
-          width: '80%',
+          width: popover ? '100%' : '80%',
           maxWidth: 350,
           backgroundColor: 'white',
         }}
@@ -113,6 +115,7 @@ export const DatePicker = createMemoComponent((
     <PickerBase
       ref={forwardRef}
       disabled={disabled}
+      popover={popover}
       style={[
         defaultStyle,
         focusRing,

@@ -30,9 +30,24 @@ import { Modify } from '../../internals/types';
 import { Pressable } from '../Pressable';
 import { useModal } from '../Modal';
 import { useTheme } from '../../theme';
+import { Popover } from '../Popover';
 import Text from '../Text';
+import View from '../View';
+import { useMergeRefs } from 'sugax';
+import { _StyleContext } from '../Style';
+
+type SelectPosition = 'top' | 'bottom';
+type SelectAlignment = 'left' | 'right';
+
+export type PopoverConfig = {
+  arrow?: boolean;
+  shadow?: boolean | number;
+  position?: SelectPosition | SelectPosition[];
+  alignment?: SelectAlignment | SelectAlignment[];
+};
 
 type PickerBaseProps = Modify<React.ComponentPropsWithoutRef<typeof Text> & Pick<React.ComponentPropsWithoutRef<typeof Pressable>, 'onFocus' | 'onBlur'>, {
+  popover?: boolean | PopoverConfig;
   picker?: any;
   disabled?: boolean;
   prepend?: React.ReactNode;
@@ -40,6 +55,7 @@ type PickerBaseProps = Modify<React.ComponentPropsWithoutRef<typeof Text> & Pick
 }>
 
 export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>, PickerBaseProps>(({
+  popover,
   style,
   picker,
   disabled,
@@ -54,29 +70,69 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
   const showModal = useModal();
   const theme = useTheme();
 
+  const pressableRef = React.useRef<React.ComponentRef<typeof Pressable>>();
+  const ref = useMergeRefs(pressableRef, forwardRef);
+
+  const [hidden, setHidden] = React.useState(true);
+
   return (
-    <Pressable
-      ref={forwardRef}
-      onPress={() => { if (!disabled) showModal(picker) }}
-      style={[
-        {
-          flexDirection: 'row',
-          gap: theme.spacer * 0.375,
-        },
-        Platform.select({
-          web: { outline: 0 } as any,
-          default: {},
-        }),
-        style
-      ]}
-      onFocus={onFocus}
-      onBlur={onBlur}
-    >
-      {prepend}
-      {_.isString(children) ? (
-        <Text style={{ flex: 1 }} {...props}>{children || ' '}</Text>
-      ) : children}
-      {append}
-    </Pressable>
-  )
+    <_StyleContext.Consumer>
+      {(_style) => (
+        <Popover
+          hidden={disabled ? true : hidden}
+          position={_.isBoolean(popover) ? ['top', 'bottom'] : popover?.position}
+          alignment={_.isBoolean(popover) ? ['left', 'right'] : popover?.alignment}
+          arrow={_.isBoolean(popover) ? false : popover?.arrow ?? false}
+          shadow={_.isBoolean(popover) ? false : popover?.shadow ?? false}
+          onTouchOutside={(e) => {
+            if (pressableRef.current === e.target as any) return;
+            setHidden(true);
+          }}
+          containerStyle={{
+            display: 'flex',
+            borderColor: theme.grays['400'],
+            borderWidth: theme.borderWidth,
+            borderRadius: theme.borderRadiusBase,
+            padding: 4,
+          }}
+          render={() => (
+            <_StyleContext.Provider value={_style}>
+              <View style={{ minWidth: 350 }}>{picker}</View>
+            </_StyleContext.Provider>
+          )}
+        >
+          <Pressable
+            ref={ref}
+            onPress={() => {
+              if (disabled) return;
+              if (popover) {
+                setHidden(false);
+              } else {
+                showModal(picker);
+              }
+            }}
+            style={[
+              {
+                flexDirection: 'row',
+                gap: theme.spacer * 0.375,
+              },
+              Platform.select({
+                web: { outline: 0 } as any,
+                default: {},
+              }),
+              style
+            ]}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          >
+            {prepend}
+            {_.isString(children) ? (
+              <Text style={{ flex: 1 }} {...props}>{children || ' '}</Text>
+            ) : children}
+            {append}
+          </Pressable>
+        </Popover>
+      )}
+    </_StyleContext.Consumer>
+  );
 });
