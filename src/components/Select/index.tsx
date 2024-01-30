@@ -215,7 +215,7 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
     <_StyleContext.Consumer>
       {(_style) => (
         <Popover
-          hidden={hidden && !_.isEmpty(sections)}
+          hidden={disabled || _.isEmpty(sections) ? true : hidden}
           position={position}
           alignment={alignment}
           arrow={arrow ?? false}
