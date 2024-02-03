@@ -37,7 +37,7 @@ export const Route: React.FC<{
   layout?: React.ComponentType<{
     children?: React.ReactNode;
   }>;
-  props: any;
+  props?: any;
   statusCode?: number | ((location: Location) => number);
   title?: string | ((location: Location) => string);
   meta?: Record<string, string> | ((location: Location) => Record<string, string>);
