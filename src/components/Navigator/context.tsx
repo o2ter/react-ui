@@ -29,13 +29,6 @@ import { StaticRouter } from 'react-router-dom/server';
 
 const NavigatorContext = React.createContext<Record<string, any> | undefined>(undefined);
 
-export const BrowserNavigator: React.FC<React.ComponentPropsWithRef<typeof BrowserRouter>> = ({
-  children,
-  ...props
-}) => (
-  <BrowserRouter {...props}>{children}</BrowserRouter>
-);
-
 type StaticNavigatorProps = React.ComponentPropsWithoutRef<typeof StaticRouter> & {
   context?: Record<string, any>;
 }
@@ -51,3 +44,10 @@ export const StaticNavigator: React.FC<StaticNavigatorProps> = ({
 );
 
 export const useNavigatorContext = () => React.useContext(NavigatorContext);
+
+export const BrowserNavigator: React.FC<React.ComponentPropsWithRef<typeof BrowserRouter>> = ({
+  children,
+  ...props
+}) => (
+  <BrowserRouter {...props}>{children}</BrowserRouter>
+);
