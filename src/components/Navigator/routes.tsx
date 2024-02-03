@@ -37,6 +37,7 @@ export const Route: React.FC<{
   layout?: React.ComponentType<{
     children?: React.ReactNode;
   }>;
+  props: any;
   statusCode?: number | ((location: Location) => number);
   title?: string | ((location: Location) => string);
   meta?: Record<string, string> | ((location: Location) => Record<string, string>);
@@ -86,6 +87,7 @@ export function createRoutesFromChildren(children?: React.ReactNode) {
 const RouteObject: React.FC<React.PropsWithChildren<React.ComponentPropsWithoutRef<typeof Route>>> = ({
   component: Component,
   layout: Layout = React.Fragment,
+  props: _props,
   children,
   ...props
 }) => {
@@ -118,7 +120,7 @@ const RouteObject: React.FC<React.PropsWithChildren<React.ComponentPropsWithoutR
 
   return (
     <Layout>
-      <Component {...props}>{children}</Component>
+      <Component {...props} {..._props}>{children}</Component>
     </Layout>
   );
 };
