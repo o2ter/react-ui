@@ -87,7 +87,7 @@ export function createRoutesFromChildren(children?: React.ReactNode) {
 const RouteObject: React.FC<React.PropsWithChildren<React.ComponentPropsWithoutRef<typeof Route>>> = ({
   component: Component,
   layout: Layout = React.Fragment,
-  props: _props,
+  props: _props = {},
   children,
   ...props
 }) => {
