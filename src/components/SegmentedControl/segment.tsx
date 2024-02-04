@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Text, TextStyle, ViewStyle, Pressable, StyleSheet, StyleProp, LayoutChangeEvent, GestureResponderEvent } from 'react-native';
+import { Text, TextStyle, ViewStyle, Pressable, StyleProp, LayoutChangeEvent, GestureResponderEvent } from 'react-native';
 
 import { style as _style } from './style';
 import { textStyleNormalize } from '../Text/style';
@@ -48,17 +48,20 @@ export const Segment: React.FC<{
   segmentContainerStyle,
   selectedSegmentContainerStyle,
   onPress,
-}) => {
-
-  const _segmentContainerStyle = isSelected ? StyleSheet.compose(segmentContainerStyle, selectedSegmentContainerStyle) : segmentContainerStyle;
-  const _segmentTextStyle = isSelected ? StyleSheet.compose(segmentTextStyle, selectedSegmentTextStyle) : segmentTextStyle;
-
-  return <Pressable
+}) => (
+  <Pressable
     onPress={onPress}
     onLayout={onLayout}
-    style={[{ paddingVertical: 8, paddingHorizontal: 16 }, _segmentContainerStyle]}>
-    <Text style={textStyleNormalize(_segmentTextStyle)}>{item.label}</Text>
+    style={[
+      { paddingVertical: 8, paddingHorizontal: 16 },
+      segmentContainerStyle,
+      isSelected && selectedSegmentContainerStyle,
+    ]}>
+    <Text style={textStyleNormalize([
+      segmentTextStyle,
+      isSelected && selectedSegmentTextStyle,
+    ])}>{item.label}</Text>
   </Pressable>
-}
+);
 
 Segment.displayName = 'Segment';
