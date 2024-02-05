@@ -1,5 +1,5 @@
 //
-//  index.ts
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2024 O2ter Limited. All rights reserved.
@@ -24,43 +24,23 @@
 //
 
 import _ from 'lodash';
-import { useField, useForm, Form as FormBase, FormConsumer } from './Form';
-import { FormGroup } from './Group';
-import { FormList, useFormList } from './List';
-import { FormDate } from './DateTime';
-import ErrorMessage from './ErrorMessage';
-import TextField from './TextField';
-import Button from './Button';
-import Picker from './Picker';
-import Checkbox from './Checkbox';
-import Radio from './Radio';
-import Select from './Select';
-import Switch from './Switch';
-import FormUploader from './Uploader';
-import HiddenData from './HiddenData';
+import React from 'react';
+import { useField } from '../Form';
 
-export { FormState } from './Form';
-
-const Form = _.assign(FormBase, {
-  Consumer: FormConsumer,
-  Group: FormGroup,
-  List: FormList,
-  ErrorMessage,
-  TextField,
-  Button,
-  Picker,
-  Checkbox,
-  Radio,
-  Select,
-  Switch,
-  Date: FormDate,
-  HiddenData,
-  _Uploader: FormUploader,
-});
-
-export {
-  useField,
-  useForm,
-  useFormList,
-  Form,
+type FormHiddenDataProps = {
+  name: string | string[];
+  value: any;
 }
+
+export const FormHiddenData = ({
+  name,
+  value,
+}: FormHiddenDataProps) => {
+  const { onChange } = useField(name);
+  React.useEffect(() => { onChange(value); }, [value]);
+  return (
+    <></>
+  );
+};
+
+export default FormHiddenData;
