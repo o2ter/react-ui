@@ -25,65 +25,22 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Awaitable } from 'sugax';
 import { Animated, View, ActivityIndicator as RNActivityIndicator, StyleSheet, Platform } from 'react-native';
-
 import { useTheme } from '../../theme';
 import { _useComponentStyle } from '../Style';
 import { normalizeStyle } from '../Style/flatten';
+import { ActivityIndicatorContext } from './context';
 
-const ActivityIndicatorContext = React.createContext<{
-  setTasks: React.Dispatch<React.SetStateAction<string[]>>;
-  defaultDelay: number;
-}>({
-  setTasks: () => {},
-  defaultDelay: 250,
-});
+export { useActivity } from './context';
 
-ActivityIndicatorContext.displayName = 'ActivityIndicatorContext';
-
-export const useActivity = () => {
-
-  const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
-
-  return async <T extends unknown>(callback: () => Awaitable<T>, delay?: number) => {
-
-    const id = _.uniqueId();
-
-    let completed = false;
-    const _delay = delay ?? defaultDelay;
-
-    if (_.isNumber(_delay) && _delay > 0) {
-      setTimeout(() => { if (!completed) setTasks(tasks => [...tasks, id]); }, _delay);
-    } else {
-      setTasks(tasks => [...tasks, id]);
-    }
-
-    try {
-
-      const result = await callback();
-
-      completed = true;
-      setTasks(tasks => _.filter(tasks, x => x !== id));
-
-      return result;
-
-    } catch (e) {
-
-      completed = true;
-      setTasks(tasks => _.filter(tasks, x => x !== id));
-
-      throw e;
-    }
-  };
-}
-
-export const ActivityIndicatorProvider: React.FC<React.PropsWithChildren<{
+type ActivityIndicatorProviderProps = React.PropsWithChildren<{
   defaultDelay?: number;
   backdrop?: boolean;
   passThroughEvents?: boolean;
   ActivityIndicator?: () => JSX.Element;
-}>> = ({
+}>;
+
+export const ActivityIndicatorProvider: React.FC<ActivityIndicatorProviderProps> = ({
   children,
   defaultDelay = 250,
   backdrop = true,

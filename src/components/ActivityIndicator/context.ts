@@ -1,5 +1,5 @@
 //
-//  media.ts
+//  context.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2024 O2ter Limited. All rights reserved.
@@ -25,33 +25,50 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { ThemeVariables } from './variables';
-import { useWindowDimensions, ScaledSize, Platform } from 'react-native';
-import { ThemeBaseContext } from './provider/base';
+import { Awaitable } from 'sugax';
 
-export const isSSR = Platform.OS === 'web' && typeof window === 'undefined';
+export const ActivityIndicatorContext = React.createContext<{
+  setTasks: React.Dispatch<React.SetStateAction<string[]>>;
+  defaultDelay: number;
+}>({
+  setTasks: () => { },
+  defaultDelay: 250,
+});
 
-const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T>(
-  breakpoint: string,
-  selector: { up: T; down: T; }
-) => {
-  if (isSSR) return selector.up;
-  return windowDimensions.width < theme.breakpoints[breakpoint] ? selector.down : selector.up;
-};
+ActivityIndicatorContext.displayName = 'ActivityIndicatorContext';
 
-const _mediaSelects = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T>(
-  breakpoints: Record<string, T>
-) => {
-  const selected = isSSR ? theme.breakpoints : _.pickBy(theme.breakpoints, v => windowDimensions.width >= v);
-  const [breakpoint] = _.maxBy(_.toPairs(selected), ([, v]) => v) ?? [];
-  return breakpoint ? breakpoints[breakpoint] : undefined;
-};
+export const useActivity = () => {
 
-export const useMediaSelect = () => {
-  const { decoded } = React.useContext(ThemeBaseContext);
-  const windowDimensions = useWindowDimensions();
-  return React.useMemo(() => ({
-    select: _mediaSelect(decoded, windowDimensions),
-    selects: _mediaSelects(decoded, windowDimensions),
-  }), [decoded, windowDimensions.width]);
+  const { setTasks, defaultDelay } = React.useContext(ActivityIndicatorContext);
+
+  return async <T>(callback: () => Awaitable<T>, delay?: number) => {
+
+    const id = _.uniqueId();
+
+    let completed = false;
+    const _delay = delay ?? defaultDelay;
+
+    if (_.isNumber(_delay) && _delay > 0) {
+      setTimeout(() => { if (!completed) setTasks(tasks => [...tasks, id]); }, _delay);
+    } else {
+      setTasks(tasks => [...tasks, id]);
+    }
+
+    try {
+
+      const result = await callback();
+
+      completed = true;
+      setTasks(tasks => _.filter(tasks, x => x !== id));
+
+      return result;
+
+    } catch (e) {
+
+      completed = true;
+      setTasks(tasks => _.filter(tasks, x => x !== id));
+
+      throw e;
+    }
+  };
 };
