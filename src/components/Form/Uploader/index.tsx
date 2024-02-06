@@ -24,8 +24,8 @@ type FormUploaderProps<F, U> = {
 };
 
 export const FormUploader = <
-  File extends any,
-  Uploaded extends any
+  File extends unknown,
+  Uploaded extends unknown
 >({
   name,
   onUpload,

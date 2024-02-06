@@ -31,7 +31,7 @@ import { ThemeBaseContext } from './provider/base';
 
 export const isSSR = Platform.OS === 'web' && typeof window === 'undefined';
 
-const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends any>(
+const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends unknown>(
   breakpoint: string,
   selector: { up: T; down: T; }
 ) => {
@@ -39,7 +39,7 @@ const _mediaSelect = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T
   return windowDimensions.width < theme.breakpoints[breakpoint] ? selector.down : selector.up;
 };
 
-const _mediaSelects = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends any>(
+const _mediaSelects = (theme: ThemeVariables, windowDimensions: ScaledSize) => <T extends unknown>(
   breakpoints: Record<string, T>
 ) => {
   const selected = isSSR ? theme.breakpoints : _.pickBy(theme.breakpoints, v => windowDimensions.width >= v);

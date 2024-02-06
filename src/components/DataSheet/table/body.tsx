@@ -43,7 +43,7 @@ type TableCellItemProps<T> = {
   renderItem: (x: Omit<TableCellItemProps<T>, 'renderItem'>) => React.ReactElement | undefined;
 }
 
-const TableCellItem = <T extends any>({
+const TableCellItem = <T extends unknown>({
   renderItem,
   ...props
 }: TableCellItemProps<T>) => (
