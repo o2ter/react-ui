@@ -33,9 +33,9 @@ const imgAttrs = [
   'alt',
   'height',
   'width',
-];
+] as const;
 
-const registerImageFormat = (quill: typeof _Quill) => { 
+const registerImageFormat = /* #__PURE__ */ (quill: typeof _Quill) => { 
   quill.register(class extends quill.import('formats/image') {
     static formats(domNode: HTMLImageElement) {
       const style = domNode.style;
@@ -67,7 +67,7 @@ const registerImageFormat = (quill: typeof _Quill) => {
   }, true);
 }
 
-export const Quill = (() => {
+export const Quill = /* #__PURE__ */ (() => {
   if (typeof window === 'undefined') return;
   const quill = require('quill');
   const { default: ImageResize } = require('quill-image-resize-module');

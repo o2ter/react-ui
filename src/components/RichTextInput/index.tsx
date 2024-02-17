@@ -56,7 +56,7 @@ const defaultToolbar = [
   [{ 'indent': '-1' }, { 'indent': '+1' }],
   ['link', 'blockquote', 'code-block', 'image'],
   [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-];
+] as const;
 
 export const RichTextInput = createMemoComponent(({
   value,
