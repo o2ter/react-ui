@@ -28,7 +28,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { useEquivalent } from 'sugax';
 import { flattenStyle } from './flatten';
-import { ComponentStyles, _StyleProp, ClassNames, Selectors } from './types';
+import { ComponentStyles, _StyleProp } from './types';
 
 export const _StyleContext = React.createContext<{
   components: ComponentStyles;
