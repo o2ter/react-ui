@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import type { SelectionChangeHandler, TextChangeHandler } from 'quill';
 import { useStableCallback } from 'sugax';
-import { Delta, Quill } from './quill';
+import { Delta, Quill, defaultToolbarHandler } from './quill';
 import { createMemoComponent } from '../../internals/utils';
 import { RichTextInputProps, RichTextInputRef } from './types';
 
@@ -40,7 +40,7 @@ const defaultToolbar = [
   ['bold', 'italic', 'underline'],
   [{ 'script': 'sub' }, { 'script': 'super' }],
   [{ 'indent': '-1' }, { 'indent': '+1' }],
-  ['link', 'blockquote', 'code-block', 'image'],
+  ['link', 'blockquote', 'code-block', 'image', 'divider'],
   [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
 ] as const;
 
@@ -61,7 +61,7 @@ export const RichTextInput = createMemoComponent(({
   const setValue = (editor: Quill) => {
     const current = editor.getContents().ops;
     if (!_.isEqual(current, value)) {
-      const selection = editor.getSelection();
+      const selection = editor.getSelection(true);
       editor.setContents(new Delta(value ?? []), 'silent');
       if (selection) editor.setSelection(selection, 'silent');
     }
@@ -89,6 +89,7 @@ export const RichTextInput = createMemoComponent(({
     const element = containerRef.current;
     if (!element) return;
     const editor = new Quill(element, {
+      theme: 'bubble',
       ...options,
       modules: {
         toolbar: defaultToolbar,
@@ -99,6 +100,7 @@ export const RichTextInput = createMemoComponent(({
         ...options?.modules ?? {},
       },
     });
+    defaultToolbarHandler(editor);
     editorRef.current = editor;
     const textChange = (...args: Parameters<TextChangeHandler>) => _onTextChange(editor.getContents().ops, ...args, editor);
     const selectionChange = (...args: Parameters<SelectionChangeHandler>) => _onSelectionChange(...args, editor);

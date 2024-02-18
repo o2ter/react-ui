@@ -4,6 +4,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
 import dts from 'rollup-plugin-dts';
+import scss from 'rollup-plugin-scss';
 import { PluginPure } from 'rollup-plugin-pure';
 
 const rollupPlugins = [
@@ -81,6 +82,7 @@ export default [
           '.ts', '.tsx', '.mjs', '.js',
         ]
       }),
+      scss({ fileName: 'index.web.css' }),
       ...rollupPlugins
     ],
   },
@@ -131,6 +133,12 @@ export default [
         file: 'dist/index.web.d.ts',
         format: 'es',
       },
+    ],
+    external: [
+      /\.css$/,
+      /\.scss$/,
+      /\.sass$/,
+      ...rollupConfig.external,
     ],
     plugins: [
       resolve({

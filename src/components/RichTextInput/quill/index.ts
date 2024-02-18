@@ -25,12 +25,10 @@
 
 import _ from 'lodash';
 import Quill from 'quill';
-
-import 'quill/dist/quill.core.css';
-import 'quill/dist/quill.bubble.css';
-import 'quill/dist/quill.snow.css';
 import { ImageResize } from './modules/imageResize/ImageResize';
 import { ImageDrop } from './modules/imageDrop/ImageDrop';
+
+import './quill.scss';
 
 export const Delta = Quill.import('delta');
 
@@ -72,5 +70,22 @@ Quill.register(class extends Quill.import('formats/image') {
     }
   }
 }, true);
+
+const BlockEmbed = Quill.import('blots/block/embed');
+
+Quill.register(class extends BlockEmbed {
+  static blotName = 'divider';
+  static tagName = 'hr';
+});
+
+export const defaultToolbarHandler = (quill: Quill) => { 
+  const toolbar = quill.getModule('toolbar');
+  toolbar.addHandler('divider', () => {
+    const range = quill.getSelection(true);
+    quill.insertText(range.index, '\n', Quill.sources.USER);
+    quill.insertEmbed(range.index + 1, 'divider', true, Quill.sources.USER);
+    quill.setSelection(range.index + 2, range.length, Quill.sources.SILENT);
+  });
+}
 
 export { Quill };
