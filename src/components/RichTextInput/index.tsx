@@ -46,7 +46,7 @@ const defaultToolbar = [
 
 export const RichTextInput = createMemoComponent(({
   value,
-  options,
+  options = {},
   onTextChange,
   onSelectionChange,
   ...props
@@ -97,7 +97,7 @@ export const RichTextInput = createMemoComponent(({
         imageResize: {
           modules: ['Resize', 'DisplaySize', 'Toolbar']
         },
-        ...options?.modules ?? {},
+        ...options.modules ?? {},
       },
     });
     defaultToolbarHandler(editor);
