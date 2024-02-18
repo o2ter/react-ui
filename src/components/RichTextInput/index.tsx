@@ -25,25 +25,11 @@
 
 import _ from 'lodash';
 import React from 'react';
-import type { Quill as _Quill, QuillOptionsStatic, SelectionChangeHandler, TextChangeHandler } from 'quill';
-import type _Delta from 'quill/node_modules/quill-delta/dist/Delta';
-import type { Op } from 'quill/node_modules/quill-delta/dist/Delta';
+import type { SelectionChangeHandler, TextChangeHandler } from 'quill';
 import { useStableCallback } from 'sugax';
-import { Quill } from './quill';
+import { Delta, Quill } from './quill';
 import { createMemoComponent } from '../../internals/utils';
-
-type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
-  value?: Op[];
-  options?: QuillOptionsStatic;
-  onTextChange?: (value: Op[], ...arg: [...Parameters<TextChangeHandler>, _Quill]) => void;
-  onSelectionChange?: (...arg: [...Parameters<SelectionChangeHandler>, _Quill]) => void;
-};
-
-type RichTextInputRef = {
-  value?: Op[];
-  editor?: _Quill;
-  container?: HTMLDivElement;
-};
+import { RichTextInputProps, RichTextInputRef } from './types';
 
 const defaultToolbar = [
   [{ 'font': [] }],
@@ -66,17 +52,16 @@ export const RichTextInput = createMemoComponent(({
   ...props
 }: RichTextInputProps, forwardRef: React.ForwardedRef<RichTextInputRef>) => {
 
-  const editorRef = React.useRef<_Quill>();
+  const editorRef = React.useRef<Quill>();
   const containerRef = React.useRef<React.ComponentRef<'div'>>(null);
 
   const _onTextChange = useStableCallback(onTextChange ?? (() => { }));
   const _onSelectionChange = useStableCallback(onSelectionChange ?? (() => { }));
 
-  const setValue = (editor: _Quill) => {
+  const setValue = (editor: Quill) => {
     const current = editor.getContents().ops;
     if (!_.isEqual(current, value)) {
       const selection = editor.getSelection();
-      const Delta = Quill.import('delta') as typeof _Delta;
       editor.setContents(new Delta(value ?? []), 'silent');
       if (selection) editor.setSelection(selection, 'silent');
     }

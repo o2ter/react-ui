@@ -1,5 +1,5 @@
 //
-//  index.web.js
+//  types.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2024 O2ter Limited. All rights reserved.
@@ -23,10 +23,19 @@
 //  THE SOFTWARE.
 //
 
-export * from './index.js';
-export * from './Navigator';
-export * from './CodeMirror';
-export * from './DataSheet';
-export * from './UploadInput';
-export * from './RichTextInput';
-export { __FONTS__ } from './Icons/fonts';
+import React from 'react';
+import type { Quill, QuillOptionsStatic, SelectionChangeHandler, TextChangeHandler } from 'quill';
+import type { Op } from 'quill-delta';
+
+export type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
+  value?: Op[];
+  options?: QuillOptionsStatic;
+  onTextChange?: (value: Op[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
+  onSelectionChange?: (...arg: [...Parameters<SelectionChangeHandler>, Quill]) => void;
+};
+
+export type RichTextInputRef = {
+  value?: Op[];
+  editor?: Quill;
+  container?: HTMLDivElement;
+};

@@ -24,10 +24,18 @@
 //
 
 import _ from 'lodash';
-import type { Quill as _Quill } from 'quill';
+import Quill from 'quill';
+
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.bubble.css';
 import 'quill/dist/quill.snow.css';
+import { ImageResize } from './modules/imageResize/ImageResize';
+import { ImageDrop } from './modules/imageDrop/ImageDrop';
+
+export const Delta = Quill.import('delta');
+
+Quill.register('modules/imageResize', ImageResize);
+Quill.register('modules/imageDrop', ImageDrop);
 
 const imgAttrs = [
   'alt',
@@ -35,45 +43,34 @@ const imgAttrs = [
   'width',
 ] as const;
 
-const registerImageFormat = /* #__PURE__ */ (quill: typeof _Quill) => { 
-  quill.register(class extends quill.import('formats/image') {
-    static formats(domNode: HTMLImageElement) {
-      const style = domNode.style;
-      const attrs = _.filter(imgAttrs, s => domNode.hasAttribute(s));
-      return {
-        style: _.fromPairs(_.map([...style], s => [s, style.getPropertyValue(s)])),
-        ..._.fromPairs(_.map(attrs, s => [s, domNode.getAttribute(s)])),
-      };
-    }
-    format(name: string, value: any) {
-      if (_.includes(imgAttrs, name)) {
-        if (value) {
-          this.domNode.setAttribute(name, value);
-        } else {
-          this.domNode.removeAttribute(name);
-        }
-      } else if (name === 'style') {
-        for (const [k, v] of _.toPairs(value)) {
-          if (value) {
-            this.domNode.style.setProperty(k, v);
-          } else {
-            this.domNode.style.removeProperty(k);
-          }
-        }
+Quill.register(class extends Quill.import('formats/image') {
+  static formats(domNode: HTMLImageElement) {
+    const style = domNode.style;
+    const attrs = _.filter(imgAttrs, s => domNode.hasAttribute(s));
+    return {
+      style: _.fromPairs(_.map([...style], s => [s, style.getPropertyValue(s)])),
+      ..._.fromPairs(_.map(attrs, s => [s, domNode.getAttribute(s)])),
+    };
+  }
+  format(name: string, value: any) {
+    if (_.includes(imgAttrs, name)) {
+      if (value) {
+        this.domNode.setAttribute(name, value);
       } else {
-        super.format(name, value);
+        this.domNode.removeAttribute(name);
       }
+    } else if (name === 'style') {
+      for (const [k, v] of _.toPairs(value)) {
+        if (value) {
+          this.domNode.style.setProperty(k, v);
+        } else {
+          this.domNode.style.removeProperty(k);
+        }
+      }
+    } else {
+      super.format(name, value);
     }
-  }, true);
-}
+  }
+}, true);
 
-export const Quill = /* #__PURE__ */ (() => {
-  if (typeof window === 'undefined') return;
-  const quill = require('quill');
-  const { default: ImageResize } = require('quill-image-resize-module');
-  const { ImageDrop } = require('quill-image-drop-module');
-  quill.register('modules/imageResize', ImageResize);
-  quill.register('modules/imageDrop', ImageDrop);
-  registerImageFormat(quill);
-  return quill;
-})() as typeof _Quill;
+export { Quill };

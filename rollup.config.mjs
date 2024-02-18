@@ -88,6 +88,31 @@ export default [
     ...rollupConfig,
     output: [
       {
+        file: 'dist/index.server.js',
+        format: 'cjs',
+        sourcemap: true,
+      },
+      {
+        file: 'dist/index.server.mjs',
+        format: 'esm',
+        sourcemap: true,
+      },
+    ],
+    plugins: [
+      resolve({
+        extensions: [
+          '.server.ts', '.server.tsx', '.server.mjs', '.server.js',
+          '.web.ts', '.web.tsx', '.web.mjs', '.web.js',
+          '.ts', '.tsx', '.mjs', '.js',
+        ]
+      }),
+      ...rollupPlugins
+    ],
+  },
+  {
+    ...rollupConfig,
+    output: [
+      {
         file: 'dist/index.d.ts',
         format: 'es',
       },

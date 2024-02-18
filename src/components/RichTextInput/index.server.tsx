@@ -1,5 +1,5 @@
 //
-//  index.web.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2024 O2ter Limited. All rights reserved.
@@ -23,10 +23,21 @@
 //  THE SOFTWARE.
 //
 
-export * from './index.js';
-export * from './Navigator';
-export * from './CodeMirror';
-export * from './DataSheet';
-export * from './UploadInput';
-export * from './RichTextInput';
-export { __FONTS__ } from './Icons/fonts';
+import _ from 'lodash';
+import React from 'react';
+import { createMemoComponent } from '../../internals/utils';
+import { RichTextInputProps, RichTextInputRef } from './types';
+
+export const RichTextInput = createMemoComponent(({
+  value,
+  options,
+  onTextChange,
+  onSelectionChange,
+  ...props
+}: RichTextInputProps, forwardRef: React.ForwardedRef<RichTextInputRef>) => {
+
+  return <div {...props} />;
+
+}, {
+  displayName: 'RichTextInput',
+})
