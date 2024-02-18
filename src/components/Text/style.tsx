@@ -70,10 +70,12 @@ export const textStyleNormalize = (style?: StyleProp<TextStyle>) => {
   };
 }
 
-export const TextStyleProvider: React.FC<React.PropsWithChildren<{
+type TextStyleProviderProps = React.PropsWithChildren<{
   classes?: ClassNames;
   style?: StyleProp<TextStyle>;
-}>> = ({
+}>;
+
+export const TextStyleProvider: React.FC<TextStyleProviderProps> = ({
   classes,
   style,
   children,
