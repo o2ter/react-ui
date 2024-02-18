@@ -83,8 +83,9 @@ export const useStyle = (
   const { classes } = React.useContext(_StyleContext);
   const names = flattenClassNames(classNames, selectors);
   return React.useMemo(() =>
-    flattenStyle(_.values(_.pickBy(classes, (v, k) => _.includes(names, k))))
-    , [classes, names.join(' ')]);
+    flattenStyle(_.values(_.pickBy(classes, (v, k) => _.includes(names, k)))),
+    [classes, names.join(' ')]
+  );
 }
 
 export const useAllStyle = () => React.useContext(_StyleContext);
