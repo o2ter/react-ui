@@ -31,8 +31,8 @@ import { RichTextInputProps, RichTextInputRef } from './types';
 export const RichTextInput = createMemoComponent(({
   value,
   options,
-  onTextChange,
-  onSelectionChange,
+  onChangeText,
+  onChangeSelection,
   ...props
 }: RichTextInputProps, forwardRef: React.ForwardedRef<RichTextInputRef>) => {
 

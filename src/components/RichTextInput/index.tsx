@@ -47,16 +47,16 @@ const defaultToolbar = [
 export const RichTextInput = createMemoComponent(({
   value,
   options = {},
-  onTextChange,
-  onSelectionChange,
+  onChangeText,
+  onChangeSelection,
   ...props
 }: RichTextInputProps, forwardRef: React.ForwardedRef<RichTextInputRef>) => {
 
   const editorRef = React.useRef<Quill>();
   const containerRef = React.useRef<React.ComponentRef<'div'>>(null);
 
-  const _onTextChange = useStableCallback(onTextChange ?? (() => { }));
-  const _onSelectionChange = useStableCallback(onSelectionChange ?? (() => { }));
+  const _onChangeText = useStableCallback(onChangeText ?? (() => { }));
+  const _onChangeSelection = useStableCallback(onChangeSelection ?? (() => { }));
 
   const setValue = (editor: Quill) => {
     const current = editor.getContents().ops;
@@ -102,8 +102,8 @@ export const RichTextInput = createMemoComponent(({
     });
     defaultToolbarHandler(editor);
     editorRef.current = editor;
-    const textChange = (...args: Parameters<TextChangeHandler>) => _onTextChange(editor.getContents().ops, ...args, editor);
-    const selectionChange = (...args: Parameters<SelectionChangeHandler>) => _onSelectionChange(...args, editor);
+    const textChange = (...args: Parameters<TextChangeHandler>) => _onChangeText(editor.getContents().ops, ...args, editor);
+    const selectionChange = (...args: Parameters<SelectionChangeHandler>) => _onChangeSelection(...args, editor);
     editor.on('text-change', textChange);
     editor.on('selection-change', selectionChange);
     setValue(editor);

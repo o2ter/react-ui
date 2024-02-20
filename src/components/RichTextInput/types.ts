@@ -30,8 +30,8 @@ import type { Op } from 'quill-delta';
 export type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
   value?: Op[];
   options?: QuillOptionsStatic;
-  onTextChange?: (value: Op[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
-  onSelectionChange?: (...arg: [...Parameters<SelectionChangeHandler>, Quill]) => void;
+  onChangeText?: (value: Op[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
+  onChangeSelection?: (...arg: [...Parameters<SelectionChangeHandler>, Quill]) => void;
 };
 
 export type RichTextInputRef = {
