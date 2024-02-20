@@ -176,7 +176,7 @@ export const Button = createMemoComponent(({
     colors.borderColor !== 'transparent' && { borderWidth: theme.borderWidth },
     (colors.borderColor !== 'transparent' || colors.backgroundColor !== 'transparent') && { borderRadius: theme.borderRadiusBase },
     buttonStyle,
-  ]), [theme, size, disabled, _activated, buttonStyle]);
+  ]), [theme, colors, size, disabled, _activated, buttonStyle]);
 
   const defaultStyle = React.useMemo(() => StyleSheet.create({
     text: _.pick(_defaultStyle, textStyleKeys),
