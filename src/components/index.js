@@ -31,6 +31,7 @@ export { Calendar } from './Calendar';
 export * from './Checkbox';
 export * from './DateTime';
 export { ErrorBoundary } from './ErrorBoundary';
+export * from './ErrorFormatter';
 export { FlatList } from './FlatList';
 export * from './Form';
 export { Icon } from './Icon';

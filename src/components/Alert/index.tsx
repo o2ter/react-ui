@@ -36,22 +36,32 @@ import { textStyleNormalize } from '../Text/style';
 import { ThemeColors } from '../../theme/variables';
 import { MaterialIcons as Icon } from '../Icons';
 import { normalizeStyle } from '../Style/flatten';
+import { useErrorFormatter } from '../ErrorFormatter/context';
 
 type AlertMessage = string | (Error & { code?: number });
 type AlertType = 'success' | 'info' | 'warning' | 'error';
 type AlertOptions = { color: ThemeColors | (string & {}); icon?: React.ReactElement; timeout?: number; };
 
-const AlertContext = React.createContext({
-  showError(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { },
-  showWarning(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { },
-  showInfo(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { },
-  showSuccess(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { },
-  showAlert(message: AlertMessage | RecursiveArray<AlertMessage>, options: AlertOptions) { },
-});
+const AlertContext = React.createContext<(
+  message: AlertMessage | ReadonlyArray<AlertMessage> | RecursiveArray<AlertMessage>,
+  style: AlertType | Omit<AlertOptions, 'timeout'>,
+  timeout?: number,
+  formatter?: (error: Error) => string
+) => void>(() => { });
 
 AlertContext.displayName = 'AlertContext';
 
-export const useAlert = () => React.useContext(AlertContext);
+export const useAlert = () => {
+  const formatter = useErrorFormatter();
+  const showMessage = React.useContext(AlertContext);
+  return React.useMemo(() => ({
+    showError(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { showMessage(message, 'error', timeout, formatter); },
+    showWarning(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { showMessage(message, 'warning', timeout, formatter); },
+    showInfo(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { showMessage(message, 'info', timeout, formatter); },
+    showSuccess(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { showMessage(message, 'success', timeout, formatter); },
+    showAlert(message: AlertMessage | RecursiveArray<AlertMessage>, options: AlertOptions) { showMessage(message, options, options.timeout, formatter); },
+  }), [formatter, showMessage])
+};
 
 const icons = {
   success: 'task-alt',
@@ -60,8 +70,9 @@ const icons = {
   error: 'error-outline',
 } as const;
 
-function toString(message: AlertMessage) {
+const toString = (message: AlertMessage, formatter?: (error: Error) => string) => {
   if (_.isString(message)) return message;
+  if (_.isFunction(formatter)) return formatter(message);
   if (_.isNumber(message.code) && _.isString(message.message)) return `${message.message} (${message.code})`;
   if (_.isString(message.message)) return message.message;
   return `${message}`;
@@ -72,6 +83,7 @@ type AlertBodyProps = {
   style: AlertType | { color: string; icon?: React.ReactElement },
   onShow: (x: { dismiss: VoidFunction }) => void;
   onDismiss: VoidFunction;
+  formatter?: (error: Error) => string;
 };
 
 const AlertBody: React.FC<AlertBodyProps> = ({
@@ -79,6 +91,7 @@ const AlertBody: React.FC<AlertBodyProps> = ({
   style,
   onShow,
   onDismiss,
+  formatter,
 }) => {
 
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
@@ -110,7 +123,7 @@ const AlertBody: React.FC<AlertBodyProps> = ({
   const { color, messageColor, ...alertColorStyle } = theme.palette.alertColors(_.isString(style) ? style : style.color);
 
   const localize = useLocalize();
-  const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message);
+  const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message, formatter);
 
   return <Animated.View
     style={normalizeStyle([
@@ -161,37 +174,33 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({
   const theme = useTheme();
 
   const provider = React.useMemo(() => {
-
-    function show_message(
+    function showMessage(
       message: AlertMessage | ReadonlyArray<AlertMessage> | RecursiveArray<AlertMessage>,
       style: AlertType | Omit<AlertOptions, 'timeout'>,
-      timeout?: number
+      timeout?: number,
+      formatter?: (error: Error) => string
     ) {
-
       if (_.isNil(message)) return;
       if (!_.isString(message) && _.isArrayLike(message)) {
-        _.forEach(message, x => show_message(x, style, timeout));
+        _.forEach(message, x => showMessage(x, style, timeout, formatter));
         return;
       }
-
       const id = _.uniqueId();
-
       setElements(elements => ({
         ...elements,
-        [id]: <AlertBody key={id} message={message} style={style}
-          onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? defaultTimeout)}
-          onDismiss={() => setElements(elements => _.pickBy(elements, (_val, key) => key != id))} />
+        [id]: (
+          <AlertBody
+            key={id}
+            message={message}
+            style={style}
+            onShow={({ dismiss }) => setTimeout(dismiss, timeout ?? defaultTimeout)}
+            onDismiss={() => setElements(elements => _.pickBy(elements, (_val, key) => key != id))}
+            formatter={formatter}
+          />
+        ),
       }));
     }
-
-    return {
-      showError(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'error', timeout); },
-      showWarning(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'warning', timeout); },
-      showInfo(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'info', timeout); },
-      showSuccess(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { show_message(message, 'success', timeout); },
-      showAlert(message: AlertMessage | RecursiveArray<AlertMessage>, options: AlertOptions) { show_message(message, options, options.timeout); },
-    };
-
+    return showMessage;
   }, []);
 
   return <AlertContext.Provider value={provider}>
