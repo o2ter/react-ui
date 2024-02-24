@@ -25,17 +25,26 @@
 
 import React from 'react';
 import type { Quill, QuillOptionsStatic, SelectionChangeHandler, TextChangeHandler } from 'quill';
-import type { Op } from 'quill-delta';
+
+type Segment = {
+  attributes: Record<string, any>;
+  insert: string | Record<string, unknown>;
+};
+
+export type Line = {
+  attributes: Record<string, any>;
+  segments: Segment[];
+};
 
 export type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
-  value?: Op[];
+  value?: Line[];
   options?: QuillOptionsStatic;
-  onChangeText?: (value: Op[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
+  onChangeText?: (value: Line[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
   onChangeSelection?: (...arg: [...Parameters<SelectionChangeHandler>, Quill]) => void;
 };
 
 export type RichTextInputRef = {
-  value?: Op[];
+  value?: Line[];
   editor?: Quill;
   container?: HTMLDivElement;
 };

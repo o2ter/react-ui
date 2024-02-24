@@ -29,7 +29,7 @@ import type { SelectionChangeHandler, TextChangeHandler } from 'quill';
 import { useStableCallback } from 'sugax';
 import { Delta, Quill, defaultToolbarHandler } from './quill';
 import { createMemoComponent } from '../../internals/utils';
-import { RichTextInputProps, RichTextInputRef } from './types';
+import { Line, RichTextInputProps, RichTextInputRef } from './types';
 
 const defaultToolbar = [
   [{ 'font': [] }],
@@ -43,6 +43,35 @@ const defaultToolbar = [
   ['link', 'blockquote', 'code-block', 'image', 'divider'],
   [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
 ] as const;
+
+const encodeContent = (lines: Line[]) => {
+  const content = new Delta();
+  let lineAttrs = {};
+  for (const [i, line] of lines.entries()) {
+    if (i !== 0) content.insert('\n', lineAttrs);
+    for (const segment of line.segments) {
+      content.insert(segment.insert, segment.attributes);
+    }
+    lineAttrs = line.attributes;
+  }
+  if (!_.isEmpty(lineAttrs)) content.insert('\n', lineAttrs);
+  return content;
+}
+
+const decodeContent = (content?: ReturnType<Quill['getContents']>) => {
+  if (!content) return [];
+  const result: Line[] = [];
+  content.eachLine((line, attributes) => {
+    result.push({
+      attributes,
+      segments: line.map(({ insert, attributes }) => ({
+        attributes: attributes ?? {},
+        insert: insert ?? '',
+      })),
+    })
+  });
+  return result;
+}
 
 export const RichTextInput = createMemoComponent(({
   value,
@@ -59,10 +88,10 @@ export const RichTextInput = createMemoComponent(({
   const _onChangeSelection = useStableCallback(onChangeSelection ?? (() => { }));
 
   const setValue = (editor: Quill) => {
-    const current = editor.getContents().ops;
+    const current = decodeContent(editor.getContents());
     if (!_.isEqual(current, value)) {
       const selection = editor.getSelection(true);
-      editor.setContents(new Delta(value ?? []), 'silent');
+      editor.setContents(encodeContent(value ?? []), 'silent');
       if (selection) editor.setSelection(selection, 'silent');
     }
   }
@@ -75,7 +104,7 @@ export const RichTextInput = createMemoComponent(({
 
   React.useImperativeHandle(forwardRef, () => ({
     get value() {
-      return editorRef.current?.getContents().ops;
+      return decodeContent(editorRef.current?.getContents());
     },
     get editor() {
       return editorRef.current;
@@ -102,7 +131,7 @@ export const RichTextInput = createMemoComponent(({
     });
     defaultToolbarHandler(editor);
     editorRef.current = editor;
-    const textChange = (...args: Parameters<TextChangeHandler>) => _onChangeText(editor.getContents().ops, ...args, editor);
+    const textChange = (...args: Parameters<TextChangeHandler>) => _onChangeText(decodeContent(editor.getContents()), ...args, editor);
     const selectionChange = (...args: Parameters<SelectionChangeHandler>) => _onChangeSelection(...args, editor);
     editor.on('text-change', textChange);
     editor.on('selection-change', selectionChange);
