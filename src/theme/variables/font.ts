@@ -53,6 +53,8 @@ export const headerFontSizes: Record<string, number | ((base: number) => number)
   '6': base => base,
 };
 
+export const headerFontWeight: FontWeight = '500';
+
 export const displayFontSizes: Record<string, number | ((base: number) => number)> = {
   '1': base => base * 5,
   '2': base => base * 4.5,
