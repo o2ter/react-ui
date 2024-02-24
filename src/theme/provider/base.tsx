@@ -40,6 +40,7 @@ const decodeVariables = (variables: typeof defaultVariables) => {
   const {
     root,
     fontSizes: _fontSizes,
+    headerFontSizes: _headerFontSizes,
     displayFontSizes: _displayFontSizes,
     spacer: _spacer,
     spacers: _spacers,
@@ -61,6 +62,7 @@ const decodeVariables = (variables: typeof defaultVariables) => {
     borderWidth,
     borderRadiusBase,
     fontSizes: _.mapValues(_fontSizes, v => _.isFunction(v) ? v(root.fontSize) : v),
+    headerFontSizes: _.mapValues(_headerFontSizes, v => _.isFunction(v) ? v(root.fontSize) : v),
     displayFontSizes: _.mapValues(_displayFontSizes, v => _.isFunction(v) ? v(root.fontSize) : v),
     spacers: _.mapValues(_spacers, v => _.isFunction(v) ? v(spacer) : v),
     borderWidths: _.mapValues(_borderWidths, v => _.isFunction(v) ? v(borderWidth) : v),
