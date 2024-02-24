@@ -44,6 +44,15 @@ export const fontWeights: Record<string, FontWeight> = {
   bold: '700',
 };
 
+export const headerFontSizes: Record<string, number | ((base: number) => number)> = {
+  '1': base => base * 2.5,
+  '2': base => base * 2,
+  '3': base => base * 1.75,
+  '4': base => base * 1.5,
+  '5': base => base * 1.25,
+  '6': base => base,
+};
+
 export const displayFontSizes: Record<string, number | ((base: number) => number)> = {
   '1': base => base * 5,
   '2': base => base * 4.5,
