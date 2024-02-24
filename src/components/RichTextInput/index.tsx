@@ -37,7 +37,7 @@ const defaultToolbar = [
   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
   [{ 'color': [] }, { 'background': [] }],
   [{ 'align': [] }],
-  ['bold', 'italic', 'underline'],
+  ['bold', 'italic', 'strike', 'underline'],
   [{ 'script': 'sub' }, { 'script': 'super' }],
   [{ 'indent': '-1' }, { 'indent': '+1' }],
   ['link', 'blockquote', 'code-block', 'image', 'divider'],
