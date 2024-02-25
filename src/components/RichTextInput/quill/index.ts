@@ -44,10 +44,8 @@ const imgAttrs = [
 
 Quill.register(class extends Quill.import('formats/image') {
   static formats(domNode: HTMLImageElement) {
-    const style = domNode.style;
     const attrs = _.filter(imgAttrs, s => domNode.hasAttribute(s));
     return {
-      style: _.fromPairs(_.map([...style], s => [s, style.getPropertyValue(s)])),
       ..._.fromPairs(_.map(attrs, s => [s, domNode.getAttribute(s)])),
     };
   }
@@ -57,14 +55,6 @@ Quill.register(class extends Quill.import('formats/image') {
         this.domNode.setAttribute(name, value);
       } else {
         this.domNode.removeAttribute(name);
-      }
-    } else if (name === 'style') {
-      for (const [k, v] of _.toPairs(value)) {
-        if (value) {
-          this.domNode.style.setProperty(k, v);
-        } else {
-          this.domNode.style.removeProperty(k);
-        }
       }
     } else {
       super.format(name, value);
