@@ -29,7 +29,7 @@ import { createMemoComponent } from '../../internals/utils';
 import { RichTextInputProps, RichTextInputRef } from './types';
 
 export const RichTextInput = createMemoComponent(({
-  value,
+  initialValue,
   options,
   onChangeText,
   onChangeSelection,
