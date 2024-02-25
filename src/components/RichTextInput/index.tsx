@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import type { SelectionChangeHandler, TextChangeHandler } from 'quill';
 import { useStableCallback } from 'sugax';
-import { Delta, Quill, defaultToolbarHandler } from './quill';
+import { Delta, Quill } from './quill';
 import { createMemoComponent } from '../../internals/utils';
 import { Line, RichTextInputProps, RichTextInputRef } from './types';
 
@@ -129,7 +129,6 @@ export const RichTextInput = createMemoComponent(({
         ...options.modules ?? {},
       },
     });
-    defaultToolbarHandler(editor);
     editorRef.current = editor;
     const textChange = (...args: Parameters<TextChangeHandler>) => _onChangeText(decodeContent(editor.getContents()), ...args, editor);
     const selectionChange = (...args: Parameters<SelectionChangeHandler>) => _onChangeSelection(...args, editor);
