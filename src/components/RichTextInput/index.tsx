@@ -40,7 +40,7 @@ const defaultToolbar = [
   ['bold', 'italic', 'strike', 'underline'],
   [{ 'script': 'sub' }, { 'script': 'super' }],
   [{ 'indent': '-1' }, { 'indent': '+1' }],
-  ['link', 'blockquote', 'code-block', 'image', 'divider'],
+  ['link', 'blockquote', 'code-block', 'image'],
   [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
 ] as const;
 

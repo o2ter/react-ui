@@ -72,21 +72,4 @@ Quill.register(class extends Quill.import('formats/image') {
   }
 }, true);
 
-const BlockEmbed = Quill.import('blots/block/embed');
-
-Quill.register(class extends BlockEmbed {
-  static blotName = 'divider';
-  static tagName = 'hr';
-});
-
-export const defaultToolbarHandler = (quill: Quill) => { 
-  const toolbar = quill.getModule('toolbar');
-  toolbar.addHandler('divider', () => {
-    const range = quill.getSelection(true);
-    quill.insertText(range.index, '\n', Quill.sources.USER);
-    quill.insertEmbed(range.index + 1, 'divider', true, Quill.sources.USER);
-    quill.setSelection(range.index + 2, range.length, Quill.sources.SILENT);
-  });
-}
-
 export { Quill };
