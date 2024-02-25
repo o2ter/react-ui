@@ -123,9 +123,7 @@ export const RichTextInput = createMemoComponent(({
       modules: {
         toolbar: defaultToolbar,
         imageDrop: true,
-        imageResize: {
-          modules: ['Resize', 'DisplaySize', 'Toolbar']
-        },
+        imageResize: true,
         ...options.modules ?? {},
       },
     });
