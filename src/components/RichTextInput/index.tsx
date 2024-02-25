@@ -74,7 +74,7 @@ const decodeContent = (content?: ReturnType<Quill['getContents']>) => {
 }
 
 export const RichTextInput = createMemoComponent(({
-  value,
+  initialValue = [],
   options = {},
   onChangeText,
   onChangeSelection,
@@ -86,21 +86,6 @@ export const RichTextInput = createMemoComponent(({
 
   const _onChangeText = useStableCallback(onChangeText ?? (() => { }));
   const _onChangeSelection = useStableCallback(onChangeSelection ?? (() => { }));
-
-  const setValue = (editor: Quill) => {
-    const current = decodeContent(editor.getContents());
-    if (!_.isEqual(current, value)) {
-      const selection = editor.getSelection(true);
-      editor.setContents(encodeContent(value ?? []), 'silent');
-      if (selection) editor.setSelection(selection, 'silent');
-    }
-  }
-
-  React.useEffect(() => {
-    const editor = editorRef.current;
-    if (!editor) return;
-    setValue(editor);
-  }, [value]);
 
   React.useImperativeHandle(forwardRef, () => ({
     get value() {
@@ -132,7 +117,7 @@ export const RichTextInput = createMemoComponent(({
     const selectionChange = (...args: Parameters<SelectionChangeHandler>) => _onChangeSelection(...args, editor);
     editor.on('text-change', textChange);
     editor.on('selection-change', selectionChange);
-    setValue(editor);
+    if (!_.isEmpty(initialValue)) editor.setContents(encodeContent(initialValue), 'silent');
     () => {
       editor.off('text-change', textChange);
       editor.off('selection-change', selectionChange);

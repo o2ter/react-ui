@@ -37,7 +37,7 @@ export type Line = {
 };
 
 export type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
-  value?: Line[];
+  initialValue?: Line[];
   options?: QuillOptionsStatic;
   onChangeText?: (value: Line[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
   onChangeSelection?: (...arg: [...Parameters<SelectionChangeHandler>, Quill]) => void;
