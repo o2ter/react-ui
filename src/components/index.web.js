@@ -29,4 +29,5 @@ export * from './CodeMirror';
 export * from './DataSheet';
 export * from './UploadInput';
 export * from './RichTextInput';
+export * from './BBCode';
 export { __FONTS__ } from './Icons/fonts';
