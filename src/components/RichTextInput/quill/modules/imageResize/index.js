@@ -1,7 +1,7 @@
 import Quill from 'quill';
 import defaultsDeep from 'lodash/defaultsDeep';
-import DefaultOptions from './DefaultOptions';
-import { Resize } from './modules/Resize';
+import DefaultOptions from './defaults';
+import { Resize } from './resize';
 
 const knownModules = { Resize };
 

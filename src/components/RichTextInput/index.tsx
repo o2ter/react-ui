@@ -76,6 +76,7 @@ const decodeContent = (content?: ReturnType<Quill['getContents']>) => {
 export const RichTextInput = createMemoComponent(({
   initialValue = [],
   options = {},
+  onUploadImage,
   onChangeText,
   onChangeSelection,
   ...props
@@ -107,8 +108,14 @@ export const RichTextInput = createMemoComponent(({
       ...options,
       modules: {
         toolbar: defaultToolbar,
-        imageDrop: true,
         imageResize: true,
+        imageUploader: {
+          upload: onUploadImage ?? (blob => new Promise(res => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => res(reader.result as string);
+          })),
+        },
         ...options.modules ?? {},
       },
     });

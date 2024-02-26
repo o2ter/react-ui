@@ -1,4 +1,4 @@
-import { BaseModule } from './BaseModule';
+import { BaseModule } from './base';
 
 export class Resize extends BaseModule {
     onCreate = () => {

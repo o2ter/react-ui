@@ -39,6 +39,7 @@ export type Line = {
 export type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
   initialValue?: Line[];
   options?: QuillOptionsStatic;
+  onUploadImage?: (blob: Blob) => PromiseLike<string>;
   onChangeText?: (value: Line[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
   onChangeSelection?: (...arg: [...Parameters<SelectionChangeHandler>, Quill]) => void;
 };
