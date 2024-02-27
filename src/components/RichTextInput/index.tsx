@@ -73,8 +73,10 @@ const decodeContent = (content?: ReturnType<Quill['getContents']>) => {
   return result;
 }
 
+const _removeEmptyLines = (lines: Line[]) => _.takeWhile(lines, x => !_.isEmpty(x.segments) && !_.isEmpty(x.attributes))
+
 export const RichTextInput = createMemoComponent(({
-  initialValue = [],
+  value = [],
   options = {},
   onUploadImage,
   onChangeText,
@@ -87,6 +89,16 @@ export const RichTextInput = createMemoComponent(({
 
   const _onChangeText = useStableCallback(onChangeText ?? (() => { }));
   const _onChangeSelection = useStableCallback(onChangeSelection ?? (() => { }));
+
+  React.useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    const current = decodeContent(editor.getContents());
+    if (_.isEqual(_removeEmptyLines(current), _removeEmptyLines(value))) return;
+    const selection = editor.getSelection(true);
+    editor.setContents(encodeContent(value ?? []), 'silent');
+    if (selection) editor.setSelection(selection, 'silent');
+  }, [value]);
 
   React.useImperativeHandle(forwardRef, () => ({
     get value() {
@@ -124,7 +136,7 @@ export const RichTextInput = createMemoComponent(({
     const selectionChange = (...args: Parameters<SelectionChangeHandler>) => _onChangeSelection(...args, editor);
     editor.on('text-change', textChange);
     editor.on('selection-change', selectionChange);
-    if (!_.isEmpty(initialValue)) editor.setContents(encodeContent(initialValue), 'silent');
+    if (!_.isEmpty(value)) editor.setContents(encodeContent(value), 'silent');
     () => {
       editor.off('text-change', textChange);
       editor.off('selection-change', selectionChange);

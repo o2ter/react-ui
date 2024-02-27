@@ -41,20 +41,21 @@ const defaultToolbar = [
   // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
 ] as const;
 
-type BBCodeEditorProps = Omit<React.ComponentPropsWithoutRef<typeof RichTextInput>, 'initialValue' | 'onChangeText'> & {
-  initialValue?: string;
+type BBCodeEditorProps = Omit<React.ComponentPropsWithoutRef<typeof RichTextInput>, 'value' | 'onChangeText'> & {
+  value?: string;
   onChangeText?: (text: string) => void;
 }
 
 export const BBCodeEditor = ({
-  initialValue,
+  value,
   onChangeText,
   options = {},
   ...props
 }: BBCodeEditorProps) => {
+  const _value = React.useMemo(() => bbcode2delta(value ?? ''), [value]);
   return (
     <RichTextInput
-      initialValue={bbcode2delta(initialValue ?? '')}
+      value={_value}
       onChangeText={(delta) => {
         if (_.isFunction(onChangeText)) onChangeText(delta2bbcode(delta));
       }}
