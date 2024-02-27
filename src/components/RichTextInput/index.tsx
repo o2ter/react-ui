@@ -90,11 +90,11 @@ export const RichTextInput = createMemoComponent(({
   const _onChangeText = useStableCallback(onChangeText ?? (() => { }));
   const _onChangeSelection = useStableCallback(onChangeSelection ?? (() => { }));
 
+  const [prev, setPrev] = React.useState(value);
   React.useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
-    const current = decodeContent(editor.getContents());
-    if (_.isEqual(_removeEmptyLines(current), _removeEmptyLines(value))) return;
+    if (_.isEqual(_removeEmptyLines(prev), _removeEmptyLines(value))) return;
     const selection = editor.getSelection(true);
     editor.setContents(encodeContent(value ?? []), 'silent');
     if (selection) editor.setSelection(selection, 'silent');
@@ -132,7 +132,11 @@ export const RichTextInput = createMemoComponent(({
       },
     });
     editorRef.current = editor;
-    const textChange = (...args: Parameters<TextChangeHandler>) => _onChangeText(decodeContent(editor.getContents()), ...args, editor);
+    const textChange = (...args: Parameters<TextChangeHandler>) => {
+      const value = decodeContent(editor.getContents());
+      setPrev(value);
+      _onChangeText(value, ...args, editor);
+    }
     const selectionChange = (...args: Parameters<SelectionChangeHandler>) => _onChangeSelection(...args, editor);
     editor.on('text-change', textChange);
     editor.on('selection-change', selectionChange);
