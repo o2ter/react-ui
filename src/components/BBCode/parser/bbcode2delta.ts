@@ -52,7 +52,10 @@ export const bbcode2delta = (docs: string) => {
             case 'img':
               segments.push({
                 insert: { image: value },
-                attributes: segment.attributes.img,
+                attributes: {
+                  ...attributes,
+                  ...segment.attributes.img ?? {},
+                },
               });
           }
         }
