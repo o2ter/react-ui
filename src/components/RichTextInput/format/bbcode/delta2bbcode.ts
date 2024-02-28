@@ -24,9 +24,10 @@
 //
 
 import _ from 'lodash';
-import { html_escaper } from './ast';
+import { html_escaper } from '../../../BBCode/parser';
+import { Line } from '../../types';
 
-export const delta2bbcode = (docs: any[]) => {
+export const delta2bbcode = (docs: Line[]) => {
   let result = '';
   for (const line of docs) {
     for (const [k, v] of _.toPairs(line.attributes)) {

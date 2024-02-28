@@ -26,7 +26,7 @@
 import React from 'react';
 import type { Quill, QuillOptionsStatic, SelectionChangeHandler, TextChangeHandler } from 'quill';
 
-type Segment = {
+export type Segment = {
   attributes: Record<string, any>;
   insert: string | Record<string, unknown>;
 };

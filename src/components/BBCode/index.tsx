@@ -30,10 +30,8 @@ import View from '../View';
 import Text from '../Text';
 import Image from '../Image';
 import { useTheme } from '../../theme';
-import { parser } from './parser/ast';
+import { parser } from './parser';
 import { createMemoComponent } from '../../internals/utils';
-
-export * from './editor';
 
 type BBCodeProps = React.ComponentPropsWithoutRef<typeof View> & {
   source?: { content?: string };

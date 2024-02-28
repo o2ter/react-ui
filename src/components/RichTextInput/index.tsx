@@ -25,130 +25,46 @@
 
 import _ from 'lodash';
 import React from 'react';
-import type { SelectionChangeHandler, TextChangeHandler } from 'quill';
-import { useStableCallback } from 'sugax';
-import { Delta, Quill } from './quill';
+import { Base } from './base';
 import { createMemoComponent } from '../../internals/utils';
-import { Line, RichTextInputProps, RichTextInputRef } from './types';
+import { Format, _format } from './format';
 
-const defaultToolbar = [
-  [{ 'font': [] }],
-  [{ 'size': ['small', false, 'large', 'huge'] }],
-  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-  [{ 'color': [] }, { 'background': [] }],
-  [{ 'align': [] }],
-  ['bold', 'italic', 'strike', 'underline'],
-  [{ 'script': 'sub' }, { 'script': 'super' }],
-  [{ 'indent': '-1' }, { 'indent': '+1' }],
-  ['link', 'blockquote', 'code-block', 'image'],
-  [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-] as const;
-
-const encodeContent = (lines: Line[]) => {
-  const content = new Delta();
-  let lineAttrs = {};
-  for (const [i, line] of lines.entries()) {
-    if (i !== 0) content.insert('\n', lineAttrs);
-    for (const segment of line.segments) {
-      content.insert(segment.insert, segment.attributes);
-    }
-    lineAttrs = line.attributes;
-  }
-  if (!_.isEmpty(lineAttrs)) content.insert('\n', lineAttrs);
-  return content;
+type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWithoutRef<typeof Base>, 'value' | 'onChangeText'> & {
+  format?: F;
+  value?: ReturnType<Format[F]['decoder']>;
+  onChangeText?: (text: ReturnType<Format[F]['decoder']>) => void;
 }
 
-const decodeContent = (content?: ReturnType<Quill['getContents']>) => {
-  if (!content) return [];
-  const result: Line[] = [];
-  content.eachLine((line, attributes) => {
-    result.push({
-      attributes,
-      segments: line.map(({ insert, attributes }) => ({
-        attributes: attributes ?? {},
-        insert: insert ?? '',
-      })),
-    })
-  });
-  return result;
-}
-
-const _removeEmptyLines = (lines: Line[]) => _.takeWhile(lines, x => !_.isEmpty(x.segments) || !_.isEmpty(x.attributes));
-
-export const RichTextInput = createMemoComponent(({
-  value = [],
-  options = {},
-  onUploadImage,
-  onChangeText,
-  onChangeSelection,
-  ...props
-}: RichTextInputProps, forwardRef: React.ForwardedRef<RichTextInputRef>) => {
-
-  const editorRef = React.useRef<Quill>();
-  const containerRef = React.useRef<React.ComponentRef<'div'>>(null);
-
-  const _onChangeText = useStableCallback(onChangeText ?? (() => { }));
-  const _onChangeSelection = useStableCallback(onChangeSelection ?? (() => { }));
-
-  const [capture, setCapture] = React.useState(value);
-  React.useEffect(() => {
-    const editor = editorRef.current;
-    if (!editor) return;
-    if (_.isEqual(_removeEmptyLines(capture), _removeEmptyLines(value))) return;
-    const selection = editor.getSelection(true);
-    editor.setContents(encodeContent(value ?? []), 'silent');
-    if (selection) editor.setSelection(selection, 'silent');
-  }, [value]);
-
-  React.useImperativeHandle(forwardRef, () => ({
-    get value() {
-      return decodeContent(editorRef.current?.getContents());
-    },
-    get editor() {
-      return editorRef.current;
-    },
-    get container() {
-      return containerRef.current ?? undefined;
-    },
-  }), []);
-
-  React.useEffect(() => {
-    const element = containerRef.current;
-    if (!element) return;
-    const editor = new Quill(element, {
-      theme: 'bubble',
-      ...options,
-      modules: {
-        toolbar: defaultToolbar,
-        imageResize: true,
-        imageUploader: {
-          upload: onUploadImage ?? (blob => new Promise(res => {
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => res(reader.result as string);
-          })),
+export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
+  {
+    format = 'bbcode' as F,
+    value,
+    onChangeText,
+    options = {},
+    ...props
+  }: RichTextInputProps<F>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Base>>
+) => {
+  const _value = React.useMemo(() => _format[format].encoder(value ?? '' as any), [value]);
+  return (
+    <Base
+      ref={forwardRef}
+      value={_value}
+      onChangeText={(delta) => {
+        if (_.isFunction(onChangeText)) onChangeText(_format[format].decoder(delta) as any);
+      }}
+      options={{
+        theme: 'snow',
+        ..._format[format].defaultOptions,
+        ...options,
+        modules: {
+          ..._format[format].defaultOptions.modules ?? {},
+          ...options.modules ?? {},
         },
-        ...options.modules ?? {},
-      },
-    });
-    editorRef.current = editor;
-    const textChange = (...args: Parameters<TextChangeHandler>) => {
-      const value = decodeContent(editor.getContents());
-      setCapture(value);
-      _onChangeText(value, ...args, editor);
-    }
-    const selectionChange = (...args: Parameters<SelectionChangeHandler>) => _onChangeSelection(...args, editor);
-    editor.on('text-change', textChange);
-    editor.on('selection-change', selectionChange);
-    if (!_.isEmpty(value)) editor.setContents(encodeContent(value), 'silent');
-    () => {
-      editor.off('text-change', textChange);
-      editor.off('selection-change', selectionChange);
-    };
-  }, []);
-
-  return <div ref={containerRef} {...props} />;
-
+      }}
+      {...props}
+    />
+  );
 }, {
   displayName: 'RichTextInput',
-})
+});

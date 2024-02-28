@@ -25,19 +25,14 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { createMemoComponent } from '../../internals/utils';
 import { RichTextInputProps, RichTextInputRef } from './types';
 
-export const RichTextInput = createMemoComponent(({
+export const Base = React.forwardRef(({
   value,
   options,
   onChangeText,
   onChangeSelection,
   ...props
 }: RichTextInputProps, forwardRef: React.ForwardedRef<RichTextInputRef>) => {
-
   return <div {...props} />;
-
-}, {
-  displayName: 'RichTextInput',
-})
+});

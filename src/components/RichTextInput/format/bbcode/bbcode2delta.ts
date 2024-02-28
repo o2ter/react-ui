@@ -24,12 +24,13 @@
 //
 
 import _ from 'lodash';
-import { parser } from './ast';
+import { parser } from '../../../BBCode/parser';
+import { Line, Segment } from '../../types';
 
 export const bbcode2delta = (docs: string) => {
-  const result: any[] = [];
+  const result: Line[] = [];
   for (const line of parser(docs)) {
-    const segments: any[] = [];
+    const segments: Segment[] = [];
     for (const segment of line.segments) {
       const attributes: Record<string, any> = {};
       for (const [key, attrs] of _.toPairs(segment.attributes)) {
