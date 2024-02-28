@@ -28,6 +28,7 @@ import React from 'react';
 import { bbcode2delta } from './parser/bbcode2delta';
 import { delta2bbcode } from './parser/delta2bbcode';
 import { RichTextInput } from '../RichTextInput';
+import { createMemoComponent } from '../../internals/utils';
 
 const defaultToolbar = [
   [{ 'font': [] }],
@@ -46,15 +47,19 @@ type BBCodeEditorProps = Omit<React.ComponentPropsWithoutRef<typeof RichTextInpu
   onChangeText?: (text: string) => void;
 }
 
-export const BBCodeEditor = ({
-  value,
-  onChangeText,
-  options = {},
-  ...props
-}: BBCodeEditorProps) => {
+export const BBCodeEditor = createMemoComponent((
+  {
+    value,
+    onChangeText,
+    options = {},
+    ...props
+  }: BBCodeEditorProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof RichTextInput>>
+) => {
   const _value = React.useMemo(() => bbcode2delta(value ?? ''), [value]);
   return (
     <RichTextInput
+      ref={forwardRef}
       value={_value}
       onChangeText={(delta) => {
         if (_.isFunction(onChangeText)) onChangeText(delta2bbcode(delta));
@@ -70,4 +75,6 @@ export const BBCodeEditor = ({
       {...props}
     />
   );
-}
+}, {
+  displayName: 'BBCodeEditor',
+})

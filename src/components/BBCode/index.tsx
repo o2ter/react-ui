@@ -31,6 +31,7 @@ import Text from '../Text';
 import Image from '../Image';
 import { useTheme } from '../../theme';
 import { parser } from './parser/ast';
+import { createMemoComponent } from '../../internals/utils';
 
 export * from './editor';
 
@@ -82,16 +83,19 @@ function* group(
   }
 }
 
-export const BBCode = ({
-  source,
-  onPressLink,
-  ...props
-}: BBCodeProps) => {
+export const BBCode = createMemoComponent((
+  {
+    source,
+    onPressLink,
+    ...props
+  }: BBCodeProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
+) => {
   const theme = useTheme();
   const { content = '' } = source ?? {};
   const lines = React.useMemo(() => parser(content), [content]);
   return (
-    <View {...props}>
+    <View ref={forwardRef} {...props}>
       <View>
         {_.map(lines, (line, i) => {
           if (_.isEmpty(line.segments)) return <Text key={i}>{' '}</Text>
@@ -182,4 +186,6 @@ export const BBCode = ({
       </View>
     </View>
   );
-}
+}, {
+  displayName: 'BBCode',
+})
