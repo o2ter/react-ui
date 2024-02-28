@@ -29,7 +29,7 @@ import { Base } from './base';
 import { createMemoComponent } from '../../internals/utils';
 import { defaultFormat } from './format';
 
-export type Format = typeof defaultFormat;
+type Format = typeof defaultFormat;
 
 type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWithoutRef<typeof Base>, 'value' | 'onChangeText'> & {
   format?: F;
