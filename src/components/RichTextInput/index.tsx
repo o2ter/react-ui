@@ -37,7 +37,7 @@ type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWitho
 
 export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
   {
-    format = 'bbcode' as F,
+    format,
     value,
     onChangeText,
     options = {},
@@ -45,7 +45,7 @@ export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbco
   }: RichTextInputProps<F>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Base>>
 ) => {
-  const { defaultOptions, encoder, decoder } = _format[format];
+  const { defaultOptions, encoder, decoder } = _format[format ?? 'bbcode' as F];
   const _value = React.useMemo(() => decoder(value ?? '' as any), [value]);
   return (
     <Base
