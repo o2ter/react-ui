@@ -27,7 +27,6 @@ import { bbcode2delta } from './bbcode/bbcode2delta';
 import { delta2bbcode } from './bbcode/delta2bbcode';
 import { Line } from '../types';
 
-export type Format = typeof _format;
 export const _format = {
   'raw': {
     defaultOptions: {
@@ -69,3 +68,5 @@ export const _format = {
     decoder: delta2bbcode,
   },
 } as const;
+
+export type Format = typeof _format;
