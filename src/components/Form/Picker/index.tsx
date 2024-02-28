@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { useField } from '../Form';
+import { useField } from '../Form/hooks';
 import { useTheme } from '../../../theme';
 import { Picker } from '../../Picker';
 import { Modify } from '../../../internals/types';

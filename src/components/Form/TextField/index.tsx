@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { NativeSyntheticEvent, StyleProp, TextInputEndEditingEventData, TextStyle } from 'react-native';
 import TextInput from '../../TextInput';
-import { useField } from '../Form';
+import { useField } from '../Form/hooks';
 import { useTheme } from '../../../theme';
 import { Modify } from '../../../internals/types';
 import { createMemoComponent } from '../../../internals/utils';

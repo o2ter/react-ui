@@ -25,74 +25,19 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { useFormGroup } from '../Group';
 import { useEquivalent, useStableCallback, useStableRef } from 'sugax';
-import { ISchema, object, TypeOfSchema, ValidateError } from '@o2ter/valid.js';
+import { ISchema, object, ValidateError } from '@o2ter/valid.js';
 import { useAlert } from '../../Alert';
 import { createMemoComponent } from '../../../internals/utils';
+import { FormState } from './types';
+import { FormInternalState, FormContext, FormInternalContext } from './context';
+import { FormProps } from './types';
 
 const cloneValue = (x: any): any => {
   if (_.isArray(x)) return x.map(v => cloneValue(v));
   if (_.isPlainObject(x)) return _.mapValues(x, v => cloneValue(v));
   return x;
 }
-
-export type FormState = {
-  roles?: string[];
-  values: Record<string, any>;
-  errors: Error[];
-  dirty: boolean;
-  submitting: boolean;
-  resetting: boolean;
-  loading: string[];
-  submitCount: number;
-  resetCount: number;
-  actionCounts: Record<string, number>;
-  setValue: (path: string, value: React.SetStateAction<any>) => void;
-  validate: (value: any, path?: string) => Error[];
-  submit: VoidFunction;
-  reset: VoidFunction;
-  action: (action: string) => void;
-  touched: (path: string) => boolean;
-  setTouched: (path?: string) => void;
-  addEventListener: (action: string, callback: () => void) => void;
-  removeEventListener: (action: string, callback: () => void) => void;
-};
-
-const FormContext = React.createContext<FormState>({
-  values: {},
-  errors: [],
-  dirty: false,
-  submitting: false,
-  resetting: false,
-  loading: [],
-  submitCount: 0,
-  resetCount: 0,
-  actionCounts: {},
-  setValue: () => { },
-  validate: () => [],
-  submit: () => { },
-  reset: () => { },
-  action: () => { },
-  touched: () => false,
-  setTouched: () => { },
-  addEventListener: () => { },
-  removeEventListener: () => { },
-});
-
-FormContext.displayName = 'FormContext';
-
-type FormInternalState = {
-  extraError: (id: string) => Error | undefined;
-  setExtraError: (id: string, error?: Error) => void;
-};
-
-const FormInternalContext = React.createContext<FormInternalState>({
-  extraError: () => void 0,
-  setExtraError: () => { },
-});
-
-FormInternalContext.displayName = 'FormInternalContext';
 
 const defaultValidation = (validate: (value: any) => ValidateError[]) => {
 
@@ -116,21 +61,6 @@ const defaultValidation = (validate: (value: any) => ValidateError[]) => {
       return path === prefix || path.startsWith(`${prefix}.`);
     });
   };
-};
-
-type FormProps<S extends Record<string, ISchema<any, any>>> = {
-  schema?: S;
-  initialValues?: TypeOfSchema<ReturnType<typeof object<S>>>;
-  roles?: string[];
-  validate?: (value: any, path?: string) => Error[];
-  validateOnMount?: boolean;
-  onReset?: (state: FormState) => void;
-  onChange?: (state: FormState) => void;
-  onChangeValues?: (state: FormState) => void;
-  onAction?: (action: string, state: FormState) => void;
-  onSubmit?: (values: Record<string, any>, state: FormState) => void;
-  onError?: (error: Error, state: FormState & { preventDefault: VoidFunction }) => void;
-  children?: React.ReactNode | ((state: FormState) => React.ReactNode);
 };
 
 export const Form = createMemoComponent(<S extends Record<string, ISchema<any, any>>>({
@@ -289,52 +219,3 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
 }, {
   displayName: 'Form',
 });
-
-export const FormConsumer = FormContext.Consumer;
-
-export const useForm = () => ({
-  ...React.useContext(FormContext),
-  groupPath: useFormGroup(),
-});
-
-export const useField = (name: string | string[]) => {
-
-  const formState = useForm();
-  const { roles, values, setValue, validate, touched, setTouched, submit, reset, groupPath } = formState;
-  const path = [...groupPath, ..._.toPath(name)].join('.');
-  const value = _.get(values, path);
-
-  const onChange = React.useCallback((value: React.SetStateAction<any>) => setValue(path, value), [path]);
-  const _setTouched = React.useCallback(() => setTouched(path), [path]);
-
-  const { extraError, setExtraError } = React.useContext(FormInternalContext);
-
-  const uniqId = React.useId();
-  React.useEffect(() => { return () => setExtraError(uniqId); }, []);
-
-  const useValidator = useStableCallback((
-    validator?: (value: any) => void
-  ) => {
-    React.useEffect(() => {
-      try {
-        validator?.(value);
-        setExtraError(uniqId, undefined);
-      } catch (e) {
-        setExtraError(uniqId, e as Error);
-      }
-    }, [value]);
-  });
-
-  return {
-    value,
-    form: formState,
-    roles,
-    get error() { return _.compact([...validate(values, path), extraError(uniqId)]) },
-    get touched() { return touched(path) },
-    setTouched: _setTouched,
-    useValidator,
-    onChange,
-    submit,
-    reset,
-  };
-}

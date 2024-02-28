@@ -28,7 +28,7 @@ import React from 'react';
 import { Text, TextProps } from 'react-native';
 import { useLocalize } from '@o2ter/i18n';
 import { ValidateError } from '@o2ter/valid.js';
-import { useField } from '../Form';
+import { useField } from '../Form/hooks';
 import { Modify } from '../../../internals/types';
 import { useTheme } from '../../../theme';
 import { createMemoComponent } from '../../../internals/utils';

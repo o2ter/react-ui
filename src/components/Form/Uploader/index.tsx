@@ -8,7 +8,7 @@ import _ from 'lodash';
 import React from 'react';
 import { useStableCallback } from 'sugax';
 import { FormUpload, FormUploadHandler, FormUploaderCallback } from './handler';
-import { useField } from '../Form';
+import { useField } from '../Form/hooks';
 
 type FormUploaderState<F, U> = {
   uploads: FormUpload<F, U>[];

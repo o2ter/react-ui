@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useStableRef } from 'sugax';
-import { useField } from '../Form';
+import { useField } from '../Form/hooks';
 import List from '../../List';
 import { createMemoComponent } from '../../../internals/utils';
 

@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { useForm } from '../Form';
+import { useForm } from '../Form/hooks';
 import { Button } from '../../Button';
 import { Modify } from '../../../internals/types';
 import { createMemoComponent } from '../../../internals/utils';
