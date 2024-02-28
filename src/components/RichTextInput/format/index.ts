@@ -64,8 +64,8 @@ export const _format = {
         ],
       }
     },
-    encoder: bbcode2delta,
-    decoder: delta2bbcode,
+    encoder: delta2bbcode,
+    decoder: bbcode2delta,
   },
 } as const;
 

@@ -31,8 +31,8 @@ import { Format, _format } from './format';
 
 type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWithoutRef<typeof Base>, 'value' | 'onChangeText'> & {
   format?: F;
-  value?: ReturnType<Format[F]['decoder']>;
-  onChangeText?: (text: ReturnType<Format[F]['decoder']>) => void;
+  value?: ReturnType<Format[F]['encoder']>;
+  onChangeText?: (text: ReturnType<Format[F]['encoder']>) => void;
 }
 
 export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
@@ -45,20 +45,21 @@ export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbco
   }: RichTextInputProps<F>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Base>>
 ) => {
-  const _value = React.useMemo(() => _format[format].encoder(value ?? '' as any), [value]);
+  const { defaultOptions, encoder, decoder } = _format[format];
+  const _value = React.useMemo(() => decoder(value ?? '' as any), [value]);
   return (
     <Base
       ref={forwardRef}
       value={_value}
       onChangeText={(delta) => {
-        if (_.isFunction(onChangeText)) onChangeText(_format[format].decoder(delta) as any);
+        if (_.isFunction(onChangeText)) onChangeText(encoder(delta) as any);
       }}
       options={{
         theme: 'snow',
-        ..._format[format].defaultOptions,
+        ...defaultOptions,
         ...options,
         modules: {
-          ..._format[format].defaultOptions.modules ?? {},
+          ...defaultOptions.modules ?? {},
           ...options.modules ?? {},
         },
       }}
