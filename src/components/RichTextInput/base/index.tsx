@@ -96,6 +96,9 @@ export const Base = React.forwardRef(({
     get container() {
       return containerRef.current ?? undefined;
     },
+    import(path: string) {
+      return Quill.import(path);
+    },
   }), []);
 
   React.useEffect(() => {

@@ -61,11 +61,30 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
   const cache = React.useRef(new Map<Blob & { source: string }, Uploaded>).current;
   if (uploadProps) {
     const { onUpload, resolveUrl, ..._props } = uploadProps;
+    const updateResolvedUploads = () => {
+      const editor = inputRef.current?.editor;
+      if (!editor) return;
+      const ops = editor.getContents().map(op => {
+        if (_.isNil(op.insert) || _.isString(op.insert)) return op;
+        if (_.isString(op.insert.image)) {
+          for (const [blob, uploaded] of cache.entries()) {
+            if (blob.source !== op.insert.image) continue;
+            return { ...op, insert: { image: resolveUrl(uploaded) } };
+          }
+        }
+        return op;
+      });
+      const Delta = inputRef.current!.import('delta');
+      const selection = editor.getSelection(true);
+      editor.setContents(new Delta(ops), 'silent');
+      if (selection) editor.setSelection(selection, 'silent');
+    };
     return (
       <FormUploader
         onUpload={async (file: Blob & { source: string }, progress) => {
           const result = await onUpload(file, progress);
           cache.set(file, result);
+          updateResolvedUploads();
           return result;
         }}
         {..._props}
@@ -79,6 +98,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
               setTouched();
               const editor = inputRef.current?.editor;
               if (!editor) return;
+              updateResolvedUploads();
               const files = _.compact(await Promise.all(editor.getContents().map(async op => {
                 if (_.isNil(op.insert) || _.isString(op.insert)) return;
                 if (_.isString(op.insert.image)) {
