@@ -56,8 +56,8 @@ export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbco
     <Base
       ref={forwardRef}
       value={_value}
-      onChangeText={(delta, ...arg) => {
-        if (_.isFunction(onChangeText)) onChangeText(encoder(delta) as any, ...arg);
+      onChangeText={(value, ...arg) => {
+        if (_.isFunction(onChangeText)) onChangeText(encoder(value) as any, ...arg);
       }}
       options={{
         theme: 'snow',
