@@ -73,13 +73,11 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
                 if (_.isNil(op.insert) || _.isString(op.insert)) return;
                 if (_.isString(op.insert.image)) {
                   const data = op.insert.image;
-                  return (async () => {
-                    try {
-                      const response = await fetch(data);
-                      const blob = await response.blob();
-                      return blob;
-                    } catch (e) { }
-                  })();
+                  try {
+                    const response = await fetch(data);
+                    const blob = await response.blob();
+                    return blob;
+                  } catch (e) { }
                 }
               })));
               submitFiles(...files);
