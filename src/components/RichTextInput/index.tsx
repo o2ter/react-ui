@@ -26,6 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { Base } from './base';
+import type { Quill, TextChangeHandler } from 'quill';
 import { createMemoComponent } from '../../internals/utils';
 import { defaultFormat, defaultFormatOptions } from './format';
 
@@ -35,7 +36,7 @@ type Encoder<F extends keyof Format> = Format[F]['encoder'];
 type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWithoutRef<typeof Base>, 'value' | 'onChangeText'> & {
   format?: F;
   value?: ReturnType<Encoder<F>>;
-  onChangeText?: (text: ReturnType<Encoder<F>>) => void;
+  onChangeText?: (text: ReturnType<Encoder<F>>, ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
 }
 
 export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
@@ -55,8 +56,8 @@ export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbco
     <Base
       ref={forwardRef}
       value={_value}
-      onChangeText={(delta) => {
-        if (_.isFunction(onChangeText)) onChangeText(encoder(delta) as any);
+      onChangeText={(delta, ...arg) => {
+        if (_.isFunction(onChangeText)) onChangeText(encoder(delta) as any, ...arg);
       }}
       options={{
         theme: 'snow',
