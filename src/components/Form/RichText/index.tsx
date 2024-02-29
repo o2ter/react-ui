@@ -80,7 +80,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
               if (!editor) return;
               const files = _.compact(await Promise.all(editor.getContents().map(async op => {
                 if (_.isNil(op.insert) || _.isString(op.insert)) return;
-                if (_.isString(op.insert.image)) {
+                if (_.isString(op.insert.image) && op.insert.image.startsWith('data:')) {
                   return _.assign(await b64ToBlob(op.insert.image), {
                     source: op.insert.image,
                   });
