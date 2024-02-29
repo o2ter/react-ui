@@ -37,6 +37,13 @@ type FormRichTextProps<U> = React.ComponentPropsWithoutRef<typeof RichTextInput>
   validate?: (value: any) => void;
 };
 
+const b64ToBlob = async (data: string) => {
+  try {
+    const response = await fetch(data);
+    return await response.blob();
+  } catch (e) { }
+}
+
 export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
   {
     name,
@@ -50,12 +57,14 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
   const ref = useMergeRefs(inputRef, forwardRef);
   const { value, setTouched, onChange, useValidator } = useField(name);
   useValidator(validate);
+  const cache = React.useRef(new Map<Blob, Uploaded>).current;
   if (uploadProps) {
     const { onUpload, resolveUrl, ..._props } = uploadProps;
     return (
       <FormUploader
         onUpload={async (file: Blob, progress) => {
           const result = await onUpload(file, progress);
+          cache.set(file, result);
           return result;
         }}
         {..._props}
@@ -72,12 +81,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
               const files = _.compact(await Promise.all(editor.getContents().map(async op => {
                 if (_.isNil(op.insert) || _.isString(op.insert)) return;
                 if (_.isString(op.insert.image)) {
-                  const data = op.insert.image;
-                  try {
-                    const response = await fetch(data);
-                    const blob = await response.blob();
-                    return blob;
-                  } catch (e) { }
+                  return b64ToBlob(op.insert.image);
                 }
               })));
               if (!_.isEmpty(files)) submitFiles(...files);
