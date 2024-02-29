@@ -32,7 +32,7 @@ import { createMemoComponent } from '../../../internals/utils';
 import { useMergeRefs } from 'sugax';
 import { FormUploadHandler } from '../Uploader/handler';
 
-type FormRichTextProps<U> = React.ComponentPropsWithoutRef<typeof RichTextInput> & {
+type FormRichTextProps<U> = Omit<React.ComponentPropsWithoutRef<typeof RichTextInput>, 'onUploadImage'> & {
   name: string;
   uploadProps?: React.ComponentPropsWithRef<typeof FormUploader<Blob & { source: string }, U>> & {
     resolveUrl: (uploaded: U) => string;
