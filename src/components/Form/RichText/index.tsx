@@ -80,7 +80,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
                   } catch (e) { }
                 }
               })));
-              submitFiles(...files);
+              if (!_.isEmpty(files)) submitFiles(...files);
             }}
             {...props}
           />
