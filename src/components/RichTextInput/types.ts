@@ -48,5 +48,5 @@ export type RichTextInputRef = {
   value?: Line[];
   editor?: Quill;
   container?: HTMLDivElement;
-  import(path: string): any;
+  replaceAssets(assets: Record<string, string>): void;
 };

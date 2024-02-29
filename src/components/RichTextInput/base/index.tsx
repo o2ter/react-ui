@@ -96,8 +96,25 @@ export const Base = React.forwardRef(({
     get container() {
       return containerRef.current ?? undefined;
     },
-    import(path: string) {
-      return Quill.import(path);
+    replaceAssets(assets: Record<string, string>) {
+      const editor = editorRef.current;
+      if (!editor) return;
+      let isChanged = false;
+      const ops = editor.getContents().map(op => {
+        if (_.isNil(op.insert) || _.isString(op.insert)) return op;
+        if (_.isString(op.insert.image)) {
+          for (const [source, replace] of _.entries(assets)) {
+            if (source !== op.insert.image) continue;
+            isChanged = true;
+            return { ...op, insert: { image: replace } };
+          }
+        }
+        return op;
+      });
+      if (!isChanged) return;
+      const selection = editor.getSelection(true);
+      editor.setContents(new Delta(ops), 'silent');
+      if (selection) editor.setSelection(selection, 'silent');
     },
   }), []);
 
