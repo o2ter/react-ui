@@ -66,16 +66,19 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
     const updateResolvedUploads = () => {
       const editor = inputRef.current?.editor;
       if (!editor) return;
+      let isChanged = false;
       const ops = editor.getContents().map(op => {
         if (_.isNil(op.insert) || _.isString(op.insert)) return op;
         if (_.isString(op.insert.image)) {
           for (const [blob, uploaded] of cache.entries()) {
             if (blob.source !== op.insert.image) continue;
+            isChanged = true;
             return { ...op, insert: { image: resolveUrl(uploaded) } };
           }
         }
         return op;
       });
+      if (!isChanged) return;
       const Delta = inputRef.current!.import('delta');
       const selection = editor.getSelection(true);
       editor.setContents(new Delta(ops), 'silent');
