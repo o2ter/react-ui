@@ -62,7 +62,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
     const { onUpload, resolveUrl, ..._props } = uploadProps;
     return (
       <FormUploader
-        onUpload={async (file: Blob, progress) => {
+        onUpload={async (file: Blob & { source: string }, progress) => {
           const result = await onUpload(file, progress);
           cache.set(file, result);
           return result;
@@ -81,7 +81,9 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
               const files = _.compact(await Promise.all(editor.getContents().map(async op => {
                 if (_.isNil(op.insert) || _.isString(op.insert)) return;
                 if (_.isString(op.insert.image)) {
-                  return b64ToBlob(op.insert.image);
+                  return _.assign(await b64ToBlob(op.insert.image), {
+                    source: op.insert.image,
+                  });
                 }
               })));
               if (!_.isEmpty(files)) submitFiles(...files);
