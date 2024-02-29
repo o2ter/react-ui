@@ -29,18 +29,21 @@ import { RichTextInput } from '../../RichTextInput';
 import { useField } from '../Form/hooks';
 import FormUploader from '../Uploader';
 
-type FormRichTextProps = React.ComponentPropsWithoutRef<typeof RichTextInput> & {
+type FormRichTextProps<F, U> = React.ComponentPropsWithoutRef<typeof RichTextInput> & {
   name: string;
-  uploadProps?: React.ComponentPropsWithoutRef<typeof FormUploader>;
+  uploadProps?: React.ComponentPropsWithoutRef<typeof FormUploader<F, U>>;
   validate?: (value: any) => void;
 };
 
-export const FormRichText = ({
+export const FormRichText = <
+  File extends unknown,
+  Uploaded extends unknown
+>({
   name,
   uploadProps,
   validate,
   ...props
-}: FormRichTextProps) => {
+}: FormRichTextProps<File, Uploaded>) => {
   const { value, setTouched, onChange, useValidator } = useField(name);
   useValidator(validate);
   if (uploadProps) {
