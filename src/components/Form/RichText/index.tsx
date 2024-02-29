@@ -67,6 +67,14 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
             onChangeText={(text) => {
               onChange(text);
               setTouched();
+              const editor = inputRef.current?.editor;
+              if (!editor) return;
+              editor.getContents().forEach(op => { 
+                if (_.isNil(op.insert) || _.isString(op.insert)) return;
+                if (_.isString(op.insert.image)) {
+                  
+                }
+              });
             }}
             {...props}
           />
