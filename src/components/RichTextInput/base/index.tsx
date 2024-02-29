@@ -96,6 +96,14 @@ export const Base = React.forwardRef(({
     get container() {
       return containerRef.current ?? undefined;
     },
+    get assets() {
+      const editor = editorRef.current;
+      if (!editor) return [];
+      return _.compact(editor.getContents().map(op => {
+        if (_.isNil(op.insert) || _.isString(op.insert)) return;
+        if (_.isString(op.insert.image)) return op.insert.image;
+      }));
+    },
     replaceAssets(assets: Record<string, string>) {
       const editor = editorRef.current;
       if (!editor) return;

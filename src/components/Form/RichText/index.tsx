@@ -86,15 +86,12 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
             onChangeText={async (text) => {
               onChange(text);
               setTouched();
-              const editor = inputRef.current?.editor;
-              if (!editor) return;
+              const assets = inputRef.current?.assets;
+              if (!assets) return;
               updateResolvedUploads();
-              const files = _.compact(await Promise.all(editor.getContents().map(async op => {
-                if (_.isNil(op.insert) || _.isString(op.insert)) return;
-                if (_.isString(op.insert.image)) {
-                  const blob = await dataUrlToBlob(op.insert.image);
-                  if (blob) return _.assign(blob, { source: op.insert.image });
-                }
+              const files = _.compact(await Promise.all(assets.map(async source => {
+                const blob = await dataUrlToBlob(source);
+                if (blob) return _.assign(blob, { source });
               })));
               if (!_.isEmpty(files)) submitFiles(...files);
             }}
