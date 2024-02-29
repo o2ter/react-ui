@@ -37,7 +37,7 @@ type FormRichTextProps<U> = React.ComponentPropsWithoutRef<typeof RichTextInput>
   validate?: (value: any) => void;
 };
 
-const b64ToBlob = async (data: string) => {
+const dataUrlToBlob = async (data: string) => {
   try {
     const response = await fetch(data);
     return await response.blob();
@@ -81,7 +81,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
               const files = _.compact(await Promise.all(editor.getContents().map(async op => {
                 if (_.isNil(op.insert) || _.isString(op.insert)) return;
                 if (_.isString(op.insert.image) && op.insert.image.startsWith('data:')) {
-                  return _.assign(await b64ToBlob(op.insert.image), {
+                  return _.assign(await dataUrlToBlob(op.insert.image), {
                     source: op.insert.image,
                   });
                 }
