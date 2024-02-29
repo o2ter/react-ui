@@ -30,11 +30,14 @@ import { useField } from '../Form/hooks';
 
 export const FormRichText = ({
   name,
+  validate,
   ...props
 }: React.ComponentPropsWithoutRef<typeof RichTextInput> & {
   name: string;
+  validate?: (value: any) => void;
 }) => {
-  const { value, setTouched, onChange } = useField(name);
+  const { value, setTouched, onChange, useValidator } = useField(name);
+  useValidator(validate);
   return (
     <RichTextInput
       value={value}
