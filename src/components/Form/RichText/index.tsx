@@ -33,7 +33,9 @@ import { useMergeRefs } from 'sugax';
 
 type FormRichTextProps<U> = React.ComponentPropsWithoutRef<typeof RichTextInput> & {
   name: string;
-  uploadProps?: React.ComponentPropsWithoutRef<typeof FormUploader<Blob, U>> & { resolveUrl: (uploaded: U) => string; };
+  uploadProps?: React.ComponentPropsWithRef<typeof FormUploader<Blob & { source: string }, U>> & {
+    resolveUrl: (uploaded: U) => string;
+  };
   validate?: (value: any) => void;
 };
 
@@ -60,7 +62,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
   useValidator(validate);
   const cache = React.useRef(new Map<Blob & { source: string }, Uploaded>).current;
   if (uploadProps) {
-    const { onUpload, resolveUrl, ..._props } = uploadProps;
+    const { onUpload, resolveUrl, ref: uploadRef, ..._props } = uploadProps;
     const updateResolvedUploads = () => {
       const editor = inputRef.current?.editor;
       if (!editor) return;
@@ -81,6 +83,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
     };
     return (
       <FormUploader
+        ref={uploadRef}
         onUpload={async (file: Blob & { source: string }, progress) => {
           const result = await onUpload(file, progress);
           cache.set(file, result);
