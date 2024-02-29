@@ -29,42 +29,45 @@ import { Line } from '../types';
 
 export const defaultFormat = {
   'raw': {
-    defaultOptions: {
-      modules: {
-        toolbar: [
-          [{ 'font': [] }],
-          [{ 'size': ['small', false, 'large', 'huge'] }],
-          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-          [{ 'color': [] }, { 'background': [] }],
-          [{ 'align': [] }],
-          ['bold', 'italic', 'strike', 'underline'],
-          [{ 'script': 'sub' }, { 'script': 'super' }],
-          [{ 'indent': '-1' }, { 'indent': '+1' }],
-          ['link', 'blockquote', 'code-block', 'image'],
-          [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-        ],
-      }
-    },
     encoder: (lines: Line[]) => lines,
     decoder: (lines: Line[]) => lines,
   },
   'bbcode': {
-    defaultOptions: {
-      modules: {
-        toolbar: [
-          [{ 'font': [] }],
-          [{ 'size': ['small', false, 'large'] }],
-          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-          [{ 'color': [] }],
-          [{ 'align': [] }],
-          ['bold', 'italic', 'strike', 'underline'],
-          ['link', 'image'],
-          [{ 'indent': '-1' }, { 'indent': '+1' }],
-          // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ],
-      }
-    },
     encoder: delta2bbcode,
     decoder: bbcode2delta,
+  },
+} as const;
+
+export const defaultFormatOptions = {
+  'raw': {
+    modules: {
+      toolbar: [
+        [{ 'font': [] }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'align': [] }],
+        ['bold', 'italic', 'strike', 'underline'],
+        [{ 'script': 'sub' }, { 'script': 'super' }],
+        [{ 'indent': '-1' }, { 'indent': '+1' }],
+        ['link', 'blockquote', 'code-block', 'image'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+      ],
+    }
+  },
+  'bbcode': {
+    modules: {
+      toolbar: [
+        [{ 'font': [] }],
+        [{ 'size': ['small', false, 'large'] }],
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'color': [] }],
+        [{ 'align': [] }],
+        ['bold', 'italic', 'strike', 'underline'],
+        ['link', 'image'],
+        [{ 'indent': '-1' }, { 'indent': '+1' }],
+        // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      ],
+    }
   },
 } as const;

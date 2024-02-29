@@ -27,7 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Base } from './base';
 import { createMemoComponent } from '../../internals/utils';
-import { defaultFormat } from './format';
+import { defaultFormat, defaultFormatOptions } from './format';
 
 type Format = typeof defaultFormat;
 type Encoder<F extends keyof Format> = Format[F]['encoder'];
@@ -48,7 +48,8 @@ export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbco
   }: RichTextInputProps<F>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Base>>
 ) => {
-  const { defaultOptions, encoder, decoder } = defaultFormat[format ?? 'bbcode' as F];
+  const { encoder, decoder } = defaultFormat[format ?? 'bbcode' as F];
+  const defaultOptions = defaultFormatOptions[format ?? 'bbcode' as F];
   const _value = React.useMemo(() => decoder(value ?? '' as any), [value]);
   return (
     <Base
