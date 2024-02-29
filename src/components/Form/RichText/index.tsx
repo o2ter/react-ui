@@ -49,6 +49,8 @@ export const FormRichText = createMemoComponent(<
   }: FormRichTextProps<File, Uploaded>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof RichTextInput>>
 ) => {
+  const inputRef = React.useRef<React.ComponentRef<typeof RichTextInput>>();
+  const ref = useMergeRefs(inputRef, forwardRef);
   const { value, setTouched, onChange, useValidator } = useField(name);
   useValidator(validate);
   if (uploadProps) {
@@ -63,7 +65,7 @@ export const FormRichText = createMemoComponent(<
       >
         {({ submitFiles }) => (
           <RichTextInput
-            ref={forwardRef}
+            ref={ref}
             value={value}
             onChangeText={(text) => {
               onChange(text);
@@ -77,7 +79,7 @@ export const FormRichText = createMemoComponent(<
   }
   return (
     <RichTextInput
-      ref={forwardRef}
+      ref={ref}
       value={value}
       onChangeText={(text) => {
         onChange(text);
