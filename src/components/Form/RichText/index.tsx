@@ -31,7 +31,7 @@ import FormUploader from '../Uploader';
 
 type FormRichTextProps<F, U> = React.ComponentPropsWithoutRef<typeof RichTextInput> & {
   name: string;
-  uploadProps?: React.ComponentPropsWithoutRef<typeof FormUploader<F, U>>;
+  uploadProps?: React.ComponentPropsWithoutRef<typeof FormUploader<F, U>> & { resolveUrl: (uploaded: U) => string; };
   validate?: (value: any) => void;
 };
 
@@ -47,7 +47,7 @@ export const FormRichText = <
   const { value, setTouched, onChange, useValidator } = useField(name);
   useValidator(validate);
   if (uploadProps) {
-    const { onUpload, ..._props } = uploadProps;
+    const { onUpload, resolveUrl, ..._props } = uploadProps;
     return (
       <FormUploader
         onUpload={async (file: File, progress) => {
