@@ -9,6 +9,7 @@ import React from 'react';
 import { useStableCallback } from 'sugax';
 import { FormUpload, FormUploadHandler, FormUploaderCallback } from './handler';
 import { useField } from '../Form/hooks';
+import { createMemoComponent } from '../../../internals/utils';
 
 type FormUploaderState<F, U> = {
   uploads: FormUpload<F, U>[];
@@ -23,15 +24,18 @@ type FormUploaderProps<F, U> = {
   children: React.ReactNode | ((state: FormUploaderState<F, U>) => React.ReactNode);
 };
 
-export const FormUploader = <
+export const FormUploader = createMemoComponent(<
   File extends unknown,
   Uploaded extends unknown
->({
-  name,
-  onUpload,
-  validate,
-  children
-}: FormUploaderProps<File, Uploaded>) => {
+>(
+  {
+    name,
+    onUpload,
+    validate,
+    children
+  }: FormUploaderProps<File, Uploaded>,
+  forwardRef: React.ForwardedRef<FormUploaderState<File, Uploaded>>
+) => {
   const {
     value,
     onChange,
@@ -86,9 +90,13 @@ export const FormUploader = <
     submitFiles,
   }), [uploads]);
 
+  React.useImperativeHandle(forwardRef, () => state, [state]);
+
   return (
     <>{_.isFunction(children) ? children(state) : children}</>
   );
-}
+}, {
+  displayName: 'Form.Uploader'
+});
 
 export default FormUploader;
