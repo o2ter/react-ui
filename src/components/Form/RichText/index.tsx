@@ -82,9 +82,8 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
               const files = _.compact(await Promise.all(editor.getContents().map(async op => {
                 if (_.isNil(op.insert) || _.isString(op.insert)) return;
                 if (_.isString(op.insert.image)) {
-                  return _.assign(await dataUrlToBlob(op.insert.image), {
-                    source: op.insert.image,
-                  });
+                  const blob = await dataUrlToBlob(op.insert.image);
+                  if (blob) return _.assign(blob, { source: op.insert.image });
                 }
               })));
               if (!_.isEmpty(files)) submitFiles(...files);
