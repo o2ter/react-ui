@@ -46,23 +46,20 @@ export const FormRichText = <
 }: FormRichTextProps<File, Uploaded>) => {
   const { value, setTouched, onChange, useValidator } = useField(name);
   useValidator(validate);
-  if (uploadProps) {
-    return (
-      <FormUploader {...uploadProps}>
-        {({ submitFiles }) => (
-          <RichTextInput
-            value={value}
-            onChangeText={(text) => {
-              onChange(text);
-              setTouched();
-            }}
-            {...props}
-          />
-        )}
-      </FormUploader>
-    )
-  }
-  return (
+  return uploadProps ? (
+    <FormUploader {...uploadProps}>
+      {({ submitFiles }) => (
+        <RichTextInput
+          value={value}
+          onChangeText={(text) => {
+            onChange(text);
+            setTouched();
+          }}
+          {...props}
+        />
+      )}
+    </FormUploader>
+  ) : (
     <RichTextInput
       value={value}
       onChangeText={(text) => {
