@@ -57,7 +57,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
   const ref = useMergeRefs(inputRef, forwardRef);
   const { value, setTouched, onChange, useValidator } = useField(name);
   useValidator(validate);
-  const cache = React.useRef(new Map<Blob, Uploaded>).current;
+  const cache = React.useRef(new Map<Blob & { source: string }, Uploaded>).current;
   if (uploadProps) {
     const { onUpload, resolveUrl, ..._props } = uploadProps;
     return (
