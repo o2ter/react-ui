@@ -30,11 +30,12 @@ import { createMemoComponent } from '../../internals/utils';
 import { defaultFormat } from './format';
 
 type Format = typeof defaultFormat;
+type Encoder<F extends keyof Format> = Format[F]['encoder'];
 
 type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWithoutRef<typeof Base>, 'value' | 'onChangeText'> & {
   format?: F;
-  value?: ReturnType<Format[F]['encoder']>;
-  onChangeText?: (text: ReturnType<Format[F]['encoder']>) => void;
+  value?: ReturnType<Encoder<F>>;
+  onChangeText?: (text: ReturnType<Encoder<F>>) => void;
 }
 
 export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
