@@ -24,10 +24,7 @@ type FormUploaderProps<F, U> = {
   children: React.ReactNode | ((state: FormUploaderState<F, U>) => React.ReactNode);
 };
 
-export const FormUploader = createMemoComponent(<
-  File extends unknown,
-  Uploaded extends unknown
->(
+export const FormUploader = createMemoComponent(<File extends unknown, Uploaded extends unknown>(
   {
     name,
     onUpload,
