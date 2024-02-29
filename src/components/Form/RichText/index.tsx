@@ -28,6 +28,8 @@ import React from 'react';
 import { RichTextInput } from '../../RichTextInput';
 import { useField } from '../Form/hooks';
 import FormUploader from '../Uploader';
+import { createMemoComponent } from '../../../internals/utils';
+import { useMergeRefs } from 'sugax';
 
 type FormRichTextProps<F, U> = React.ComponentPropsWithoutRef<typeof RichTextInput> & {
   name: string;
@@ -35,15 +37,20 @@ type FormRichTextProps<F, U> = React.ComponentPropsWithoutRef<typeof RichTextInp
   validate?: (value: any) => void;
 };
 
-export const FormRichText = <
+export const FormRichText = createMemoComponent(<
   File extends unknown,
   Uploaded extends unknown
->({
-  name,
-  uploadProps,
-  validate,
-  ...props
-}: FormRichTextProps<File, Uploaded>) => {
+>(
+  {
+    name,
+    uploadProps,
+    validate,
+    ...props
+  }: FormRichTextProps<File, Uploaded>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof RichTextInput>>
+) => {
+  const inputRef = React.useRef<React.ComponentRef<typeof RichTextInput>>();
+  const ref = useMergeRefs(inputRef, forwardRef);
   const { value, setTouched, onChange, useValidator } = useField(name);
   useValidator(validate);
   if (uploadProps) {
@@ -58,6 +65,7 @@ export const FormRichText = <
       >
         {({ submitFiles }) => (
           <RichTextInput
+            ref={ref}
             value={value}
             onChangeText={(text) => {
               onChange(text);
@@ -71,6 +79,7 @@ export const FormRichText = <
   }
   return (
     <RichTextInput
+      ref={ref}
       value={value}
       onChangeText={(text) => {
         onChange(text);
@@ -79,6 +88,8 @@ export const FormRichText = <
       {...props}
     />
   );
-};
+}, {
+  displayName: 'Form.RichText'
+});
 
 export default FormRichText;
