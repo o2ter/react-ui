@@ -30,6 +30,7 @@ import { useField } from '../Form/hooks';
 import FormUploader from '../Uploader';
 import { createMemoComponent } from '../../../internals/utils';
 import { useMergeRefs } from 'sugax';
+import { FormUploadHandler } from '../Uploader/handler';
 
 type FormRichTextProps<U> = React.ComponentPropsWithoutRef<typeof RichTextInput> & {
   name: string;
@@ -79,7 +80,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
         }}
         {..._props}
       >
-        {({ submitFiles }) => (
+        {({ setUploads, submitFiles }) => (
           <RichTextInput
             ref={ref}
             value={value}
@@ -89,6 +90,17 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
               updateResolvedUploads();
               const assets = inputRef.current?.assets;
               if (!assets) return;
+              setUploads(uploads => {
+                let result = [...uploads];
+                for (const upload of uploads) {
+                  if (_.includes(
+                    assets,
+                    upload instanceof FormUploadHandler ? upload.file.source : resolveUrl(upload)
+                  )) continue;
+                  result = _.filter(result, x => x !== upload);
+                }
+                return result;
+              });
               const files = _.compact(await Promise.all(assets.map(async source => {
                 const blob = await dataUrlToBlob(source);
                 if (blob) return _.assign(blob, { source });
