@@ -27,17 +27,38 @@ import _ from 'lodash';
 import React from 'react';
 import { RichTextInput } from '../../RichTextInput';
 import { useField } from '../Form/hooks';
+import FormUploader from '../Uploader';
+
+type FormRichTextProps = React.ComponentPropsWithoutRef<typeof RichTextInput> & {
+  name: string;
+  uploadProps?: React.ComponentPropsWithoutRef<typeof FormUploader>;
+  validate?: (value: any) => void;
+};
 
 export const FormRichText = ({
   name,
+  uploadProps,
   validate,
   ...props
-}: React.ComponentPropsWithoutRef<typeof RichTextInput> & {
-  name: string;
-  validate?: (value: any) => void;
-}) => {
+}: FormRichTextProps) => {
   const { value, setTouched, onChange, useValidator } = useField(name);
   useValidator(validate);
+  if (uploadProps) {
+    return (
+      <FormUploader {...uploadProps}>
+        {({ submitFiles }) => (
+          <RichTextInput
+            value={value}
+            onChangeText={(text) => {
+              onChange(text);
+              setTouched();
+            }}
+            {...props}
+          />
+        )}
+      </FormUploader>
+    )
+  }
   return (
     <RichTextInput
       value={value}
