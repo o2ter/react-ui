@@ -31,22 +31,19 @@ import FormUploader from '../Uploader';
 import { createMemoComponent } from '../../../internals/utils';
 import { useMergeRefs } from 'sugax';
 
-type FormRichTextProps<F, U> = React.ComponentPropsWithoutRef<typeof RichTextInput> & {
+type FormRichTextProps<U> = React.ComponentPropsWithoutRef<typeof RichTextInput> & {
   name: string;
-  uploadProps?: React.ComponentPropsWithoutRef<typeof FormUploader<F, U>> & { resolveUrl: (uploaded: U) => string; };
+  uploadProps?: React.ComponentPropsWithoutRef<typeof FormUploader<Blob, U>> & { resolveUrl: (uploaded: U) => string; };
   validate?: (value: any) => void;
 };
 
-export const FormRichText = createMemoComponent(<
-  File extends unknown,
-  Uploaded extends unknown
->(
+export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
   {
     name,
     uploadProps,
     validate,
     ...props
-  }: FormRichTextProps<File, Uploaded>,
+  }: FormRichTextProps<Uploaded>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof RichTextInput>>
 ) => {
   const inputRef = React.useRef<React.ComponentRef<typeof RichTextInput>>();
@@ -57,7 +54,7 @@ export const FormRichText = createMemoComponent(<
     const { onUpload, resolveUrl, ..._props } = uploadProps;
     return (
       <FormUploader
-        onUpload={async (file: File, progress) => {
+        onUpload={async (file: Blob, progress) => {
           const result = await onUpload(file, progress);
           return result;
         }}
