@@ -50,8 +50,9 @@ export const FormRichText = <
     const { onUpload, ..._props } = uploadProps;
     return (
       <FormUploader
-        onUpload={(file: File, progress) => {
-          return onUpload(file, progress);
+        onUpload={async (file: File, progress) => {
+          const result = await onUpload(file, progress);
+          return result;
         }}
         {..._props}
       >
