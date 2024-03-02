@@ -45,7 +45,7 @@ const dataUrlToBlob = async (data: string) => {
     if (!data.startsWith('data:')) return;
     const response = await fetch(data);
     return await response.blob();
-  } catch (e) { }
+  } catch { }
 }
 
 export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
