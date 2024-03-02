@@ -34,13 +34,22 @@ import type { useWindowEvent } from '../../../hooks/webHooks';
 import { useOverlay } from '../context';
 
 type OverlayProps = React.ComponentProps<typeof View> & {
-  render: (layout: LayoutRectangle) => React.ReactElement;
+  render: (layout: LayoutRectangle & { pageX: number; pageY: number; }) => React.ReactElement;
   extraData?: any;
   onTouchOutside?: (event: GestureResponderEvent) => void;
 };
 
+type MeasureCallback = (
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  pageX: number,
+  pageY: number,
+) => void;
+
 export const createOverlay = (
-  _measureInWindow: (view: RNView, callback: MeasureInWindowOnSuccessCallback) => void,
+  _measureInWindow: (view: RNView, callback: MeasureCallback) => void,
   _useWindowEvent?: typeof useWindowEvent
 ) => createMemoComponent((
   {
@@ -57,14 +66,14 @@ export const createOverlay = (
   const viewRef = React.useRef<React.ComponentRef<typeof View>>();
   const ref = useMergeRefs(viewRef, forwardRef);
 
-  const [layout, setLayout] = React.useState<LayoutRectangle>();
+  const [layout, setLayout] = React.useState<LayoutRectangle & { pageX: number; pageY: number; }>();
   const overlay = React.useMemo(() => layout && render(layout), [layout, extraData]);
 
   const _onTouchOutside = useStableCallback(onTouchOutside ?? (() => { }));
   useOverlay(overlay, _onTouchOutside);
 
   const calculate = () => {
-    if (viewRef.current) _measureInWindow(viewRef.current, (x, y, width, height) => setLayout({ x, y, width, height }));
+    if (viewRef.current) _measureInWindow(viewRef.current, (x, y, width, height, pageX, pageY) => setLayout({ x, y, width, height, pageX, pageY }));
   }
 
   if (_useWindowEvent) _useWindowEvent('scroll', () => { calculate(); }, true);

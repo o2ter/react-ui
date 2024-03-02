@@ -26,4 +26,4 @@
 import _ from 'lodash';
 import { createOverlay } from './base';
 
-export const Overlay = createOverlay((view, callback) => view.measureInWindow(callback));
+export const Overlay = createOverlay((view, callback) => view.measureInWindow((x, y, width, height) => callback(x, y, width, height, 0, 0)));

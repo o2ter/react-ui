@@ -38,7 +38,7 @@ export type PopoverProps = React.ComponentProps<typeof View> & {
   hidden?: boolean;
   arrow?: boolean;
   shadow?: boolean | number;
-  render: (layout: LayoutRectangle) => React.ReactNode;
+  render: (layout: LayoutRectangle & { pageX: number; pageY: number; }) => React.ReactNode;
   onTouchOutside?: (event: GestureResponderEvent) => void;
   extraData?: any;
   containerStyle?: StyleProp<ViewStyle>;

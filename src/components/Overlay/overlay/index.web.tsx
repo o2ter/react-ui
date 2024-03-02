@@ -28,6 +28,6 @@ import { createOverlay } from './base';
 import { useWindowEvent } from '../../../hooks/webHooks';
 
 export const Overlay = createOverlay(
-  (view, callback) => view.measureInWindow((x, y, width, height) => callback(x + window.scrollX, y + window.scrollY, width, height)),
+  (view, callback) => view.measureInWindow((x, y, width, height) => callback(x + window.scrollX, y + window.scrollY, width, height, window.scrollX, window.scrollY)),
   useWindowEvent,
 );

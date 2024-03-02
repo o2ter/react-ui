@@ -54,7 +54,7 @@ export const Popover = createMemoComponent((
   const [press, setPress] = React.useState(false);
 
   const _extraData = [hidden ?? !press, position, containerStyle, extraData];
-  const _render = useStableCallback((layout: LayoutRectangle) => (
+  const _render = useStableCallback((layout: LayoutRectangle & { pageX: number; pageY: number; }) => (
     <PopoverBody
       key={id}
       layout={layout}

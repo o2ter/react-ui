@@ -40,22 +40,24 @@ type PopoverBodyProps = React.PropsWithChildren<{
   shadow: boolean | number;
   position: PopoverPosition;
   alignment: PopoverAlignment;
-  layout: LayoutRectangle;
+  layout: LayoutRectangle & { pageX: number; pageY: number; };
   style?: StyleProp<ViewStyle>;
 }>;
 
 const selectPosition = (
   position: PopoverPosition,
-  layout: LayoutRectangle,
+  layout: LayoutRectangle & { pageX: number; pageY: number; },
   windowDimensions: ScaledSize
 ) => {
   if (position === 'auto') position = ['top', 'left', 'right', 'bottom'];
   position = _.castArray(position);
+  const top = layout.y - layout.pageY;
+  const left = layout.x - layout.pageX;
   const spaces = {
-    top: Math.max(0, layout.y),
-    left: Math.max(0, layout.x),
-    right: Math.max(0, windowDimensions.width - layout.x - layout.width),
-    bottom: Math.max(0, windowDimensions.height - layout.y - layout.height),
+    top: Math.max(0, top),
+    left: Math.max(0, left),
+    right: Math.max(0, windowDimensions.width - left - layout.width),
+    bottom: Math.max(0, windowDimensions.height - top - layout.height),
   };
   return _.maxBy(position, x => spaces[x])!;
 };
@@ -143,6 +145,7 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
             ...elevationShadow(_.isNumber(shadow) ? shadow : 6),
           }),
           {
+            position: 'absolute',
             left: _pos_x,
             top: _pos_y,
             backgroundColor: backgroundColor,
@@ -156,10 +159,6 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
             opacity: containerLayout ? fadeAnim : 0,
             padding: theme.spacers['1'],
           },
-          Platform.select({
-            web: { position: 'fixed' } as any,
-            default: { position: 'absolute' },
-          }),
           _style,
         ])}
       >

@@ -61,7 +61,7 @@ export const Tooltip = createMemoComponent((
     container: _.omit(_defaultStyle, textStyleKeys),
   }), [_defaultStyle]);
 
-  const _render = useStableCallback((layout: LayoutRectangle) => (
+  const _render = useStableCallback((layout: LayoutRectangle & { pageX: number; pageY: number; }) => (
     <TextStyleProvider style={_styles.text}>{render(layout)}</TextStyleProvider>
   ));
 
