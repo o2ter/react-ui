@@ -18,6 +18,7 @@ export class FormUploadHandler<F, U> {
 
   #file: F;
   #upload: FormUploaderCallback<F, U>;
+  #refresh: () => void;
   #complete: (uploaded: U, handler: FormUploadHandler<F, U>) => void;
 
   #promise?: Promise<void>;
@@ -27,10 +28,12 @@ export class FormUploadHandler<F, U> {
   constructor(
     file: F,
     upload: FormUploaderCallback<F, U>,
+    refresh: () => void,
     complete: (uploaded: U, handler: FormUploadHandler<F, U>) => void
   ) {
     this.#file = file;
     this.#upload = upload;
+    this.#refresh = refresh;
     this.#complete = complete;
   }
 
@@ -47,11 +50,16 @@ export class FormUploadHandler<F, U> {
       this.#promise = (async () => {
         try {
           this.#error.setValue(null);
-          const uploaded = await this.#upload(this.#file, (bytes, total) => this.#progress.setValue({ bytes, total }));
+          const uploaded = await this.#upload(this.#file, (bytes, total) => {
+            this.#progress.setValue({ bytes, total });
+            this.#refresh();
+          });
           this.#complete(uploaded, this);
+          this.#refresh();
         } catch (e) {
           this.#error.setValue(e as Error);
           this.#promise = undefined;
+          this.#refresh();
         }
       })();
     }

@@ -91,6 +91,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const [counts, setCounts] = React.useState<Record<string, number>>({});
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
   const [listeners, setListeners] = React.useState<{ action: string; callback: () => void; }[]>([]);
+  const [refresh, setRefresh] = React.useState(0);
 
   const _schema = React.useMemo(() => object(schema ?? {}), [schema]);
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
@@ -164,6 +165,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     ),
     submit: () => stableRef.current.action('submit'),
     reset: () => stableRef.current.action('reset'),
+    refresh: () => setRefresh(v => v + 1),
     action: (action: string) => stableRef.current.action(action),
     setTouched: (path?: string) => setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }),
     addEventListener: (action: string, callback: () => void) => setListeners(v => [...v, { action, callback }]),
@@ -184,7 +186,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     get errors() { return [..._validate(values), ..._.map(extraError, x => x.error)] },
     touched: (path: string) => _.isBoolean(touched) ? touched : touched[path] ?? false,
     ...formAction,
-  }), [useEquivalent(roles), loading, counts, values, _validate, touched, extraError]);
+  }), [useEquivalent(roles), loading, counts, values, _validate, touched, extraError, refresh]);
 
   const [initState] = React.useState(formState);
   React.useEffect(() => {

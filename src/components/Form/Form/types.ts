@@ -41,6 +41,7 @@ export type FormState = {
   validate: (value: any, path?: string) => Error[];
   submit: VoidFunction;
   reset: VoidFunction;
+  refresh: () => void;
   action: (action: string) => void;
   touched: (path: string) => boolean;
   setTouched: (path?: string) => void;

@@ -36,6 +36,7 @@ export const FormUploader = createMemoComponent(<File extends unknown, Uploaded 
   const {
     value,
     onChange,
+    refresh,
     setTouched,
     useValidator,
     form: {
@@ -72,7 +73,7 @@ export const FormUploader = createMemoComponent(<File extends unknown, Uploaded 
   const _onUpload = useStableCallback(onUpload);
   const submitFiles = useStableCallback((...files: File[]) => {
     const uploads = _.map(files, file => new FormUploadHandler(
-      file, _onUpload,
+      file, _onUpload, refresh,
       (uploaded, handler) => {
         setUploads(x => x ? _.map(x, v => v === handler ? uploaded : v) : [uploaded]);
       }

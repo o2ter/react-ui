@@ -37,7 +37,7 @@ export const useForm = () => ({
 export const useField = (name: string | string[]) => {
 
   const formState = useForm();
-  const { roles, values, setValue, validate, touched, setTouched, submit, reset, groupPath } = formState;
+  const { roles, values, setValue, validate, touched, setTouched, submit, reset, refresh, groupPath } = formState;
   const path = [...groupPath, ..._.toPath(name)].join('.');
   const value = _.get(values, path);
 
@@ -73,5 +73,6 @@ export const useField = (name: string | string[]) => {
     onChange,
     submit,
     reset,
+    refresh,
   };
 };
