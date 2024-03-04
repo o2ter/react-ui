@@ -84,6 +84,8 @@ export const FormUploader = createMemoComponent(<File extends unknown, Uploaded 
       for (const { error } of _uploads) {
         if (error) throw error;
       }
+      onChange(_.map(uploads, x => x instanceof FormUploadHandler ? x.uploaded : x));
+      setTouched();
     }
     addEventListener('submit', listener);
     return () => removeEventListener('submit', listener);
@@ -92,7 +94,7 @@ export const FormUploader = createMemoComponent(<File extends unknown, Uploaded 
   const _onUpload = useStableCallback(onUpload);
   const submitFiles = useStableCallback((...files: File[]) => {
     const uploads = _.map(files, file => new FormUploadHandler(
-      file, _onUpload, refresh,
+      file, refresh, _onUpload,
       (uploaded, handler) => {
         setUploads(x => x ? _.map(x, v => v === handler ? uploaded : v) : [uploaded]);
       }

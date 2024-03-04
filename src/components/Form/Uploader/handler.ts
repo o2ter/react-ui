@@ -36,8 +36,10 @@ export type FormUploaderCallback<F, U> = (
 export class FormUploadHandler<F, U> {
 
   #file: F;
-  #upload: FormUploaderCallback<F, U>;
+  #uploaded?: U;
+
   #refresh: () => void;
+  #upload: FormUploaderCallback<F, U>;
   #complete: (uploaded: U, handler: FormUploadHandler<F, U>) => void;
 
   #promise?: Promise<void>;
@@ -46,18 +48,22 @@ export class FormUploadHandler<F, U> {
 
   constructor(
     file: F,
-    upload: FormUploaderCallback<F, U>,
     refresh: () => void,
+    upload: FormUploaderCallback<F, U>,
     complete: (uploaded: U, handler: FormUploadHandler<F, U>) => void
   ) {
     this.#file = file;
-    this.#upload = upload;
     this.#refresh = refresh;
+    this.#upload = upload;
     this.#complete = complete;
   }
 
   get file() {
     return this.#file;
+  }
+
+  get uploaded() {
+    return this.#uploaded;
   }
 
   get error() {
@@ -73,6 +79,7 @@ export class FormUploadHandler<F, U> {
             this.#progress.setValue({ bytes, total });
             this.#refresh();
           });
+          this.#uploaded = uploaded;
           this.#complete(uploaded, this);
           this.#refresh();
         } catch (e) {
