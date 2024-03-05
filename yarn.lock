@@ -1224,6 +1224,13 @@
   dependencies:
     lodash ">=4.17.21"
 
+"@o2ter/utils-js@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@o2ter/utils-js/-/utils-js-0.0.2.tgz#ba2b203f6a1e53f412a1c379d00247f7f1df1849"
+  integrity sha512-tGrsQpCDAZxfav/GIlSDKJrB5epqNO9OjhUQZNlabOBPsYwmlhwxlOlx1UUYVsJrxn8MTjDz0AXJS7a+aZttnQ==
+  dependencies:
+    lodash ">=4.17.21"
+
 "@o2ter/valid.js@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@o2ter/valid.js/-/valid.js-1.0.0.tgz#c72b59da07c9baa07c766532bd3748f2775988f3"
