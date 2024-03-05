@@ -1217,6 +1217,13 @@
     events ">=3.3.0"
     lodash ">=4.17.21"
 
+"@o2ter/utils-js@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@o2ter/utils-js/-/utils-js-0.0.1.tgz#f208778d49b1dcb27eb75cbd32a6ce444df64e0c"
+  integrity sha512-IOZbRAdkLaDMoh4Ff1rIx3zIURTWNwCdEZMinjS5xipBTy0MwMtT/0kJrC+rdgoWUPEIZXlcdZcj09RQ4U+RIw==
+  dependencies:
+    lodash ">=4.17.21"
+
 "@o2ter/valid.js@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@o2ter/valid.js/-/valid.js-1.0.0.tgz#c72b59da07c9baa07c766532bd3748f2775988f3"

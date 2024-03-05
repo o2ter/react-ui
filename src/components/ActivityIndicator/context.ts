@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Awaitable } from 'sugax';
+import { Awaitable } from '@o2ter/utils-js';
 
 export const ActivityIndicatorContext = React.createContext<{
   setTasks: React.Dispatch<React.SetStateAction<string[]>>;
