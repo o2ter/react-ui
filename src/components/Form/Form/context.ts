@@ -40,6 +40,7 @@ export const FormContext = React.createContext<FormState>({
   validate: () => [],
   submit: () => { },
   reset: () => { },
+  refresh: () => { },
   action: () => { },
   touched: () => false,
   setTouched: () => { },
