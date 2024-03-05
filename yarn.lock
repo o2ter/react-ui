@@ -2703,10 +2703,12 @@ style-mod@^4.0.0:
   resolved "https://registry.yarnpkg.com/style-mod/-/style-mod-4.0.0.tgz#97e7c2d68b592975f2ca7a63d0dd6fcacfe35a01"
   integrity sha512-OPhtyEjyyN9x3nhPsu76f52yUGXiZcgvsrFVtvTkyGRQJ0XK+GPc6ov1z+lRpbeabka+MYEQxOYRnt5nF30aMw==
 
-sugax@^1.0.95:
-  version "1.0.95"
-  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.95.tgz#551635e0309bdc8313b5ac9e61ce1cce37acb54d"
-  integrity sha512-95fJ5xfWcD6zLzrkFbIArE2HUmcQHh8SpE6l9huv1wR0LGPQB5XNDE7axrWvUTZdByqXEZTPtFpDhbmYIuMjWw==
+sugax@^1.0.96:
+  version "1.0.96"
+  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.96.tgz#bcdc3fd2a81c40b52038f015ccf1e448d7365e8c"
+  integrity sha512-me27iKlZSTB2RJiKU984C5r2qtQSRtO/bt15f8rN2XZBfjP45wlD74MXVPNwN//cSjrA2tgM4z7Wb7Oi7LuCMA==
+  dependencies:
+    "@o2ter/utils-js" "^0.0.1"
 
 supports-color@^5.3.0:
   version "5.5.0"
