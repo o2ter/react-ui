@@ -1224,10 +1224,10 @@
   dependencies:
     lodash ">=4.17.21"
 
-"@o2ter/utils-js@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@o2ter/utils-js/-/utils-js-0.0.6.tgz#e01e07a9788eeb8e623f7255ff4f505a1a9352e3"
-  integrity sha512-RcJvYrR5v/ldgNrnxz2GqOFEOFckEpt8XXhAsa/49RdemAAsZUCOb4JBVaMI00HS4PBWAfK9Cb0CsqecrDYkdQ==
+"@o2ter/utils-js@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@o2ter/utils-js/-/utils-js-0.0.7.tgz#89f64f387cc82b9d956ae28d95e60579388a75f0"
+  integrity sha512-lQNCkFK+pdYYXdFBo3gdfBEjzAms6DsQftl52RPXOoUHH7hWATNc2nCIKjNRNiJXGdJ9lgK9a/+gvfKBiZceZQ==
   dependencies:
     lodash ">=4.17.21"
 
