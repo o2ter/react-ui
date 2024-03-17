@@ -30,7 +30,6 @@ import { createMemoComponent } from '../../internals/utils';
 import { _useCSSComponentStyle } from '../Style';
 import { ClassNames } from '../Style/types';
 import { TextStyleProvider } from '../Text/style';
-import { normalizeStyle } from '../Style/flatten';
 
 type ViewProps = RNViewProps & {
   classes?: ClassNames;
