@@ -56,6 +56,7 @@ type SelectProps<T, M extends boolean> = {
   }[];
   disabled?: boolean;
   multiple?: M;
+  dismissOnSelect?: boolean;
   arrow?: boolean;
   shadow?: boolean | number;
   variant?: 'outline' | 'underlined' | 'unstyled';
@@ -132,6 +133,7 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
     options,
     disabled = false,
     multiple,
+    dismissOnSelect = !multiple,
     arrow,
     shadow,
     style,
@@ -246,6 +248,7 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
                     : [v.value];
                   const selected = findItems(_val, _.flatMap(sections, x => x.data));
                   _onChange(selected);
+                  if (dismissOnSelect) setHidden(true);
                 }}
                 {...listProps}
               />
