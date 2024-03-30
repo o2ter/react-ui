@@ -48,16 +48,15 @@ export const _useCSSComponentStyle = (
 ) => {
   const cssNames = React.useContext(_CSSNameContext);
   const { components, classes } = React.useContext(_StyleContext);
-  const sel = _.sortedUniq(_.compact(_.flattenDeep([selectors])).sort());
-  const names = flattenClassNames(classNames, sel);
+  const sel = React.useMemo(() => _.sortedUniq(_.compact(_.flattenDeep([selectors])).sort()), [selectors]);
+  const names = React.useMemo(() => flattenClassNames(classNames, sel), [classNames, sel]);
   return React.useMemo(() => [
     components[component],
     ...sel.map(s => components[`${component}:${s}` as keyof ComponentStyles]),
-    ..._.compact(_.map(classes,
-      (v, k) => _.includes(names, k) ?
-        _.includes(cssNames, k) ? { $$css: true, [k]: k } as _StyleProp : v
-        : undefined
-    )),
+    ..._.map(
+      _.pick(classes, names),
+      (v, k) => _.includes(cssNames, k) ? { $$css: true, [k]: k } as _StyleProp : v
+    ),
   ], [components, classes, component, names.join(' ')]);
 }
 
@@ -67,12 +66,12 @@ export const _useComponentStyle = (
   selectors?: Selectors,
 ) => {
   const { components, classes } = React.useContext(_StyleContext);
-  const sel = _.sortedUniq(_.compact(_.flattenDeep([selectors])).sort());
-  const names = flattenClassNames(classNames, sel);
+  const sel = React.useMemo(() => _.sortedUniq(_.compact(_.flattenDeep([selectors])).sort()), [selectors]);
+  const names = React.useMemo(() => flattenClassNames(classNames, sel), [classNames, sel]);
   return React.useMemo(() => flattenStyle([
     components[component],
     ...sel.map(s => components[`${component}:${s}` as keyof ComponentStyles]),
-    ..._.values(_.pickBy(classes, (v, k) => _.includes(names, k))),
+    ..._.values(_.pick(classes, names)),
   ]), [components, classes, component, names.join(' ')]);
 }
 
@@ -81,9 +80,9 @@ export const useStyle = (
   selectors?: Selectors,
 ) => {
   const { classes } = React.useContext(_StyleContext);
-  const names = flattenClassNames(classNames, selectors);
+  const names = React.useMemo(() => flattenClassNames(classNames, selectors), [classNames, selectors]);
   return React.useMemo(() =>
-    flattenStyle(_.values(_.pickBy(classes, (v, k) => _.includes(names, k)))),
+    flattenStyle(_.values(_.pick(classes, names))),
     [classes, names.join(' ')]
   );
 }
