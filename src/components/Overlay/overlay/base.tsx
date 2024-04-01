@@ -26,7 +26,8 @@
 import _ from 'lodash';
 import React from 'react';
 import View from '../../View';
-import { GestureResponderEvent, MeasureInWindowOnSuccessCallback, View as RNView } from 'react-native';
+import Pressable from '../../Pressable';
+import { GestureResponderEvent, View as RNView, Pressable as RNPressable } from 'react-native';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import { createMemoComponent } from '../../../internals/utils';
 import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
@@ -47,6 +48,38 @@ type MeasureCallback = (
   pageX: number,
   pageY: number,
 ) => void;
+
+type WrapperProps = Omit<React.ComponentProps<typeof View>, 'children'> & {
+  element: React.ReactElement<any>,
+};
+
+const Wrapper = React.forwardRef(({
+  element,
+  onLayout,
+  ...props
+}: WrapperProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
+) => {
+  const {
+    props: {
+      ref: _ref,
+      onLayout: _onLayout,
+      children,
+      ..._props
+    }
+  } = element;
+  const ref = useMergeRefs(_ref, forwardRef);
+  const layout = useStableCallback((e: LayoutChangeEvent) => {
+    if (onLayout) onLayout(e);
+    if (_onLayout) _onLayout(e);
+  });
+  return React.cloneElement(element, {
+    ref,
+    onLayout: layout,
+    ...props,
+    ..._props
+  }, ..._.castArray(children ?? []));
+})
 
 export const createOverlay = (
   _measureInWindow: (view: RNView, callback: MeasureCallback) => void,
@@ -81,6 +114,21 @@ export const createOverlay = (
     calculate();
     if (onLayout) onLayout(e);
   });
+
+  const [child, ...rest] = React.Children.toArray(children);
+  if (
+    React.isValidElement(child) &&
+    _.isEmpty(rest) &&
+    _.indexOf([
+      View,
+      Pressable,
+      RNView,
+      RNPressable,
+    ], child.type as any) !== -1) {
+    return (
+      <Wrapper ref={ref} element={child} onLayout={_onLayout} {...props} />
+    );
+  }
 
   return (
     <View
