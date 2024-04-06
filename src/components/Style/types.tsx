@@ -91,7 +91,7 @@ type _ComponentStyles = {
 
 };
 
-type _Selector = 'active' | 'hover' | 'focus' | 'checked' | 'invalid' | 'valid' | 'disabled' | 'enabled';
+type _Selector = 'active' | 'hover' | 'focus' | 'checked' | 'invalid' | 'valid' | 'disabled' | 'enabled' | 'indeterminate';
 
 export type ClassNames = string | _.Falsey | ClassNames[];
 export type Selectors = _Selector | _.Falsey | Selectors[];

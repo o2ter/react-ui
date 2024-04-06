@@ -38,6 +38,7 @@ import { useFocus, useFocusRing } from '../../internals/focus';
 import { ThemeColors } from '../../theme/variables';
 
 type CheckboxState = {
+  mixed: boolean;
   selected: boolean;
   focused: boolean;
 };
@@ -45,6 +46,7 @@ type CheckboxState = {
 type CheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;
   color?: ThemeColors | (string & {});
+  mixed?: boolean;
   selected?: boolean;
   tabIndex?: number;
   focusRingColor?: string;
@@ -57,6 +59,7 @@ export const Checkbox = createMemoComponent((
     classes,
     color = 'primary',
     style,
+    mixed,
     selected,
     focusRingColor,
     onFocus,
@@ -75,13 +78,18 @@ export const Checkbox = createMemoComponent((
   const checkboxStyle = _useComponentStyle('checkbox', classes, [
     focused && 'focus',
     selected && 'checked',
+    mixed && 'indeterminate',
     props.disabled ? 'disabled' : 'enabled',
   ]);
 
   const fontSize = textStyle.fontSize ?? theme.root.fontSize;
   const lineHeight = textStyle.lineHeight ?? theme.root.lineHeight;
 
-  const state = { selected: selected ?? false, focused };
+  const state = {
+    mixed: mixed ?? false,
+    selected: selected ?? false,
+    focused,
+  };
 
   const innerStyle = [
     'width',
@@ -143,16 +151,18 @@ export const Checkbox = createMemoComponent((
         _.pick(_style, ...innerStyle),
         { marginTop: _.isNumber(lineHeight) ? (lineHeight - 1) * 0.5 * fontSize : 0 }
       ]}>
-        {selected && <Svg width='100%' height='100%' viewBox='0 0 20 20'>
-          <Path
-            fill='none'
-            stroke={theme.colorContrast(theme.pickColor(color))}
-            strokeWidth='3'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='m6 10 3 3 6-6'
-          />
-        </Svg>}
+        {(selected || mixed) && (
+          <Svg width='100%' height='100%' viewBox='0 0 20 20'>
+            <Path
+              fill='none'
+              stroke={theme.colorContrast(theme.pickColor(color))}
+              strokeWidth='3'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d={mixed ? 'M6 10h8' : 'm6 10 3 3 6-6'}
+            />
+          </Svg>
+        )}
       </View>
       {_.isFunction(children) ? children(state) : children}
     </Pressable>
