@@ -67,12 +67,13 @@ const Wrapper = React.forwardRef(({
       ..._props
     }
   } = element;
+  const ref = useMergeRefs(forwardRef, 'ref' in element ? element.ref as any : null);
   const layout = useStableCallback((e: LayoutChangeEvent) => {
     if (onLayout) onLayout(e);
     if (_onLayout) _onLayout(e);
   });
   return React.cloneElement(element, {
-    ref: forwardRef,
+    ref,
     onLayout: layout,
     ...props,
     ..._props
