@@ -50,7 +50,7 @@ type MeasureCallback = (
 ) => void;
 
 type WrapperProps = Omit<React.ComponentProps<typeof View>, 'children'> & {
-  element: React.ReactElement<any>,
+  element: React.ReactElement<any>;
 };
 
 const Wrapper = React.forwardRef(({
@@ -62,19 +62,17 @@ const Wrapper = React.forwardRef(({
 ) => {
   const {
     props: {
-      ref: _ref,
       onLayout: _onLayout,
       children,
       ..._props
     }
   } = element;
-  const ref = useMergeRefs(_ref, forwardRef);
   const layout = useStableCallback((e: LayoutChangeEvent) => {
     if (onLayout) onLayout(e);
     if (_onLayout) _onLayout(e);
   });
   return React.cloneElement(element, {
-    ref,
+    ref: forwardRef,
     onLayout: layout,
     ...props,
     ..._props
@@ -126,7 +124,12 @@ export const createOverlay = (
       RNPressable,
     ], child.type as any) !== -1) {
     return (
-      <Wrapper ref={ref} element={child} onLayout={_onLayout} {...props} />
+      <Wrapper
+        ref={ref}
+        element={child}
+        onLayout={_onLayout}
+        {...props}
+      />
     );
   }
 
