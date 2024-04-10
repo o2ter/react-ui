@@ -41,8 +41,8 @@ export const useField = (name: string | string[]) => {
   const path = [...groupPath, ..._.toPath(name)].join('.');
   const value = _.get(values, path);
 
-  const onChange = React.useCallback((value: React.SetStateAction<any>) => setValue(path, value), [path]);
-  const _setTouched = React.useCallback(() => setTouched(path), [path]);
+  const onChange = useStableCallback((value: React.SetStateAction<any>) => setValue(path, value));
+  const _setTouched = useStableCallback(() => setTouched(path));
 
   const { extraError, setExtraError } = React.useContext(FormInternalContext);
 
