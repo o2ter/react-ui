@@ -51,14 +51,15 @@ export const Popover = createMemoComponent((
 
   const id = React.useId();
 
-  const [press, setPress] = React.useState(false);
+  const pressableRef = React.useRef<React.ComponentRef<typeof Pressable>>(null);
+  const [visible, setVisible] = React.useState(false);
 
-  const _extraData = [hidden ?? !press, position, containerStyle, extraData];
+  const _extraData = [hidden ?? !visible, position, containerStyle, extraData];
   const _render = useStableCallback((layout: LayoutRectangle & { pageX: number; pageY: number; }) => (
     <PopoverBody
       key={id}
       layout={layout}
-      hidden={hidden ?? !press}
+      hidden={hidden ?? !visible}
       arrow={arrow ?? true}
       shadow={shadow ?? true}
       position={position}
@@ -72,9 +73,13 @@ export const Popover = createMemoComponent((
       ref={forwardRef}
       render={_render}
       extraData={React.useMemo(() => _extraData, _extraData)}
+      onTouchOutside={(e) => {
+        if (pressableRef.current === e.target as any) return;
+        setVisible(false);
+      }}
       {...props}
     >{_.isNil(hidden) ? (
-      <Pressable onPress={() => setPress(v => !v)}>{children}</Pressable>
+      <Pressable ref={pressableRef} onPress={() => setVisible(v => !v)}>{children}</Pressable>
     ) : children}</Overlay>
   );
 }, {
