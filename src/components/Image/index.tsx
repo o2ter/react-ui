@@ -60,10 +60,12 @@ export const Image = createMemoComponent((
   const [imageSize, setImageSize] = React.useState({ width: _source?.width ?? 0, height: _source?.height ?? 0 });
 
   React.useEffect(() => {
-    if (!_.isNumber(source) && _.isString(source?.uri)) {
+    if (_.isNumber(source)) {
+      setImageSize({ width: _source?.width ?? 0, height: _source?.height ?? 0 });
+    } else if (_.isString(source?.uri)) {
       RNImage.getSize(source.uri, (width, height) => setImageSize({ width, height }));
     }
-  }, [!_.isNumber(source) && source?.uri]);
+  }, [_.isNumber(source) ? source : source?.uri]);
 
   let aspectRatio;
   let _width = width;
