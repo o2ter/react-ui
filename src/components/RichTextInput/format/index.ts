@@ -23,6 +23,7 @@
 //  THE SOFTWARE.
 //
 
+import _ from 'lodash';
 import { bbcode2delta } from './bbcode/bbcode2delta';
 import { delta2bbcode } from './bbcode/delta2bbcode';
 import { Line } from '../types';
@@ -41,9 +42,9 @@ export const defaultFormat = {
 export const defaultFormatOptions = {
   'raw': {
     modules: {
-      toolbar: [
+      toolbar: (fontSizes: (number | string)[]) => [
         [{ 'font': [] }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
+        [{ 'size': _.map(fontSizes, x => _.isNumber(x) ? `${x}px` : x) }],
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
         [{ 'color': [] }, { 'background': [] }],
         [{ 'align': [] }],
@@ -57,10 +58,10 @@ export const defaultFormatOptions = {
   },
   'bbcode': {
     modules: {
-      toolbar: [
+      toolbar: (fontSizes: (number | string)[]) => [
         [{ 'font': [] }],
-        [{ 'size': ['small', false, 'large'] }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'size': _.map(fontSizes, x => _.isNumber(x) ? `${x}px` : x) }],
+        // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
         [{ 'color': [] }],
         [{ 'align': [] }],
         ['bold', 'italic', 'strike', 'underline'],

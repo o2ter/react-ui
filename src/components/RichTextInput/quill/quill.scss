@@ -23,6 +23,16 @@
 //  THE SOFTWARE.
 //
 
+.ql-bubble .ql-picker.ql-size .ql-picker-label::before,
+.ql-bubble .ql-picker.ql-size .ql-picker-item::before {
+  content: attr(data-value);
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item::before {
+  content: attr(data-value);
+}
+
 @import 'quill/dist/quill.core.css';
 @import 'quill/dist/quill.bubble.css';
 @import 'quill/dist/quill.snow.css';

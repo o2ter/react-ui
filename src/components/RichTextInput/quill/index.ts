@@ -36,6 +36,10 @@ export const Delta = Quill.import('delta') as typeof _Delta;
 Quill.register('modules/imageResize', ImageResize);
 Quill.register("modules/imageUploader", ImageUploader);
 
+const Size = Quill.import('attributors/style/size');
+Size.whitelist = null;
+Quill.register(Size, true);
+
 const imgAttrs = [
   'alt',
   'height',

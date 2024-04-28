@@ -29,6 +29,7 @@ import { Base } from './base';
 import type { Quill, TextChangeHandler } from 'quill';
 import { createMemoComponent } from '../../internals/utils';
 import { defaultFormat, defaultFormatOptions } from './format';
+import { useTheme } from '../../theme';
 
 export type Format = typeof defaultFormat;
 type Encoder<F extends keyof Format> = Format[F]['encoder'];
@@ -49,9 +50,17 @@ const _RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
   }: RichTextInputProps<F>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Base>>
 ) => {
+
+  const theme = useTheme();
+  const fontSizes = _.sortedUniq([
+    ..._.values(theme.displayFontSizes),
+    ..._.values(theme.fontSizes),
+  ].sort((a, b) => a - b));
+
   const { encoder, decoder } = defaultFormat[format ?? 'bbcode' as F];
-  const defaultOptions = defaultFormatOptions[format ?? 'bbcode' as F];
+  const { modules: { toolbar, ...modules }, ...defaultOptions } = defaultFormatOptions[format ?? 'bbcode' as F];
   const _value = React.useMemo(() => decoder(value ?? '' as any), [value]);
+
   return (
     <Base
       ref={forwardRef}
@@ -64,7 +73,8 @@ const _RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
         ...defaultOptions,
         ...options,
         modules: {
-          ...defaultOptions.modules ?? {},
+          toolbar: toolbar(fontSizes),
+          ...modules ?? {},
           ...options.modules ?? {},
         },
       }}
