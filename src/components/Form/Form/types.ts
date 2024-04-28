@@ -53,6 +53,7 @@ export type FormProps<S extends Record<string, ISchema<any, any>>> = {
   schema?: S;
   initialValues?: TypeOfSchema<ReturnType<typeof object<S>>>;
   roles?: string[];
+  activity?: boolean | { actions?: string[]; delay?: number; };
   validate?: (value: any, path?: string) => Error[];
   validateOnMount?: boolean;
   onReset?: (state: FormState) => void;
@@ -61,6 +62,7 @@ export type FormProps<S extends Record<string, ISchema<any, any>>> = {
   onAction?: (action: string, state: FormState) => void;
   onSubmit?: (values: Record<string, any>, state: FormState) => void;
   onError?: (error: Error, state: FormState & { preventDefault: VoidFunction; }) => void;
+  onLoading?: (action: string, task: Promise<void>, state: FormState) => void;
   children?: React.ReactNode | ((state: FormState) => React.ReactNode);
 };
 

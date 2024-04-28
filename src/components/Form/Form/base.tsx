@@ -32,6 +32,7 @@ import { createMemoComponent } from '../../../internals/utils';
 import { FormState } from './types';
 import { FormInternalState, FormContext, FormInternalContext } from './context';
 import { FormProps } from './types';
+import { useActivity } from '../../ActivityIndicator';
 
 const cloneValue = (x: any): any => {
   if (_.isArray(x)) return x.map(v => cloneValue(v));
@@ -67,14 +68,16 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   schema,
   initialValues,
   roles,
+  activity,
   validate,
   validateOnMount,
-  onReset = () => { },
-  onChange = () => { },
-  onChangeValues = () => { },
-  onAction = () => { },
-  onSubmit = () => { },
-  onError = () => { },
+  onReset,
+  onChange,
+  onChangeValues,
+  onAction,
+  onSubmit,
+  onError,
+  onLoading,
   children
 }: FormProps<S>, forwardRef: React.ForwardedRef<FormState>) => {
 
@@ -87,11 +90,13 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     update: React.SetStateAction<typeof _initialValues>
   ) => _setValues(_.isFunction(update) ? v => update(v ?? _initialValues) : update));
 
-  const [loading, setLoading] = React.useState<Record<string, boolean>>({});
+  const [loading, setLoading] = React.useState<Record<string, string[]>>({});
   const [counts, setCounts] = React.useState<Record<string, number>>({});
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
   const [listeners, setListeners] = React.useState<{ action: string; callback: () => void; }[]>([]);
   const [refresh, setRefresh] = React.useState(0);
+
+  const startActivity = useActivity();
 
   const _schema = React.useMemo(() => object(schema ?? {}), [schema]);
   const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
@@ -123,6 +128,16 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
       if (_.isFunction(onError)) await onError(error, state);
     },
     action: (action: string) => {
+      const taskId = _.uniqueId();
+      const { promise, resolve } = Promise.withResolvers<void>();
+      if (_.isFunction(onLoading)) onLoading(action, promise, formState);
+      if (activity) {
+        const actions = _.isBoolean(activity) ? undefined : activity.actions;
+        const delay = _.isBoolean(activity) ? undefined : activity.delay;
+        if (_.isNil(actions) || _.includes(actions, action)) {
+          startActivity(() => promise, delay);
+        }
+      }
       const callback = ({ values, formState, schema }: NextTickParam) => {
         (async () => {
           switch (action) {
@@ -139,12 +154,13 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
               break;
           }
           setCounts(c => ({ ...c, [action]: (c[action] ?? 0) + 1 }));
-          setLoading(v => ({ ...v, [action]: false }));
+          setLoading(v => ({ ...v, [action]: _.filter(v[action], x => x !== taskId) }));
+          resolve();
         })();
       };
       _showError(async () => {
         try {
-          setLoading(v => ({ ...v, [action]: true }));
+          setLoading(v => ({ ...v, [action]: [...v[action] ?? [], taskId] }));
           const resolved = await Promise.all(_.flatMap(listeners, x => x.action === action ? x.callback() : []));
           if (_.isEmpty(resolved)) {
             callback({ values, formState, schema: _schema });
@@ -152,7 +168,8 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
             setNextTick(v => [...v, callback]);
           }
         } catch (error) {
-          setLoading(v => ({ ...v, [action]: false }));
+          setLoading(v => ({ ...v, [action]: _.filter(v[action], x => x !== taskId) }));
+          resolve();
           throw error;
         }
       });
@@ -177,9 +194,9 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     values,
     validate: _validate,
     get dirty() { return !_.isNil(_values) },
-    get submitting() { return loading.submit ?? false },
-    get resetting() { return loading.reset ?? false },
-    get loading() { return _.keys(_.pickBy(loading, x => x)) },
+    get submitting() { return !_.isEmpty(loading.submit) },
+    get resetting() { return !_.isEmpty(loading.reset) },
+    get loading() { return _.keys(_.pickBy(loading, x => !_.isEmpty(x))) },
     get submitCount() { return counts.submit },
     get resetCount() { return counts.reset },
     get actionCounts() { return counts },
