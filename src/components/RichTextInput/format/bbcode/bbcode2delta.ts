@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import { parser } from '../../../BBCode/parser';
-import { Line, Segment } from '../../types';
+import { Line, Segment } from '../types';
 
 export const bbcode2delta = (docs: string) => {
   const result: Line[] = [];

@@ -37,6 +37,7 @@ type Encoder<F extends keyof Format> = Format[F]['encoder'];
 type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWithoutRef<typeof Base>, 'value' | 'onChangeText'> & {
   format?: F;
   value?: ReturnType<Encoder<F>>;
+  fontSizes?: number[];
   onChangeText?: (text: ReturnType<Encoder<F>>, ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
 }
 
@@ -46,13 +47,14 @@ const _RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
     value,
     onChangeText,
     options = {},
+    fontSizes,
     ...props
   }: RichTextInputProps<F>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Base>>
 ) => {
 
   const theme = useTheme();
-  const fontSizes = _.sortedUniq([
+  const _fontSizes = fontSizes ?? _.sortedUniq([
     ..._.values(theme.displayFontSizes),
     ..._.values(theme.fontSizes),
   ].sort((a, b) => a - b));
@@ -73,7 +75,10 @@ const _RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
         ...defaultOptions,
         ...options,
         modules: {
-          toolbar: toolbar(fontSizes),
+          toolbar: toolbar({
+            baseFontSize: theme.fontSizes['normal'] ?? theme.root.fontSize,
+            fontSizes: _fontSizes,
+          }),
           ...modules ?? {},
           ...options.modules ?? {},
         },

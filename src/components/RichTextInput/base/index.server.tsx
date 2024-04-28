@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { RichTextInputProps, RichTextInputRef } from '../types';
+import { RichTextInputProps, RichTextInputRef } from './types';
 
 export const Base = React.forwardRef(({
   value,

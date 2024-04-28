@@ -23,9 +23,6 @@
 //  THE SOFTWARE.
 //
 
-import React from 'react';
-import type { Quill, QuillOptionsStatic, SelectionChangeHandler, TextChangeHandler } from 'quill';
-
 export type Segment = {
   attributes: Record<string, any>;
   insert: string | Record<string, unknown>;
@@ -34,20 +31,4 @@ export type Segment = {
 export type Line = {
   attributes: Record<string, any>;
   segments: Segment[];
-};
-
-export type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
-  value?: Line[];
-  options?: QuillOptionsStatic;
-  onUploadImage?: (blob: Blob) => PromiseLike<string>;
-  onChangeText?: (value: Line[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
-  onChangeSelection?: (...arg: [...Parameters<SelectionChangeHandler>, Quill]) => void;
-};
-
-export type RichTextInputRef = {
-  value?: Line[];
-  editor?: Quill;
-  container?: HTMLDivElement;
-  assets: string[];
-  replaceAssets(assets: Record<string, string>): void;
 };

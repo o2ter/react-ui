@@ -1,5 +1,5 @@
 //
-//  quill.scss
+//  types.ts
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2024 O2ter Limited. All rights reserved.
@@ -23,17 +23,22 @@
 //  THE SOFTWARE.
 //
 
-.ql-bubble .ql-picker.ql-size .ql-picker-label[data-value]::before,
-.ql-bubble .ql-picker.ql-size .ql-picker-item[data-value]::before {
-  content: attr(data-value);
-}
+import React from 'react';
+import type { Quill, QuillOptionsStatic, SelectionChangeHandler, TextChangeHandler } from 'quill';
+import { Line } from '../format/types';
 
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value]::before {
-  content: attr(data-value);
-}
+export type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
+  value?: Line[];
+  options?: QuillOptionsStatic;
+  onUploadImage?: (blob: Blob) => PromiseLike<string>;
+  onChangeText?: (value: Line[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
+  onChangeSelection?: (...arg: [...Parameters<SelectionChangeHandler>, Quill]) => void;
+};
 
-@import 'quill/dist/quill.core.css';
-@import 'quill/dist/quill.bubble.css';
-@import 'quill/dist/quill.snow.css';
-@import './modules/imageUploader/index.scss';
+export type RichTextInputRef = {
+  value?: Line[];
+  editor?: Quill;
+  container?: HTMLDivElement;
+  assets: string[];
+  replaceAssets(assets: Record<string, string>): void;
+};

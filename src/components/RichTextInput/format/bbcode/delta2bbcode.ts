@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import { html_escaper } from '../../../BBCode/parser';
-import { Line } from '../../types';
+import { Line } from '../types';
 
 export const delta2bbcode = (docs: Line[]) => {
   let result = '';

@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import { bbcode2delta } from './bbcode/bbcode2delta';
 import { delta2bbcode } from './bbcode/delta2bbcode';
-import { Line } from '../types';
+import { Line } from './types';
 
 export const defaultFormat = {
   'raw': {
@@ -39,12 +39,17 @@ export const defaultFormat = {
   },
 } as const;
 
+type ToolbarOptions = {
+  baseFontSize: number;
+  fontSizes: number[];
+};
+
 export const defaultFormatOptions = {
   'raw': {
     modules: {
-      toolbar: (fontSizes: (number | string)[]) => [
+      toolbar: (options: ToolbarOptions) => [
         [{ 'font': [] }],
-        [{ 'size': _.map(fontSizes, x => _.isNumber(x) ? `${x}px` : x) }],
+        [{ 'size': _.map(options.fontSizes, x => x === options.baseFontSize ? false : `${x}px`) }],
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
         [{ 'color': [] }, { 'background': [] }],
         [{ 'align': [] }],
@@ -58,9 +63,9 @@ export const defaultFormatOptions = {
   },
   'bbcode': {
     modules: {
-      toolbar: (fontSizes: (number | string)[]) => [
+      toolbar: (options: ToolbarOptions) => [
         [{ 'font': [] }],
-        [{ 'size': _.map(fontSizes, x => _.isNumber(x) ? `${x}px` : x) }],
+        [{ 'size': _.map(options.fontSizes, x => x === options.baseFontSize ? false : `${x}px`) }],
         // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
         [{ 'color': [] }],
         [{ 'align': [] }],
