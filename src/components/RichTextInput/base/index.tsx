@@ -109,7 +109,8 @@ export const Base = React.forwardRef(({
       const editor = editorRef.current;
       if (!editor) return;
       let isChanged = false;
-      const ops = editor.getContents().map(op => {
+      const oldContents = editor.getContents();
+      const ops = oldContents.map(op => {
         if (_.isNil(op.insert) || _.isString(op.insert)) return op;
         if (_.isString(op.insert.image)) {
           for (const [source, replace] of _.entries(assets)) {
@@ -121,9 +122,13 @@ export const Base = React.forwardRef(({
         return op;
       });
       if (!isChanged) return;
+      const delta = new Delta(ops);
       const selection = editor.getSelection(true);
-      editor.setContents(new Delta(ops), 'silent');
+      editor.setContents(delta, 'silent');
       if (selection) editor.setSelection(selection, 'silent');
+      const value = decodeContent(delta);
+      setCapture(value);
+      _onChangeText(value, delta, oldContents, 'silent', editor);
     },
   }), []);
 
