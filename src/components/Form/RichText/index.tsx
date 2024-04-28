@@ -25,14 +25,14 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { RichTextInput } from '../../RichTextInput';
+import { RichTextInput, Format } from '../../RichTextInput';
 import { useField } from '../Form/hooks';
 import FormUploader from '../Uploader';
 import { createMemoComponent } from '../../../internals/utils';
 import { useMergeRefs } from 'sugax';
 import { FormUploadHandler } from '../Uploader/handler';
 
-type FormRichTextProps<U> = Omit<React.ComponentPropsWithoutRef<typeof RichTextInput>, 'onUploadImage'> & {
+type FormRichTextProps<U, F extends keyof Format> = Omit<React.ComponentPropsWithoutRef<typeof RichTextInput<F>>, 'onUploadImage'> & {
   name: string;
   uploadProps?: React.ComponentPropsWithRef<typeof FormUploader<Blob & { source: string }, U>> & {
     resolveUrl: (uploaded: U) => string;
@@ -48,16 +48,16 @@ const dataUrlToBlob = async (data: string) => {
   } catch { }
 }
 
-export const FormRichText = createMemoComponent(<Uploaded extends unknown>(
+export const FormRichText = createMemoComponent(<Uploaded extends unknown, F extends keyof Format = 'bbcode'>(
   {
     name,
     uploadProps,
     validate,
     ...props
-  }: FormRichTextProps<Uploaded>,
-  forwardRef: React.ForwardedRef<React.ComponentRef<typeof RichTextInput>>
+  }: FormRichTextProps<Uploaded, F>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof RichTextInput<F>>>
 ) => {
-  const inputRef = React.useRef<React.ComponentRef<typeof RichTextInput>>();
+  const inputRef = React.useRef<React.ComponentRef<typeof RichTextInput<F>>>();
   const ref = useMergeRefs(inputRef, forwardRef);
   const { value, setTouched, onChange, useValidator } = useField(name);
   useValidator(validate);

@@ -30,7 +30,7 @@ import type { Quill, TextChangeHandler } from 'quill';
 import { createMemoComponent } from '../../internals/utils';
 import { defaultFormat, defaultFormatOptions } from './format';
 
-type Format = typeof defaultFormat;
+export type Format = typeof defaultFormat;
 type Encoder<F extends keyof Format> = Format[F]['encoder'];
 
 type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWithoutRef<typeof Base>, 'value' | 'onChangeText'> & {
