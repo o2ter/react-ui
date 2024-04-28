@@ -39,7 +39,7 @@ type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWitho
   onChangeText?: (text: ReturnType<Encoder<F>>, ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
 }
 
-export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
+const _RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
   {
     format,
     value,
@@ -73,4 +73,8 @@ export const RichTextInput = createMemoComponent(<F extends keyof Format = 'bbco
   );
 }, {
   displayName: 'RichTextInput',
+});
+
+export const RichTextInput = _.assign(_RichTextInput, {
+  formatter: defaultFormat,
 });
