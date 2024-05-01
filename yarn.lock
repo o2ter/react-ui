@@ -1209,10 +1209,10 @@
   dependencies:
     "@lezer/common" "^1.0.0"
 
-"@o2ter/i18n@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@o2ter/i18n/-/i18n-0.0.9.tgz#40f873d3b25fa2805e3161545d7c18f89ad932ae"
-  integrity sha512-PjwzXGyyGifD9K+efsSKA61W/xU1nbfJnJQhMjK5wnzBwhCFBg2XjqUC3DaIbKtvepwWoVftvWc2PeZ7slH3/A==
+"@o2ter/i18n@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@o2ter/i18n/-/i18n-0.0.10.tgz#5f966a518def93e10824dc8ed26f1c3641280562"
+  integrity sha512-V57ghWj/a+mNXxbkkcBEqPLBW9QbosYf9Oq4vMXm/4EUGet3FkKStIdlMOu7BQyRMyxFZK6dKjVvQCd7/qqC7g==
   dependencies:
     events ">=3.3.0"
     lodash ">=4.17.21"
