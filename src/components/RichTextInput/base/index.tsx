@@ -82,9 +82,9 @@ export const Base = React.forwardRef(({
     const editor = editorRef.current;
     if (!editor) return;
     if (_.isEqual(_removeEmptyLines(capture), _removeEmptyLines(value))) return;
-    const selection = editor.getSelection(true);
+    const selection = editor.getSelection();
     editor.setContents(encodeContent(value ?? []), 'silent');
-    if (selection) editor.setSelection(selection, 'silent');
+    if (selection && editor.hasFocus()) editor.setSelection(selection, 'silent');
   }, [value]);
 
   React.useImperativeHandle(forwardRef, () => ({
@@ -123,7 +123,7 @@ export const Base = React.forwardRef(({
       });
       if (!isChanged) return;
       const delta = new Delta(ops);
-      const selection = editor.getSelection(true);
+      const selection = editor.getSelection();
       editor.setContents(delta, 'silent');
       if (selection) editor.setSelection(selection, 'silent');
       const value = decodeContent(delta);
