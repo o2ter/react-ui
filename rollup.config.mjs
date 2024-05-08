@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import commonjs from '@rollup/plugin-commonjs';
@@ -40,77 +41,31 @@ const rollupConfig = {
 };
 
 export default [
-  {
+  ...['.server', '.web', ''].map(suffix => ({
     ...rollupConfig,
     output: [
       {
-        file: 'dist/index.js',
+        file: `dist/index${suffix}.js`,
         format: 'cjs',
         sourcemap: true,
       },
       {
-        file: 'dist/index.mjs',
+        file: `dist/index${suffix}.mjs`,
         format: 'esm',
         sourcemap: true,
       },
     ],
-    plugins: [
-      resolve({
-        extensions: ['.ts', '.tsx', '.mjs', '.js']
-      }),
-      ...rollupPlugins
-    ],
-  },
-  {
-    ...rollupConfig,
-    output: [
-      {
-        file: 'dist/index.web.js',
-        format: 'cjs',
-        sourcemap: true,
-      },
-      {
-        file: 'dist/index.web.mjs',
-        format: 'esm',
-        sourcemap: true,
-      },
-    ],
-    plugins: [
+    plugins: _.compact([
       resolve({
         extensions: [
-          '.web.ts', '.web.tsx', '.web.mjs', '.web.js',
-          '.ts', '.tsx', '.mjs', '.js',
+          ..._.uniq([suffix, '']).flatMap(x => [`${x}.tsx`, `${x}.jsx`]),
+          ..._.uniq([suffix, '']).flatMap(x => [`${x}.ts`, `${x}.mjs`, `${x}.js`]),
         ]
       }),
-      scss({ fileName: 'index.web.css' }),
+      suffix === '.web' && scss({ fileName: 'index.web.css' }),
       ...rollupPlugins
-    ],
-  },
-  {
-    ...rollupConfig,
-    output: [
-      {
-        file: 'dist/index.server.js',
-        format: 'cjs',
-        sourcemap: true,
-      },
-      {
-        file: 'dist/index.server.mjs',
-        format: 'esm',
-        sourcemap: true,
-      },
-    ],
-    plugins: [
-      resolve({
-        extensions: [
-          '.server.ts', '.server.tsx', '.server.mjs', '.server.js',
-          '.web.ts', '.web.tsx', '.web.mjs', '.web.js',
-          '.ts', '.tsx', '.mjs', '.js',
-        ]
-      }),
-      ...rollupPlugins
-    ],
-  },
+    ]),
+  })),
   {
     ...rollupConfig,
     output: [
@@ -121,7 +76,7 @@ export default [
     ],
     plugins: [
       resolve({
-        extensions: ['.ts', '.tsx', '.mjs', '.js']
+        extensions: ['.tsx', '.jsx', '.ts', '.mjs', '.js']
       }),
       dts()
     ],
@@ -143,8 +98,8 @@ export default [
     plugins: [
       resolve({
         extensions: [
-          '.web.ts', '.web.tsx', '.web.mjs', '.web.js',
-          '.ts', '.tsx', '.mjs', '.js',
+          ..._.uniq(['.web', '']).flatMap(x => [`${x}.tsx`, `${x}.jsx`]),
+          ..._.uniq(['.web', '']).flatMap(x => [`${x}.ts`, `${x}.mjs`, `${x}.js`]),
         ]
       }),
       dts()
