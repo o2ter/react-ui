@@ -40,8 +40,14 @@ const rollupConfig = {
   ],
 };
 
+const moduleSuffixes = {
+  '.server': ['.server', '.web', ''],
+  '.web': ['.web', ''],
+  '': [''],
+};
+
 export default [
-  ...['.server', '.web', ''].map(suffix => ({
+  ..._.map(moduleSuffixes, (exts, suffix) => ({
     ...rollupConfig,
     output: [
       {
@@ -58,8 +64,8 @@ export default [
     plugins: _.compact([
       resolve({
         extensions: [
-          ..._.uniq([suffix, '']).flatMap(x => [`${x}.tsx`, `${x}.jsx`]),
-          ..._.uniq([suffix, '']).flatMap(x => [`${x}.ts`, `${x}.mjs`, `${x}.js`]),
+          ...exts.flatMap(x => [`${x}.tsx`, `${x}.jsx`]),
+          ...exts.flatMap(x => [`${x}.ts`, `${x}.mjs`, `${x}.js`]),
         ]
       }),
       suffix === '.web' && scss({ fileName: 'index.web.css' }),
