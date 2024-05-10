@@ -87,11 +87,11 @@ export default [
       dts()
     ],
   },
-  {
+  ..._.map(moduleSuffixes, (exts, suffix) => ({
     ...rollupConfig,
     output: [
       {
-        file: 'dist/index.web.d.ts',
+        file: `dist/index${suffix}.d.ts`,
         format: 'es',
       },
     ],
@@ -104,11 +104,11 @@ export default [
     plugins: [
       resolve({
         extensions: [
-          ..._.uniq(['.web', '']).flatMap(x => [`${x}.tsx`, `${x}.jsx`]),
-          ..._.uniq(['.web', '']).flatMap(x => [`${x}.ts`, `${x}.mjs`, `${x}.js`]),
+          ...exts.flatMap(x => [`${x}.tsx`, `${x}.jsx`]),
+          ...exts.flatMap(x => [`${x}.ts`, `${x}.mjs`, `${x}.js`]),
         ]
       }),
       dts()
     ],
-  },
+  })),
 ];
