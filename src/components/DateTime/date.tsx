@@ -43,9 +43,10 @@ type DatePickerState = {
 };
 
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
-type DatePickerProps = Modify<Modify<React.ComponentPropsWithoutRef<typeof PickerBase>, DatePickerBaseProps>, {
+type DatePickerProps = Modify<Modify<Omit<React.ComponentPropsWithoutRef<typeof PickerBase>, 'picker' | 'pickerHidden' | 'setPickerHidden'>, DatePickerBaseProps>, {
   variant?: 'outline' | 'underlined' | 'unstyled';
   popover?: boolean | PopoverConfig;
+  dismissOnSelect?: boolean;
   style?: StyleProp<TextStyle> | ((state: DatePickerState) => StyleProp<TextStyle>);
   children?: React.ReactNode | ((state: DatePickerState) => React.ReactNode);
   prepend?: React.ReactNode | ((state: DatePickerState) => React.ReactNode);
@@ -65,6 +66,7 @@ export const DatePicker = createMemoComponent((
     variant,
     popover = false,
     disabled = false,
+    dismissOnSelect = false,
     onChange,
     onFocus,
     onBlur,
@@ -79,6 +81,7 @@ export const DatePicker = createMemoComponent((
   const defaultStyle = useDefaultInputStyle(theme, variant);
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+  const [hidden, setHidden] = React.useState(true);
 
   const datePickerStyle = _useComponentStyle('datePicker', classes, [
     focused && 'focus',
@@ -89,14 +92,18 @@ export const DatePicker = createMemoComponent((
 
   const _Calendar = React.useCallback(() => {
     const [_value, setValue] = React.useState(value);
-    React.useEffect(() => { if (_value !== value) onChange?.(_value as any); }, [_value]);
+    const submit = React.useCallback((date: string[]) => {
+      setValue(date);
+      if (dismissOnSelect) setHidden(true);
+      if (_.isFunction(onChange)) onChange(date);
+    }, []);
     return (
       <Calendar
         value={_value}
         min={min}
         max={max}
         multiple={multiple}
-        onChange={setValue}
+        onChange={submit}
         selectable={selectable}
         style={{
           width: popover ? '100%' : '80%',
@@ -116,6 +123,9 @@ export const DatePicker = createMemoComponent((
       ref={forwardRef}
       disabled={disabled}
       popover={popover}
+      picker={<_Calendar />}
+      pickerHidden={hidden}
+      setPickerHidden={setHidden}
       style={[
         defaultStyle,
         focusRing,
@@ -124,7 +134,6 @@ export const DatePicker = createMemoComponent((
       ]}
       onFocus={_onFocus}
       onBlur={_onBlur}
-      picker={<_Calendar />}
       prepend={_.isFunction(prepend) ? prepend(state) : prepend}
       append={_.isFunction(append) ? append(state) : append}
       {...props}
