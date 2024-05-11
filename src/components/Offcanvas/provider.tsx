@@ -33,7 +33,7 @@ import { normalizeStyle } from '../Style/flatten';
 import { useAnimate } from 'sugax';
 import { OffcanvasConfig } from './types';
 
-const OffcanvasContext = React.createContext((config?: OffcanvasConfig) => { });
+const OffcanvasContext = React.createContext((config?: React.SetStateAction<OffcanvasConfig | undefined>) => { });
 OffcanvasContext.displayName = 'OffcanvasContext';
 
 export const useOffcanvas = () => React.useContext(OffcanvasContext);

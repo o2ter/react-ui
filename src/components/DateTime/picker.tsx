@@ -67,7 +67,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
   ...props
 }, forwardRef) => {
 
-  const showModal = useModal();
+  const setModal = useModal();
   const theme = useTheme();
 
   const pressableRef = React.useRef<React.ComponentRef<typeof Pressable>>();
@@ -108,7 +108,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
               if (popover) {
                 setHidden(false);
               } else {
-                showModal(picker);
+                setModal(picker);
               }
             }}
             style={[

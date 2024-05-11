@@ -33,7 +33,7 @@ import { normalizeStyle } from '../Style/flatten';
 import { useAnimate } from 'sugax';
 import { ModalConfig } from './types';
 
-const ModalContext = React.createContext((config?: ModalConfig) => { });
+const ModalContext = React.createContext((config?: React.SetStateAction<ModalConfig | undefined>) => { });
 ModalContext.displayName = 'ModalContext';
 
 export const useModal = () => React.useContext(ModalContext);

@@ -43,12 +43,13 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const setModal = useModal();
   React.useEffect(() => {
-    setModal(visible ? {
+    const _config = visible ? {
       element: children,
       onDismiss: onDismiss ?? (() => { }),
       ...config,
-    } : undefined);
-    return () => setModal();
+    } : undefined;
+    setModal(_config);
+    return () => setModal(v => v === _config ? undefined : v);
   }, [visible, children]);
   return (
     <></>

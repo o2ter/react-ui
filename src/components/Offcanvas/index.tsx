@@ -43,12 +43,13 @@ export const Offcanvas: React.FC<OffcanvasProps> = ({
 }) => {
   const setOffcanvas = useOffcanvas();
   React.useEffect(() => {
-    setOffcanvas(visible ? {
+    const _config = visible ? {
       element: children,
       onDismiss: onDismiss ?? (() => { }),
       ...config,
-    } : undefined);
-    return () => setOffcanvas();
+    } : undefined;
+    setOffcanvas(_config);
+    return () => setOffcanvas(v => v === _config ? undefined : v);
   }, [visible, children]);
   return (
     <></>
