@@ -26,11 +26,11 @@
 import _ from 'lodash';
 import React from 'react';
 import { useOffcanvas } from './provider';
-import { _OffcanvasConfig } from './types';
+import { OffcanvasConfig } from './types';
 
 export * from './provider';
 
-type OffcanvasProps = Omit<_OffcanvasConfig, 'element'> & {
+type OffcanvasProps = Omit<OffcanvasConfig, 'id' | 'element'> & {
   visible: boolean;
   children: React.ReactElement;
 };
@@ -43,13 +43,14 @@ export const Offcanvas: React.FC<OffcanvasProps> = ({
 }) => {
   const setOffcanvas = useOffcanvas();
   React.useEffect(() => {
-    const _config = visible ? {
+    const id = setOffcanvas(visible ? {
       element: children,
       onDismiss: onDismiss ?? (() => { }),
       ...config,
-    } : undefined;
-    setOffcanvas(_config);
-    return () => setOffcanvas(v => v === _config ? undefined : v);
+    } : undefined);
+    return () => {
+      setOffcanvas(v => v?.id === id ? undefined : v);
+    };
   }, [visible, children]);
   return (
     <></>

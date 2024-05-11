@@ -26,11 +26,11 @@
 import _ from 'lodash';
 import React from 'react';
 import { useModal } from './provider';
-import { _ModalConfig } from './types';
+import { ModalConfig } from './types';
 
 export * from './provider';
 
-type ModalProps = Omit<_ModalConfig, 'element'> & {
+type ModalProps = Omit<ModalConfig, 'id' | 'element'> & {
   visible: boolean;
   children: React.ReactElement;
 };
@@ -43,13 +43,14 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const setModal = useModal();
   React.useEffect(() => {
-    const _config = visible ? {
+    const id = setModal(visible ? {
       element: children,
       onDismiss: onDismiss ?? (() => { }),
       ...config,
-    } : undefined;
-    setModal(_config);
-    return () => setModal(v => v === _config ? undefined : v);
+    } : undefined);
+    return () => {
+      setModal(v => v?.id === id ? undefined : v);
+    };
   }, [visible, children]);
   return (
     <></>

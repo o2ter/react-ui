@@ -33,7 +33,30 @@ import { normalizeStyle } from '../Style/flatten';
 import { useAnimate } from 'sugax';
 import { ModalConfig } from './types';
 
-const ModalContext = React.createContext((config?: React.SetStateAction<ModalConfig | undefined>) => { });
+type _ModalConfig = React.ReactElement | Omit<ModalConfig, 'id'>;
+
+const setModalAction = (setConfig: React.Dispatch<React.SetStateAction<ModalConfig | undefined>>) => (
+  config?: _ModalConfig | ((prevState: ModalConfig | undefined) => _ModalConfig | undefined)
+) => {
+  const uniqId = _.uniqueId();
+  if (_.isFunction(config)) {
+    setConfig(v => {
+      const _config = config(v);
+      if (!_config) return;
+      if (React.isValidElement(_config)) return { id: uniqId, element: _config };
+      return { id: uniqId, ..._config as Omit<ModalConfig, 'id'> };
+    });
+  } else if (React.isValidElement(config)) {
+    setConfig({ id: uniqId, element: config });
+  } else if (config) {
+    setConfig({ id: uniqId, ...config as Omit<ModalConfig, 'id'> });
+  } else {
+    setConfig(undefined);
+  }
+  return uniqId;
+}
+
+const ModalContext = React.createContext<ReturnType<typeof setModalAction>>(() => _.uniqueId());
 ModalContext.displayName = 'ModalContext';
 
 export const useModal = () => React.useContext(ModalContext);
@@ -53,31 +76,29 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({
   const modalBackdrop = _useComponentStyle('modalBackdrop');
   const modalContainer = _useComponentStyle('modalContainer');
 
-  const element = React.isValidElement(config) ? config : config && 'element' in config ? config.element : undefined;
   const { value: fadeAnim, start } = useAnimate(0);
   React.useEffect(() => {
     setDisplay(current => config ?? current);
     start({
-      toValue: _.isNil(element) ? 0 : 1,
+      toValue: _.isNil(config?.element) ? 0 : 1,
       duration: theme.modalDuration,
       easing: theme.modalEasing,
       onCompleted: () => {
-        if (!_.isNil(element)) return;
+        if (!_.isNil(config?.element)) return;
         setDisplay(undefined);
       }
     });
-  }, [_.isNil(element)]);
+  }, [_.isNil(config?.element)]);
 
-  const displayElement = React.isValidElement(display) ? display : display && 'element' in display ? display.element : undefined;
-  const onDismiss = display && 'onDismiss' in display ? display.onDismiss : undefined;
+  const setModal = React.useCallback(setModalAction(setConfig), []);
 
-  if (displayElement && element && displayElement !== element) setDisplay(config);
+  if (display?.element && config?.element && display.element !== config.element) setDisplay(config);
 
-  return <ModalContext.Provider value={setConfig}>
+  return <ModalContext.Provider value={setModal}>
     {children}
-    {React.isValidElement(displayElement) && <>
+    {React.isValidElement(display?.element) && <>
       {backdrop === true && <Pressable
-        onPress={onDismiss ?? (() => setConfig(undefined))}
+        onPress={display?.onDismiss ?? (() => setConfig(undefined))}
         style={normalizeStyle([
           {
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
@@ -93,7 +114,7 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({
             default: {},
           }),
           modalBackdrop,
-          display && 'backdropStyle' in display ? display.backdropStyle : {},
+          display?.backdropStyle ?? {},
           {
             opacity: fadeAnim,
           },
@@ -113,12 +134,12 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({
             default: {},
           }),
           modalContainer,
-          display && 'containerStyle' in display ? display.containerStyle : {},
+          display?.containerStyle ?? {},
           {
             opacity: fadeAnim,
           },
         ]}>
-        {displayElement}
+        {display?.element}
       </View>
     </>}
   </ModalContext.Provider>;

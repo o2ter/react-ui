@@ -28,7 +28,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { Modify } from '../../internals/types';
 import { Pressable } from '../Pressable';
-import { useModal } from '../Modal';
+import { Modal, useModal } from '../Modal';
 import { useTheme } from '../../theme';
 import { Popover } from '../Popover';
 import Text from '../Text';
@@ -67,13 +67,57 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
   ...props
 }, forwardRef) => {
 
-  const setModal = useModal();
   const theme = useTheme();
 
   const pressableRef = React.useRef<React.ComponentRef<typeof Pressable>>();
   const ref = useMergeRefs(pressableRef, forwardRef);
 
   const [hidden, setHidden] = React.useState(true);
+
+  console.log({ hidden })
+
+  const pickerBody = (
+    <Pressable
+      ref={ref}
+      onPress={() => {
+        if (disabled) return;
+        setHidden(false);
+      }}
+      style={[
+        {
+          flexDirection: 'row',
+          gap: theme.spacer * 0.375,
+        },
+        Platform.select({
+          web: { outline: 0 } as any,
+          default: {},
+        }),
+        style
+      ]}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    >
+      {prepend}
+      {_.isString(children) ? (
+        <Text style={{ flex: 1 }} {...props}>{children || ' '}</Text>
+      ) : children}
+      {append}
+    </Pressable>
+  );
+
+  if (!popover) {
+    return (
+      <>
+        {pickerBody}
+        <Modal
+          visible={disabled ? false : !hidden}
+          onDismiss={() => {
+            setHidden(true);
+          }}
+        >{picker}</Modal>
+      </>
+    );
+  }
 
   return (
     <_StyleContext.Consumer>
@@ -101,36 +145,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
             </_StyleContext.Provider>
           )}
         >
-          <Pressable
-            ref={ref}
-            onPress={() => {
-              if (disabled) return;
-              if (popover) {
-                setHidden(false);
-              } else {
-                setModal(picker);
-              }
-            }}
-            style={[
-              {
-                flexDirection: 'row',
-                gap: theme.spacer * 0.375,
-              },
-              Platform.select({
-                web: { outline: 0 } as any,
-                default: {},
-              }),
-              style
-            ]}
-            onFocus={onFocus}
-            onBlur={onBlur}
-          >
-            {prepend}
-            {_.isString(children) ? (
-              <Text style={{ flex: 1 }} {...props}>{children || ' '}</Text>
-            ) : children}
-            {append}
-          </Pressable>
+          {pickerBody}
         </Popover>
       )}
     </_StyleContext.Consumer>

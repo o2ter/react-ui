@@ -27,12 +27,11 @@ import _ from 'lodash';
 import React from 'react';
 import { ViewStyle, StyleProp } from 'react-native';
 
-export type _OffcanvasConfig = {
+export type OffcanvasConfig = {
+  id: string;
+  element: React.ReactElement;
   placement?: 'left' | 'right' | 'top' | 'bottom';
   backdropStyle?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
-  element?: React.ReactElement;
   onDismiss?: () => void;
 };
-
-export type OffcanvasConfig = React.ReactElement | _OffcanvasConfig;

@@ -27,11 +27,10 @@ import _ from 'lodash';
 import React from 'react';
 import { ViewStyle, StyleProp } from 'react-native';
 
-export type _ModalConfig = {
+export type ModalConfig = {
+  id: string;
+  element: React.ReactElement;
   backdropStyle?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
-  element?: React.ReactElement;
   onDismiss?: () => void;
 };
-
-export type ModalConfig = React.ReactElement | _ModalConfig;

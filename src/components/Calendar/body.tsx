@@ -35,13 +35,15 @@ import { calendarStyle } from './style';
 import { _useComponentStyle } from '../Style';
 import { textStyleNormalize } from '../Text/style';
 
-export const CalendarBody: React.FC<{
+type CalendarBodyProps = {
   selected: _Date[];
   month: number;
   year: number;
   selectable: (date: string) => boolean;
   onSelect: (date: { year: number; month: number; day: number; }) => void;
-}> = ({
+};
+
+export const CalendarBody: React.FC<CalendarBodyProps> = ({
   selected,
   month,
   year,
@@ -49,57 +51,57 @@ export const CalendarBody: React.FC<{
   onSelect,
 }) => {
 
-    const id = React.useId();
+  const id = React.useId();
 
-    const theme = useTheme();
+  const theme = useTheme();
   const calendarWeekdayStyle = _useComponentStyle('calendarWeekday');
   const calendarWeekContainerStyle = _useComponentStyle('calendarWeekContainer');
   const calendarWeekdayContainerStyle = _useComponentStyle('calendarWeekdayContainer');
-  
-    const monthObj = DateTime.fromObject({ year, month, day: 1 } as any);
-    const daysInMonth = monthObj.daysInMonth;
-    const weekdayStart = monthObj.weekday % 7;
 
-    const _selected = selected.filter(x => x.year === year && x.month === month);
+  const monthObj = DateTime.fromObject({ year, month, day: 1 } as any);
+  const daysInMonth = monthObj.daysInMonth;
+  const weekdayStart = monthObj.weekday % 7;
 
-    const rows = [];
-    let current_row = [];
-    for (const day of _.range(1, daysInMonth + 1)) {
-      if (day == 1 && weekdayStart > 0) {
-        current_row.push(<View key={`${id}-padding-start`} style={{ flex: weekdayStart }} />);
-      }
-      if (!_.isEmpty(current_row) && (day + weekdayStart - 1) % 7 == 0) {
-        rows.push(<View key={`${id}-row-${rows.length}`} style={[calendarStyle.weekContainer, calendarWeekContainerStyle]}>{current_row}</View>);
-        current_row = [];
-      }
-      const selected = _selected.find(x => x.day === day);
-      current_row.push(
-        <Pressable
-          key={`${id}-day-${day}`}
-          style={[calendarStyle.weekdayContainer, calendarWeekdayContainerStyle]}
-          {...Platform.select({
-            web: { tabIndex: -1 },
-            default: {},
-          })}
-          onPress={() => { if (selectable(dateToString(year, month, day))) onSelect({ year, month, day }) }}>
-          {selected && (
-            <Svg viewBox='0 0 100 100' style={[{ zIndex: -1 }, StyleSheet.absoluteFill]}>
-              <Circle cx={50} cy={50} r={40} fill={theme.themeColors.primary} />
-            </Svg>
-          )}
-          <Text style={textStyleNormalize([
-            calendarStyle.weekdays,
-            calendarWeekdayStyle,
-            selectable(dateToString(year, month, day)) ? {} : { color: theme.grays['500'] },
-            selected ? { color: theme.colorContrast(theme.themeColors.primary) } : {},
-          ])}>{day}</Text>
-        </Pressable>
-      );
+  const _selected = selected.filter(x => x.year === year && x.month === month);
+
+  const rows = [];
+  let current_row = [];
+  for (const day of _.range(1, daysInMonth + 1)) {
+    if (day == 1 && weekdayStart > 0) {
+      current_row.push(<View key={`${id}-padding-start`} style={{ flex: weekdayStart }} />);
     }
-    if ((daysInMonth + weekdayStart) % 7 != 0) {
-      current_row.push(<View key={`${id}-padding-end`} style={{ flex: 7 - (daysInMonth + weekdayStart) % 7 }} />);
+    if (!_.isEmpty(current_row) && (day + weekdayStart - 1) % 7 == 0) {
+      rows.push(<View key={`${id}-row-${rows.length}`} style={[calendarStyle.weekContainer, calendarWeekContainerStyle]}>{current_row}</View>);
+      current_row = [];
     }
-    rows.push(<View key={`${id}-row-${rows.length}`} style={[calendarStyle.weekContainer, calendarWeekContainerStyle]}>{current_row}</View>);
+    const selected = _selected.find(x => x.day === day);
+    current_row.push(
+      <Pressable
+        key={`${id}-day-${day}`}
+        style={[calendarStyle.weekdayContainer, calendarWeekdayContainerStyle]}
+        {...Platform.select({
+          web: { tabIndex: -1 },
+          default: {},
+        })}
+        onPress={() => { if (selectable(dateToString(year, month, day))) onSelect({ year, month, day }) }}>
+        {selected && (
+          <Svg viewBox='0 0 100 100' style={[{ zIndex: -1 }, StyleSheet.absoluteFill]}>
+            <Circle cx={50} cy={50} r={40} fill={theme.themeColors.primary} />
+          </Svg>
+        )}
+        <Text style={textStyleNormalize([
+          calendarStyle.weekdays,
+          calendarWeekdayStyle,
+          selectable(dateToString(year, month, day)) ? {} : { color: theme.grays['500'] },
+          selected ? { color: theme.colorContrast(theme.themeColors.primary) } : {},
+        ])}>{day}</Text>
+      </Pressable>
+    );
+  }
+  if ((daysInMonth + weekdayStart) % 7 != 0) {
+    current_row.push(<View key={`${id}-padding-end`} style={{ flex: 7 - (daysInMonth + weekdayStart) % 7 }} />);
+  }
+  rows.push(<View key={`${id}-row-${rows.length}`} style={[calendarStyle.weekContainer, calendarWeekContainerStyle]}>{current_row}</View>);
 
-    return <React.Fragment>{rows}</React.Fragment>;
-  };
+  return <React.Fragment>{rows}</React.Fragment>;
+};
