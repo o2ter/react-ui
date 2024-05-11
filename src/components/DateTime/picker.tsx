@@ -74,8 +74,6 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
 
   const [hidden, setHidden] = React.useState(true);
 
-  console.log({ hidden })
-
   const pickerBody = (
     <Pressable
       ref={ref}
