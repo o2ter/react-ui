@@ -1231,10 +1231,10 @@
   dependencies:
     lodash ">=4.17.21"
 
-"@o2ter/valid.js@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@o2ter/valid.js/-/valid.js-1.0.0.tgz#c72b59da07c9baa07c766532bd3748f2775988f3"
-  integrity sha512-fQvTrP1tzMFuryELaxQLw18mHtkmS5imwUxMsGkIVKDOlr3GW97QRp3QIuRAN6aNoAGKFvks/FPWCkhY1cUcwA==
+"@o2ter/valid.js@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@o2ter/valid.js/-/valid.js-1.0.6.tgz#b2a02feb950abaaec52ad9ad7539c81cd294e134"
+  integrity sha512-dLeF/nru31qS76RcxM3nciAuFQlYN+X+QcFvDhnF+qiPKZKGF7TW9L3uCuv1KjCkrRF8y5XsxZbaLdZMMbax8A==
   dependencies:
     lodash ">=4.17.21"
 

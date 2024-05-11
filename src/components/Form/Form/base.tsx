@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { useEquivalent, useStableCallback, useStableRef } from 'sugax';
-import { ISchema, object, ValidateError } from '@o2ter/valid.js';
+import { isSchema, ISchema, object, ValidateError } from '@o2ter/valid.js';
 import { useAlert } from '../../Alert';
 import { createMemoComponent } from '../../../internals/utils';
 import { FormState } from './types';
@@ -81,7 +81,10 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   children
 }: FormProps<S>, forwardRef: React.ForwardedRef<FormState>) => {
 
-  const _initialValues = React.useMemo(() => initialValues ?? object(schema ?? {}).getDefault() ?? {}, [initialValues]);
+  const _schema = React.useMemo(() => isSchema(schema) ? schema : object(schema ?? {} as S), [schema]);
+  const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
+
+  const _initialValues = React.useMemo(() => initialValues ?? _schema.getDefault() ?? {}, [initialValues, _schema]);
   const [_values, _setValues] = React.useState<typeof _initialValues>();
   const [extraError, setExtraError] = React.useState<{ id: string; error: Error; }[]>([]);
 
@@ -97,9 +100,6 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const [refresh, setRefresh] = React.useState(0);
 
   const startActivity = useActivity();
-
-  const _schema = React.useMemo(() => object(schema ?? {}), [schema]);
-  const _validate = React.useMemo(() => validate ?? defaultValidation(_schema.validate), [_schema, validate]);
 
   const { showError } = useAlert();
   const _showError = React.useCallback(async (resolve: () => any) => {

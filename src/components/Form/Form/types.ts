@@ -50,7 +50,7 @@ export type FormState = {
 };
 
 export type FormProps<S extends Record<string, ISchema<any, any>>> = {
-  schema?: S;
+  schema?: S | ReturnType<typeof object<S>>;
   initialValues?: TypeOfSchema<ReturnType<typeof object<S>>>;
   roles?: string[];
   activity?: boolean | { actions?: string[]; delay?: number; };
