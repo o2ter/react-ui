@@ -1,5 +1,5 @@
 //
-//  index.web.js
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2024 O2ter Limited. All rights reserved.
@@ -23,12 +23,24 @@
 //  THE SOFTWARE.
 //
 
-export * from './index.js';
-export * from './Navigator';
-export * from './CodeMirror';
-export * from './JSCode';
-export * from './DataSheet';
-export * from './UploadInput';
-export * from './RichTextInput';
-export * from './BBCode';
-export { __FONTS__ } from './Icons/fonts';
+import _ from 'lodash';
+import React from 'react';
+import CodeMirror from '../CodeMirror';
+import { createMemoComponent } from '../../internals/utils';
+import { JSCodeProps } from './types';
+
+export const JSCode = createMemoComponent((
+  {
+    jsx,
+    typescript,
+    ...props
+  }: JSCodeProps,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof CodeMirror>>
+) => (
+  <CodeMirror
+    ref={forwardRef}
+    codeFolding
+    lineNumbers
+    {...props}
+  />
+));

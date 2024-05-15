@@ -15,6 +15,7 @@
     "rollup": "yarn clean && rollup -c"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.2",
     "@o2ter/utils-js": "^0.0.8",
     "@react-native-picker/picker": ">=2.4.8",
     "@react-native/normalize-colors": "^0.74.1",
