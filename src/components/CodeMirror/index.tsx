@@ -26,33 +26,14 @@
 import _ from 'lodash';
 import React from 'react';
 import { View } from '../View';
-import { Modify } from '../../internals/types';
 import { useMergeRefs, useStableRef } from 'sugax';
 import { EditorState } from '@codemirror/state';
-import { lineNumbers as _lineNumbers, ViewUpdate } from '@codemirror/view';
+import { lineNumbers as _lineNumbers } from '@codemirror/view';
 import { EditorView, keymap, highlightSpecialChars, drawSelection } from '@codemirror/view';
 import { standardKeymap, history, historyKeymap } from '@codemirror/commands';
 import { defaultHighlightStyle, syntaxHighlighting, codeFolding as _codeFolding, foldGutter as _foldGutter } from '@codemirror/language';
 import { createMemoComponent } from '../../internals/utils';
-
-type CodeMirrorProps = Modify<React.ComponentPropsWithoutRef<typeof View>, {
-  theme?: Parameters<typeof EditorView.theme>[0],
-  darkMode?: boolean,
-  initialValue?: string;
-  autoFocus?: boolean;
-  onChange?: (e: ViewUpdate) => void;
-  onChangeValue?: (value: string) => void;
-  onFocus?: (e: ViewUpdate) => void;
-  onBlur?: (e: ViewUpdate) => void;
-  onSelectionChange?: (e: ViewUpdate) => void;
-  extensions?: any[];
-  editable?: boolean;
-  codeFolding?: boolean;
-  lineNumbers?: boolean;
-  allowMultipleSelections?: boolean;
-  tabSize?: number;
-  keymaps?: any[];
-}>
+import { CodeMirrorProps } from './types';
 
 export const CodeMirror = createMemoComponent((
   {
@@ -94,7 +75,7 @@ export const CodeMirror = createMemoComponent((
     const editor = new EditorView({
       doc: initialValue,
       parent: containerRef.current as any,
-      extensions: [
+      extensions: _.compact([
         highlightSpecialChars(),
         history(),
         drawSelection(),
@@ -121,7 +102,7 @@ export const CodeMirror = createMemoComponent((
         }),
         EditorView.theme(_.merge({ '&': { width: '100%', height: '100%' } }, theme), { dark: darkMode }),
         ...extensions
-      ].filter(Boolean),
+      ]),
     });
 
     codeMirror.current = editor;
