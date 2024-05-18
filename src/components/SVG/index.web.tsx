@@ -47,23 +47,27 @@ export const SVG = createMemoComponent(({
   const dataStr = React.useMemo(() => _.isString(content) ? `data:image/svg+xml,${encodeURIComponent(content)}` : '', [content]);
 
   if (_.isString(content)) {
-    return <View ref={forwardRef} style={[{ width, height, aspectRatio }, _style]} {...props}>
-      <img
-        draggable={false}
-        width={_.isNil(width) && (_.isNil(height) || _.isNil(aspectRatio)) ? undefined : '100%'}
-        height={_.isNil(height) && (_.isNil(width) || _.isNil(aspectRatio)) ? undefined : '100%'}
-        src={dataStr} />
-    </View>;
+    return (
+      <View ref={forwardRef} style={[{ width, height, aspectRatio }, _style]} {...props}>
+        <img
+          draggable={false}
+          width={_.isNil(width) && (_.isNil(height) || _.isNil(aspectRatio)) ? undefined : '100%'}
+          height={_.isNil(height) && (_.isNil(width) || _.isNil(aspectRatio)) ? undefined : '100%'}
+          src={dataStr} />
+      </View>
+    );
   }
 
   if (_.isString(uri)) {
-    return <View ref={forwardRef} style={[{ width, height, aspectRatio }, _style]} {...props}>
-      <img
-        draggable={false}
-        width={_.isNil(width) && (_.isNil(height) || _.isNil(aspectRatio)) ? undefined : '100%'}
-        height={_.isNil(height) && (_.isNil(width) || _.isNil(aspectRatio)) ? undefined : '100%'}
-        src={uri} />
-    </View>;
+    return (
+      <View ref={forwardRef} style={[{ width, height, aspectRatio }, _style]} {...props}>
+        <img
+          draggable={false}
+          width={_.isNil(width) && (_.isNil(height) || _.isNil(aspectRatio)) ? undefined : '100%'}
+          height={_.isNil(height) && (_.isNil(width) || _.isNil(aspectRatio)) ? undefined : '100%'}
+          src={uri} />
+      </View>
+    );
   }
 
   return <View ref={forwardRef} style={[{ width, height, aspectRatio }, _style]} {...props} />;

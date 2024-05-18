@@ -33,7 +33,7 @@ const createShadowValue = (shadow: ShadowStyleIOS) => {
   const offsetX = shadowOffset ? `${shadowOffset.width}px` : null;
   const offsetY = shadowOffset ? `${shadowOffset.height}px` : null;
   const blurRadius = shadowRadius ? `${shadowRadius}px` : null;
-  const color = shadowColor ? rgba(shadowColor as string, shadowOpacity ?? 1) : null;
+  const color = shadowColor ? rgba(shadowColor as string, shadowOpacity as number ?? 1) : null;
   if (_.isNil(color) || _.isNil(offsetX) || _.isNil(offsetY) || _.isNil(blurRadius)) return;
   return `${offsetX} ${offsetY} ${blurRadius} ${color}`;
 };

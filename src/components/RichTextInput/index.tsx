@@ -26,10 +26,11 @@
 import _ from 'lodash';
 import React from 'react';
 import { Base } from './base';
-import type { Quill, TextChangeHandler } from 'quill';
+import type Quill from 'quill';
 import { createMemoComponent } from '../../internals/utils';
 import { defaultFormat, defaultFormatOptions } from './format';
 import { useTheme } from '../../theme';
+import { TextChangeHandler } from './base/types';
 
 export type Format = typeof defaultFormat;
 type Encoder<F extends keyof Format> = Format[F]['encoder'];

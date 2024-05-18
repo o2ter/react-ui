@@ -26,9 +26,10 @@
 import _ from 'lodash';
 import React from 'react';
 import { View } from 'react-native';
-import { SvgCss, SvgCssUri } from 'react-native-svg';
+import { SvgCss, SvgCssUri } from 'react-native-svg/css';
 import { SVGProps } from './types';
 import { flattenStyle } from '../Style/flatten';
+import { NumberProp } from 'react-native-svg';
 
 export const SVG: React.FC<SVGProps> = ({
   source,
@@ -45,11 +46,27 @@ export const SVG: React.FC<SVGProps> = ({
   const { content, uri } = source ?? {};
 
   if (_.isString(content)) {
-    return <SvgCss width={width} height={height} xml={content} style={_style} {...props} />;
+    return (
+      <SvgCss
+        xml={content}
+        style={_style}
+        width={width as NumberProp}
+        height={height as NumberProp}
+        {...props}
+      />
+    );
   }
 
   if (_.isString(uri)) {
-    return <SvgCssUri width={width} height={height} uri={uri} style={_style} {...props} />;
+    return (
+      <SvgCssUri
+        uri={uri}
+        style={_style}
+        width={width as NumberProp}
+        height={height as NumberProp}
+        {...props}
+      />
+    );
   }
 
   return <View style={[{ width, height }, _style]} {...props} />

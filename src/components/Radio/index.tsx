@@ -59,6 +59,7 @@ export const Radio = createMemoComponent((
     style,
     selected,
     focusRingColor,
+    tabIndex,
     onFocus,
     onBlur,
     children,
@@ -131,7 +132,7 @@ export const Radio = createMemoComponent((
       ref={forwardRef}
       style={_.omit(_style, ...innerStyle)}
       {...Platform.select({
-        web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
+        web: { tabIndex: tabIndex ?? (props.disabled ? -1 : 0) } as any,
         default: {},
       })}
       onFocus={_onFocus}

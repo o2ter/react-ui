@@ -24,12 +24,17 @@
 //
 
 import React from 'react';
-import type { Quill, QuillOptionsStatic, SelectionChangeHandler, TextChangeHandler } from 'quill';
-import { Line } from '../format/types';
+import type Quill from 'quill';
+import type { Line } from '../format/types';
+import type { EmitterSource, QuillOptions, Range } from 'quill';
+import type Delta from 'quill-delta';
+
+export type TextChangeHandler = (delta: Delta, oldContent: Delta, source: EmitterSource) => void;
+export type SelectionChangeHandler = (range: Range, oldRange: Range, source: EmitterSource) => void;
 
 export type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
   value?: Line[];
-  options?: QuillOptionsStatic;
+  options?: QuillOptions;
   onUploadImage?: (blob: Blob) => PromiseLike<string>;
   onChangeText?: (value: Line[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
   onChangeSelection?: (...arg: [...Parameters<SelectionChangeHandler>, Quill]) => void;

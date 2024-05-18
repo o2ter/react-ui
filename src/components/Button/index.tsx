@@ -106,7 +106,7 @@ export const Button = createMemoComponent(({
   onFocus,
   onBlur,
   ...props
-}: ButtonProps, forwardRef: React.ForwardedRef<typeof _AnimatedPressable>) => {
+}: ButtonProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof _AnimatedPressable>>) => {
 
   const theme = useTheme();
 

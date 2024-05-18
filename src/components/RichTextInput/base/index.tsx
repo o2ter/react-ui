@@ -25,11 +25,10 @@
 
 import _ from 'lodash';
 import React from 'react';
-import type { SelectionChangeHandler, TextChangeHandler } from 'quill';
 import { useStableCallback } from 'sugax';
 import { Delta, Quill } from '../quill';
 import { Line } from '../format/types';
-import { RichTextInputProps, RichTextInputRef } from './types';
+import { RichTextInputProps, RichTextInputRef, SelectionChangeHandler, TextChangeHandler } from './types';
 
 const encodeContent = (lines: Line[]) => {
   const content = new Delta();

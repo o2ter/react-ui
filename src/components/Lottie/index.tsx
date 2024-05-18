@@ -25,12 +25,12 @@
 
 import _ from 'lodash';
 import React from 'react';
-import RNLottie, { AnimatedLottieViewProps, AnimationObject } from 'lottie-react-native';
+import RNLottie, { AnimationObject } from 'lottie-react-native';
 import { Modify } from '../../internals/types';
 import { createMemoComponent } from '../../internals/utils';
 import { flattenStyle } from '../Style/flatten';
 
-type LottieProps = Modify<AnimatedLottieViewProps, {
+type LottieProps = Modify<React.ComponentPropsWithoutRef<typeof RNLottie>, {
   source: AnimationObject;
 }>
 

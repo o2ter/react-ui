@@ -8,7 +8,7 @@ import dts from 'rollup-plugin-dts';
 import scss from 'rollup-plugin-scss';
 import { PluginPure } from 'rollup-plugin-pure';
 
-const rollupPlugins = [
+const rollupPlugins = (exts) => [
   PluginPure({
     functions: [
       'createComponent',
@@ -19,7 +19,10 @@ const rollupPlugins = [
       'Animated.createAnimatedComponent',
     ],
   }),
-  typescript({ declaration: false }),
+  typescript({
+    declaration: false,
+    moduleSuffixes: exts,
+   }),
   babel({
     babelrc: false,
     exclude: 'node_modules/**',
@@ -69,7 +72,7 @@ export default [
         ]
       }),
       suffix === '.web' && scss({ fileName: 'index.web.css' }),
-      ...rollupPlugins
+      ...rollupPlugins(exts),
     ]),
   })),
   {

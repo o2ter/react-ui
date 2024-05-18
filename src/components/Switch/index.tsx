@@ -48,6 +48,7 @@ export const Switch = createMemoComponent((
     classes,
     style,
     selected,
+    tabIndex,
     onFocus,
     onBlur,
     children,
@@ -115,7 +116,7 @@ export const Switch = createMemoComponent((
         _.isFunction(style) ? style({ selected: selected ?? false, focused }) : style,
       ])}
       {...Platform.select({
-        web: { tabIndex: props.tabIndex ?? (props.disabled ? -1 : 0) },
+        web: { tabIndex: tabIndex ?? (props.disabled ? -1 : 0) } as any,
         default: {},
       })}
       onFocus={_onFocus}
