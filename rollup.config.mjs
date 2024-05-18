@@ -108,7 +108,11 @@ export default [
           ...exts.flatMap(x => [`${x}.ts`, `${x}.mjs`, `${x}.js`]),
         ]
       }),
-      dts()
+      dts({
+        compilerOptions: {
+          moduleSuffixes: exts,
+        }
+      }),
     ],
   })),
 ];
