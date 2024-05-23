@@ -26,18 +26,18 @@
 import React from 'react';
 import type Quill from 'quill';
 import type { Line } from '../format/types';
-import type { EmitterSource, QuillOptions, Range } from 'quill';
-import type Delta from 'quill-delta';
+import type { QuillOptions } from 'quill';
+import { OverloadParameters } from '@o2ter/utils-js';
 
-export type TextChangeHandler = (delta: Delta, oldContent: Delta, source: EmitterSource) => void;
-export type SelectionChangeHandler = (range: Range, oldRange: Range, source: EmitterSource) => void;
+export type TextChangeHandler = Extract<OverloadParameters<Quill['on']>, ['text-change', any]>[1];
+export type SelectionChangeHandler = Extract<OverloadParameters<Quill['on']>, ['selection-change', any]>[1];
 
 export type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
   value?: Line[];
   options?: QuillOptions;
   onUploadImage?: (blob: Blob) => PromiseLike<string>;
-  onChangeText?: (value: Line[], ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
-  onChangeSelection?: (...arg: [...Parameters<SelectionChangeHandler>, Quill]) => void;
+  onChangeText?: (value: Line[], ...arg: [...Parameters<TextChangeHandler>, quill: Quill]) => void;
+  onChangeSelection?: (...arg: [...Parameters<SelectionChangeHandler>, quill: Quill]) => void;
 };
 
 export type RichTextInputRef = {
