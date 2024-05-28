@@ -26,12 +26,12 @@
 import _ from 'lodash';
 import React from 'react';
 import { ColorValue } from 'react-native';
-import { Svg, SvgProps, Rect, Path } from 'react-native-svg';
+import { Svg, Rect, Path } from 'react-native-svg';
 import { Modify } from '../../internals/types';
 import qrcode from 'qrcode';
 import { createMemoComponent } from '../../internals/utils';
 
-type QRCodeProps = Modify<SvgProps, {
+type QRCodeProps = Modify<React.ComponentPropsWithoutRef<typeof Svg>, {
   value?: string | any[];
   options?: object;
   color?: ColorValue;

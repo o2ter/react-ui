@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { ColorValue } from 'react-native';
-import { Svg, SvgProps, Rect } from 'react-native-svg';
+import { Svg, Rect } from 'react-native-svg';
 import { List } from '../List';
 import { Options } from 'jsbarcode';
 import { Modify } from '../../internals/types';
@@ -37,7 +37,7 @@ import { createMemoComponent } from '../../internals/utils';
 export type BarcodeFormat = keyof typeof barcodes;
 export const BarcodeFormats = /* #__PURE__ */ _.keys(barcodes) as BarcodeFormat[];
 
-type BarcodeProps = Modify<SvgProps, {
+type BarcodeProps = Modify<React.ComponentPropsWithoutRef<typeof Svg>, {
   value?: string;
   format?: BarcodeFormat;
   options?: Options;
