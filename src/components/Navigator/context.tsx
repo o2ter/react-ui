@@ -27,10 +27,16 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
 
-const NavigatorContext = React.createContext<Record<string, any> | undefined>(undefined);
+type Context = Record<string, any> & {
+  statusCode?: number;
+  title?: string;
+  meta?: Record<string, string>;
+};
+
+const NavigatorContext = React.createContext<Context | undefined>(undefined);
 
 type StaticNavigatorProps = React.ComponentPropsWithoutRef<typeof StaticRouter> & {
-  context?: Record<string, any>;
+  context?: Context;
 }
 
 export const StaticNavigator: React.FC<StaticNavigatorProps> = ({
@@ -44,7 +50,7 @@ export const StaticNavigator: React.FC<StaticNavigatorProps> = ({
 );
 
 export const useNavigatorContext = (
-  callback: (context: NonNullable<React.ContextType<typeof NavigatorContext>>) => void
+  callback: (context: Context) => void
 ) => {
   const context = React.useContext(NavigatorContext);
   if (context) callback(context);
