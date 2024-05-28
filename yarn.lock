@@ -1427,13 +1427,6 @@
     events ">=3.3.0"
     lodash ">=4.17.21"
 
-"@o2ter/utils-js@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@o2ter/utils-js/-/utils-js-0.0.8.tgz#a997f85ad647f8fd66a35da2439f6a58e7354af5"
-  integrity sha512-qEJ9A8U+4x0b8zlINq+GLgr/8rE79fmhI4jtoU/uMkd/mpGbNCYdJZVaY2wgvLjG1yfBS/kM0tqrThqYcLv/kg==
-  dependencies:
-    lodash ">=4.17.21"
-
 "@o2ter/utils-js@^0.0.9":
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/@o2ter/utils-js/-/utils-js-0.0.9.tgz#4af8caaf4eea553f70645cee5221c9dbf0c70919"
@@ -4975,12 +4968,12 @@ sudo-prompt@^9.0.0:
   resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-9.2.1.tgz#77efb84309c9ca489527a4e749f287e6bdd52afd"
   integrity sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==
 
-sugax@^1.0.98:
-  version "1.0.98"
-  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.98.tgz#e300c7643a129b9b5e77d635bdda38f53b336083"
-  integrity sha512-3UK/z5vBQa9jt5tKTb+GoXxc6YoIhTVRAJOuJRQsKzRtedtfUwaDvewTGAdX2Nai8GH05szPrCZ5jfZ1VIXsyg==
+sugax@^1.0.100:
+  version "1.0.100"
+  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.100.tgz#cf1db29ae71f6e4426eb7d0c0136cee114ab927d"
+  integrity sha512-8cOaEVjet7xFo0tUwgzoBSFqNOP5YIqaY/0RgV39Fyp/UqPYXUJHeXLEjq3b5+1xr97hXspxtfvYKYB035f1gQ==
   dependencies:
-    "@o2ter/utils-js" "^0.0.8"
+    "@o2ter/utils-js" "^0.0.9"
 
 supports-color@^5.3.0:
   version "5.5.0"

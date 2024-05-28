@@ -1,5 +1,5 @@
 //
-//  index.web.js
+//  index.js
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2024 O2ter Limited. All rights reserved.
@@ -23,5 +23,4 @@
 //  THE SOFTWARE.
 //
 
-export * from './index.js';
-export * from './webHooks';
+export * from './index_common';

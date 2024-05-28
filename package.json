@@ -43,7 +43,7 @@
     "@o2ter/valid.js": ">=1.0.6",
     "react": ">=18.2.0",
     "react-native": ">=0.70.2",
-    "sugax": ">=1.0.92"
+    "sugax": ">=1.0.100"
   },
   "devDependencies": {
     "@babel/core": "^7.24.5",
@@ -67,7 +67,7 @@
     "rollup-plugin-pure": "^0.2.1",
     "rollup-plugin-scss": "^4.0.0",
     "sass": "^1.77.2",
-    "sugax": "^1.0.98",
+    "sugax": "^1.0.100",
     "tslib": "^2.6.2",
     "typescript": "^5.4.5"
   }

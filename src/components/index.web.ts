@@ -23,7 +23,7 @@
 //  THE SOFTWARE.
 //
 
-export * from './index.js';
+export * from './index_common';
 export * from './Navigator';
 export * from './CodeMirror';
 export * from './JSCode';
