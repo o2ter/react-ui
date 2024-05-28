@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { ColorValue } from 'react-native';
+import { ColorValue, View } from 'react-native';
 import { Svg, Rect } from 'react-native-svg';
 import { List } from '../List';
 import { Options } from 'jsbarcode';
@@ -34,10 +34,20 @@ import { Modify } from '../../internals/types';
 import barcodes from 'jsbarcode/src/barcodes';
 import { createMemoComponent } from '../../internals/utils';
 
+type _SvgProps = React.ComponentPropsWithoutRef<typeof View> & {
+  width?: string | number;
+  height?: string | number;
+  viewBox?: string;
+  preserveAspectRatio?: string;
+  color?: ColorValue;
+  title?: string;
+  opacity?: string | number;
+}
+
 export type BarcodeFormat = keyof typeof barcodes;
 export const BarcodeFormats = /* #__PURE__ */ _.keys(barcodes) as BarcodeFormat[];
 
-type BarcodeProps = Modify<React.ComponentPropsWithoutRef<typeof Svg>, {
+type BarcodeProps = Modify<_SvgProps, {
   value?: string;
   format?: BarcodeFormat;
   options?: Options;
@@ -87,7 +97,7 @@ export const Barcode = createMemoComponent(({
 
   }, [value, format, options]);
 
-  return <Svg ref={forwardRef} viewBox={`0 0 ${size} 100`} preserveAspectRatio='none' {...props}>
+  return <Svg ref={forwardRef} viewBox={`0 0 ${size} 100`} preserveAspectRatio='none' {...props as any}>
     {backgroundColor && <Rect x={0} y={0} width={size} height={100} fill={backgroundColor} />}
     <List data={rects} renderItem={({ item }) => <Rect y={0} height={100} fill={color} {...item} />} />
   </Svg>;

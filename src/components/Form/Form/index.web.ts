@@ -24,8 +24,8 @@
 //
 
 import _ from 'lodash';
-import { Form as FormBase } from './index.js';
-import FormRichText from '../RichText/index.js';
+import { Form as FormBase } from './index_common';
+import FormRichText from '../RichText';
 
 export const Form = _.assign(FormBase, {
   RichText: FormRichText,

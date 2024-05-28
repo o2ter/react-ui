@@ -25,13 +25,23 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { ColorValue } from 'react-native';
+import { ColorValue, View } from 'react-native';
 import { Svg, Rect, Path } from 'react-native-svg';
 import { Modify } from '../../internals/types';
 import qrcode from 'qrcode';
 import { createMemoComponent } from '../../internals/utils';
 
-type QRCodeProps = Modify<React.ComponentPropsWithoutRef<typeof Svg>, {
+type _SvgProps = React.ComponentPropsWithoutRef<typeof View> & {
+  width?: string | number;
+  height?: string | number;
+  viewBox?: string;
+  preserveAspectRatio?: string;
+  color?: ColorValue;
+  title?: string;
+  opacity?: string | number;
+}
+
+type QRCodeProps = Modify<_SvgProps, {
   value?: string | any[];
   options?: object;
   color?: ColorValue;
@@ -71,7 +81,7 @@ export const QRCode = createMemoComponent(({
 
   }, [value, options]);
 
-  return <Svg ref={forwardRef} viewBox={`0 0 ${size} ${size}`} preserveAspectRatio='none' {...props}>
+  return <Svg ref={forwardRef} viewBox={`0 0 ${size} ${size}`} preserveAspectRatio='none' {...props as any}>
     {backgroundColor && <Rect x={0} y={0} width={size} height={size} fill={backgroundColor} />}
     <Path d={path} fill={color} />
   </Svg>;

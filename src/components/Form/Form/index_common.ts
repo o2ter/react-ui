@@ -23,4 +23,36 @@
 //  THE SOFTWARE.
 //
 
-export * from './index_common';
+import _ from 'lodash';
+import { Form as FormBase } from './base';
+import { FormConsumer } from './context';
+import { FormGroup } from '../Group';
+import { FormList } from '../List';
+import { FormDate } from '../DateTime';
+import ErrorMessage from '../ErrorMessage';
+import TextField from '../TextField';
+import Button from '../Button';
+import Picker from '../Picker';
+import Checkbox from '../Checkbox';
+import Radio from '../Radio';
+import Select from '../Select';
+import Switch from '../Switch';
+import HiddenData from '../HiddenData';
+import FormUploader from '../Uploader';
+
+export const Form = _.assign(FormBase, {
+  Consumer: FormConsumer,
+  Group: FormGroup,
+  List: FormList,
+  ErrorMessage,
+  TextField,
+  Button,
+  Picker,
+  Checkbox,
+  Radio,
+  Select,
+  Switch,
+  Date: FormDate,
+  HiddenData,
+  _Uploader: FormUploader,
+});
