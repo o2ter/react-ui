@@ -100,21 +100,20 @@ const RouteObject: React.FC<React.PropsWithChildren<React.ComponentPropsWithoutR
     meta = {},
   } = props;
 
-  const NavigatorContext = useNavigatorContext();
   const location = useLocation();
 
   const _statusCode = _.isFunction(statusCode) ? statusCode(location) : statusCode;
   const _title = _.isFunction(title) ? title(location) : title;
   const _meta = _.isFunction(meta) ? meta(location) : meta;
 
-  if (NavigatorContext) {
+  useNavigatorContext(context => {
     for (const [key, value] of Object.entries(props)) {
-      NavigatorContext[key] = value;
+      context[key] = value;
     }
-    NavigatorContext.statusCode = _statusCode;
-    NavigatorContext.title = _title;
-    NavigatorContext.meta = _meta;
-  }
+    context.statusCode = _statusCode;
+    context.title = _title;
+    context.meta = _meta;
+  });
 
   if (globalThis.document && _.isString(_title)) {
     document.title = _title;

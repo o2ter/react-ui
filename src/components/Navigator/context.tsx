@@ -43,7 +43,12 @@ export const StaticNavigator: React.FC<StaticNavigatorProps> = ({
   </NavigatorContext.Provider>
 );
 
-export const useNavigatorContext = () => React.useContext(NavigatorContext);
+export const useNavigatorContext = (
+  callback: (context: NonNullable<React.ContextType<typeof NavigatorContext>>) => void
+) => {
+  const context = React.useContext(NavigatorContext);
+  if (context) callback(context);
+};
 
 export const BrowserNavigator: React.FC<React.ComponentPropsWithRef<typeof BrowserRouter>> = ({
   children,
