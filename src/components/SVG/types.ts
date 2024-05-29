@@ -26,7 +26,11 @@
 import _ from 'lodash';
 import { ViewProps } from 'react-native';
 import { Modify } from '../../internals/types';
+import { Svg } from 'react-native-svg';
 
-export type SVGProps = Modify<ViewProps, {
+export type _SVGProps = Modify<ViewProps, {
   source?: { content?: string, uri?: string };
 }>;
+
+type _SvgProps = React.ComponentPropsWithoutRef<typeof Svg>;
+export type SvgProps = { [K in keyof _SvgProps]: _SvgProps[K] };

@@ -26,7 +26,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { View } from 'react-native';
-import { SVGProps } from './types';
+import { _SVGProps } from './types';
 import { createMemoComponent } from '../../internals/utils';
 import { flattenStyle } from '../Style/flatten';
 
@@ -34,7 +34,7 @@ export const SVG = createMemoComponent(({
   source,
   style,
   ...props
-}: SVGProps, forwardRef: React.ForwardedRef<View>) => {
+}: _SVGProps, forwardRef: React.ForwardedRef<View>) => {
 
   const {
     width,

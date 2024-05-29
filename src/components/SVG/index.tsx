@@ -27,11 +27,11 @@ import _ from 'lodash';
 import React from 'react';
 import { View } from 'react-native';
 import { SvgCss, SvgCssUri } from 'react-native-svg/css';
-import { SVGProps } from './types';
+import { _SVGProps } from './types';
 import { flattenStyle } from '../Style/flatten';
 import { NumberProp } from 'react-native-svg';
 
-export const SVG: React.FC<SVGProps> = ({
+export const SVG: React.FC<_SVGProps> = ({
   source,
   style,
   ...props
