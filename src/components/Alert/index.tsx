@@ -123,7 +123,7 @@ const AlertBody: React.FC<AlertBodyProps> = ({
   const { color, messageColor, ...alertColorStyle } = theme.palette.alertColors(_.isString(style) ? style : style.color);
 
   const localize = useLocalize();
-  const _message = localize(message instanceof ValidateError ? message.locales : {}) ?? toString(message, formatter);
+  const _message = message instanceof ValidateError ? message.options.message ?? localize(message.locales) : toString(message, formatter);
 
   return <Animated.View
     style={normalizeStyle([

@@ -58,8 +58,7 @@ export const FormErrorMessage = createMemoComponent(({
 
   const localize = useLocalize();
   const formatter = useErrorFormatter();
-  const message = _error instanceof ValidateError ?
-    localize(_error.locales ?? {}) :
+  const message = _error instanceof ValidateError ? _error.options.message ?? localize(_error.locales) :
     _.isFunction(formatter) && !_.isNil(_error) ? formatter(_error) : _error?.message;
 
   return (
