@@ -41,12 +41,14 @@ import { errorString } from '../../utils';
 type FormErrorMessageProps = Modify<TextProps, {
   classes?: ClassNames;
   name: string | string[];
+  message?: String;
 }>
 
 export const FormErrorMessage = createMemoComponent(({
   classes,
   name,
   style,
+  message,
   ...props
 }: FormErrorMessageProps, forwardRef: React.ForwardedRef<Text>) => {
 
@@ -59,15 +61,15 @@ export const FormErrorMessage = createMemoComponent(({
 
   const localize = useLocalize();
   const formatter = useErrorFormatter();
-  const message = !_.isNil(_error) ? errorString(_error, localize, formatter) : undefined;
+  const _message = !_.isNil(_error) ? message ?? errorString(_error, localize, formatter) : undefined;
 
   return (
     <React.Fragment>
-      {touched && !_.isNil(message) && <Text ref={forwardRef} style={textStyleNormalize([
+      {touched && !_.isNil(_message) && <Text ref={forwardRef} style={textStyleNormalize([
         { color: theme.themeColors.danger },
         formErrorMessageStyle,
         style,
-      ])} {...props}>{message}</Text>}
+      ])} {...props}>{_message}</Text>}
     </React.Fragment>
   );
 }, {
