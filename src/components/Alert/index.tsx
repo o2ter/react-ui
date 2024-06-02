@@ -37,13 +37,13 @@ import { ThemeColors } from '../../theme/variables';
 import { MaterialIcons as Icon } from '../Icons';
 import { normalizeStyle } from '../Style/flatten';
 import { useErrorFormatter } from '../ErrorFormatter/context';
+import { ErrorMessage, errorString } from '../utils';
 
-type AlertMessage = string | (Error & { code?: number });
 type AlertType = 'success' | 'info' | 'warning' | 'error';
 type AlertOptions = { color: ThemeColors | (string & {}); icon?: React.ReactElement; timeout?: number; };
 
 const AlertContext = React.createContext<(
-  message: AlertMessage | ReadonlyArray<AlertMessage> | RecursiveArray<AlertMessage>,
+  message: ErrorMessage | ReadonlyArray<ErrorMessage> | RecursiveArray<ErrorMessage>,
   style: AlertType | Omit<AlertOptions, 'timeout'>,
   timeout?: number,
   formatter?: (error: Error) => string
@@ -55,11 +55,11 @@ export const useAlert = () => {
   const formatter = useErrorFormatter();
   const showMessage = React.useContext(AlertContext);
   return React.useMemo(() => ({
-    showError(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { showMessage(message, 'error', timeout, formatter); },
-    showWarning(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { showMessage(message, 'warning', timeout, formatter); },
-    showInfo(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { showMessage(message, 'info', timeout, formatter); },
-    showSuccess(message: AlertMessage | RecursiveArray<AlertMessage>, timeout?: number) { showMessage(message, 'success', timeout, formatter); },
-    showAlert(message: AlertMessage | RecursiveArray<AlertMessage>, options: AlertOptions) { showMessage(message, options, options.timeout, formatter); },
+    showError(message: ErrorMessage | RecursiveArray<ErrorMessage>, timeout?: number) { showMessage(message, 'error', timeout, formatter); },
+    showWarning(message: ErrorMessage | RecursiveArray<ErrorMessage>, timeout?: number) { showMessage(message, 'warning', timeout, formatter); },
+    showInfo(message: ErrorMessage | RecursiveArray<ErrorMessage>, timeout?: number) { showMessage(message, 'info', timeout, formatter); },
+    showSuccess(message: ErrorMessage | RecursiveArray<ErrorMessage>, timeout?: number) { showMessage(message, 'success', timeout, formatter); },
+    showAlert(message: ErrorMessage | RecursiveArray<ErrorMessage>, options: AlertOptions) { showMessage(message, options, options.timeout, formatter); },
   }), [formatter, showMessage])
 };
 
@@ -70,16 +70,8 @@ const icons = {
   error: 'error-outline',
 } as const;
 
-const toString = (message: AlertMessage, formatter?: (error: Error) => string) => {
-  if (_.isString(message)) return message;
-  if (_.isFunction(formatter)) return formatter(message);
-  if (_.isNumber(message.code) && _.isString(message.message)) return `${message.message} (${message.code})`;
-  if (_.isString(message.message)) return message.message;
-  return `${message}`;
-}
-
 type AlertBodyProps = {
-  message: AlertMessage;
+  message: ErrorMessage;
   style: AlertType | { color: string; icon?: React.ReactElement },
   onShow: (x: { dismiss: VoidFunction }) => void;
   onDismiss: VoidFunction;
@@ -123,7 +115,7 @@ const AlertBody: React.FC<AlertBodyProps> = ({
   const { color, messageColor, ...alertColorStyle } = theme.palette.alertColors(_.isString(style) ? style : style.color);
 
   const localize = useLocalize();
-  const _message = message instanceof ValidateError ? message.options.message ?? localize(message.locales) : toString(message, formatter);
+  const _message = errorString(message, localize, formatter);
 
   return <Animated.View
     style={normalizeStyle([
@@ -175,7 +167,7 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({
 
   const provider = React.useMemo(() => {
     function showMessage(
-      message: AlertMessage | ReadonlyArray<AlertMessage> | RecursiveArray<AlertMessage>,
+      message: ErrorMessage | ReadonlyArray<ErrorMessage> | RecursiveArray<ErrorMessage>,
       style: AlertType | Omit<AlertOptions, 'timeout'>,
       timeout?: number,
       formatter?: (error: Error) => string

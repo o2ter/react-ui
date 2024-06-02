@@ -36,6 +36,7 @@ import { _useComponentStyle } from '../../Style';
 import { ClassNames } from '../../Style/types';
 import { textStyleNormalize } from '../../Text/style';
 import { useErrorFormatter } from '../../ErrorFormatter/context';
+import { errorString } from '../../utils';
 
 type FormErrorMessageProps = Modify<TextProps, {
   classes?: ClassNames;
@@ -58,8 +59,7 @@ export const FormErrorMessage = createMemoComponent(({
 
   const localize = useLocalize();
   const formatter = useErrorFormatter();
-  const message = _error instanceof ValidateError ? _error.options.message ?? localize(_error.locales) :
-    _.isFunction(formatter) && !_.isNil(_error) ? formatter(_error) : _error?.message;
+  const message = !_.isNil(_error) ? errorString(_error, localize, formatter) : undefined;
 
   return (
     <React.Fragment>
