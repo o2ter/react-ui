@@ -93,9 +93,8 @@ export class ImageUploader {
     // IE 11 is .files other browsers are .items
     if (clipboard && (clipboard.items || clipboard.files)) {
       let items = clipboard.items || clipboard.files;
-      const IMAGE_MIME_REGEX = /^image\/(jpe?g|gif|png|svg|webp)$/i;
-
       for (let i = 0; i < items.length; i++) {
+        const IMAGE_MIME_REGEX = /^image\/(jpe?g|gif|png|svg|webp)$/i;
         if (IMAGE_MIME_REGEX.test(items[i].type)) {
           let file = items[i].getAsFile ? items[i].getAsFile() : items[i];
 
