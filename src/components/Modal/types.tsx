@@ -32,5 +32,5 @@ export type ModalConfig = {
   element: React.ReactElement;
   backdropStyle?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
-  onDismiss?: () => void;
+  onDismiss?: VoidFunction;
 };

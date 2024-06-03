@@ -33,5 +33,5 @@ export type OffcanvasConfig = {
   placement?: 'left' | 'right' | 'top' | 'bottom';
   backdropStyle?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
-  onDismiss?: () => void;
+  onDismiss?: VoidFunction;
 };

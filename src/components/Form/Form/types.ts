@@ -41,12 +41,12 @@ export type FormState = {
   validate: (value: any, path?: string) => Error[];
   submit: VoidFunction;
   reset: VoidFunction;
-  refresh: () => void;
+  refresh: VoidFunction;
   action: (action: string) => void;
   touched: (path: string) => boolean;
   setTouched: (path?: string) => void;
-  addEventListener: (action: string, callback: () => void) => void;
-  removeEventListener: (action: string, callback: () => void) => void;
+  addEventListener: (action: string, callback: VoidFunction) => void;
+  removeEventListener: (action: string, callback: VoidFunction) => void;
 };
 
 export type FormProps<S extends Record<string, ISchema<any, any>>> = {

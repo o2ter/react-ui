@@ -96,7 +96,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const [loading, setLoading] = React.useState<Record<string, string[]>>({});
   const [counts, setCounts] = React.useState<Record<string, number>>({});
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
-  const [listeners, setListeners] = React.useState<{ action: string; callback: () => void; }[]>([]);
+  const [listeners, setListeners] = React.useState<{ action: string; callback: VoidFunction; }[]>([]);
   const [refresh, setRefresh] = React.useState(0);
 
   const startActivity = useActivity();
@@ -129,7 +129,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     },
     action: (action: string) => {
       const taskId = _.uniqueId();
-      let resolve: () => void;
+      let resolve: VoidFunction;
       const promise = new Promise<void>(res => resolve = res);
       if (_.isFunction(onLoading)) onLoading(action, promise, formState);
       if (activity) {
@@ -186,8 +186,8 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     refresh: () => setRefresh(v => v + 1),
     action: (action: string) => stableRef.current.action(action),
     setTouched: (path?: string) => setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }),
-    addEventListener: (action: string, callback: () => void) => setListeners(v => [...v, { action, callback }]),
-    removeEventListener: (action: string, callback: () => void) => setListeners(v => _.filter(v, x => x.action !== action || x.callback !== callback)),
+    addEventListener: (action: string, callback: VoidFunction) => setListeners(v => [...v, { action, callback }]),
+    removeEventListener: (action: string, callback: VoidFunction) => setListeners(v => _.filter(v, x => x.action !== action || x.callback !== callback)),
   }), []);
 
   const formState = React.useMemo(() => ({

@@ -77,7 +77,7 @@ export type DataSheetProps<T extends object> = DataSheetStyleProps & {
   highlightColor?: string;
   renderItem: (x: Omit<TableCellItemProps<T[keyof T]>, 'renderItem'>) => React.ReactElement | undefined;
   onColumnWidthChange?: (col: number, width: number) => void;
-  onSelectionChanged?: () => void;
+  onSelectionChanged?: VoidFunction;
   onDeleteRows?: (rows: number[]) => void;
   onDeleteCells?: (cells: Range<Position>) => void;
   onCopyRows?: (rows: number[], data: Pick<T, keyof T>[]) => void;

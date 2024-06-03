@@ -38,7 +38,7 @@ export class FormUploadHandler<F, U> {
   #file: F;
   #uploaded?: U;
 
-  #refresh: () => void;
+  #refresh: VoidFunction;
   #upload: FormUploaderCallback<F, U>;
   #complete: (uploaded: U, handler: FormUploadHandler<F, U>) => void;
 
@@ -48,7 +48,7 @@ export class FormUploadHandler<F, U> {
 
   constructor(
     file: F,
-    refresh: () => void,
+    refresh: VoidFunction,
     upload: FormUploaderCallback<F, U>,
     complete: (uploaded: U, handler: FormUploadHandler<F, U>) => void
   ) {

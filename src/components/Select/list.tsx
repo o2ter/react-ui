@@ -47,7 +47,7 @@ type SelectListBodyProps<T> = Omit<ListProps<T>, 'renderItem'> & {
 type SelectListItemProps<T> = SelectOption<any> & {
   selected: boolean;
   theme: ReturnType<typeof useTheme>;
-  onPress: () => void;
+  onPress: VoidFunction;
 };
 
 const SelectListItem = <T = any>({
