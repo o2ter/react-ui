@@ -24,7 +24,6 @@
     "d3-dsv": "^3.0.1",
     "jsbarcode": ">=3.11.6",
     "lodash": ">=4.17.21",
-    "lottie-ios": ">=4.4.3",
     "lottie-react-native": ">=6.7.2",
     "lottie-web": ">=5.12.2",
     "luxon": ">=3.4.4",
