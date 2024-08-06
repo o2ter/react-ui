@@ -41,6 +41,7 @@ const rollupConfig = {
     /^react$/,
     /^react-native$/,
   ],
+  makeAbsoluteExternalsRelative: true,
 };
 
 const moduleSuffixes = {
