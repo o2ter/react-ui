@@ -25,16 +25,13 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { useMergeRefs } from 'sugax';
-import { View, Animated, LayoutRectangle } from 'react-native';
-import LottieWeb, { AnimationItem } from 'lottie-web';
+import { View, Animated } from 'react-native';
 import { flattenStyle } from '../Style/flatten';
 import { LottieProps } from './types';
 
 const LottieBase = React.forwardRef<View, LottieProps>(({
   source,
   style,
-  onLayout,
   duration = 0,
   autoPlay = false,
   loop = true,
@@ -42,20 +39,6 @@ const LottieBase = React.forwardRef<View, LottieProps>(({
   preserveAspectRatio,
   ...props
 }, forwardRef) => {
-
-  const handleRef = React.useRef<AnimationItem>();
-  const containerRef = React.useRef<View>();
-  const ref = useMergeRefs(containerRef, forwardRef);
-  const [layout, setLayout] = React.useState<Partial<LayoutRectangle>>({});
-
-  React.useImperativeHandle(forwardRef, () => ({
-    get currentFrame() { return handleRef.current?.currentFrame },
-    get totalFrames() { return handleRef.current?.totalFrames },
-    get frameRate() { return handleRef.current?.frameRate },
-    get playCount() { return handleRef.current?.playCount },
-    get isPaused() { return handleRef.current?.isPaused },
-    get duration() { return handleRef.current?.getDuration(false) },
-  }) as any);
 
   const _style = flattenStyle(style) ?? {};
 
@@ -72,40 +55,8 @@ const LottieBase = React.forwardRef<View, LottieProps>(({
     }
   }
 
-  React.useEffect(() => {
-
-    const handle = LottieWeb.loadAnimation({
-      container: containerRef.current as any,
-      animationData: source,
-      renderer: renderer,
-      rendererSettings: { preserveAspectRatio },
-      autoplay: autoPlay,
-      loop,
-    });
-
-    handleRef.current = handle;
-
-    return () => handle.destroy();
-
-  }, [source]);
-
-  React.useEffect(() => {
-
-    const handle = handleRef.current;
-    if (_.isNil(handle) || !handle.isPaused) return;
-
-    handle.goToAndStop(Math.max(0, Math.min(1, duration)) * handle.getDuration(false) * 1000, false);
-
-  }, [duration]);
-
-  React.useEffect(() => void handleRef.current?.resize(), [layout.width, layout.height]);
-
   return <View
-    ref={ref}
-    onLayout={(event) => {
-      setLayout(event.nativeEvent.layout);
-      if (_.isFunction(onLayout)) onLayout(event);
-    }}
+    ref={forwardRef}
     style={[{ aspectRatio, width: _width, height: _height }, style]}
     {...props} />;
 });
