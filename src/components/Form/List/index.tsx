@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { useStableRef } from 'sugax';
+import { useStableCallback, useStableRef } from 'sugax';
 import { useField } from '../Form/hooks';
 import List from '../../List';
 import { createMemoComponent } from '../../../internals/utils';
@@ -42,16 +42,18 @@ FormListContext.displayName = 'Form.ListContext';
 
 export const useFormList = () => React.useContext(FormListContext);
 
+type ListComponentProps = React.PropsWithChildren<{
+  data: any[];
+  actions: ReturnType<typeof useFormList>;
+}>;
+
 type FormListProps = {
   name: string | string[];
   extraData?: any;
   keyExtractor?: (item: any, index: number, data: any[]) => string;
   renderItem: (x: { item: any, index: number, data: any[], actions: ReturnType<typeof useFormList> }) => any;
   validate?: (value: any) => void;
-  ListComponent?: React.ComponentType<React.PropsWithChildren<{
-    data: any[];
-    actions: ReturnType<typeof useFormList>;
-  }>>;
+  ListComponent?: React.ComponentType<ListComponentProps>;
 }
 
 export const FormList = createMemoComponent(({
@@ -83,7 +85,12 @@ export const FormList = createMemoComponent(({
 
   const stableRef = useStableRef({ renderItem });
 
-  const _ListComponent = React.useMemo(() => ListComponent, []);
+  const _ListComponent = useStableCallback(({
+    children,
+    ...props
+  }: ListComponentProps) => (
+    <ListComponent {...props}>{children}</ListComponent>
+  ));
   const _renderItem = React.useCallback((x: { item: any, index: number, data: any[] }) => stableRef.current.renderItem({ ...x, actions }), [actions]);
 
   React.useImperativeHandle(forwardRef, () => actions, [actions]);
