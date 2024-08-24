@@ -1437,10 +1437,10 @@
   dependencies:
     lodash ">=4.17.21"
 
-"@o2ter/valid.js@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@o2ter/valid.js/-/valid.js-1.0.8.tgz#82de796921a1ebae6e2086edd5a53cb21adfa070"
-  integrity sha512-+UbGVeD51SH3p4K70zbGIMkpDHNZWCBNfdqqrYRXJYY5gy+AtYpEP917dDehnCzWZk3g++DyE2eX2dL8DwIVzA==
+"@o2ter/valid.js@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@o2ter/valid.js/-/valid.js-1.0.9.tgz#c2f0b2f609cee769d9bff7a151e92d1cbbc84c07"
+  integrity sha512-i+qZ0dnBjflmP9/+8IpGDuDpWRel9+D2BnwQJnz1iBKmvrsAo6Yv5+MDvl3+Dm36tKcmbHfs9BurnhcYccF4HQ==
   dependencies:
     lodash ">=4.17.21"
 
