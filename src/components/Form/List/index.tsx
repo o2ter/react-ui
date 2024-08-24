@@ -85,12 +85,7 @@ export const FormList = createMemoComponent(({
 
   const stableRef = useStableRef({ renderItem });
 
-  const _ListComponent = useStableCallback(({
-    children,
-    ...props
-  }: ListComponentProps) => (
-    <ListComponent {...props}>{children}</ListComponent>
-  ));
+  const _ListComponent = React.useMemo(() => ListComponent, []);
   const _renderItem = React.useCallback((x: { item: any, index: number, data: any[] }) => stableRef.current.renderItem({ ...x, actions }), [actions]);
 
   React.useImperativeHandle(forwardRef, () => actions, [actions]);

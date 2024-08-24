@@ -43,11 +43,12 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const setModal = useModal();
   React.useEffect(() => {
-    const id = setModal(visible ? {
+    if (!visible) return;
+    const id = setModal({
       element: children,
       onDismiss: onDismiss ?? (() => { }),
       ...config,
-    } : undefined);
+    });
     return () => {
       setModal(v => v?.id === id ? undefined : v);
     };
