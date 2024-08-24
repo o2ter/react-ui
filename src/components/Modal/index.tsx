@@ -32,11 +32,13 @@ export * from './provider';
 
 type ModalProps = Omit<ModalConfig, 'id' | 'element'> & {
   visible: boolean;
+  extraData?: any;
   children: React.ReactElement;
 };
 
 export const Modal: React.FC<ModalProps> = ({
   visible,
+  extraData,
   children,
   onDismiss,
   ...config
@@ -52,7 +54,7 @@ export const Modal: React.FC<ModalProps> = ({
     return () => {
       setModal(v => v?.id === id ? undefined : v);
     };
-  }, [visible]);
+  }, [visible, extraData]);
   return (
     <></>
   );

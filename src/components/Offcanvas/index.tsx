@@ -32,11 +32,13 @@ export * from './provider';
 
 type OffcanvasProps = Omit<OffcanvasConfig, 'id' | 'element'> & {
   visible: boolean;
+  extraData?: any;
   children: React.ReactElement;
 };
 
 export const Offcanvas: React.FC<OffcanvasProps> = ({
   visible,
+  extraData,
   children,
   onDismiss,
   ...config
@@ -52,7 +54,7 @@ export const Offcanvas: React.FC<OffcanvasProps> = ({
     return () => {
       setOffcanvas(v => v?.id === id ? undefined : v);
     };
-  }, [visible]);
+  }, [visible, extraData]);
   return (
     <></>
   );
