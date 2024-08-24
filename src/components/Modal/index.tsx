@@ -52,7 +52,7 @@ export const Modal: React.FC<ModalProps> = ({
     return () => {
       setModal(v => v?.id === id ? undefined : v);
     };
-  }, [visible, children]);
+  }, [visible]);
   return (
     <></>
   );

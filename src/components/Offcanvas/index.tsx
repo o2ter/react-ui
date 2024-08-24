@@ -52,7 +52,7 @@ export const Offcanvas: React.FC<OffcanvasProps> = ({
     return () => {
       setOffcanvas(v => v?.id === id ? undefined : v);
     };
-  }, [visible, children]);
+  }, [visible]);
   return (
     <></>
   );
