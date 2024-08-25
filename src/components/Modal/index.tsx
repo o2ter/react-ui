@@ -27,34 +27,38 @@ import _ from 'lodash';
 import React from 'react';
 import { useModal } from './provider';
 import { ModalConfig } from './types';
+import { createChannel, useChannel } from 'sugax';
 
 export * from './provider';
 
 type ModalProps = Omit<ModalConfig, 'id' | 'element'> & {
   visible: boolean;
-  extraData?: any;
   children: React.ReactElement;
 };
 
 export const Modal: React.FC<ModalProps> = ({
   visible,
-  extraData,
   children,
   onDismiss,
   ...config
 }) => {
   const setModal = useModal();
+  const channel = createChannel(children);
+  const Body = React.useCallback(() => useChannel(channel), []);
   React.useEffect(() => {
     if (!visible) return;
     const id = setModal({
-      element: children,
+      element: <Body />,
       onDismiss: onDismiss ?? (() => { }),
       ...config,
     });
     return () => {
       setModal(v => v?.id === id ? undefined : v);
     };
-  }, [visible, extraData]);
+  }, [visible]);
+  React.useEffect(() => {
+    channel.setValue(children);
+  }, [children]);
   return (
     <></>
   );

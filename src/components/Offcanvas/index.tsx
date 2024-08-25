@@ -27,34 +27,38 @@ import _ from 'lodash';
 import React from 'react';
 import { useOffcanvas } from './provider';
 import { OffcanvasConfig } from './types';
+import { createChannel, useChannel } from 'sugax';
 
 export * from './provider';
 
 type OffcanvasProps = Omit<OffcanvasConfig, 'id' | 'element'> & {
   visible: boolean;
-  extraData?: any;
   children: React.ReactElement;
 };
 
 export const Offcanvas: React.FC<OffcanvasProps> = ({
   visible,
-  extraData,
   children,
   onDismiss,
   ...config
 }) => {
   const setOffcanvas = useOffcanvas();
+  const channel = createChannel(children);
+  const Body = React.useCallback(() => useChannel(channel), []);
   React.useEffect(() => {
     if (!visible) return;
     const id = setOffcanvas({
-      element: children,
+      element: <Body />,
       onDismiss: onDismiss ?? (() => { }),
       ...config,
     });
     return () => {
       setOffcanvas(v => v?.id === id ? undefined : v);
     };
-  }, [visible, extraData]);
+  }, [visible]);
+  React.useEffect(() => {
+    channel.setValue(children);
+  }, [children]);
   return (
     <></>
   );
