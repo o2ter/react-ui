@@ -33,6 +33,7 @@ import { FormState } from './types';
 import { FormInternalState, FormContext, FormInternalContext } from './context';
 import { FormProps } from './types';
 import { useActivity } from '../../ActivityIndicator';
+import { FormGroupContext } from '../Group/context';
 
 const cloneValue = (x: any): any => {
   if (_.isArray(x)) return x.map(v => cloneValue(v));
@@ -232,7 +233,9 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   return (
     <FormContext.Provider value={formState}>
       <FormInternalContext.Provider value={formInternalState}>
-        {_.isFunction(children) ? children(formState) : children}
+        <FormGroupContext.Provider value={[]}>
+          {_.isFunction(children) ? children(formState) : children}
+        </FormGroupContext.Provider>
       </FormInternalContext.Provider>
     </FormContext.Provider>
   );

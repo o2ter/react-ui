@@ -1,5 +1,5 @@
 //
-//  index.tsx
+//  context.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2024 O2ter Limited. All rights reserved.
@@ -25,23 +25,5 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { FormGroupContext } from './context';
 
-export const useFormGroup = () => React.useContext(FormGroupContext);
-
-export const FormGroup: React.FC<React.PropsWithChildren<{
-  name: string | string[];
-}>> = ({
-  name,
-  children
-}) => {
-  const parent = useFormGroup();
-  const value = React.useMemo(() => [...parent, ..._.toPath(name)], [parent, name]);
-  return (
-    <FormGroupContext.Provider value={value}>
-      {children}
-    </FormGroupContext.Provider>
-  )
-};
-
-FormGroup.displayName = 'Form.Group';
+export const FormGroupContext = React.createContext<string[]>([]);
