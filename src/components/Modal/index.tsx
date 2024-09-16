@@ -44,7 +44,7 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const setModal = useModal();
   const channel = createChannel(children);
-  const Body = React.useCallback(() => useChannel(channel), []);
+  const Body = React.useCallback(() => useChannel(channel), [visible]);
   React.useEffect(() => {
     if (!visible) return;
     const id = setModal({

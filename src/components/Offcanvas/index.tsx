@@ -44,7 +44,7 @@ export const Offcanvas: React.FC<OffcanvasProps> = ({
 }) => {
   const setOffcanvas = useOffcanvas();
   const channel = createChannel(children);
-  const Body = React.useCallback(() => useChannel(channel), []);
+  const Body = React.useCallback(() => useChannel(channel), [visible]);
   React.useEffect(() => {
     if (!visible) return;
     const id = setOffcanvas({
