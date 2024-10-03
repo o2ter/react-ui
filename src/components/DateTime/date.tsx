@@ -88,7 +88,7 @@ export const DatePicker = createMemoComponent((
     disabled ? 'disabled' : 'enabled',
   ]);
 
-  const date = _.castArray(value ?? []).map(x => new Calendar.Date(x));
+  const date = _.sortBy(_.castArray(value ?? []).map(x => new Calendar.Date(x)), 'year', 'month', 'day');
 
   const _Calendar = React.useCallback(() => {
     const [_value, setValue] = React.useState(value);
