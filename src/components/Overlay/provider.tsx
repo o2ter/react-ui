@@ -27,6 +27,7 @@ import _ from 'lodash';
 import React from 'react';
 import { View } from 'react-native';
 import { OverlayConfig, OverlayContext } from './context';
+import List from '../List';
 
 export const OverlayProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
@@ -44,7 +45,7 @@ export const OverlayProvider: React.FC<React.PropsWithChildren<{}>> = ({
           return false;
         }}
       >{children}</View>
-      {_.compact(_.map(nodes, ({ node }) => node))}
+      <List data={nodes} renderItem={({ item }) => item.node} />
     </OverlayContext.Provider>
   );
 };
