@@ -101,72 +101,74 @@ export const OffcanvasProvider: React.FC<OffcanvasProviderProps> = ({
 
   if (display?.element && config?.element && display.element !== config.element) setDisplay(config);
 
-  return <OffcanvasContext.Provider value={setOffcanvas}>
-    {children}
-    {React.isValidElement(display?.element) && <>
-      {backdrop === true && <Pressable
-        onPress={display?.onDismiss ?? (() => setConfig(undefined))}
-        style={normalizeStyle([
-          {
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            zIndex: theme.zIndex.offcanvasBackdrop,
-          },
-          Platform.select({
-            web: { cursor: 'default' } as any,
-            default: {},
-          }),
-          StyleSheet.absoluteFill,
-          Platform.select({
-            web: { position: 'fixed' } as any,
-            default: {},
-          }),
-          offcanvasBackdrop,
-          display?.backdropStyle ?? {},
-          {
-            opacity: fadeAnim,
-          },
-        ])} />}
-      <View
-        onLayout={(e) => setLayout(e.nativeEvent.layout)}
-        style={normalizeStyle([
-          {
-            zIndex: theme.zIndex.offcanvas,
-            borderColor: theme.grays['300'],
-            backgroundColor: theme.root.backgroundColor,
-            ...placement === 'left' ? { borderRightWidth: 1 } : { right: 0 },
-            ...placement === 'right' ? { borderLeftWidth: 1 } : { left: 0 },
-            ...placement === 'top' ? { borderBottomWidth: 1 } : { bottom: 0 },
-            ...placement === 'bottom' ? { borderTopWidth: 1 } : { top: 0 },
-            ...placement === 'left' || placement === 'right' ? {
-              width: 400,
-              maxWidth: '100%',
-            } : {
-              height: 400,
-              maxHeight: '100%',
+  return (
+    <OffcanvasContext.Provider value={setOffcanvas}>
+      {children}
+      {React.isValidElement(display?.element) && <>
+        {backdrop === true && <Pressable
+          onPress={display?.onDismiss ?? (() => setConfig(undefined))}
+          style={normalizeStyle([
+            {
+              backgroundColor: 'rgba(0, 0, 0, 0.75)',
+              zIndex: theme.zIndex.offcanvasBackdrop,
             },
-          },
-          Platform.select({
-            web: { position: 'fixed' } as any,
-            default: { position: 'absolute' },
-          }),
-          offcanvasContainer,
-          placement === 'left' && offcanvasLeftContainer,
-          placement === 'right' && offcanvasRightContainer,
-          placement === 'top' && offcanvasTopContainer,
-          placement === 'bottom' && offcanvasBottomContainer,
-          display?.containerStyle ?? {},
-          {
-            opacity: layout ? 1 : 0,
-            ...layout && placement === 'left' ? { left: (fadeAnim - 1) * layout.width } : {},
-            ...layout && placement === 'right' ? { right: (fadeAnim - 1) * layout.width } : {},
-            ...layout && placement === 'top' ? { top: (fadeAnim - 1) * layout.height } : {},
-            ...layout && placement === 'bottom' ? { bottom: (fadeAnim - 1) * layout.height } : {},
-          },
-        ])}>
-        {display?.element}
-      </View>
-    </>}
-  </OffcanvasContext.Provider>;
+            Platform.select({
+              web: { cursor: 'default' } as any,
+              default: {},
+            }),
+            StyleSheet.absoluteFill,
+            Platform.select({
+              web: { position: 'fixed' } as any,
+              default: {},
+            }),
+            offcanvasBackdrop,
+            display?.backdropStyle ?? {},
+            {
+              opacity: fadeAnim,
+            },
+          ])} />}
+        <View
+          onLayout={(e) => setLayout(e.nativeEvent.layout)}
+          style={normalizeStyle([
+            {
+              zIndex: theme.zIndex.offcanvas,
+              borderColor: theme.grays['300'],
+              backgroundColor: theme.root.backgroundColor,
+              ...placement === 'left' ? { borderRightWidth: 1 } : { right: 0 },
+              ...placement === 'right' ? { borderLeftWidth: 1 } : { left: 0 },
+              ...placement === 'top' ? { borderBottomWidth: 1 } : { bottom: 0 },
+              ...placement === 'bottom' ? { borderTopWidth: 1 } : { top: 0 },
+              ...placement === 'left' || placement === 'right' ? {
+                width: 400,
+                maxWidth: '100%',
+              } : {
+                height: 400,
+                maxHeight: '100%',
+              },
+            },
+            Platform.select({
+              web: { position: 'fixed' } as any,
+              default: { position: 'absolute' },
+            }),
+            offcanvasContainer,
+            placement === 'left' && offcanvasLeftContainer,
+            placement === 'right' && offcanvasRightContainer,
+            placement === 'top' && offcanvasTopContainer,
+            placement === 'bottom' && offcanvasBottomContainer,
+            display?.containerStyle ?? {},
+            {
+              opacity: layout ? 1 : 0,
+              ...layout && placement === 'left' ? { left: (fadeAnim - 1) * layout.width } : {},
+              ...layout && placement === 'right' ? { right: (fadeAnim - 1) * layout.width } : {},
+              ...layout && placement === 'top' ? { top: (fadeAnim - 1) * layout.height } : {},
+              ...layout && placement === 'bottom' ? { bottom: (fadeAnim - 1) * layout.height } : {},
+            },
+          ])}>
+          {display?.element}
+        </View>
+      </>}
+    </OffcanvasContext.Provider>
+  );
 };
 
 OffcanvasProvider.displayName = 'OffcanvasProvider';

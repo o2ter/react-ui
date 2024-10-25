@@ -35,16 +35,18 @@ export const OverlayProvider: React.FC<React.PropsWithChildren<{}>> = ({
   const [nodes, setNodes] = React.useState<OverlayConfig[]>([]);
   const values = React.useMemo(() => ({ nodes, setNodes }), [nodes]);
 
-  return <OverlayContext.Provider value={values}>
-    <View
-      style={{ flex: 1 }}
-      onStartShouldSetResponderCapture={(e) => {
-        for (const node of nodes) node.onTouchOutside(e);
-        return false;
-      }}
-    >{children}</View>
-    {_.compact(_.map(nodes, ({ node }) => node))}
-  </OverlayContext.Provider>;
+  return (
+    <OverlayContext.Provider value={values}>
+      <View
+        style={{ flex: 1 }}
+        onStartShouldSetResponderCapture={(e) => {
+          for (const node of nodes) node.onTouchOutside(e);
+          return false;
+        }}
+      >{children}</View>
+      {_.compact(_.map(nodes, ({ node }) => node))}
+    </OverlayContext.Provider>
+  );
 };
 
 OverlayProvider.displayName = 'OverlayProvider';
