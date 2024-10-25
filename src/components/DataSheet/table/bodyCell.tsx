@@ -83,7 +83,7 @@ export const BodyCell = createComponent(({
   }, state.editing ? {} : { cursor: 'cell' }, selectedStyle]), [state.editing, row, rowNumbers, selectedStyle]);
 
   const allowEdit = _.isFunction(allowEditForCell) ? allowEditForCell(row, col) : !!allowEditForCell;
-  const doubleClick = React.useCallback(() => setState({ editing: { row, col } }), []);
+  const doubleClick = React.useCallback(() => setState({ editing: { row, col } }), [row, col]);
 
   return (
     <DataSheetCell
