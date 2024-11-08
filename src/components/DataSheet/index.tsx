@@ -34,6 +34,7 @@ import { createMemoComponent } from '../../internals/utils';
 export const DataSheet = createMemoComponent(<T extends object>({
   columnMinWidth = 64,
   rowNumbers = true,
+  startRowNumber = 1,
   stickyHeader = true,
   stickyRowNumbers = true,
   allowSelection = true,
@@ -50,6 +51,7 @@ export const DataSheet = createMemoComponent(<T extends object>({
           ref={forwardRef}
           columnMinWidth={columnMinWidth}
           rowNumbers={rowNumbers}
+          startRowNumber={startRowNumber}
           stickyHeader={stickyHeader}
           stickyRowNumbers={stickyRowNumbers}
           allowSelection={allowSelection}

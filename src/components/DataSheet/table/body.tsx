@@ -64,6 +64,7 @@ export const DataSheetBody = <T extends object>({
   data,
   columns,
   rowNumbers,
+  startRowNumber = 1,
   renderItem,
   allowSelection,
   allowEditForCell,
@@ -157,7 +158,7 @@ export const DataSheetBody = <T extends object>({
                     highlightColor={highlightColor}
                     stickyRowNumbers={stickyRowNumbers}
                   >
-                    <Text classes='font-monospace'>{row + 1}</Text>
+                    <Text classes='font-monospace'>{row + startRowNumber}</Text>
                   </RowNumberCell>
                 )}
                 <List

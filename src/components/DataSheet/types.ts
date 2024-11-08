@@ -71,6 +71,7 @@ export type DataSheetProps<T extends object> = DataSheetStyleProps & {
   columnWidth: number[];
   columnMinWidth?: number;
   rowNumbers?: boolean;
+  startRowNumber?: number;
   stickyHeader?: boolean;
   stickyRowNumbers?: boolean;
   showEmptyLastRow?: boolean;
