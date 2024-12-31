@@ -30,11 +30,11 @@ type FunctionComponent<T, P> = (props: P & React.RefAttributes<T>) => React.Reac
 type ForwardFunctionComponent<T, P> = (props: P, forwardRef: React.ForwardedRef<T>) => React.ReactElement | null;
 
 export const createComponent = <T, P = {}, A = {}>(
-  render: ForwardFunctionComponent<T, P>,
+  render: ForwardFunctionComponent<T, React.PropsWithoutRef<P>>,
   attrs?: A,
 ) => _.assign(React.forwardRef(render) as FunctionComponent<T, P>, attrs ?? {});
 
 export const createMemoComponent = <T, P = {}, A = {}>(
-  render: ForwardFunctionComponent<T, P>,
+  render: ForwardFunctionComponent<T, React.PropsWithoutRef<P>>,
   attrs?: A,
 ) => React.memo(createComponent(render, attrs)) as FunctionComponent<T, P>;
