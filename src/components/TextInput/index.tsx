@@ -119,18 +119,20 @@ export const TextInput = createMemoComponent(({
   }
 
   return (
-    <Pressable style={[
-      {
-        flexDirection: 'row',
-        gap: theme.spacer * 0.375,
-      },
-      defaultStyle,
-      focusRing,
-      textStyle,
-      textInputStyle,
-      _.isFunction(style) ? style(state) : style,
-    ]}
-      onFocus={() => void inputRef.current?.focus()}>
+    <Pressable
+      style={[
+        {
+          flexDirection: 'row',
+          gap: theme.spacer * 0.375,
+        },
+        defaultStyle,
+        focusRing,
+        textStyle,
+        textInputStyle,
+        _.isFunction(style) ? style(state) : style,
+      ]}
+      onFocus={() => void inputRef.current?.focus()}
+    >
       {_.isFunction(prepend) ? prepend(state) : prepend}
       <InnerTextInput
         ref={ref}
