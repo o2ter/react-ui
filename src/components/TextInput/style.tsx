@@ -30,36 +30,45 @@ import { useTheme } from '../../theme';
 
 export const useDefaultInputStyle = (
   theme: ReturnType<typeof useTheme>,
-  variant?: 'outline' | 'underlined' | 'unstyled',
-) => React.useMemo(() => StyleSheet.create({
-  outline: {
-    display: 'flex',
-    color: theme.root.textColor,
-    fontSize: theme.root.fontSize,
-    lineHeight: theme.root.lineHeight,
-    backgroundColor: 'transparent',
-    borderColor: theme.grays['400'],
-    borderWidth: theme.borderWidth,
-    borderRadius: theme.borderRadiusBase,
-    paddingVertical: theme.spacer * 0.375,
-    paddingHorizontal: theme.spacer * 0.75,
-  },
-  underlined: {
-    display: 'flex',
-    color: theme.root.textColor,
-    fontSize: theme.root.fontSize,
-    lineHeight: theme.root.lineHeight,
-    backgroundColor: 'transparent',
-    borderColor: theme.grays['400'],
-    borderBottomWidth: theme.borderWidth,
-    paddingVertical: theme.spacer * 0.375,
-    paddingHorizontal: theme.spacer * 0.75,
-  },
-  unstyled: {
-    display: 'flex',
-    color: theme.root.textColor,
-    fontSize: theme.root.fontSize,
-    lineHeight: theme.root.lineHeight,
-    backgroundColor: 'transparent',
-  },
-})[variant ?? 'outline'], [theme, variant]);
+  variant?: 'outline' | 'underlined' | 'unstyled' | 'material',
+) => React.useMemo(() => {
+  const styles = StyleSheet.create({
+    outline: {
+      display: 'flex',
+      color: theme.root.textColor,
+      fontSize: theme.root.fontSize,
+      lineHeight: theme.root.lineHeight,
+      backgroundColor: 'transparent',
+      borderColor: theme.grays['400'],
+      borderWidth: theme.borderWidth,
+      borderRadius: theme.borderRadiusBase,
+      paddingVertical: theme.spacer * 0.375,
+      paddingHorizontal: theme.spacer * 0.75,
+    },
+    underlined: {
+      display: 'flex',
+      color: theme.root.textColor,
+      fontSize: theme.root.fontSize,
+      lineHeight: theme.root.lineHeight,
+      backgroundColor: 'transparent',
+      borderColor: theme.grays['400'],
+      borderBottomWidth: theme.borderWidth,
+      paddingVertical: theme.spacer * 0.375,
+      paddingHorizontal: theme.spacer * 0.75,
+    },
+    unstyled: {
+      display: 'flex',
+      color: theme.root.textColor,
+      fontSize: theme.root.fontSize,
+      lineHeight: theme.root.lineHeight,
+      backgroundColor: 'transparent',
+    },
+  });
+  return StyleSheet.create({
+    ...styles,
+    material: {
+      ...styles.outline,
+      paddingVertical: 0,
+    },
+  })[variant ?? 'outline'];
+}, [theme, variant]);

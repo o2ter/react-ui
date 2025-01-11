@@ -25,22 +25,19 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextInputProps as RNTextInputProps } from 'react-native';
 import { createMemoComponent } from '../../internals/utils';
-import { ClassNames } from '../Style/types';
 import TextInput from '../TextInput';
 
-type TextInputProps = RNTextInputProps & {
-  classes?: ClassNames;
-};
-
-export const UncontrolledTextInput = createMemoComponent(({
-  classes,
-  value,
-  style,
-  onChangeText,
-  ...props
-}: TextInputProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>) => {
+export const UncontrolledTextInput = createMemoComponent((
+  {
+    classes,
+    value,
+    style,
+    onChangeText,
+    ...props
+  }: React.ComponentPropsWithoutRef<typeof TextInput>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>
+) => {
 
   const [text, setText] = React.useState<string | null>(null);
 

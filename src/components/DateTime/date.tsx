@@ -44,7 +44,9 @@ type DatePickerState = {
 
 type DatePickerBaseProps = Pick<React.ComponentPropsWithoutRef<typeof Calendar>, 'value' | 'min' | 'max' | 'multiple' | 'selectable' | 'onChange'>;
 type DatePickerProps = Modify<Modify<Omit<React.ComponentPropsWithoutRef<typeof PickerBase>, 'picker' | 'pickerHidden' | 'setPickerHidden'>, DatePickerBaseProps>, {
-  variant?: 'outline' | 'underlined' | 'unstyled';
+  label?: string;
+  labelStyle?: StyleProp<TextStyle> | ((state: DatePickerState) => StyleProp<TextStyle>);
+  variant?: 'outline' | 'underlined' | 'unstyled' | 'material';
   popover?: boolean | PopoverConfig;
   dismissOnSelect?: boolean;
   style?: StyleProp<TextStyle> | ((state: DatePickerState) => StyleProp<TextStyle>);
@@ -63,6 +65,8 @@ export const DatePicker = createMemoComponent((
     prepend,
     append,
     style,
+    label,
+    labelStyle,
     variant,
     popover = false,
     disabled = false,
@@ -122,6 +126,11 @@ export const DatePicker = createMemoComponent((
     <PickerBase
       ref={forwardRef}
       disabled={disabled}
+      focused={focused}
+      value={date}
+      label={label}
+      labelStyle={_.isFunction(labelStyle) ? labelStyle(state) : labelStyle}
+      variant={variant}
       popover={popover}
       picker={<_Calendar />}
       pickerHidden={hidden}

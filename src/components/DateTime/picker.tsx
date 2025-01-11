@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, StyleProp, TextStyle } from 'react-native';
 import { Modify } from '../../internals/types';
 import { Pressable } from '../Pressable';
 import { Modal, useModal } from '../Modal';
@@ -35,6 +35,7 @@ import Text from '../Text';
 import View from '../View';
 import { useMergeRefs } from 'sugax';
 import { _StyleContext } from '../Style';
+import { MaterialInputLabel } from '../MaterialInputLabel';
 
 type SelectPosition = 'top' | 'bottom';
 type SelectAlignment = 'left' | 'right';
@@ -47,6 +48,11 @@ export type PopoverConfig = {
 };
 
 type PickerBaseProps = Modify<React.ComponentPropsWithoutRef<typeof Text> & Pick<React.ComponentPropsWithoutRef<typeof Pressable>, 'onFocus' | 'onBlur'>, {
+  label?: string;
+  labelStyle?: StyleProp<TextStyle>;
+  focused?: boolean;
+  value?: any[];
+  variant?: 'outline' | 'underlined' | 'unstyled' | 'material';
   popover?: boolean | PopoverConfig;
   picker: any;
   disabled?: boolean;
@@ -57,6 +63,11 @@ type PickerBaseProps = Modify<React.ComponentPropsWithoutRef<typeof Text> & Pick
 }>
 
 export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>, PickerBaseProps>(({
+  label,
+  labelStyle,
+  focused,
+  value,
+  variant,
   popover,
   style,
   picker,
@@ -76,6 +87,14 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
   const pressableRef = React.useRef<React.ComponentRef<typeof Pressable>>();
   const ref = useMergeRefs(pressableRef, forwardRef);
 
+  const content = (
+    <>
+      {_.isString(children) ? (
+        <Text style={{ flex: 1 }} {...props}>{children || ' '}</Text>
+      ) : children}
+    </>
+  );
+
   const pickerBody = (
     <Pressable
       ref={ref}
@@ -87,6 +106,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
         {
           flexDirection: 'row',
           gap: theme.spacer * 0.375,
+          alignItems: 'center',
         },
         Platform.select({
           web: { outline: 0 } as any,
@@ -98,9 +118,17 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
       onBlur={onBlur}
     >
       {prepend}
-      {_.isString(children) ? (
-        <Text style={{ flex: 1 }} {...props}>{children || ' '}</Text>
-      ) : children}
+      {_.includes(['material'], variant) ? (
+              <View style={{flex: 1}}>
+          <MaterialInputLabel
+            label={label ?? ''}
+            style={labelStyle}
+            focused={!!focused}
+            active={!_.isEmpty(value)}
+          />
+          {content}
+        </View>
+      ) : content}
       {append}
     </Pressable>
   );

@@ -38,6 +38,7 @@ import { ListProps, SelectOption, SelectState } from './types';
 import { SelectListBody } from './list';
 import { useMergeRefs, useStableCallback } from 'sugax';
 import { MaterialIcons as Icon } from '../Icons';
+import { MaterialInputLabel } from '../MaterialInputLabel';
 import View from '../View';
 import Text from '../Text';
 import List from '../List';
@@ -59,7 +60,9 @@ type SelectProps<T, M extends boolean> = {
   dismissOnSelect?: boolean;
   arrow?: boolean;
   shadow?: boolean | number;
-  variant?: 'outline' | 'underlined' | 'unstyled';
+  label?: string;
+  labelStyle?: StyleProp<TextStyle> | ((state: SelectState<SelectValue<T, M>>) => StyleProp<TextStyle>);
+  variant?: 'outline' | 'underlined' | 'unstyled' | 'material';
   position?: SelectPosition | SelectPosition[];
   alignment?: SelectAlignment | SelectAlignment[];
   style?: StyleProp<TextStyle> | ((state: SelectState<SelectValue<T, M>>) => StyleProp<TextStyle>);
@@ -137,6 +140,8 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
     arrow,
     shadow,
     style,
+    label,
+    labelStyle,
     variant,
     position = ['top', 'bottom'],
     alignment = ['left', 'right'],
@@ -211,7 +216,23 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
     onChange(multiple ? selected : _.first(selected) as any);
   });
 
-  const _value = (multiple ? _.castArray(value ?? []) : [value]) as T[];
+  const _value = _.castArray(value ?? []) as T[];
+
+  const content = (
+    <>
+      {_.isFunction(render) ? render(state) : (
+        <SelectBody
+          multiple={multiple}
+          value={findItems(_value, _.flatMap(sections, x => x.data))}
+          onRemove={(v) => {
+            const _val = _.filter(_value, x => x !== v.value);
+            const selected = findItems(_val, _.flatMap(sections, x => x.data));
+            _onChange(selected);
+          }}
+        />
+      )}
+    </>
+  );
 
   return (
     <_StyleContext.Consumer>
@@ -262,6 +283,7 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
               {
                 flexDirection: 'row',
                 gap: theme.spacer * 0.375,
+                alignItems: 'center',
               },
               Platform.select({
                 web: { outline: 0 } as any,
@@ -277,17 +299,19 @@ export const Select = createMemoComponent(<T = any, M extends boolean = false>(
             onBlur={_onBlur}
           >
             {_.isFunction(prepend) ? prepend(state) : prepend}
-            {_.isFunction(render) ? render(state) : (
-              <SelectBody
-                multiple={multiple}
-                value={findItems(_value, _.flatMap(sections, x => x.data))}
-                onRemove={(v) => { 
-                  const _val = _.filter(_value, x => x !== v.value);
-                  const selected = findItems(_val, _.flatMap(sections, x => x.data));
-                  _onChange(selected);
-                }}
-              />
-            )}
+            {_.includes(['material'], variant) ? (
+              <View style={{ flex: 1 }}>
+                <MaterialInputLabel
+                  label={label ?? ''}
+                  style={[
+                    _.isFunction(labelStyle) ? labelStyle(state) : labelStyle,
+                  ]}
+                  focused={focused}
+                  active={!_.isEmpty(_value)}
+                />
+                {content}
+              </View>
+            ) : content}
             {_.isFunction(append) ? append(state) : append}
           </Pressable>
         </Popover>

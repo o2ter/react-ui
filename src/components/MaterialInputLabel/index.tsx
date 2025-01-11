@@ -1,5 +1,5 @@
 //
-//  box.tsx
+//  index.tsx
 //
 //  The MIT License
 //  Copyright (c) 2021 - 2025 O2ter Limited. All rights reserved.
@@ -25,62 +25,51 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { StyleProp, TextStyle } from 'react-native';
-import { _useComponentStyle } from '../Style';
-import { ClassNames } from '../Style/types';
-import { useFocusRing } from '../../internals/focus';
-import { useTheme } from '../../theme';
-import { createComponent } from '../../internals/utils';
-import View from '../View';
 import Text from '../Text';
+import { StyleProp, TextStyle } from 'react-native';
+import { useAnimate } from 'sugax';
+import { _useComponentStyle } from '../Style';
+import { useTheme } from '../../theme';
 
-type PickerBoxProps = React.PropsWithChildren<{
-  classes?: ClassNames;
-  style?: StyleProp<TextStyle> | ((state: { focused: boolean; }) => StyleProp<TextStyle>);
+type MaterialInputLabelProps = React.ComponentPropsWithoutRef<typeof Text> & {
+  label: string;
+  style?: StyleProp<TextStyle>;
   focused: boolean;
-  disabled?: boolean;
-  prepend?: React.ReactNode;
-  append?: React.ReactNode;
-}>;
+  active: boolean;
+};
 
-export const PickerBox = createComponent(({
-  classes,
+export const MaterialInputLabel = ({
+  label,
   style,
   focused,
-  disabled,
-  prepend,
-  append,
-  children,
-}: PickerBoxProps, forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>) => {
-
+  active,
+  ...props
+}: MaterialInputLabelProps) => {
   const theme = useTheme();
-
-  const textStyle = _useComponentStyle('text');
-  const pickerStyle = _useComponentStyle('picker', classes, [
-    focused && 'focus',
-    disabled ? 'disabled' : 'enabled',
-  ]);
-
-  const focusRing = useFocusRing(focused);
-
+  const defaultStyle = _useComponentStyle('text') as TextStyle;
+  const fontSize = defaultStyle.fontSize ?? theme.root.fontSize;
+  const _active = focused || active;
+  const { value, start } = useAnimate(_active ? 0 : 1);
+  React.useEffect(() => {
+    start({
+      toValue: _active ? 0 : 1,
+      duration: 100,
+    });
+  }, [_active]);
   return (
-    <View ref={forwardRef} style={[
-      focusRing,
-      {
-        flexDirection: 'row',
-        gap: theme.spacer * 0.375,
-        alignItems: 'center',
-        color: theme.root.textColor,
-        fontSize: theme.root.fontSize,
-        lineHeight: theme.root.lineHeight,
-      },
-      textStyle,
-      pickerStyle,
-      _.isFunction(style) ? style({ focused }) : style,
-    ]}>
-      {prepend}
-      <Text style={{ flex: 1 }}>{children || ' '}</Text>
-      {append}
-    </View>
+    <Text
+      style={[
+        { fontSize: fontSize * 0.75, color: theme.grays['500'] },
+        value > 0 && {
+          transformOrigin: 'top left',
+          transform: [
+            { scale: value / 3 + 1 },
+            { translateY: value * fontSize * 0.375 },
+          ],
+        },
+        style,
+      ]}
+      {...props}
+    >{label}</Text>
   );
-});
+};

@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Platform, Pressable, TextInput as RNTextInput, TextInputProps as RNTextInputProps, StyleProp, TextStyle } from 'react-native';
+import { Platform, TextInput as RNTextInput, TextInputProps as RNTextInputProps, StyleProp, TextStyle, View } from 'react-native';
 import { useTheme } from '../../theme';
 import { useDefaultInputStyle } from './style';
 import { createMemoComponent, createComponent } from '../../internals/utils';
@@ -34,7 +34,8 @@ import { ClassNames } from '../Style/types';
 import { textStyleNormalize } from '../Text/style';
 import { useFocus, useFocusRing } from '../../internals/focus';
 import { useMergeRefs } from 'sugax';
-import View from '../View';
+import { MaterialInputLabel } from '../MaterialInputLabel';
+import Pressable from '../Pressable';
 
 type TextInputState = {
   value: string;
@@ -44,7 +45,9 @@ type TextInputState = {
 
 type TextInputProps = Omit<RNTextInputProps, 'style'> & {
   classes?: ClassNames;
-  variant?: 'outline' | 'underlined' | 'unstyled';
+  label?: string;
+  labelStyle?: StyleProp<TextStyle> | ((state: TextInputState) => StyleProp<TextStyle>);
+  variant?: 'outline' | 'underlined' | 'unstyled' | 'material';
   style?: StyleProp<TextStyle> | ((state: TextInputState) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: TextInputState) => React.ReactNode);
   append?: React.ReactNode | ((state: TextInputState) => React.ReactNode);
@@ -70,6 +73,8 @@ export const TextInput = createMemoComponent(({
   classes,
   style,
   value,
+  label,
+  labelStyle,
   variant,
   editable,
   prepend,
@@ -97,7 +102,7 @@ export const TextInput = createMemoComponent(({
 
   const state = { focused, disabled: !editable, value: value ?? '' };
 
-  if (!prepend && !append) {
+  if (!prepend && !append && !_.includes(['material'], variant)) {
     return (
       <RNTextInput
         ref={ref}
@@ -118,12 +123,32 @@ export const TextInput = createMemoComponent(({
     );
   }
 
+  const content = (
+    <InnerTextInput
+      ref={ref}
+      value={value}
+      style={[
+        { flex: 1 },
+        Platform.select({
+          web: { outline: 0 } as any,
+          default: {},
+        }),
+      ]}
+      editable={editable}
+      onFocus={_onFocus}
+      onBlur={_onBlur}
+      {...props}>
+      {children}
+    </InnerTextInput>
+  );
+
   return (
     <Pressable
       style={[
         {
           flexDirection: 'row',
           gap: theme.spacer * 0.375,
+          alignItems: 'center',
         },
         defaultStyle,
         focusRing,
@@ -134,22 +159,19 @@ export const TextInput = createMemoComponent(({
       onFocus={() => void inputRef.current?.focus()}
     >
       {_.isFunction(prepend) ? prepend(state) : prepend}
-      <InnerTextInput
-        ref={ref}
-        value={value}
-        style={[
-          { flex: 1 },
-          Platform.select({
-            web: { outline: 0 } as any,
-            default: {},
-          }),
-        ]}
-        editable={editable}
-        onFocus={_onFocus}
-        onBlur={_onBlur}
-        {...props}>
-        {children}
-      </InnerTextInput>
+      {_.includes(['material'], variant) ? (
+        <View style={{ flex: 1 }}>
+          <MaterialInputLabel
+            label={label ?? ''}
+            style={[
+              _.isFunction(labelStyle) ? labelStyle(state) : labelStyle,
+            ]}
+            focused={focused}
+            active={!_.isEmpty(value)}
+          />
+          {content}
+        </View>
+      ) : content}
       {_.isFunction(append) ? append(state) : append}
     </Pressable>
   );
