@@ -121,13 +121,13 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({
             },
           ])} />}
         <View
-          pointerEvents='box-none'
           style={[
             {
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
               zIndex: theme.zIndex.modal,
+              pointerEvents: 'box-none',
             },
             StyleSheet.absoluteFill,
             Platform.select({

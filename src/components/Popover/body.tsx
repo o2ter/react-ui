@@ -137,7 +137,6 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
   return (
     <>
       {visible && <Animated.View
-        pointerEvents='box-none'
         onLayout={(e) => setContainerLayout(e.nativeEvent.layout)}
         style={flattenStyle([
           !!shadow && selectPlatformShadow({
@@ -158,6 +157,7 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
             zIndex: theme.zIndex.popover,
             opacity: containerLayout ? fadeAnim : 0,
             padding: theme.spacers['1'],
+            pointerEvents: 'box-none',
           },
           _style,
         ])}
@@ -165,7 +165,6 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
         {arrow && (
           <>
             <RNView
-              pointerEvents='box-none'
               style={{
                 position: 'absolute',
                 left: _arrow_pos_x - borderWidth,
@@ -179,9 +178,9 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
                 borderLeftColor: _position === 'left' ? borderColor : 'transparent',
                 borderRightColor: _position === 'right' ? borderColor : 'transparent',
                 borderBottomColor: _position === 'bottom' ? borderColor : 'transparent',
+                pointerEvents: 'box-none',
               }} />
             <RNView
-              pointerEvents='box-none'
               style={{
                 position: 'absolute',
                 left: _position === 'left' ? _arrow_pos_x - 2 * borderWidth : _position === 'right' ? _arrow_pos_x : _arrow_pos_x - borderWidth,
@@ -195,6 +194,7 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
                 borderLeftColor: _position === 'left' ? backgroundColor : 'transparent',
                 borderRightColor: _position === 'right' ? backgroundColor : 'transparent',
                 borderBottomColor: _position === 'bottom' ? backgroundColor : 'transparent',
+                pointerEvents: 'box-none',
               }} />
           </>
         )}

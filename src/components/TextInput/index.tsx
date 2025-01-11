@@ -76,7 +76,8 @@ export const TextInput = createMemoComponent(({
   label,
   labelStyle,
   variant,
-  editable,
+  editable = true,
+  readOnly = !editable,
   prepend,
   append,
   onFocus,
@@ -100,7 +101,7 @@ export const TextInput = createMemoComponent(({
 
   const focusRing = useFocusRing(focused);
 
-  const state = { focused, disabled: !editable, value: value ?? '' };
+  const state = { focused, disabled: !!readOnly, value: value ?? '' };
 
   if (!prepend && !append && !_.includes(['material'], variant)) {
     return (
@@ -114,7 +115,7 @@ export const TextInput = createMemoComponent(({
           textInputStyle,
           _.isFunction(style) ? style(state) : style,
         ])}
-        editable={editable}
+        readOnly={readOnly}
         onFocus={_onFocus}
         onBlur={_onBlur}
         {...props}>
@@ -134,7 +135,7 @@ export const TextInput = createMemoComponent(({
           default: {},
         }),
       ]}
-      editable={editable}
+      readOnly={readOnly}
       onFocus={_onFocus}
       onBlur={_onBlur}
       {...props}>

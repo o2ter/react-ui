@@ -57,7 +57,8 @@ export const FormTextField = createMemoComponent((
     name,
     roles,
     style,
-    editable,
+    editable = true,
+    readOnly = !editable,
     prepend,
     append,
     onFocus,
@@ -77,7 +78,7 @@ export const FormTextField = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const _disabled = !(editable ?? true) || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+  const _disabled = !!readOnly || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
 
   const formTextFieldStyle = _useComponentStyle('formTextField', classes, [
     focused && 'focus',
@@ -104,7 +105,7 @@ export const FormTextField = createMemoComponent((
     <TextInput
       ref={forwardRef}
       value={value ?? ''}
-      editable={!_disabled}
+      readOnly={_disabled}
       onChangeText={onChange}
       onEndEditing={onEndEditing}
       onSubmitEditing={submit}

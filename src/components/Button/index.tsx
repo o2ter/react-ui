@@ -81,7 +81,7 @@ const ButtonText = Animated.createAnimatedComponent(createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Text>>
 ) => {
   return (
-    <Text ref={forwardRef} style={style} selectable={false}>{children}</Text>
+    <Text ref={forwardRef} style={[{ userSelect: 'none' }, style]}>{children}</Text>
   );
 }));
 
@@ -191,7 +191,7 @@ export const Button = createMemoComponent(({
   const _wrapped = (children?: React.ReactNode) => <ButtonText style={_style}>{children}</ButtonText>;
 
   const content = _.isEmpty(children) && !_.isEmpty(title)
-    ? <Animated.Text selectable={false} style={_style}>{title}</Animated.Text>
+    ? <Animated.Text style={[{ userSelect: 'none' }, _style]}>{title}</Animated.Text>
     : _.isFunction(children) ? () => _wrapped(children(_state)) : _wrapped(children);
 
   return (

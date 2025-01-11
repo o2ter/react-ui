@@ -76,11 +76,11 @@ export const ActivityIndicatorProvider: React.FC<ActivityIndicatorProviderProps>
   return <ActivityIndicatorContext.Provider value={value}>
     {children}
     {visible && <Animated.View
-      pointerEvents={passThroughEvents ? 'none' : 'auto'}
       style={normalizeStyle([
         {
           opacity: fadeAnim,
           zIndex: theme.zIndex.indicator,
+          pointerEvents: passThroughEvents ? 'none' : 'auto',
         },
         style.activityIndicator,
         StyleSheet.absoluteFill,
