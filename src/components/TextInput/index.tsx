@@ -119,37 +119,36 @@ export const TextInput = createMemoComponent(({
   }
 
   return (
-    <Pressable onFocus={() => void inputRef.current?.focus()}>
-      <View style={[
-        {
-          flexDirection: 'row',
-          gap: theme.spacer * 0.375,
-        },
-        defaultStyle,
-        focusRing,
-        textStyle,
-        textInputStyle,
-        _.isFunction(style) ? style(state) : style,
-      ]}>
-        {_.isFunction(prepend) ? prepend(state) : prepend}
-        <InnerTextInput
-          ref={ref}
-          value={value}
-          style={[
-            { flex: 1 },
-            Platform.select({
-              web: { outline: 0 } as any,
-              default: {},
-            }),
-          ]}
-          editable={editable}
-          onFocus={_onFocus}
-          onBlur={_onBlur}
-          {...props}>
-          {children}
-        </InnerTextInput>
-        {_.isFunction(append) ? append(state) : append}
-      </View>
+    <Pressable style={[
+      {
+        flexDirection: 'row',
+        gap: theme.spacer * 0.375,
+      },
+      defaultStyle,
+      focusRing,
+      textStyle,
+      textInputStyle,
+      _.isFunction(style) ? style(state) : style,
+    ]}
+      onFocus={() => void inputRef.current?.focus()}>
+      {_.isFunction(prepend) ? prepend(state) : prepend}
+      <InnerTextInput
+        ref={ref}
+        value={value}
+        style={[
+          { flex: 1 },
+          Platform.select({
+            web: { outline: 0 } as any,
+            default: {},
+          }),
+        ]}
+        editable={editable}
+        onFocus={_onFocus}
+        onBlur={_onBlur}
+        {...props}>
+        {children}
+      </InnerTextInput>
+      {_.isFunction(append) ? append(state) : append}
     </Pressable>
   );
 }, {
