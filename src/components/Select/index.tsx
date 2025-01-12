@@ -82,7 +82,7 @@ type SelectBodyProps<T> = {
   onRemove: (item: SelectOption<T>) => void
 };
 
-const SelectBody = <T = any>({
+const SelectBody = <T extends unknown = any>({
   value,
   multiple,
   onRemove,
@@ -124,12 +124,12 @@ const SelectBody = <T = any>({
   );
 }
 
-const findItems = <T = any>(
+const findItems = <T extends unknown = any>(
   value: T[],
   options: SelectOption<T>[],
 ) => _.compact(_.map(value, x => _.find(options, o => o.value === x)));
 
-export const Select = createMemoComponent(<T = any, M extends boolean = false>(
+export const Select = createMemoComponent(<T extends unknown = any, M extends boolean = false>(
   {
     classes,
     value,

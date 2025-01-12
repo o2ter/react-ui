@@ -50,7 +50,7 @@ type SelectListItemProps<T> = SelectOption<any> & {
   onPress: VoidFunction;
 };
 
-const SelectListItem = <T = any>({
+const SelectListItem = <T extends unknown = any>({
   classes,
   label,
   selected,

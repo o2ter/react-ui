@@ -33,7 +33,7 @@ import { style as _style } from './style';
 import { Segment } from './segment';
 import { createMemoComponent } from '../../internals/utils';
 
-type SegmentedControlBaseProps<T = any> = Modify<ViewProps, {
+type SegmentedControlBaseProps<T extends unknown = any> = Modify<ViewProps, {
   value?: T;
   onChange?: (value: T) => void;
   segments?: { label: string, value: T }[];
@@ -43,7 +43,7 @@ type SegmentedControlBaseProps<T = any> = Modify<ViewProps, {
   selectedSegmentContainerStyle?: StyleProp<ViewStyle>;
 }>
 
-type SegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { tabStyle?: StyleProp<ViewStyle>; }>
+type SegmentedControlProps<T extends unknown = any> = Modify<SegmentedControlBaseProps<T>, { tabStyle?: StyleProp<ViewStyle>; }>
 
 export const SegmentedControl = createMemoComponent(({
   value,
@@ -107,7 +107,7 @@ export const SegmentedControl = createMemoComponent(({
   displayName: 'SegmentedControl',
 });
 
-type PlainSegmentedControlProps<T = any> = Modify<SegmentedControlBaseProps<T>, { color?: string; }>
+type PlainSegmentedControlProps<T extends unknown = any> = Modify<SegmentedControlBaseProps<T>, { color?: string; }>
 
 export const PlainSegmentedControl = createMemoComponent(({
   value,
