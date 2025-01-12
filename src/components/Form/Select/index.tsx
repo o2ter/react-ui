@@ -51,7 +51,7 @@ type FormSelectProps<T, M extends boolean> = Modify<React.ComponentPropsWithoutR
   validate?: (value: any) => void;
 }>
 
-export const FormSelect = createMemoComponent(<T = any, M extends boolean = false>(
+export const FormSelect = createMemoComponent(<T extends unknown = any, M extends boolean = false>(
   {
     classes,
     name,
