@@ -40,7 +40,7 @@
   },
   "peerDependencies": {
     "@o2ter/i18n": ">=0.0.10",
-    "@o2ter/valid.js": ">=1.0.10",
+    "@o2ter/valid.js": ">=1.0.11",
     "react": ">=18.2.0",
     "react-native": ">=0.70.2",
     "sugax": ">=1.0.104"
@@ -51,7 +51,7 @@
     "@babel/preset-react": "^7.24.6",
     "@babel/preset-typescript": "^7.24.6",
     "@o2ter/i18n": "^0.0.10",
-    "@o2ter/valid.js": "^1.0.10",
+    "@o2ter/valid.js": "^1.0.11",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.8",
     "@rollup/plugin-json": "^6.1.0",
