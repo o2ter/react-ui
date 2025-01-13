@@ -52,13 +52,11 @@ const defaultValidation = (validate: (value: any) => ValidateError[]) => {
   };
 
   return (value: any, path?: string) => {
-
     const errors = _validate(value);
-
     if (!_.isString(path)) return errors;
-
     const prefix = _.toPath(path).join('.');
     return errors.filter(e => {
+      if (!_.isArray(e.path) || !_.every(e.path, v => _.isString(v))) return false;
       const path = e.path.join('.');
       return path === prefix || path.startsWith(`${prefix}.`);
     });
