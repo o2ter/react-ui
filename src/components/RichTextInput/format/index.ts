@@ -42,6 +42,7 @@ export const defaultFormat = {
 export type ToolbarOptions = {
   baseFontSize?: number;
   fontSizes?: number[];
+  allowed?: (x: string) => boolean;
   disallowed?: (x: string) => boolean;
 };
 
@@ -59,7 +60,7 @@ const toolbar = (options: ToolbarOptions) => {
     [['list', 'ordered'], ['list', 'bullet'], ['list', 'check']],
   ];
   return tools
-    .map(x => _.filter(x, ([k]) => !options.disallowed?.(k)))
+    .map(x => _.filter(x, ([k]) => options.allowed?.(k) !== false && !options.disallowed?.(k)))
     .filter(x => !_.isEmpty(x))
     .map(x => _.map(x, ([k, v]) => v === true ? k : { [k]: v }));
 };
