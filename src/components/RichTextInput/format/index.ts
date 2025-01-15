@@ -75,7 +75,7 @@ export const defaultFormatOptions = {
     modules: {
       toolbar: (options: ToolbarOptions) => toolbar({
         ...options,
-        disallowed: (x) => !options.disallowed?.(x) && !_.includes(['header', 'list'], x),
+        disallowed: (x) => !options.disallowed?.(x) || _.includes(['header', 'list'], x),
       }),
     }
   },
