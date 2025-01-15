@@ -42,38 +42,40 @@ export const defaultFormat = {
 export type ToolbarOptions = {
   baseFontSize?: number;
   fontSizes?: number[];
+  disallowed?: (x: string) => boolean;
+};
+
+const toolbar = (options: ToolbarOptions) => {
+  const tools: [string, any][][] = [
+    [['font', []]],
+    [['size', _.map(options.fontSizes, x => x === options.baseFontSize ? false : `${x}px`)]],
+    [['header', [1, 2, 3, 4, 5, 6, false]]],
+    [['color', []], ['background', []]],
+    [['align', []]],
+    [['bold', true], ['italic', true], ['strike', true], ['underline', true]],
+    [['script', 'sub'], ['script', 'super']],
+    [['indent', '-1'], ['indent', '+1']],
+    [['link', true], ['blockquote', true], ['code-block', true], ['image', true]],
+    [['list', 'ordered'], ['list', 'bullet'], ['list', 'check']],
+  ];
+  return tools
+    .map(x => _.filter(x, ([k]) => !options.disallowed?.(k)))
+    .filter(x => !_.isEmpty(x))
+    .map(x => _.map(x, ([k, v]) => v === true ? k : { [k]: v }));
 };
 
 export const defaultFormatOptions = {
   'raw': {
     modules: {
-      toolbar: (options: ToolbarOptions) => [
-        [{ 'font': [] }],
-        [{ 'size': _.map(options.fontSizes, x => x === options.baseFontSize ? false : `${x}px`) }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'align': [] }],
-        ['bold', 'italic', 'strike', 'underline'],
-        [{ 'script': 'sub' }, { 'script': 'super' }],
-        [{ 'indent': '-1' }, { 'indent': '+1' }],
-        ['link', 'blockquote', 'code-block', 'image'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-      ],
+      toolbar: (options: ToolbarOptions) => toolbar(options),
     }
   },
   'bbcode': {
     modules: {
-      toolbar: (options: ToolbarOptions) => [
-        [{ 'font': [] }],
-        [{ 'size': _.map(options.fontSizes, x => x === options.baseFontSize ? false : `${x}px`) }],
-        // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }],
-        [{ 'align': [] }],
-        ['bold', 'italic', 'strike', 'underline'],
-        ['link', 'image'],
-        [{ 'indent': '-1' }, { 'indent': '+1' }],
-        // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      ],
+      toolbar: (options: ToolbarOptions) => toolbar({
+        ...options,
+        disallowed: (x) => !options.disallowed?.(x) && !_.includes(['header', 'list'], x),
+      }),
     }
   },
 } as const;
