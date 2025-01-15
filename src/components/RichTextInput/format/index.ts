@@ -39,9 +39,9 @@ export const defaultFormat = {
   },
 } as const;
 
-type ToolbarOptions = {
-  baseFontSize: number;
-  fontSizes: number[];
+export type ToolbarOptions = {
+  baseFontSize?: number;
+  fontSizes?: number[];
 };
 
 export const defaultFormatOptions = {

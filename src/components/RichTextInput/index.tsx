@@ -28,7 +28,7 @@ import React from 'react';
 import { Base } from './base';
 import type Quill from 'quill';
 import { createMemoComponent } from '../../internals/utils';
-import { defaultFormat, defaultFormatOptions } from './format';
+import { defaultFormat, defaultFormatOptions, ToolbarOptions } from './format';
 import { useTheme } from '../../theme';
 import { TextChangeHandler } from './base/types';
 
@@ -38,7 +38,7 @@ type Encoder<F extends keyof Format> = Format[F]['encoder'];
 type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWithoutRef<typeof Base>, 'value' | 'onChangeText'> & {
   format?: F;
   value?: ReturnType<Encoder<F>>;
-  fontSizes?: number[];
+  toolbarOptions?: ToolbarOptions;
   onChangeText?: (text: ReturnType<Encoder<F>>, ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
 }
 
@@ -48,17 +48,13 @@ const _RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
     value,
     onChangeText,
     options = {},
-    fontSizes,
+    toolbarOptions,
     ...props
   }: RichTextInputProps<F>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Base>>
 ) => {
 
   const theme = useTheme();
-  const _fontSizes = fontSizes ?? _.sortedUniq([
-    ..._.values(theme.displayFontSizes),
-    ..._.values(theme.fontSizes),
-  ].sort((a, b) => a - b));
 
   const { encoder, decoder } = defaultFormat[format ?? 'bbcode' as F];
   const { modules: { toolbar, ...modules }, ...defaultOptions } = defaultFormatOptions[format ?? 'bbcode' as F];
@@ -77,8 +73,12 @@ const _RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
         ...options,
         modules: {
           toolbar: toolbar({
-            baseFontSize: theme.fontSizes['normal'] ?? theme.root.fontSize,
-            fontSizes: _fontSizes,
+            ...toolbarOptions ?? {},
+            baseFontSize: toolbarOptions?.baseFontSize ?? theme.fontSizes['normal'] ?? theme.root.fontSize,
+            fontSizes: toolbarOptions?.fontSizes ?? _.sortedUniq([
+              ..._.values(theme.displayFontSizes),
+              ..._.values(theme.fontSizes),
+            ].sort((a, b) => a - b)),
           }),
           ...modules ?? {},
           ...options.modules ?? {},
