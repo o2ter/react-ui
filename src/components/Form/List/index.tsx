@@ -31,9 +31,11 @@ import List from '../../List';
 import { createMemoComponent } from '../../../internals/utils';
 
 const FormListContext = React.createContext<{
+  update: (callback: (values: any[]) => any[]) => void
   create: (item: any, index?: number) => void;
   remove: (index: number) => void;
 }>({
+  update: () => { },
   create: () => { },
   remove: () => { },
 });
@@ -71,6 +73,9 @@ export const FormList = createMemoComponent(({
   useValidator(validate);
 
   const actions = React.useMemo(() => ({
+    update: (callback: (values: any[]) => any[]) => {
+      onChange((x: any) => callback([..._.castArray(x ?? [])]));
+    },
     create: (item: any, index?: number) => {
       onChange((x: any) => {
         const result = [..._.castArray(x ?? [])];
