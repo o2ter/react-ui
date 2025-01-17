@@ -157,9 +157,6 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
 ) => {
 
-  const pressableRef = React.useRef<React.ComponentRef<typeof Pressable>>();
-  const ref = useMergeRefs(pressableRef, forwardRef);
-
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme, variant);
 
@@ -274,7 +271,7 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
           )}
         >
           <Pressable
-            ref={ref}
+            ref={forwardRef}
             style={[
               defaultStyle,
               {
