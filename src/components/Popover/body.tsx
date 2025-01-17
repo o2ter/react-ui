@@ -136,70 +136,72 @@ export const PopoverBody: React.FC<PopoverBodyProps> = ({
 
   return (
     <>
-      {visible && <Animated.View
-        onLayout={(e) => setContainerLayout(e.nativeEvent.layout)}
-        style={flattenStyle([
-          !!shadow && selectPlatformShadow({
-            shadowColor: 'black',
-            ...elevationShadow(_.isNumber(shadow) ? shadow : 6),
-          }),
-          {
-            position: 'absolute',
-            left: _pos_x,
-            top: _pos_y,
-            backgroundColor: backgroundColor,
-            borderStyle: 'solid',
-            borderWidth: borderWidth,
-            borderColor: borderColor,
-            borderRadius: theme.borderRadiusBase,
-            minWidth: 2 * theme.borderRadiusBase + (_position === 'top' || _position === 'bottom' ? 2 * arrowSize : arrowSize),
-            minHeight: 2 * theme.borderRadiusBase + (_position === 'left' || _position === 'right' ? 2 * arrowSize : arrowSize),
-            zIndex: theme.zIndex.popover,
-            opacity: containerLayout ? fadeAnim : 0,
-            padding: theme.spacers['1'],
-            pointerEvents: 'box-none',
-          },
-          _style,
-        ])}
-      >
-        {arrow && (
-          <>
-            <RNView
-              style={{
-                position: 'absolute',
-                left: _arrow_pos_x - borderWidth,
-                top: _arrow_pos_y - borderWidth,
-                borderStyle: 'solid',
-                borderTopWidth: _position === 'bottom' ? 0 : arrowSize,
-                borderLeftWidth: _position === 'right' ? 0 : arrowSize,
-                borderRightWidth: _position === 'left' ? 0 : arrowSize,
-                borderBottomWidth: _position === 'top' ? 0 : arrowSize,
-                borderTopColor: _position === 'top' ? borderColor : 'transparent',
-                borderLeftColor: _position === 'left' ? borderColor : 'transparent',
-                borderRightColor: _position === 'right' ? borderColor : 'transparent',
-                borderBottomColor: _position === 'bottom' ? borderColor : 'transparent',
-                pointerEvents: 'box-none',
-              }} />
-            <RNView
-              style={{
-                position: 'absolute',
-                left: _position === 'left' ? _arrow_pos_x - 2 * borderWidth : _position === 'right' ? _arrow_pos_x : _arrow_pos_x - borderWidth,
-                top: _position === 'top' ? _arrow_pos_y - 2 * borderWidth : _position === 'bottom' ? _arrow_pos_y : _arrow_pos_y - borderWidth,
-                borderStyle: 'solid',
-                borderTopWidth: _position === 'bottom' ? 0 : arrowSize,
-                borderLeftWidth: _position === 'right' ? 0 : arrowSize,
-                borderRightWidth: _position === 'left' ? 0 : arrowSize,
-                borderBottomWidth: _position === 'top' ? 0 : arrowSize,
-                borderTopColor: _position === 'top' ? backgroundColor : 'transparent',
-                borderLeftColor: _position === 'left' ? backgroundColor : 'transparent',
-                borderRightColor: _position === 'right' ? backgroundColor : 'transparent',
-                borderBottomColor: _position === 'bottom' ? backgroundColor : 'transparent',
-                pointerEvents: 'box-none',
-              }} />
-          </>
-        )}
-        {children}
-      </Animated.View>}
+      {visible && (
+        <Animated.View
+          pointerEvents='box-none'
+          onLayout={(e) => setContainerLayout(e.nativeEvent.layout)}
+          style={flattenStyle([
+            !!shadow && selectPlatformShadow({
+              shadowColor: 'black',
+              ...elevationShadow(_.isNumber(shadow) ? shadow : 6),
+            }),
+            {
+              position: 'absolute',
+              left: _pos_x,
+              top: _pos_y,
+              backgroundColor: backgroundColor,
+              borderStyle: 'solid',
+              borderWidth: borderWidth,
+              borderColor: borderColor,
+              borderRadius: theme.borderRadiusBase,
+              minWidth: 2 * theme.borderRadiusBase + (_position === 'top' || _position === 'bottom' ? 2 * arrowSize : arrowSize),
+              minHeight: 2 * theme.borderRadiusBase + (_position === 'left' || _position === 'right' ? 2 * arrowSize : arrowSize),
+              zIndex: theme.zIndex.popover,
+              opacity: containerLayout ? fadeAnim : 0,
+              padding: theme.spacers['1'],
+            },
+            _style,
+          ])}
+        >
+          {arrow && (
+            <>
+              <RNView
+                pointerEvents='box-none'
+                style={{
+                  position: 'absolute',
+                  left: _arrow_pos_x - borderWidth,
+                  top: _arrow_pos_y - borderWidth,
+                  borderStyle: 'solid',
+                  borderTopWidth: _position === 'bottom' ? 0 : arrowSize,
+                  borderLeftWidth: _position === 'right' ? 0 : arrowSize,
+                  borderRightWidth: _position === 'left' ? 0 : arrowSize,
+                  borderBottomWidth: _position === 'top' ? 0 : arrowSize,
+                  borderTopColor: _position === 'top' ? borderColor : 'transparent',
+                  borderLeftColor: _position === 'left' ? borderColor : 'transparent',
+                  borderRightColor: _position === 'right' ? borderColor : 'transparent',
+                  borderBottomColor: _position === 'bottom' ? borderColor : 'transparent',
+                }} />
+              <RNView
+                pointerEvents='box-none'
+                style={{
+                  position: 'absolute',
+                  left: _position === 'left' ? _arrow_pos_x - 2 * borderWidth : _position === 'right' ? _arrow_pos_x : _arrow_pos_x - borderWidth,
+                  top: _position === 'top' ? _arrow_pos_y - 2 * borderWidth : _position === 'bottom' ? _arrow_pos_y : _arrow_pos_y - borderWidth,
+                  borderStyle: 'solid',
+                  borderTopWidth: _position === 'bottom' ? 0 : arrowSize,
+                  borderLeftWidth: _position === 'right' ? 0 : arrowSize,
+                  borderRightWidth: _position === 'left' ? 0 : arrowSize,
+                  borderBottomWidth: _position === 'top' ? 0 : arrowSize,
+                  borderTopColor: _position === 'top' ? backgroundColor : 'transparent',
+                  borderLeftColor: _position === 'left' ? backgroundColor : 'transparent',
+                  borderRightColor: _position === 'right' ? backgroundColor : 'transparent',
+                  borderBottomColor: _position === 'bottom' ? backgroundColor : 'transparent',
+                }} />
+            </>
+          )}
+          {children}
+        </Animated.View>
+      )}
     </>
   );
 };

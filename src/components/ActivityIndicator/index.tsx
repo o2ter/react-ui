@@ -75,28 +75,30 @@ export const ActivityIndicatorProvider: React.FC<ActivityIndicatorProviderProps>
 
   return <ActivityIndicatorContext.Provider value={value}>
     {children}
-    {visible && <Animated.View
-      style={normalizeStyle([
-        {
-          opacity: fadeAnim,
-          zIndex: theme.zIndex.indicator,
-          pointerEvents: passThroughEvents ? 'none' : 'auto',
-        },
-        style.activityIndicator,
-        StyleSheet.absoluteFill,
-        Platform.select({
-          web: { position: 'fixed' } as any,
-          default: {},
-        }),
-        defaultStyle,
-      ])}>
-      {backdrop === true ? (
-        <View style={[
-          style.activityIndicatorBackdrop,
-          defaultBackdropStyle
-        ]}><ActivityIndicator /></View>
-      ) : <ActivityIndicator />}
-    </Animated.View>}
+    {visible && (
+      <Animated.View
+        pointerEvents={passThroughEvents ? 'none' : 'auto'}
+        style={normalizeStyle([
+          {
+            opacity: fadeAnim,
+            zIndex: theme.zIndex.indicator,
+          },
+          style.activityIndicator,
+          StyleSheet.absoluteFill,
+          Platform.select({
+            web: { position: 'fixed' } as any,
+            default: {},
+          }),
+          defaultStyle,
+        ])}>
+        {backdrop === true ? (
+          <View style={[
+            style.activityIndicatorBackdrop,
+            defaultBackdropStyle
+          ]}><ActivityIndicator /></View>
+        ) : <ActivityIndicator />}
+      </Animated.View>
+    )}
   </ActivityIndicatorContext.Provider>;
 };
 

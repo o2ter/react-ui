@@ -93,23 +93,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{}>> = ({
     <ModalContext.Provider value={setModal}>
       {children}
       {React.isValidElement(display?.element) && (
-        <View
-          style={[
-            {
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: theme.zIndex.modal,
-            },
-            StyleSheet.absoluteFill,
-            Platform.select({
-              web: { position: 'fixed' } as any,
-              default: {},
-            }),
-            {
-              opacity: fadeAnim,
-            },
-          ]}>
+        <>
           <Pressable
             onPress={display?.onDismiss ?? (() => setConfig(undefined))}
             style={normalizeStyle([
@@ -124,15 +108,33 @@ export const ModalProvider: React.FC<React.PropsWithChildren<{}>> = ({
               StyleSheet.absoluteFill,
               modalBackdrop,
               display?.backdropStyle ?? {},
+              {
+                opacity: fadeAnim,
+              },
             ])} />
-          <View style={[
-            { zIndex: theme.zIndex.modal },
-            modalContainer,
-            display?.containerStyle ?? {},
-          ]}>
+          <View
+            pointerEvents='box-none'
+            style={[
+              {
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: theme.zIndex.modal,
+              },
+              StyleSheet.absoluteFill,
+              Platform.select({
+                web: { position: 'fixed' } as any,
+                default: {},
+              }),
+              modalContainer,
+              display?.containerStyle ?? {},
+              {
+                opacity: fadeAnim,
+              },
+            ]}>
             {display?.element}
           </View>
-        </View>
+        </>
       )}
     </ModalContext.Provider>
   );
