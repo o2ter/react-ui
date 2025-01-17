@@ -84,8 +84,9 @@ export const DatePicker = createMemoComponent((
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme, variant);
 
-  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+  const [_focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
   const [hidden, setHidden] = React.useState(true);
+  const focused = _focused || !hidden;
 
   const datePickerStyle = _useComponentStyle('datePicker', classes, [
     focused && 'focus',
@@ -119,14 +120,13 @@ export const DatePicker = createMemoComponent((
   }, [value]);
 
   const focusRing = useFocusRing(focused);
-
   const state = { focused, disabled, value };
 
   return (
     <PickerBase
       ref={forwardRef}
       disabled={disabled}
-      focused={focused}
+      focused={_focused}
       value={date}
       label={label}
       labelStyle={_.isFunction(labelStyle) ? labelStyle(state) : labelStyle}

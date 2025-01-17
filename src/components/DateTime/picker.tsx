@@ -65,7 +65,7 @@ type PickerBaseProps = Modify<React.ComponentPropsWithoutRef<typeof Text> & Pick
 export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>, PickerBaseProps>(({
   label,
   labelStyle,
-  focused,
+  focused: _focused,
   value,
   variant,
   popover,
@@ -83,9 +83,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
 }, forwardRef) => {
 
   const theme = useTheme();
-
-  const pressableRef = React.useRef<React.ComponentRef<typeof Pressable>>();
-  const ref = useMergeRefs(pressableRef, forwardRef);
+  const focused = _focused || !pickerHidden;
 
   const content = (
     <>
@@ -97,7 +95,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
 
   const pickerBody = (
     <Pressable
-      ref={ref}
+      ref={forwardRef}
       onPress={() => {
         if (disabled) return;
         setPickerHidden(false);
@@ -119,7 +117,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
     >
       {prepend}
       {_.includes(['material'], variant) ? (
-              <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <MaterialInputLabel
             label={label ?? ''}
             style={labelStyle}
@@ -139,9 +137,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
         {pickerBody}
         <Modal
           visible={disabled ? false : !pickerHidden}
-          onDismiss={() => {
-            setPickerHidden(true);
-          }}
+          onDismiss={() => setPickerHidden(true)}
         >{picker}</Modal>
       </>
     );
@@ -151,15 +147,12 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
     <_StyleContext.Consumer>
       {(_style) => (
         <Popover
-          hidden={disabled ? true : pickerHidden}
+          hidden={disabled ? true : !focused}
           position={_.isBoolean(popover) ? ['top', 'bottom'] : popover?.position}
           alignment={_.isBoolean(popover) ? ['left', 'right'] : popover?.alignment}
           arrow={_.isBoolean(popover) ? false : popover?.arrow ?? false}
           shadow={_.isBoolean(popover) ? false : popover?.shadow ?? false}
-          onTouchOutside={(e) => {
-            if (pressableRef.current === e.target as any) return;
-            setPickerHidden(true);
-          }}
+          onTouchOutside={() => setPickerHidden(true)}
           containerStyle={{
             display: 'flex',
             borderColor: theme.grays['400'],
