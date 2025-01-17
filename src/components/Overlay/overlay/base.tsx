@@ -33,6 +33,9 @@ import { createMemoComponent } from '../../../internals/utils';
 import { LayoutChangeEvent, LayoutRectangle } from 'react-native';
 import type { useWindowEvent } from '../../../hooks/webHooks';
 import { useOverlay } from '../context';
+import Button from '../../Button';
+import TextInput from '../../TextInput';
+import { Form } from '../../Form';
 
 type OverlayProps = React.ComponentProps<typeof View> & {
   render: (layout: LayoutRectangle & { pageX: number; pageY: number; }) => React.ReactElement;
@@ -121,6 +124,10 @@ export const createOverlay = (
     _.indexOf([
       View,
       Pressable,
+      Button,
+      TextInput,
+      Form.Button,
+      Form.TextField,
       RNView,
       RNPressable,
     ], child.type as any) !== -1) {
