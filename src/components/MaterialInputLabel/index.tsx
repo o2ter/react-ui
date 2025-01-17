@@ -60,6 +60,7 @@ export const MaterialInputLabel = ({
     <Text
       style={[
         {
+          maxWidth: '75%',
           fontSize: fontSize * 0.75,
           color: theme.grays['500'],
           userSelect: 'none',
