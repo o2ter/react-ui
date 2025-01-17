@@ -57,7 +57,6 @@ export const FormSelect = createMemoComponent(<T extends unknown = any, M extend
     name,
     roles,
     style,
-    options,
     multiple,
     disabled,
     prepend,
@@ -106,7 +105,6 @@ export const FormSelect = createMemoComponent(<T extends unknown = any, M extend
     <Select
       ref={forwardRef}
       value={value}
-      options={options}
       multiple={multiple}
       disabled={_disabled}
       onValueChange={_onChange}
@@ -120,7 +118,7 @@ export const FormSelect = createMemoComponent(<T extends unknown = any, M extend
         formSelectStyle,
         _.isFunction(style) ? style(state) : style,
       ]}
-      {...props} />
+      {...props as any} />
   )
 }, {
   displayName: 'Form.Select'
