@@ -59,7 +59,11 @@ export const MaterialInputLabel = ({
   return (
     <Text
       style={[
-        { fontSize: fontSize * 0.75, color: theme.grays['500'] },
+        {
+          fontSize: fontSize * 0.75,
+          color: theme.grays['500'],
+          userSelect: 'none',
+        },
         value > 0 && {
           transformOrigin: 'top left',
           transform: [

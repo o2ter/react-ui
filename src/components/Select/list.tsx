@@ -116,7 +116,7 @@ const SelectListItem = <T extends unknown = any>({
       {_.isFunction(prepend) ? prepend(_state) : prepend}
       <View style={{ flex: 1 }}>
         {_.isFunction(render) ? render(_state) : (
-          <Text>{label}</Text>
+          <Text style={{ userSelect: 'none' }}>{label}</Text>
         )}
       </View>
       {selected && <Icon color={theme.themeColors.primary} size={16} name='done' />}
@@ -153,6 +153,7 @@ export const SelectListBody = ({
               color: theme.grays['400'],
               fontSize: theme.fontSizes['small'],
               margin: 4,
+              userSelect: 'none',
             }}
           >{section.label}</Text>
         )
