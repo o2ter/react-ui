@@ -54,7 +54,7 @@ type _SelectOption<T> = SelectOption<T>[] | {
   options: SelectOption<T>[];
 }[];
 
-type SelectOptionProps<T> = {
+type SelectOptionProps<T, M extends boolean> = {
   options: _SelectOption<T>;
   fetch?: never;
   debounce?: never;
@@ -63,6 +63,8 @@ type SelectOptionProps<T> = {
   options?: never;
   fetch: (options: {
     search: string;
+    value?: SelectValue<T, M>;
+    history: SelectOption<T>[];
     abortSignal: AbortSignal;
   }) => PromiseLike<_SelectOption<T>>;
   debounce?: _.DebounceSettings & {
@@ -71,7 +73,7 @@ type SelectOptionProps<T> = {
   searchInputProps?: React.ComponentPropsWithoutRef<typeof TextInput>;
 };
 
-type SelectProps<T, M extends boolean> = SelectOptionProps<T> & {
+type SelectProps<T, M extends boolean> = SelectOptionProps<T, M> & {
   classes?: ClassNames;
   value?: SelectValue<T, M>;
   disabled?: boolean;
@@ -180,10 +182,11 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
 ) => {
 
   const [search, setSearch] = React.useState('');
+  const [history, setHistory] = React.useState<SelectOption<T>[]>([]);
   const {
     resource: options = _options ?? []
   } = useAsyncResource<_SelectOption<T>>({
-    fetch: async ({ abortSignal }) => fetch ? fetch({ search, abortSignal }) : _options,
+    fetch: async ({ abortSignal }) => fetch ? fetch({ search, history, value, abortSignal }) : _options,
     debounce,
   }, [search]);
 
@@ -239,6 +242,7 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
 
   const extraData = React.useMemo(() => [sections, value], [sections, value]);
   const _onChange = useStableCallback((selected: SelectOption<T>[]) => {
+    if (_.isFunction(fetch)) setHistory(v => _.uniq([...v, ...selected]));
     onValueChange(multiple ? _.map(selected, x => x.value) : _.first(selected)?.value as any);
     onChange(multiple ? selected : _.first(selected) as any);
   });
@@ -250,10 +254,10 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
       {_.isFunction(render) ? render(state) : (
         <SelectBody
           multiple={multiple}
-          value={findItems(_value, _.flatMap(sections, x => x.data))}
+          value={findItems(_value, [...history, ..._.flatMap(sections, x => x.data)])}
           onRemove={(v) => {
             const _val = _.filter(_value, x => x !== v.value);
-            const selected = findItems(_val, _.flatMap(sections, x => x.data));
+            const selected = findItems(_val, [...history, ..._.flatMap(sections, x => x.data)]);
             _onChange(selected);
           }}
         />
@@ -306,7 +310,7 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
                     const _val = multiple
                       ? _.includes(_value, v.value) ? _.filter(_value, x => x !== v.value) : [..._value, v.value]
                       : [v.value];
-                    const selected = findItems(_val, _.flatMap(sections, x => x.data));
+                    const selected = findItems(_val, [...history, ..._.flatMap(sections, x => x.data)]);
                     _onChange(selected);
                     if (dismissOnSelect) setHidden(true);
                   }}
