@@ -52,7 +52,7 @@ export * from './SafeAreaView';
 export { ScrollView, useScrollView, useScrollLayout } from './ScrollView';
 export * from './SegmentedControl';
 export { SectionList } from './SectionList';
-export { Select } from './Select';
+export { Select, SelectBase } from './Select';
 export { SleekAnimationView } from './SleekAnimationView';
 export { StickyView } from './StickyView';
 export { StyleProvider, _CSSNameProvider, useStyle, useAllStyle } from './Style';

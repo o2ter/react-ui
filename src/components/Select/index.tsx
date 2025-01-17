@@ -26,54 +26,33 @@
 import _ from 'lodash';
 import React from 'react';
 import { Platform, StyleProp, TextStyle } from 'react-native';
-import { createMemoComponent } from '../../internals/utils';
+import { createComponent, createMemoComponent } from '../../internals/utils';
 import { _useComponentStyle, _StyleContext } from '../Style';
 import { ClassNames } from '../Style/types';
 import { Pressable } from '../Pressable';
-import { useFocus, useFocusRing } from '../../internals/focus';
+import { useFocusRing } from '../../internals/focus';
 import { useTheme } from '../../theme';
-import { Popover } from '../Popover';
 import { useDefaultInputStyle } from '../TextInput/style';
-import { ListProps, SelectOption, SelectState } from './types';
-import { SelectListBody } from './list';
-import { useMergeRefs, useStableCallback } from 'sugax';
+import { SelectOption, SelectState } from './types';
 import { MaterialIcons as Icon } from '../Icons';
 import { MaterialInputLabel } from '../MaterialInputLabel';
 import View from '../View';
 import Text from '../Text';
 import List from '../List';
+import SelectBase, { findItems, SelectBaseChildrenProps, SelectValue } from './base';
+import { Modify } from '../../internals/types';
 
-type SelectPosition = 'top' | 'bottom';
-type SelectAlignment = 'left' | 'right';
+export { SelectBase };
 
-export type SelectValue<T, M extends boolean> = M extends true ? T[] : T | undefined;
-
-type SelectProps<T, M extends boolean> = {
+type SelectProps<T, M extends boolean> = Omit<React.ComponentPropsWithoutRef<typeof SelectBase<T, M>>, 'children'> & {
   classes?: ClassNames;
-  value?: SelectValue<T, M>;
-  options: SelectOption<T>[] | {
-    label: string;
-    options: SelectOption<T>[];
-  }[];
-  disabled?: boolean;
-  multiple?: M;
-  dismissOnSelect?: boolean;
-  arrow?: boolean;
-  shadow?: boolean | number;
   label?: string;
   labelStyle?: StyleProp<TextStyle> | ((state: SelectState<SelectValue<T, M>>) => StyleProp<TextStyle>);
   variant?: 'outline' | 'underlined' | 'unstyled' | 'material';
-  position?: SelectPosition | SelectPosition[];
-  alignment?: SelectAlignment | SelectAlignment[];
   style?: StyleProp<TextStyle> | ((state: SelectState<SelectValue<T, M>>) => StyleProp<TextStyle>);
   prepend?: React.ReactNode | ((state: SelectState<SelectValue<T, M>>) => React.ReactNode);
   append?: React.ReactNode | ((state: SelectState<SelectValue<T, M>>) => React.ReactNode);
-  onValueChange?: (value: SelectValue<T, M>) => void;
-  onChange?: (selected: SelectValue<SelectOption<T>, M>) => void;
-  onFocus?: VoidFunction;
-  onBlur?: VoidFunction;
   render?: (state: SelectState<SelectValue<T, M>>) => React.ReactNode;
-  listProps?: Omit<ListProps<T>, 'renderItem'>;
 };
 
 type SelectBodyProps<T> = {
@@ -122,51 +101,32 @@ const SelectBody = <T extends unknown = any>({
   return (
     <Text>{_.first(value)?.label || ' '}</Text>
   );
-}
+};
 
-const findItems = <T extends unknown = any>(
-  value: T[],
-  options: SelectOption<T>[],
-) => _.compact(_.map(value, x => _.find(options, o => o.value === x)));
-
-export const Select = createMemoComponent(<T extends unknown = any, M extends boolean = false>(
+const _Select = createComponent(<T extends unknown = any, M extends boolean = false>(
   {
     classes,
     value,
-    options,
-    disabled = false,
-    multiple,
-    dismissOnSelect = !multiple,
-    arrow,
-    shadow,
     style,
     label,
     labelStyle,
     variant,
-    position = ['top', 'bottom'],
-    alignment = ['left', 'right'],
-    onValueChange = () => { },
-    onChange = () => { },
-    onFocus = () => { },
-    onBlur = () => { },
+    disabled,
+    multiple,
+    focused,
+    sections,
+    onFocus,
+    onBlur,
+    onChange,
     prepend,
     append,
     render,
-    listProps = {},
-  }: SelectProps<T, M>,
+  }: Modify<SelectProps<T, M>, SelectBaseChildrenProps<T>>,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
 ) => {
 
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme, variant);
-
-  const [_focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
-  const [_hidden, setHidden] = React.useState(true);
-  const focused = _focused || !_hidden;
-
-  React.useEffect(() => {
-    if (_focused) setHidden(false);
-  }, [_focused]);
 
   const textStyle = _useComponentStyle('text');
   const selectStyle = _useComponentStyle('select', classes, [
@@ -182,37 +142,6 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
     value: multiple ? value ?? [] : value,
   } as SelectState<SelectValue<T, M>>;
 
-  const sections = React.useMemo(() => {
-
-    const sections: {
-      label: string;
-      data: SelectOption<T>[];
-    }[] = [];
-    let opts: SelectOption<T>[] = [];
-
-    for (const opt of options) {
-      if ('options' in opt) {
-        if (!_.isEmpty(opts)) {
-          sections.push({ label: '', data: opts });
-          opts = [];
-        }
-        if (!_.isEmpty(opt.options)) sections.push({ label: opt.label, data: opt.options });
-      } else {
-        opts.push(opt);
-      }
-    }
-
-    if (!_.isEmpty(opts)) sections.push({ label: '', data: opts });
-    return sections;
-
-  }, [options]);
-
-  const extraData = React.useMemo(() => [sections, value], [sections, value]);
-  const _onChange = useStableCallback((selected: SelectOption<T>[]) => {
-    onValueChange(multiple ? _.map(selected, x => x.value) : _.first(selected)?.value as any);
-    onChange(multiple ? selected : _.first(selected) as any);
-  });
-
   const _value = _.castArray(value ?? []) as T[];
 
   const content = (
@@ -224,7 +153,7 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
           onRemove={(v) => {
             const _val = _.filter(_value, x => x !== v.value);
             const selected = findItems(_val, _.flatMap(sections, x => x.data));
-            _onChange(selected);
+            onChange(selected);
           }}
         />
       )}
@@ -232,87 +161,57 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
   );
 
   return (
-    <_StyleContext.Consumer>
-      {(_style) => (
-        <Popover
-          hidden={disabled || _.isEmpty(sections) ? true : !focused}
-          position={position}
-          alignment={alignment}
-          arrow={arrow ?? false}
-          shadow={shadow ?? false}
-          onTouchOutside={() => setHidden(true)}
-          extraData={extraData}
-          containerStyle={{
-            display: 'flex',
-            borderColor: theme.grays['400'],
-            borderWidth: theme.borderWidth,
-            borderRadius: theme.borderRadiusBase,
-            padding: 0,
-          }}
-          render={(layout) => (
-            <_StyleContext.Provider value={_style}>
-              <SelectListBody
-                value={_value}
-                layout={layout}
-                theme={theme}
-                sections={sections}
-                extraData={extraData}
-                onSelect={(v) => {
-                  const _val = multiple
-                    ? _.includes(_value, v.value) ? _.filter(_value, x => x !== v.value) : [..._value, v.value]
-                    : [v.value];
-                  const selected = findItems(_val, _.flatMap(sections, x => x.data));
-                  _onChange(selected);
-                  if (dismissOnSelect) setHidden(true);
-                }}
-                {...listProps}
-              />
-            </_StyleContext.Provider>
-          )}
-        >
-          <Pressable
-            ref={forwardRef}
+    <Pressable
+      ref={forwardRef}
+      style={[
+        defaultStyle,
+        {
+          flexDirection: 'row',
+          gap: theme.spacer * 0.375,
+          alignItems: 'center',
+        },
+        Platform.select({
+          web: { outline: 0 } as any,
+          default: {},
+        }),
+        focusRing,
+        textStyle,
+        selectStyle,
+        _.isFunction(style) ? style(state) : style,
+      ]}
+      disabled={disabled}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    >
+      {_.isFunction(prepend) ? prepend(state) : prepend}
+      {_.includes(['material'], variant) ? (
+        <View style={{ flex: 1 }}>
+          <MaterialInputLabel
+            label={label ?? ''}
             style={[
-              defaultStyle,
-              {
-                flexDirection: 'row',
-                gap: theme.spacer * 0.375,
-                alignItems: 'center',
-              },
-              Platform.select({
-                web: { outline: 0 } as any,
-                default: {},
-              }),
-              focusRing,
-              textStyle,
-              selectStyle,
-              _.isFunction(style) ? style(state) : style,
+              _.isFunction(labelStyle) ? labelStyle(state) : labelStyle,
             ]}
-            disabled={disabled}
-            onFocus={_onFocus}
-            onBlur={_onBlur}
-          >
-            {_.isFunction(prepend) ? prepend(state) : prepend}
-            {_.includes(['material'], variant) ? (
-              <View style={{ flex: 1 }}>
-                <MaterialInputLabel
-                  label={label ?? ''}
-                  style={[
-                    _.isFunction(labelStyle) ? labelStyle(state) : labelStyle,
-                  ]}
-                  focused={focused}
-                  active={!_.isEmpty(_value)}
-                />
-                {content}
-              </View>
-            ) : content}
-            {_.isFunction(append) ? append(state) : append}
-          </Pressable>
-        </Popover>
-      )}
-    </_StyleContext.Consumer>
+            focused={focused}
+            active={!_.isEmpty(_value)}
+          />
+          {content}
+        </View>
+      ) : content}
+      {_.isFunction(append) ? append(state) : append}
+    </Pressable>
   );
-}, {
+});
+
+export const Select = createMemoComponent(<T extends unknown = any, M extends boolean = false>(
+  props: SelectProps<T, M>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
+) => (
+  <SelectBase {...props}>
+    {({ ...extra }) => (
+      <_Select ref={forwardRef} {...props} {...extra} />
+    )}
+  </SelectBase>
+), {
   displayName: 'Select',
 });
 
