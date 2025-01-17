@@ -61,12 +61,7 @@ ModalContext.displayName = 'ModalContext';
 
 export const useModal = () => React.useContext(ModalContext);
 
-type ModalProviderProps = React.PropsWithChildren<{
-  backdrop?: boolean;
-}>;
-
-export const ModalProvider: React.FC<ModalProviderProps> = ({
-  backdrop = true,
+export const ModalProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
 }) => {
 
@@ -97,8 +92,24 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({
   return (
     <ModalContext.Provider value={setModal}>
       {children}
-      {React.isValidElement(display?.element) && <>
-        {backdrop === true && (
+      {React.isValidElement(display?.element) && (
+        <View
+          style={[
+            {
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: theme.zIndex.modal,
+            },
+            StyleSheet.absoluteFill,
+            Platform.select({
+              web: { position: 'fixed' } as any,
+              default: {},
+            }),
+            {
+              opacity: fadeAnim,
+            },
+          ]}>
           <Pressable
             onPress={display?.onDismiss ?? (() => setConfig(undefined))}
             style={normalizeStyle([
@@ -111,40 +122,18 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({
                 default: {},
               }),
               StyleSheet.absoluteFill,
-              Platform.select({
-                web: { position: 'fixed' } as any,
-                default: {},
-              }),
               modalBackdrop,
               display?.backdropStyle ?? {},
-              {
-                opacity: fadeAnim,
-              },
             ])} />
-        )}
-        <View
-          style={[
-            {
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: theme.zIndex.modal,
-              pointerEvents: 'box-none',
-            },
-            StyleSheet.absoluteFill,
-            Platform.select({
-              web: { position: 'fixed' } as any,
-              default: {},
-            }),
+          <View style={[
+            { zIndex: theme.zIndex.modal },
             modalContainer,
             display?.containerStyle ?? {},
-            {
-              opacity: fadeAnim,
-            },
           ]}>
-          {display?.element}
+            {display?.element}
+          </View>
         </View>
-      </>}
+      )}
     </ModalContext.Provider>
   );
 };

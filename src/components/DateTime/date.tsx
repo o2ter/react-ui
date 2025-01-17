@@ -111,7 +111,7 @@ export const DatePicker = createMemoComponent((
         onChange={submit}
         selectable={selectable}
         style={{
-          width: popover ? '100%' : '80%',
+          width: '100%',
           maxWidth: 350,
           backgroundColor: 'white',
         }}
