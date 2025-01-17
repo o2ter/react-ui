@@ -163,7 +163,13 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
   const theme = useTheme();
   const defaultStyle = useDefaultInputStyle(theme, variant);
 
-  const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+  const [_focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
+  const [_hidden, setHidden] = React.useState(true);
+  const focused = _focused || !_hidden;
+
+  React.useEffect(() => {
+    if (_focused) setHidden(false);
+  }, [_focused]);
 
   const textStyle = _useComponentStyle('text');
   const selectStyle = _useComponentStyle('select', classes, [
@@ -178,12 +184,6 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
     disabled,
     value: multiple ? value ?? [] : value,
   } as SelectState<SelectValue<T, M>>;
-
-  const [hidden, setHidden] = React.useState(true);
-
-  React.useEffect(() => {
-    if (focused && !disabled) setHidden(false);
-  }, [focused, disabled]);
 
   const sections = React.useMemo(() => {
 
@@ -238,15 +238,12 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
     <_StyleContext.Consumer>
       {(_style) => (
         <Popover
-          hidden={disabled || _.isEmpty(sections) ? true : hidden}
+          hidden={disabled || _.isEmpty(sections) ? true : !focused}
           position={position}
           alignment={alignment}
           arrow={arrow ?? false}
           shadow={shadow ?? false}
-          onTouchOutside={(e) => {
-            if (pressableRef.current === e.target as any) return;
-            setHidden(true);
-          }}
+          onTouchOutside={() => setHidden(true)}
           extraData={extraData}
           containerStyle={{
             display: 'flex',
