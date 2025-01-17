@@ -103,8 +103,11 @@ const SelectBody = <T extends unknown = any>({
   );
 };
 
-const _Select = createComponent(<T extends unknown = any, M extends boolean = false>(
-  {
+export const Select = createMemoComponent(<T extends unknown = any, M extends boolean = false>(
+  props: SelectProps<T, M>,
+  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
+) => {
+  const {
     classes,
     value,
     style,
@@ -113,105 +116,93 @@ const _Select = createComponent(<T extends unknown = any, M extends boolean = fa
     variant,
     disabled,
     multiple,
-    focused,
-    sections,
-    onFocus,
-    onBlur,
-    onChange,
     prepend,
     append,
     render,
-  }: Modify<SelectProps<T, M>, SelectBaseChildrenProps<T>>,
-  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
-) => {
-
-  const theme = useTheme();
-  const defaultStyle = useDefaultInputStyle(theme, variant);
-
-  const textStyle = _useComponentStyle('text');
-  const selectStyle = _useComponentStyle('select', classes, [
-    focused && 'focus',
-    disabled ? 'disabled' : 'enabled',
-  ]);
-
-  const focusRing = useFocusRing(focused);
-
-  const state = {
-    focused,
-    disabled,
-    value: multiple ? value ?? [] : value,
-  } as SelectState<SelectValue<T, M>>;
-
-  const _value = _.castArray(value ?? []) as T[];
-
-  const content = (
-    <>
-      {_.isFunction(render) ? render(state) : (
-        <SelectBody
-          multiple={multiple}
-          value={findItems(_value, _.flatMap(sections, x => x.data))}
-          onRemove={(v) => {
-            const _val = _.filter(_value, x => x !== v.value);
-            const selected = findItems(_val, _.flatMap(sections, x => x.data));
-            onChange(selected);
-          }}
-        />
-      )}
-    </>
-  );
-
+  } = props;
   return (
-    <Pressable
-      ref={forwardRef}
-      style={[
-        defaultStyle,
-        {
-          flexDirection: 'row',
-          gap: theme.spacer * 0.375,
-          alignItems: 'center',
-        },
-        Platform.select({
-          web: { outline: 0 } as any,
-          default: {},
-        }),
-        focusRing,
-        textStyle,
-        selectStyle,
-        _.isFunction(style) ? style(state) : style,
-      ]}
-      disabled={disabled}
-      onFocus={onFocus}
-      onBlur={onBlur}
-    >
-      {_.isFunction(prepend) ? prepend(state) : prepend}
-      {_.includes(['material'], variant) ? (
-        <View style={{ flex: 1 }}>
-          <MaterialInputLabel
-            label={label ?? ''}
-            style={[
-              _.isFunction(labelStyle) ? labelStyle(state) : labelStyle,
-            ]}
-            focused={focused}
-            active={!_.isEmpty(_value)}
-          />
-          {content}
-        </View>
-      ) : content}
-      {_.isFunction(append) ? append(state) : append}
-    </Pressable>
-  );
-});
+    <SelectBase {...props}>
+      {({ focused, sections, onFocus, onBlur, onChange }) => {
 
-export const Select = createMemoComponent(<T extends unknown = any, M extends boolean = false>(
-  props: SelectProps<T, M>,
-  forwardRef: React.ForwardedRef<React.ComponentRef<typeof Pressable>>
-) => (
-  <SelectBase {...props}>
-    {({ ...extra }) => (
-      <_Select ref={forwardRef} {...props} {...extra} />
-    )}
-  </SelectBase>
-), {
+        const theme = useTheme();
+        const defaultStyle = useDefaultInputStyle(theme, variant);
+
+        const textStyle = _useComponentStyle('text');
+        const selectStyle = _useComponentStyle('select', classes, [
+          focused && 'focus',
+          disabled ? 'disabled' : 'enabled',
+        ]);
+
+        const focusRing = useFocusRing(focused);
+
+        const state = {
+          focused,
+          disabled,
+          value: multiple ? value ?? [] : value,
+        } as SelectState<SelectValue<T, M>>;
+
+        const _value = _.castArray(value ?? []) as T[];
+
+        const content = (
+          <>
+            {_.isFunction(render) ? render(state) : (
+              <SelectBody
+                multiple={multiple}
+                value={findItems(_value, _.flatMap(sections, x => x.data))}
+                onRemove={(v) => {
+                  const _val = _.filter(_value, x => x !== v.value);
+                  const selected = findItems(_val, _.flatMap(sections, x => x.data));
+                  onChange(selected);
+                }}
+              />
+            )}
+          </>
+        );
+
+        return (
+          <Pressable
+            ref={forwardRef}
+            style={[
+              defaultStyle,
+              {
+                flexDirection: 'row',
+                gap: theme.spacer * 0.375,
+                alignItems: 'center',
+              },
+              Platform.select({
+                web: { outline: 0 } as any,
+                default: {},
+              }),
+              focusRing,
+              textStyle,
+              selectStyle,
+              _.isFunction(style) ? style(state) : style,
+            ]}
+            disabled={disabled}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          >
+            {_.isFunction(prepend) ? prepend(state) : prepend}
+            {_.includes(['material'], variant) ? (
+              <View style={{ flex: 1 }}>
+                <MaterialInputLabel
+                  label={label ?? ''}
+                  style={[
+                    _.isFunction(labelStyle) ? labelStyle(state) : labelStyle,
+                  ]}
+                  focused={focused}
+                  active={!_.isEmpty(_value)}
+                />
+                {content}
+              </View>
+            ) : content}
+            {_.isFunction(append) ? append(state) : append}
+          </Pressable>
+        );
+      }}
+    </SelectBase>
+  )
+}, {
   displayName: 'Select',
 });
 

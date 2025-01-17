@@ -136,6 +136,14 @@ export const SelectBase = <T extends unknown = any, M extends boolean = false>({
 
   const _value = _.castArray(value ?? []) as T[];
 
+  const content = children({
+    focused,
+    sections,
+    onFocus: _onFocus,
+    onBlur: _onBlur,
+    onChange: _onChange,
+  });
+
   return (
     <_StyleContext.Consumer>
       {(_style) => (
@@ -174,15 +182,7 @@ export const SelectBase = <T extends unknown = any, M extends boolean = false>({
               />
             </_StyleContext.Provider>
           )}
-        >
-          {children({
-            focused,
-            sections,
-            onFocus: _onFocus,
-            onBlur: _onBlur,
-            onChange: _onChange,
-          })}
-        </Popover>
+        >{content}</Popover>
       )}
     </_StyleContext.Consumer>
   );
