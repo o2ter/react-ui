@@ -90,10 +90,12 @@ export const ActivityIndicatorProvider: React.FC<ActivityIndicatorProviderProps>
         }),
         defaultStyle,
       ])}>
-      {backdrop === true ? <View style={[
-        style.activityIndicatorBackdrop,
-        defaultBackdropStyle
-      ]}><ActivityIndicator /></View> : <ActivityIndicator />}
+      {backdrop === true ? (
+        <View style={[
+          style.activityIndicatorBackdrop,
+          defaultBackdropStyle
+        ]}><ActivityIndicator /></View>
+      ) : <ActivityIndicator />}
     </Animated.View>}
   </ActivityIndicatorContext.Provider>;
 };

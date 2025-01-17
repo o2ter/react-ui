@@ -98,28 +98,30 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({
     <ModalContext.Provider value={setModal}>
       {children}
       {React.isValidElement(display?.element) && <>
-        {backdrop === true && <Pressable
-          onPress={display?.onDismiss ?? (() => setConfig(undefined))}
-          style={normalizeStyle([
-            {
-              backgroundColor: 'rgba(0, 0, 0, 0.75)',
-              zIndex: theme.zIndex.modalBackdrop,
-            },
-            Platform.select({
-              web: { cursor: 'default' } as any,
-              default: {},
-            }),
-            StyleSheet.absoluteFill,
-            Platform.select({
-              web: { position: 'fixed' } as any,
-              default: {},
-            }),
-            modalBackdrop,
-            display?.backdropStyle ?? {},
-            {
-              opacity: fadeAnim,
-            },
-          ])} />}
+        {backdrop === true && (
+          <Pressable
+            onPress={display?.onDismiss ?? (() => setConfig(undefined))}
+            style={normalizeStyle([
+              {
+                backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                zIndex: theme.zIndex.modalBackdrop,
+              },
+              Platform.select({
+                web: { cursor: 'default' } as any,
+                default: {},
+              }),
+              StyleSheet.absoluteFill,
+              Platform.select({
+                web: { position: 'fixed' } as any,
+                default: {},
+              }),
+              modalBackdrop,
+              display?.backdropStyle ?? {},
+              {
+                opacity: fadeAnim,
+              },
+            ])} />
+        )}
         <View
           style={[
             {

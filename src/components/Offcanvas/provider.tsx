@@ -105,28 +105,30 @@ export const OffcanvasProvider: React.FC<OffcanvasProviderProps> = ({
     <OffcanvasContext.Provider value={setOffcanvas}>
       {children}
       {React.isValidElement(display?.element) && <>
-        {backdrop === true && <Pressable
-          onPress={display?.onDismiss ?? (() => setConfig(undefined))}
-          style={normalizeStyle([
-            {
-              backgroundColor: 'rgba(0, 0, 0, 0.75)',
-              zIndex: theme.zIndex.offcanvasBackdrop,
-            },
-            Platform.select({
-              web: { cursor: 'default' } as any,
-              default: {},
-            }),
-            StyleSheet.absoluteFill,
-            Platform.select({
-              web: { position: 'fixed' } as any,
-              default: {},
-            }),
-            offcanvasBackdrop,
-            display?.backdropStyle ?? {},
-            {
-              opacity: fadeAnim,
-            },
-          ])} />}
+        {backdrop === true && (
+          <Pressable
+            onPress={display?.onDismiss ?? (() => setConfig(undefined))}
+            style={normalizeStyle([
+              {
+                backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                zIndex: theme.zIndex.offcanvasBackdrop,
+              },
+              Platform.select({
+                web: { cursor: 'default' } as any,
+                default: {},
+              }),
+              StyleSheet.absoluteFill,
+              Platform.select({
+                web: { position: 'fixed' } as any,
+                default: {},
+              }),
+              offcanvasBackdrop,
+              display?.backdropStyle ?? {},
+              {
+                opacity: fadeAnim,
+              },
+            ])} />
+        )}
         <View
           onLayout={(e) => setLayout(e.nativeEvent.layout)}
           style={normalizeStyle([
