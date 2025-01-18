@@ -41,7 +41,10 @@ type SelectListBodyProps<T> = Omit<ListProps<T>, 'renderItem'> & {
   value?: T[];
   layout: LayoutRectangle;
   theme: ReturnType<typeof useTheme>;
-  onSelect: (option: SelectOption<T>) => void
+  onSelect: (option: SelectOption<T>) => void;
+  searchComponent: (props: {
+    onLayout: React.Dispatch<React.SetStateAction<LayoutRectangle | undefined>>;
+  }) => React.ReactNode;
 };
 
 type SelectListItemProps<T> = SelectOption<any> & {
@@ -131,46 +134,54 @@ export const SelectListBody = ({
   style,
   sections = [],
   onSelect,
+  searchComponent,
   ...props
 }: SelectListBodyProps<any>) => {
 
   const isSection = sections.length !== 1 || !_.isEmpty(sections[0].label);
   const windowDimensions = useWindowDimensions();
 
+  const [searchLayout, setSearchLayout] = React.useState<LayoutRectangle>();
+
   return (
-    <SectionList
-      sections={sections}
-      style={[
-        {
-          minWidth: layout.width,
-          maxHeight: 0.5 * windowDimensions.height - 96,
-        },
-        style,
-      ]}
-      contentContainerStyle={{
-        padding: 4,
-      }}
-      renderSectionHeader={isSection ? (
-        ({ section }) => (
-          <Text
-            style={{
-              color: theme.grays['400'],
-              fontSize: theme.fontSizes['small'],
-              margin: 4,
-              userSelect: 'none',
-            }}
-          >{section.label}</Text>
-        )
-      ) : undefined}
-      renderItem={({ item }) => (
-        <SelectListItem
-          theme={theme}
-          selected={_.some(value, x => item.value === x)}
-          onPress={() => onSelect(item)}
-          {...item}
-        />
-      )}
-      {...props}
-    />
+    <>
+      {searchComponent({
+        onLayout: setSearchLayout,
+      })}
+      <SectionList
+        sections={sections}
+        style={[
+          {
+            minWidth: layout.width,
+            maxHeight: 0.5 * windowDimensions.height - 16 - (searchLayout?.height ? searchLayout.height + 16 : 0)
+          },
+          style,
+        ]}
+        contentContainerStyle={{
+          padding: 4,
+        }}
+        renderSectionHeader={isSection ? (
+          ({ section }) => (
+            <Text
+              style={{
+                color: theme.grays['400'],
+                fontSize: theme.fontSizes['small'],
+                margin: 4,
+                userSelect: 'none',
+              }}
+            >{section.label}</Text>
+          )
+        ) : undefined}
+        renderItem={({ item }) => (
+          <SelectListItem
+            theme={theme}
+            selected={_.some(value, x => item.value === x)}
+            onPress={() => onSelect(item)}
+            {...item}
+          />
+        )}
+        {...props}
+      />
+    </>
   );
 };

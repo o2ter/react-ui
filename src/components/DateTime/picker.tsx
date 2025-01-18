@@ -28,12 +28,11 @@ import React from 'react';
 import { Platform, StyleProp, TextStyle } from 'react-native';
 import { Modify } from '../../internals/types';
 import { Pressable } from '../Pressable';
-import { Modal, useModal } from '../Modal';
+import { Modal } from '../Modal';
 import { useTheme } from '../../theme';
 import { Popover } from '../Popover';
 import Text from '../Text';
 import View from '../View';
-import { useMergeRefs } from 'sugax';
 import { _StyleContext } from '../Style';
 import { MaterialInputLabel } from '../MaterialInputLabel';
 
@@ -76,6 +75,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
   setPickerHidden,
   onFocus,
   onBlur,
+  onLayout,
   prepend,
   append,
   children,
@@ -114,6 +114,7 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
       ]}
       onFocus={onFocus}
       onBlur={onBlur}
+      onLayout={onLayout}
     >
       {prepend}
       {_.includes(['material'], variant) ? (

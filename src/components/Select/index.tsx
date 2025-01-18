@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { Platform, StyleProp, TextStyle } from 'react-native';
+import { LayoutChangeEvent, Platform, StyleProp, TextStyle } from 'react-native';
 import { createMemoComponent } from '../../internals/utils';
 import { _useComponentStyle, _StyleContext } from '../Style';
 import { ClassNames } from '../Style/types';
@@ -95,6 +95,7 @@ type SelectProps<T, M extends boolean> = SelectOptionProps<T, M> & {
   onBlur?: VoidFunction;
   render?: (state: SelectState<SelectValue<T, M>>) => React.ReactNode;
   listProps?: Omit<ListProps<T>, 'renderItem'>;
+  onLayout?: (event: LayoutChangeEvent) => void;
 };
 
 type SelectBodyProps<T> = {
@@ -172,6 +173,7 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
     onChange = () => { },
     onFocus = () => { },
     onBlur = () => { },
+    onLayout,
     prepend,
     append,
     render,
@@ -285,13 +287,19 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
           }}
           render={(layout) => (
             <_StyleContext.Provider value={_style}>
-              <>
-                {_.isFunction(fetch) && (
+              <SelectListBody
+                value={_value}
+                layout={layout}
+                theme={theme}
+                sections={sections}
+                extraData={extraData}
+                searchComponent={({ onLayout }) => _.isFunction(fetch) && (
                   <TextInput
                     prepend={(
                       <Feather name='search' size={16} />
                     )}
                     {...searchInputProps}
+                    onLayout={(e) => onLayout(e.nativeEvent.layout)}
                     value={search}
                     onChangeText={setSearch}
                     style={(state) => [
@@ -300,23 +308,16 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
                     ]}
                   />
                 )}
-                <SelectListBody
-                  value={_value}
-                  layout={layout}
-                  theme={theme}
-                  sections={sections}
-                  extraData={extraData}
-                  onSelect={(v) => {
-                    const _val = multiple
-                      ? _.includes(_value, v.value) ? _.filter(_value, x => x !== v.value) : [..._value, v.value]
-                      : [v.value];
-                    const selected = findItems(_val, [...history, ..._.flatMap(sections, x => x.data)]);
-                    _onChange(selected);
-                    if (dismissOnSelect) setHidden(true);
-                  }}
-                  {...listProps}
-                />
-              </>
+                onSelect={(v) => {
+                  const _val = multiple
+                    ? _.includes(_value, v.value) ? _.filter(_value, x => x !== v.value) : [..._value, v.value]
+                    : [v.value];
+                  const selected = findItems(_val, [...history, ..._.flatMap(sections, x => x.data)]);
+                  _onChange(selected);
+                  if (dismissOnSelect) setHidden(true);
+                }}
+                {...listProps}
+              />
             </_StyleContext.Provider>
           )}
         >
@@ -341,6 +342,7 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
             disabled={disabled}
             onFocus={_onFocus}
             onBlur={_onBlur}
+            onLayout={onLayout}
           >
             {_.isFunction(prepend) ? prepend(state) : prepend}
             {_.includes(['material'], variant) ? (

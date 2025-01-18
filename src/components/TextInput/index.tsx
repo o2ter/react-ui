@@ -82,6 +82,7 @@ export const TextInput = createMemoComponent(({
   append,
   onFocus,
   onBlur,
+  onLayout,
   children,
   ...props
 }: TextInputProps, forwardRef: React.ForwardedRef<RNTextInput>) => {
@@ -118,6 +119,7 @@ export const TextInput = createMemoComponent(({
         readOnly={readOnly}
         onFocus={_onFocus}
         onBlur={_onBlur}
+        onLayout={onLayout}
         {...props}>
         {children}
       </RNTextInput>
@@ -158,6 +160,7 @@ export const TextInput = createMemoComponent(({
         _.isFunction(style) ? style(state) : style,
       ]}
       onFocus={() => void inputRef.current?.focus()}
+      onLayout={onLayout}
     >
       {_.isFunction(prepend) ? prepend(state) : prepend}
       {_.includes(['material'], variant) ? (
