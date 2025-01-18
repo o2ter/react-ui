@@ -31,10 +31,13 @@ import { StyleProp, TextStyle } from 'react-native';
 
 export type ListProps<T> = Partial<React.ComponentPropsWithoutRef<typeof SectionList<SelectOption<T>>>>;
 
-export type SelectState<T> = {
-  value: T;
+export type SelectValue<T, M extends boolean> = M extends true ? T[] : T | undefined;
+
+export type SelectState<T, M extends boolean> = {
+  value: SelectValue<T, M>;
   focused: boolean;
   disabled: boolean;
+  selected: SelectOption<T>[];
 };
 
 type SelectOptionState = {

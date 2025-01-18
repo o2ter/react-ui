@@ -27,15 +27,16 @@ import _ from 'lodash';
 import React from 'react';
 import { useField } from '../Form/hooks';
 import { useTheme } from '../../../theme';
-import { Select, SelectValue } from '../../Select';
+import { Select } from '../../Select';
 import { Modify } from '../../../internals/types';
 import { createMemoComponent } from '../../../internals/utils';
 import { _useComponentStyle } from '../../Style';
 import { useFocus, useFocusRing } from '../../../internals/focus';
 import { StyleProp, TextStyle } from 'react-native';
+import { SelectValue } from '../../Select/types';
 
-type FormSelectState<T> = {
-  value: T;
+type FormSelectState<T, M extends boolean> = {
+  value: SelectValue<T, M>;
   focused: boolean;
   invalid: boolean;
   disabled: boolean;
@@ -45,9 +46,9 @@ type FormSelectState<T> = {
 type FormSelectProps<T, M extends boolean> = Modify<React.ComponentPropsWithoutRef<typeof Select<T, M>>, {
   name: string | string[];
   roles?: string[];
-  style?: StyleProp<TextStyle> | ((state: FormSelectState<SelectValue<T, M>>) => StyleProp<TextStyle>);
-  prepend?: React.ReactNode | ((state: FormSelectState<SelectValue<T, M>>) => React.ReactNode);
-  append?: React.ReactNode | ((state: FormSelectState<SelectValue<T, M>>) => React.ReactNode);
+  style?: StyleProp<TextStyle> | ((state: FormSelectState<T, M>) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode | ((state: FormSelectState<T, M>) => React.ReactNode);
+  append?: React.ReactNode | ((state: FormSelectState<T, M>) => React.ReactNode);
   validate?: (value: any) => void;
 }>
 
@@ -118,7 +119,8 @@ export const FormSelect = createMemoComponent(<T extends unknown = any, M extend
         formSelectStyle,
         _.isFunction(style) ? style(state) : style,
       ]}
-      {...props as any} />
+      {...props as any}
+    />
   )
 }, {
   displayName: 'Form.Select'

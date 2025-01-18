@@ -34,7 +34,7 @@ import { useFocus, useFocusRing } from '../../internals/focus';
 import { useTheme } from '../../theme';
 import { Popover } from '../Popover';
 import { useDefaultInputStyle } from '../TextInput/style';
-import { ListProps, SelectOption, SelectState } from './types';
+import { ListProps, SelectOption, SelectState, SelectValue } from './types';
 import { SelectListBody } from './list';
 import { useAsyncResource, useStableCallback } from 'sugax';
 import { MaterialIcons, Feather } from '../Icons';
@@ -46,8 +46,6 @@ import TextInput from '../TextInput';
 
 type SelectPosition = 'top' | 'bottom';
 type SelectAlignment = 'left' | 'right';
-
-export type SelectValue<T, M extends boolean> = M extends true ? T[] : T | undefined;
 
 type _SelectOption<T> = SelectOption<T>[] | {
   label: string;
@@ -82,35 +80,35 @@ type SelectProps<T, M extends boolean> = SelectOptionProps<T, M> & {
   arrow?: boolean;
   shadow?: boolean | number;
   label?: string;
-  labelStyle?: StyleProp<TextStyle> | ((state: SelectState<SelectValue<T, M>>) => StyleProp<TextStyle>);
+  labelStyle?: StyleProp<TextStyle> | ((state: SelectState<T, M>) => StyleProp<TextStyle>);
   variant?: 'outline' | 'underlined' | 'unstyled' | 'material';
   position?: SelectPosition | SelectPosition[];
   alignment?: SelectAlignment | SelectAlignment[];
-  style?: StyleProp<TextStyle> | ((state: SelectState<SelectValue<T, M>>) => StyleProp<TextStyle>);
-  prepend?: React.ReactNode | ((state: SelectState<SelectValue<T, M>>) => React.ReactNode);
-  append?: React.ReactNode | ((state: SelectState<SelectValue<T, M>>) => React.ReactNode);
+  style?: StyleProp<TextStyle> | ((state: SelectState<T, M>) => StyleProp<TextStyle>);
+  prepend?: React.ReactNode | ((state: SelectState<T, M>) => React.ReactNode);
+  append?: React.ReactNode | ((state: SelectState<T, M>) => React.ReactNode);
   onValueChange?: (value: SelectValue<T, M>) => void;
   onChange?: (selected: SelectValue<SelectOption<T>, M>) => void;
   onFocus?: VoidFunction;
   onBlur?: VoidFunction;
-  render?: (state: SelectState<SelectValue<T, M>>) => React.ReactNode;
+  render?: (state: SelectState<T, M>) => React.ReactNode;
   listProps?: Omit<ListProps<T>, 'renderItem'>;
   onLayout?: (event: LayoutChangeEvent) => void;
 };
 
 type SelectBodyProps<T> = {
-  value: SelectOption<T>[];
+  selected: SelectOption<T>[];
   multiple?: boolean;
   onRemove: (item: SelectOption<T>) => void
 };
 
 const SelectBody = <T extends unknown = any>({
-  value,
+  selected,
   multiple,
   onRemove,
 }: SelectBodyProps<T>) => {
   const theme = useTheme();
-  if (multiple && !_.isEmpty(value)) {
+  if (multiple && !_.isEmpty(selected)) {
     return (
       <View style={{
         flexDirection: 'row',
@@ -119,7 +117,7 @@ const SelectBody = <T extends unknown = any>({
         gap: 2,
       }}>
         <List
-          data={value}
+          data={selected}
           renderItem={({ item }) => (
             <View
               style={{
@@ -142,14 +140,14 @@ const SelectBody = <T extends unknown = any>({
     );
   }
   return (
-    <Text>{_.first(value)?.label || ' '}</Text>
+    <Text>{_.first(selected)?.label || ' '}</Text>
   );
 }
 
 const findItems = <T extends unknown = any>(
   value: T[],
   options: SelectOption<T>[],
-) => _.compact(_.map(value, x => _.find(options, o => o.value === x)));
+) => _.compact(_.map(value, x => _.find(options, o => o.value === x) ?? { value: x }));
 
 export const Select = createMemoComponent(<T extends unknown = any, M extends boolean = false>(
   {
@@ -211,12 +209,6 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
 
   const focusRing = useFocusRing(focused);
 
-  const state = {
-    focused,
-    disabled,
-    value: multiple ? value ?? [] : value,
-  } as SelectState<SelectValue<T, M>>;
-
   const sections = React.useMemo(() => {
 
     const sections: {
@@ -242,6 +234,14 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
 
   }, [options]);
 
+  const _value = _.castArray(value ?? []) as T[];
+  const state = {
+    focused,
+    disabled,
+    value: multiple ? value ?? [] : value,
+    selected: findItems(_value, [...history, ..._.flatMap(sections, x => x.data)]),
+  } as SelectState<T, M>;
+
   const extraData = React.useMemo(() => [sections, value], [sections, value]);
   const _onChange = useStableCallback((selected: SelectOption<T>[]) => {
     if (_.isFunction(fetch)) setHistory(v => _.uniq([...v, ...selected]));
@@ -249,14 +249,12 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
     onChange(multiple ? selected : _.first(selected) as any);
   });
 
-  const _value = _.castArray(value ?? []) as T[];
-
   const content = (
     <>
       {_.isFunction(render) ? render(state) : (
         <SelectBody
           multiple={multiple}
-          value={findItems(_value, [...history, ..._.flatMap(sections, x => x.data)])}
+          selected={state.selected}
           onRemove={(v) => {
             const _val = _.filter(_value, x => x !== v.value);
             const selected = findItems(_val, [...history, ..._.flatMap(sections, x => x.data)]);
