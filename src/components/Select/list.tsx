@@ -128,6 +128,7 @@ export const SelectListBody = ({
   value,
   layout,
   theme,
+  style,
   sections = [],
   onSelect,
   ...props
@@ -139,10 +140,13 @@ export const SelectListBody = ({
   return (
     <SectionList
       sections={sections}
-      style={{
-        minWidth: layout.width,
-        maxHeight: 0.5 * windowDimensions.height,
-      }}
+      style={[
+        {
+          minWidth: layout.width,
+          maxHeight: 0.5 * windowDimensions.height - 96,
+        },
+        style,
+      ]}
       contentContainerStyle={{
         padding: 4,
       }}
