@@ -269,7 +269,7 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
     <_StyleContext.Consumer>
       {(_style) => (
         <Popover
-          hidden={disabled || _.isEmpty(sections) ? true : !focused}
+          hidden={disabled || (!_.isFunction(fetch) && _.isEmpty(sections)) ? true : !focused}
           position={position}
           alignment={alignment}
           arrow={arrow ?? false}
