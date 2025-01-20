@@ -59,7 +59,7 @@ const decodeContent = (content?: ReturnType<Quill['getContents']>) => {
   return result;
 }
 
-const _removeEmptyLines = (lines: Line[]) => _.takeWhile(lines, x => !_.isEmpty(x.segments) || !_.isEmpty(x.attributes));
+const _removeEmptyLines = (lines: Line[]) => _.dropRightWhile(lines, x => _.isEmpty(x.segments) && _.isEmpty(x.attributes));
 
 export const Base = React.forwardRef(({
   value = [],
