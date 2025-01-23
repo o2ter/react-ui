@@ -171,7 +171,7 @@ const CalendarBase = createMemoComponent(({
         const values = _.map(_value, x => dateToString(x.year, x.month, x.day));
         const date = dateToString(year, month, day);
         if (multiple) {
-          onChange(_.includes(values, date) ? [...values, date].sort() : values.filter(x => x !== date));
+          onChange(_.includes(values, date) ? values.filter(x => x !== date) : [...values, date].sort());
         } else {
           onChange(_.includes(values, date) ? [] : [date]);
         }
