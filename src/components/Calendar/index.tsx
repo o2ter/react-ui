@@ -167,32 +167,14 @@ const CalendarBase = createMemoComponent(({
         <Text style={textStyleNormalize([calendarStyle.weekdays, calendarWeekdayStyle])}>{locale.string('calendar.weekdays.saturday')}</Text>
       </View>
       <CalendarBody selected={_value} selectable={_selectable} onSelect={({ year, month, day }) => {
-
         if (!_.isFunction(onChange)) return;
-
+        const values = _.map(_value, x => dateToString(x.year, x.month, x.day));
+        const date = dateToString(year, month, day);
         if (multiple) {
-
-          const index = _value.findIndex(x => x.year === year && x.month === month && x.day === day);
-
-          if (index === -1) {
-
-            onChange([
-              ..._value.map(x => dateToString(x.year, x.month, x.day)),
-              dateToString(year, month, day),
-            ].sort());
-
-          } else {
-
-            const result = [..._value];
-            result.splice(index, 1);
-            onChange(result.map(x => dateToString(x.year, x.month, x.day)));
-          }
-
+          onChange(_.includes(values, date) ? [...values, date].sort() : values.filter(x => x !== date));
         } else {
-
-          onChange([dateToString(year, month, day)]);
+          onChange(_.includes(values, date) ? [] : [date]);
         }
-
       }} {...current} />
     </View>
   )
