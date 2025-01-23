@@ -37,10 +37,8 @@ type SegmentedControlBaseProps<T extends unknown = any> = Modify<ViewProps, {
   value?: T;
   onChange?: (value: T) => void;
   segments?: { label: string, value: T }[];
-  segmentTextStyle?: StyleProp<TextStyle>;
-  selectedSegmentTextStyle?: StyleProp<TextStyle>;
-  segmentContainerStyle?: StyleProp<ViewStyle>;
-  selectedSegmentContainerStyle?: StyleProp<ViewStyle>;
+  segmentTextStyle?: StyleProp<TextStyle> | ((state: { selected: boolean; }) => StyleProp<TextStyle>);
+  segmentContainerStyle?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<TextStyle>);
 }>
 
 type SegmentedControlProps<T extends unknown = any> = Modify<SegmentedControlBaseProps<T>, { tabStyle?: StyleProp<ViewStyle>; }>
@@ -52,9 +50,7 @@ export const SegmentedControl = createMemoComponent(<T extends unknown = any>({
   segments = [],
   tabStyle,
   segmentTextStyle,
-  selectedSegmentTextStyle,
   segmentContainerStyle,
-  selectedSegmentContainerStyle,
   ...props
 }: SegmentedControlProps<T>, forwardRef: React.ForwardedRef<View>) => {
 
@@ -96,11 +92,9 @@ export const SegmentedControl = createMemoComponent(<T extends unknown = any>({
           <Segment
             item={item}
             onLayout={({ nativeEvent }) => setSegmentBounds(state => ({ ...state, [index]: nativeEvent.layout }))}
-            isSelected={selected_idx === index}
+            selected={selected_idx === index}
             segmentTextStyle={segmentTextStyle}
-            selectedSegmentTextStyle={selectedSegmentTextStyle}
             segmentContainerStyle={segmentContainerStyle}
-            selectedSegmentContainerStyle={selectedSegmentContainerStyle}
             onPress={() => { if (_.isFunction(onChange)) onChange(item.value) }} />
         )} />
     </View>
@@ -118,9 +112,7 @@ export const PlainSegmentedControl = createMemoComponent(<T extends unknown = an
   onChange,
   segments = [],
   segmentTextStyle,
-  selectedSegmentTextStyle,
   segmentContainerStyle,
-  selectedSegmentContainerStyle,
   ...props
 }: PlainSegmentedControlProps<T>, forwardRef: React.ForwardedRef<View>) => {
 
@@ -136,11 +128,15 @@ export const PlainSegmentedControl = createMemoComponent(<T extends unknown = an
         renderItem={({ item, index }) => (
           <Segment
             item={item}
-            isSelected={selected_idx === index}
-            segmentTextStyle={[{ color }, segmentTextStyle]}
-            selectedSegmentTextStyle={[{ color: 'white' }, selectedSegmentTextStyle]}
-            segmentContainerStyle={segmentContainerStyle}
-            selectedSegmentContainerStyle={[{ backgroundColor: color }, selectedSegmentContainerStyle]}
+            selected={selected_idx === index}
+            segmentTextStyle={(state) => [
+              { color: state.selected ? 'white' : color },
+              _.isFunction(segmentTextStyle) ? segmentTextStyle(state) : segmentTextStyle,
+            ]}
+            segmentContainerStyle={(state) => [
+              state.selected && { backgroundColor: color },
+              _.isFunction(segmentContainerStyle) ? segmentContainerStyle(state) : segmentContainerStyle,
+            ]}
             onPress={() => { if (_.isFunction(onChange)) onChange(item.value) }} />
         )} />
     </View>

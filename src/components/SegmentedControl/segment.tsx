@@ -32,21 +32,17 @@ import { textStyleNormalize } from '../Text/style';
 
 export const Segment: React.FC<{
   item: { label: string };
-  isSelected?: boolean;
-  segmentTextStyle?: StyleProp<TextStyle>;
-  selectedSegmentTextStyle?: StyleProp<TextStyle>;
-  segmentContainerStyle?: StyleProp<ViewStyle>;
-  selectedSegmentContainerStyle?: StyleProp<ViewStyle>;
+  selected: boolean;
+  segmentTextStyle?: StyleProp<TextStyle> | ((state: { selected: boolean; }) => StyleProp<TextStyle>);
+  segmentContainerStyle?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<TextStyle>);
   onLayout?: (event: LayoutChangeEvent) => void;
   onPress: (event: GestureResponderEvent) => void;
 }> = ({
   item,
   onLayout,
-  isSelected,
+  selected,
   segmentTextStyle,
-  selectedSegmentTextStyle,
   segmentContainerStyle,
-  selectedSegmentContainerStyle,
   onPress,
 }) => (
   <Pressable
@@ -54,12 +50,10 @@ export const Segment: React.FC<{
     onLayout={onLayout}
     style={[
       { paddingVertical: 8, paddingHorizontal: 16 },
-      segmentContainerStyle,
-      isSelected && selectedSegmentContainerStyle,
+      _.isFunction(segmentContainerStyle) ? segmentContainerStyle({ selected }) : segmentContainerStyle,
     ]}>
     <Text style={textStyleNormalize([
-      segmentTextStyle,
-      isSelected && selectedSegmentTextStyle,
+      _.isFunction(segmentTextStyle) ? segmentTextStyle({ selected }) : segmentTextStyle,
     ])}>{item.label}</Text>
   </Pressable>
 );
