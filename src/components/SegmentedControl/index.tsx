@@ -45,7 +45,7 @@ type SegmentedControlBaseProps<T extends unknown = any> = Modify<ViewProps, {
 
 type SegmentedControlProps<T extends unknown = any> = Modify<SegmentedControlBaseProps<T>, { tabStyle?: StyleProp<ViewStyle>; }>
 
-export const SegmentedControl = createMemoComponent(({
+export const SegmentedControl = createMemoComponent(<T extends unknown = any>({
   value,
   style,
   onChange,
@@ -56,7 +56,7 @@ export const SegmentedControl = createMemoComponent(({
   segmentContainerStyle,
   selectedSegmentContainerStyle,
   ...props
-}: SegmentedControlProps, forwardRef: React.ForwardedRef<View>) => {
+}: SegmentedControlProps<T>, forwardRef: React.ForwardedRef<View>) => {
 
   const [segmentBounds, setSegmentBounds] = React.useState<Record<number, LayoutRectangle>>({});
   const selected_idx = Math.max(0, _.findIndex(segments, x => x.value === value));
@@ -76,40 +76,42 @@ export const SegmentedControl = createMemoComponent(({
     }
   }, [selected_bounds.x, selected_bounds.width]);
 
-  return <View
-    ref={forwardRef}
-    style={[_style.segmentedControlContainer, style]}
-    {...props}>
-    <Animated.View style={{
-      position: 'absolute',
-      top: 0,
-      height: '100%',
-      left: tabTranslate.x,
-      width: tabTranslate.y,
-    }}>
-      <View style={[{ flex: 1, backgroundColor: 'white', margin: 2, borderRadius: 8, alignSelf: 'stretch' }, _style.shadow, tabStyle]} />
-    </Animated.View>
-    <List
-      data={segments}
-      renderItem={({ item, index }) => (
-        <Segment
-          item={item}
-          onLayout={({ nativeEvent }) => setSegmentBounds(state => ({ ...state, [index]: nativeEvent.layout }))}
-          isSelected={selected_idx === index}
-          segmentTextStyle={segmentTextStyle}
-          selectedSegmentTextStyle={selectedSegmentTextStyle}
-          segmentContainerStyle={segmentContainerStyle}
-          selectedSegmentContainerStyle={selectedSegmentContainerStyle}
-          onPress={() => { if (_.isFunction(onChange)) onChange(item.value) }} />
-      )} />
-  </View>;
+  return (
+    <View
+      ref={forwardRef}
+      style={[_style.segmentedControlContainer, style]}
+      {...props}>
+      <Animated.View style={{
+        position: 'absolute',
+        top: 0,
+        height: '100%',
+        left: tabTranslate.x,
+        width: tabTranslate.y,
+      }}>
+        <View style={[{ flex: 1, backgroundColor: 'white', margin: 2, borderRadius: 8, alignSelf: 'stretch' }, _style.shadow, tabStyle]} />
+      </Animated.View>
+      <List
+        data={segments}
+        renderItem={({ item, index }) => (
+          <Segment
+            item={item}
+            onLayout={({ nativeEvent }) => setSegmentBounds(state => ({ ...state, [index]: nativeEvent.layout }))}
+            isSelected={selected_idx === index}
+            segmentTextStyle={segmentTextStyle}
+            selectedSegmentTextStyle={selectedSegmentTextStyle}
+            segmentContainerStyle={segmentContainerStyle}
+            selectedSegmentContainerStyle={selectedSegmentContainerStyle}
+            onPress={() => { if (_.isFunction(onChange)) onChange(item.value) }} />
+        )} />
+    </View>
+  );
 }, {
   displayName: 'SegmentedControl',
 });
 
 type PlainSegmentedControlProps<T extends unknown = any> = Modify<SegmentedControlBaseProps<T>, { color?: string; }>
 
-export const PlainSegmentedControl = createMemoComponent(({
+export const PlainSegmentedControl = createMemoComponent(<T extends unknown = any>({
   value,
   style,
   color = '#2196F3',
@@ -120,27 +122,29 @@ export const PlainSegmentedControl = createMemoComponent(({
   segmentContainerStyle,
   selectedSegmentContainerStyle,
   ...props
-}: PlainSegmentedControlProps, forwardRef: React.ForwardedRef<View>) => {
+}: PlainSegmentedControlProps<T>, forwardRef: React.ForwardedRef<View>) => {
 
   const selected_idx = Math.max(0, _.findIndex(segments, x => x.value === value));
 
-  return <View
-    ref={forwardRef}
-    style={[_style.plainSegmentedControlContainer, { borderColor: color }, style]}
-    {...props}>
-    <List
-      data={segments}
-      renderItem={({ item, index }) => (
-        <Segment
-          item={item}
-          isSelected={selected_idx === index}
-          segmentTextStyle={[{ color }, segmentTextStyle]}
-          selectedSegmentTextStyle={[{ color: 'white' }, selectedSegmentTextStyle]}
-          segmentContainerStyle={segmentContainerStyle}
-          selectedSegmentContainerStyle={[{ backgroundColor: color }, selectedSegmentContainerStyle]}
-          onPress={() => { if (_.isFunction(onChange)) onChange(item.value) }} />
-      )} />
-  </View>;
+  return (
+    <View
+      ref={forwardRef}
+      style={[_style.plainSegmentedControlContainer, { borderColor: color }, style]}
+      {...props}>
+      <List
+        data={segments}
+        renderItem={({ item, index }) => (
+          <Segment
+            item={item}
+            isSelected={selected_idx === index}
+            segmentTextStyle={[{ color }, segmentTextStyle]}
+            selectedSegmentTextStyle={[{ color: 'white' }, selectedSegmentTextStyle]}
+            segmentContainerStyle={segmentContainerStyle}
+            selectedSegmentContainerStyle={[{ backgroundColor: color }, selectedSegmentContainerStyle]}
+            onPress={() => { if (_.isFunction(onChange)) onChange(item.value) }} />
+        )} />
+    </View>
+  );
 }, {
   displayName: 'PlainSegmentedControl',
 });
