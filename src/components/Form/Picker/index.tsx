@@ -74,7 +74,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Picker<T>>>
 ) => {
 
-  const { value, roles: _roles, error, touched, setTouched, onChange, useValidator } = useField(name);
+  const { value, roles: _roles, disabled: formDisabled, error, touched, setTouched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -84,7 +84,7 @@ export const FormPicker = createMemoComponent(<T = ItemValue>(
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const _disabled = disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+  const _disabled = formDisabled || disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
 
   const formPickerStyle = _useComponentStyle('formPicker', classes, [
     focused && 'focus',

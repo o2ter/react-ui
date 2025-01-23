@@ -74,7 +74,7 @@ export const FormDate = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof DatePicker>>
 ) => {
 
-  const { value, roles: _roles, error, touched, setTouched, onChange, useValidator } = useField(name);
+  const { value, roles: _roles, disabled: formDisabled, error, touched, setTouched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -83,7 +83,7 @@ export const FormDate = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const _disabled = disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+  const _disabled = formDisabled || disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
 
   const formDateStyle = _useComponentStyle('formDate', classes, [
     focused && 'focus',

@@ -31,6 +31,7 @@ export type FormState = {
   values: Record<string, any>;
   errors: Error[];
   dirty: boolean;
+  disabled: boolean;
   submitting: boolean;
   resetting: boolean;
   loading: string[];
@@ -53,6 +54,7 @@ export type FormProps<S extends Record<string, ISchema<any, any>>> = {
   schema?: S | ReturnType<typeof object<S>>;
   initialValues?: TypeOfSchema<ReturnType<typeof object<S>>>;
   roles?: string[];
+  disabled?: boolean;
   activity?: boolean | { actions?: string[]; delay?: number; };
   validate?: (value: any, path?: string) => Error[];
   validateOnMount?: boolean;

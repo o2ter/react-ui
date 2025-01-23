@@ -69,7 +69,7 @@ export const FormSwitch = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Switch>>
 ) => {
 
-  const { value: _value, roles: _roles, error, touched, onChange, useValidator } = useField(name);
+  const { value: _value, roles: _roles, disabled: formDisabled, error, touched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -78,7 +78,7 @@ export const FormSwitch = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const _disabled = disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+  const _disabled = formDisabled || disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
 
   const formSwitchStyle = _useComponentStyle('formSwitch', classes, [
     focused && 'focus',

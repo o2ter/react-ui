@@ -70,7 +70,7 @@ export const FormSelect = createMemoComponent(<T extends unknown = any, M extend
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Select<T, M>>>
 ) => {
 
-  const { value, roles: _roles, error, touched, setTouched, onChange, useValidator } = useField(name);
+  const { value, roles: _roles, disabled: formDisabled, error, touched, setTouched, onChange, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -79,7 +79,7 @@ export const FormSelect = createMemoComponent(<T extends unknown = any, M extend
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const _disabled = disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+  const _disabled = formDisabled || disabled || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
 
   const formSelectStyle = _useComponentStyle('formSelect', classes, [
     focused && 'focus',

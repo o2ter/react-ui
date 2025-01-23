@@ -69,7 +69,7 @@ export const FormTextField = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof TextInput>>
 ) => {
 
-  const { value, roles: _roles, error, touched, setTouched, onChange, submit, useValidator } = useField(name);
+  const { value, roles: _roles, disabled: formDisabled, error, touched, setTouched, onChange, submit, useValidator } = useField(name);
   const invalid = !_.isEmpty(error);
 
   useValidator(validate);
@@ -78,7 +78,7 @@ export const FormTextField = createMemoComponent((
 
   const [focused, _onFocus, _onBlur] = useFocus(onFocus, onBlur);
 
-  const _disabled = !!readOnly || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
+  const _disabled = formDisabled || !!readOnly || (!_.isNil(roles ?? _roles) && _.isEmpty(_.intersection(roles ?? _roles, _roles ?? roles)));
 
   const formTextFieldStyle = _useComponentStyle('formTextField', classes, [
     focused && 'focus',

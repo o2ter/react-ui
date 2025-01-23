@@ -43,7 +43,7 @@ export const FormButton = createMemoComponent((
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof Button>>
 ) => {
 
-  const { submit, reset, action: _action, loading } = useForm();
+  const { submit, reset, action: _action, loading, disabled: formDisabled } = useForm();
 
   const defaultProps = {
     submit: {
@@ -60,7 +60,7 @@ export const FormButton = createMemoComponent((
     <Button
       ref={forwardRef}
       title={_.upperCase(action)}
-      disabled={disabled ?? !_.isEmpty(loading)}
+      disabled={formDisabled || (disabled ?? !_.isEmpty(loading))}
       {..._.get(defaultProps, action, { onPress: () => _action(action) })}
       {...props} />
   );

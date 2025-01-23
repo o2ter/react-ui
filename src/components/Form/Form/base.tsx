@@ -67,6 +67,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   schema,
   initialValues,
   roles,
+  disabled,
   activity,
   validate,
   validateOnMount,
@@ -194,6 +195,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     values,
     validate: _validate,
     get dirty() { return !_.isNil(_values) },
+    get disabled() { return !!disabled },
     get submitting() { return !_.isEmpty(loading.submit) },
     get resetting() { return !_.isEmpty(loading.reset) },
     get loading() { return _.keys(_.pickBy(loading, x => !_.isEmpty(x))) },
@@ -203,7 +205,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     get errors() { return [..._validate(values), ..._.map(extraError, x => x.error)] },
     touched: (path: string) => _.isBoolean(touched) ? touched : touched[path] ?? false,
     ...formAction,
-  }), [useEquivalent(roles), loading, counts, values, _validate, touched, extraError, refresh]);
+  }), [useEquivalent(roles), disabled, loading, counts, values, _validate, touched, extraError, refresh]);
 
   const [initState] = React.useState(formState);
   React.useEffect(() => {
