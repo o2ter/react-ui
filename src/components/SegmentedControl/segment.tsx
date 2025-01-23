@@ -30,14 +30,16 @@ import { Text, TextStyle, ViewStyle, Pressable, StyleProp, LayoutChangeEvent, Ge
 import { style as _style } from './style';
 import { textStyleNormalize } from '../Text/style';
 
-export const Segment: React.FC<{
+type SegmentProps = {
   item: { label: string };
   selected: boolean;
   segmentTextStyle?: StyleProp<TextStyle> | ((state: { selected: boolean; }) => StyleProp<TextStyle>);
   segmentContainerStyle?: StyleProp<ViewStyle> | ((state: { selected: boolean; }) => StyleProp<TextStyle>);
   onLayout?: (event: LayoutChangeEvent) => void;
   onPress: (event: GestureResponderEvent) => void;
-}> = ({
+};
+
+export const Segment: React.FC<SegmentProps> = ({
   item,
   onLayout,
   selected,
