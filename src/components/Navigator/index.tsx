@@ -38,6 +38,7 @@ export {
   useMatch,
   useNavigate,
   useParams,
+  useSearchParams,
   useResolvedPath,
   useLinkClickHandler,
   NavLink,
