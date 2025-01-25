@@ -183,10 +183,8 @@ export const Select = createMemoComponent(<T extends unknown = any, M extends bo
 
   const [search, setSearch] = React.useState('');
   const [history, setHistory] = React.useState<SelectOption<T>[]>([]);
-  const {
-    resource: options = _options ?? []
-  } = useAsyncResource<_SelectOption<T>>({
-    fetch: async ({ abortSignal }) => fetch ? fetch({ search, history, value, abortSignal }) : _options,
+  const { resource: options = _options ?? [] } = useAsyncResource<_SelectOption<T>>({
+    fetch: async ({ abortSignal }) => _.isFunction(fetch) ? fetch({ search, history, value, abortSignal }) : undefined,
     debounce,
   }, [search]);
 
