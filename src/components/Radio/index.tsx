@@ -45,6 +45,7 @@ type RadioState = {
 type RadioProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;
   color?: ThemeColors | (string & {});
+  innerColor?: ThemeColors | (string & {});
   selected?: boolean;
   tabIndex?: number;
   focusRingColor?: string;
@@ -56,6 +57,7 @@ export const Radio = createMemoComponent((
   {
     classes,
     color = 'primary',
+    innerColor,
     style,
     selected,
     focusRingColor,
@@ -145,7 +147,7 @@ export const Radio = createMemoComponent((
         { marginTop: _.isNumber(lineHeight) ? (lineHeight - 1) * 0.5 * fontSize : 0 }
       ]}>
         {selected && <Svg width='100%' height='100%' viewBox='-4 -4 8 8'>
-          <Circle r='2' fill={theme.colorContrast(theme.pickColor(color))} />
+          <Circle r='2' fill={innerColor ? theme.pickColor(innerColor) : theme.colorContrast(theme.pickColor(color))} />
         </Svg>}
       </View>
       {_.isFunction(children) ? children(state) : children}

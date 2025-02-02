@@ -46,6 +46,7 @@ type CheckboxState = {
 type CheckboxProps = Modify<React.ComponentPropsWithoutRef<typeof Pressable>, {
   classes?: ClassNames;
   color?: ThemeColors | (string & {});
+  innerColor?: ThemeColors | (string & {});
   mixed?: boolean;
   selected?: boolean;
   tabIndex?: number;
@@ -58,6 +59,7 @@ export const Checkbox = createMemoComponent((
   {
     classes,
     color = 'primary',
+    innerColor,
     style,
     mixed,
     selected,
@@ -156,7 +158,7 @@ export const Checkbox = createMemoComponent((
           <Svg width='100%' height='100%' viewBox='0 0 20 20'>
             <Path
               fill='none'
-              stroke={theme.colorContrast(theme.pickColor(color))}
+              stroke={innerColor ? theme.pickColor(innerColor) : theme.colorContrast(theme.pickColor(color))}
               strokeWidth='3'
               strokeLinecap='round'
               strokeLinejoin='round'
