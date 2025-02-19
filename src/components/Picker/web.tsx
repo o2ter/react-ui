@@ -73,7 +73,6 @@ export const PickerWeb = createMemoComponent(<T = ItemValue>(
       baseStyle,
       {
         flexDirection: 'row',
-        gap: theme.spacer * 0.375,
         alignItems: 'center',
         color: theme.root.textColor,
         fontSize: theme.root.fontSize,

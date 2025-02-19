@@ -103,7 +103,6 @@ export const PickerBase = React.forwardRef<React.ComponentRef<typeof Pressable>,
       style={[
         {
           flexDirection: 'row',
-          gap: theme.spacer * 0.375,
           alignItems: 'center',
         },
         Platform.select({
