@@ -91,6 +91,7 @@ const SelectListItem = <T extends unknown = any>({
         {
           flexDirection: 'row',
           alignItems: 'center',
+          gap: theme.spacer * 0.375,
           backgroundColor: fadeAnim.interpolate({
             inputRange: [0, 1],
             outputRange: [rgba(theme.grays['200'], 0), rgba(theme.grays['200'])],
