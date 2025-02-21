@@ -30,12 +30,13 @@ import View from '../View';
 import Text from '../Text';
 import Image from '../Image';
 import { useTheme } from '../../theme';
-import { parser } from './parser';
+import { DefaultTags, parser } from './parser';
 import { createMemoComponent } from '../../internals/utils';
 
 type BBCodeProps = React.ComponentPropsWithoutRef<typeof View> & {
   source?: { content?: string };
   onPressLink?: (link: string) => void;
+  allowedTags?: DefaultTags[];
 };
 
 type LinkProps = React.PropsWithChildren<{
@@ -85,13 +86,14 @@ export const BBCode = createMemoComponent((
   {
     source,
     onPressLink,
+    allowedTags,
     ...props
   }: BBCodeProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
 ) => {
   const theme = useTheme();
   const { content = '' } = source ?? {};
-  const lines = React.useMemo(() => parser(content), [content]);
+  const lines = React.useMemo(() => parser(content, allowedTags), [content]);
   return (
     <View ref={forwardRef} {...props}>
       <View>

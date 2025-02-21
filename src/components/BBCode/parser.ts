@@ -66,7 +66,7 @@ export const html_escaper = (() => {
 
 })();
 
-const tags: any = {
+const defaultTags = {
   b: {},
   i: {},
   s: {},
@@ -90,7 +90,14 @@ const tags: any = {
   // ol: { block: true },
   // li: { isSelfClosing: true },
   img: { stringContent: true },
-}
+} as const;
+
+type UnionToIntersection<T> =
+  (T extends any ? (x: T) => any : never) extends
+  (x: infer R) => any ? R : never
+
+export type DefaultTags = keyof typeof defaultTags;
+type TagParams = Partial<UnionToIntersection<typeof defaultTags[DefaultTags]>>;
 
 const tag_regex = /\[([^\/\[\]\n\r\s=]+)(?:=([^\[\]\n\r]+))?((?:\s+(?:[^\/\[\]\n\r\s=]+)=(?:[^\[\]\n\r\s]+))*)\]|\[\/([^\/\[\]\n\r\s=]+)\]/;
 const space_regex = /\s+/;
@@ -128,7 +135,11 @@ type Line = {
   segments: Segment[];
 };
 
-export const parser = (docs: string) => {
+export const parser = (
+  docs: string,
+  allowedTags?: DefaultTags[],
+) => {
+  const tags = _.pickBy(defaultTags, allowedTags ?? _.keys(defaultTags)) as Record<string, TagParams>;
   const result: Line[] = [];
   const attributes: Record<string, any> = {};
   const line_attributes: Record<string, any> = {};
