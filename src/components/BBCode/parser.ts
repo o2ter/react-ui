@@ -139,7 +139,7 @@ export const parser = (
   docs: string,
   allowedTags?: DefaultTags[],
 ) => {
-  const tags = _.pickBy(defaultTags, allowedTags ?? _.keys(defaultTags)) as Record<string, TagParams>;
+  const tags = _.pick(defaultTags, allowedTags ?? _.keys(defaultTags)) as Record<string, TagParams>;
   const result: Line[] = [];
   const attributes: Record<string, any> = {};
   const line_attributes: Record<string, any> = {};
