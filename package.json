@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@codemirror/lang-javascript": "^6.2.2",
-    "@o2ter/utils-js": "^0.0.17",
+    "@o2ter/utils-js": "^0.0.18",
     "@react-native-picker/picker": ">=2.7.6",
     "@react-native/normalize-colors": "^0.74.83",
     "@types/d3-dsv": "^3.0.7",

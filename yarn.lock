@@ -1423,10 +1423,10 @@
     events ">=3.3.0"
     lodash ">=4.17.21"
 
-"@o2ter/utils-js@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@o2ter/utils-js/-/utils-js-0.0.17.tgz#b18be26781a0539c0cd592c26f5cd70d5622057c"
-  integrity sha512-IwbvwdCL9pxq5eK9Lsy+AOA8g3YNWNqebWEW68qy0Dc0zI+FlcLZsewJfBIYkQJ2kgroNTIEbohqHyQIHVt+zg==
+"@o2ter/utils-js@^0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@o2ter/utils-js/-/utils-js-0.0.18.tgz#65be6f80d331d9372ecb8cbf9f16265a5b8e07ac"
+  integrity sha512-7ebXdOm3CG38tjD3iKcMbhd0cl5OB9UJkxywvG0whKRAQ8Goq0eh/RlKLZtaKXeEJWatPDe7DQOjRBVCWOovsw==
   dependencies:
     lodash ">=4.17.21"
 
