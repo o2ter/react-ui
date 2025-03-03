@@ -46,8 +46,8 @@ export type FormState = {
   action: (action: string) => void;
   touched: (path: string) => boolean;
   setTouched: (path?: string) => void;
-  addEventListener: (action: string, callback: VoidFunction) => void;
-  removeEventListener: (action: string, callback: VoidFunction) => void;
+  addEventListener: (callback: (action: string, state: FormState) => void) => void;
+  removeEventListener: (callback: (action: string, state: FormState) => void) => void;
 };
 
 export type FormProps<S extends Record<string, ISchema<any, any>>> = {

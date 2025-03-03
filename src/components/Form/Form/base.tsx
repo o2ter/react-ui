@@ -96,7 +96,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
   const [loading, setLoading] = React.useState<Record<string, string[]>>({});
   const [counts, setCounts] = React.useState<Record<string, number>>({});
   const [touched, setTouched] = React.useState<true | Record<string, boolean>>(validateOnMount ? true : {});
-  const [listeners, setListeners] = React.useState<{ action: string; callback: VoidFunction; }[]>([]);
+  const [listeners, setListeners] = React.useState<((action: string, state: FormState) => void)[]>([]);
   const [refresh, setRefresh] = React.useState(0);
 
   const startActivity = useActivity();
@@ -162,7 +162,7 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
       _showError(async () => {
         try {
           setLoading(v => ({ ...v, [action]: [...v[action] ?? [], taskId] }));
-          const resolved = await Promise.all(_.flatMap(listeners, x => x.action === action ? x.callback() : []));
+          const resolved = await Promise.all(_.flatMap(listeners, callback => callback(action, formState)));
           if (_.isEmpty(resolved)) {
             callback({ values, formState, schema: _schema });
           } else {
@@ -186,8 +186,8 @@ export const Form = createMemoComponent(<S extends Record<string, ISchema<any, a
     refresh: () => setRefresh(v => v + 1),
     action: (action: string) => stableRef.current.action(action),
     setTouched: (path?: string) => setTouched(touched => _.isNil(path) || _.isBoolean(touched) ? true : { ...touched, [path]: true }),
-    addEventListener: (action: string, callback: VoidFunction) => setListeners(v => [...v, { action, callback }]),
-    removeEventListener: (action: string, callback: VoidFunction) => setListeners(v => _.filter(v, x => x.action !== action || x.callback !== callback)),
+    addEventListener: (callback: (action: string, state: FormState) => void) => setListeners(v => [...v, callback]),
+    removeEventListener: (callback: (action: string, state: FormState) => void) => setListeners(v => _.filter(v, x => x !== callback)),
   }), []);
 
   const formState = React.useMemo(() => ({

@@ -78,7 +78,8 @@ export const FormUploader = createMemoComponent(<File extends unknown, Uploaded 
   }, [uploads]);
 
   React.useEffect(() => {
-    const listener = async () => {
+    const listener = async (action: string) => {
+      if (action !== 'submit') return;
       const _uploads = _.filter(uploads, x => x instanceof FormUploadHandler) as FormUploadHandler<File, Uploaded>[];
       await Promise.all(_.map(_uploads, x => x.startUpload()));
       for (const { error } of _uploads) {
@@ -87,8 +88,8 @@ export const FormUploader = createMemoComponent(<File extends unknown, Uploaded 
       onChange(_.map(uploads, x => x instanceof FormUploadHandler ? x.uploaded : x));
       setTouched();
     }
-    addEventListener('submit', listener);
-    return () => removeEventListener('submit', listener);
+    addEventListener(listener);
+    return () => removeEventListener(listener);
   }, [uploads]);
 
   const _onUpload = useStableCallback(onUpload);
