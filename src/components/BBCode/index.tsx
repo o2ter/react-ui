@@ -143,8 +143,8 @@ export const BBCode = createMemoComponent((
                           case 'color': style.color = _.isFunction(fallbacks?.color) ? fallbacks.color(attrs.color) : attrs.color; break;
                           case 'size':
                             let size = parseFloat(attrs.size);
-                            if (_.isFinite(size)) style.fontSize = size;
-                            else if (_.isFunction(fallbacks?.size)) style.fontSize = fallbacks.size(attrs.size);
+                            if (_.isFunction(fallbacks?.size)) style.fontSize = fallbacks.size(attrs.size);
+                            else if (_.isFinite(size)) style.fontSize = size;
                             else if (theme.fontSizes[attrs.size]) style.fontSize = theme.fontSizes[attrs.size];
                             break;
                           case 'font': style.fontFamily = _.isFunction(fallbacks?.font) ? fallbacks.font(attrs.font) : attrs.font; break;
