@@ -37,6 +37,11 @@ type BBCodeProps = React.ComponentPropsWithoutRef<typeof View> & {
   source?: { content?: string };
   allowedTags?: DefaultTags[];
   linkStyle?: StyleProp<TextStyle>;
+  fallbacks?: {
+    color?: (x: string) => string;
+    size?: (x: string) => number;
+    font?: (x: string) => string;
+  };
   onPressLink?: (link: string) => void;
 };
 
@@ -88,6 +93,7 @@ export const BBCode = createMemoComponent((
     source,
     allowedTags,
     linkStyle,
+    fallbacks,
     onPressLink,
     ...props
   }: BBCodeProps,
@@ -134,13 +140,14 @@ export const BBCode = createMemoComponent((
                         switch (key) {
                           case 'b': style.fontWeight = 'bold'; break;
                           case 'i': style.fontStyle = 'italic'; break;
-                          case 'color': style.color = attrs.color; break;
+                          case 'color': style.color = _.isFunction(fallbacks?.color) ? fallbacks.color(attrs.color) : attrs.color; break;
                           case 'size':
                             let size = parseFloat(attrs.size);
                             if (_.isFinite(size)) style.fontSize = size;
+                            else if (_.isFunction(fallbacks?.size)) style.fontSize = fallbacks.size(attrs.size);
                             else if (theme.fontSizes[attrs.size]) style.fontSize = theme.fontSizes[attrs.size];
                             break;
-                          case 'font': style.fontFamily = attrs.font; break;
+                          case 'font': style.fontFamily = _.isFunction(fallbacks?.font) ? fallbacks.font(attrs.font) : attrs.font; break;
                         }
                       }
                       const underline = !_.isNil(segment.attributes.u);
