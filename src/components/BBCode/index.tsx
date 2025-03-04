@@ -25,7 +25,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import { TextStyle, Pressable, Platform, Linking, ViewStyle } from 'react-native';
+import { TextStyle, Pressable, Platform, Linking, ViewStyle, StyleProp } from 'react-native';
 import View from '../View';
 import Text from '../Text';
 import Image from '../Image';
@@ -35,8 +35,9 @@ import { createMemoComponent } from '../../internals/utils';
 
 type BBCodeProps = React.ComponentPropsWithoutRef<typeof View> & {
   source?: { content?: string };
-  onPressLink?: (link: string) => void;
   allowedTags?: DefaultTags[];
+  linkStyle?: StyleProp<TextStyle>;
+  onPressLink?: (link: string) => void;
 };
 
 type LinkProps = React.PropsWithChildren<{
@@ -85,8 +86,9 @@ function* group(
 export const BBCode = createMemoComponent((
   {
     source,
-    onPressLink,
     allowedTags,
+    linkStyle,
+    onPressLink,
     ...props
   }: BBCodeProps,
   forwardRef: React.ForwardedRef<React.ComponentRef<typeof View>>
@@ -153,7 +155,7 @@ export const BBCode = createMemoComponent((
                       if (_.isString(segment.attributes.link?.link)) {
                         return (
                           <Link key={k} link={segment.attributes.link.link} onPressLink={onPressLink}>
-                            <Text style={style}>{_.isString(segment.insert) ? segment.insert : ''}</Text>
+                            <Text style={[linkStyle, style]}>{_.isString(segment.insert) ? segment.insert : ''}</Text>
                           </Link>
                         );
                       }
