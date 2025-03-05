@@ -29,7 +29,7 @@ import type _Delta from 'quill-delta';
 import { useStableCallback } from 'sugax';
 import { Delta, Quill } from '../quill';
 import { Line } from '../format/types';
-import { RichTextInputProps, RichTextInputRef, SelectionChangeHandler, TextChangeHandler } from './types';
+import { RichTextInputProps, RichTextInputRef } from './types';
 import { Range } from 'quill';
 
 const encodeContent = (lines: Line[]) => {
