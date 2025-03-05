@@ -95,7 +95,7 @@ export const Base = React.forwardRef(({
     editor.setContents(delta, 'silent');
     if (selection && editor.hasFocus()) {
       const pos = oldContent.diff(delta).transformPosition(selection.index);
-      editor.setSelection({ index: pos, length: selection.length }, 'silent');
+      editor.setSelection(pos, selection.length, 'silent');
     }
   }, [value]);
 
