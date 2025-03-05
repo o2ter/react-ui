@@ -177,16 +177,10 @@ export const Base = React.forwardRef(({
     });
     editorRef.current = editor;
     const textChange = (delta: _Delta) => {
-      setCapture(v => ({
-        ...v,
-        delta: v.delta.compose(delta),
-      }));
+      setCapture(v => ({ ...v, delta: v.delta.compose(delta) }));
     }
     const selectionChange = (range: Range) => {
-      setCapture(v => ({
-        ...v,
-        selection: v.delta.length() ? v.selection : range,
-      }));
+      setCapture(v => ({ ...v, selection: v.delta.length() ? v.selection : range }));
       _onChangeSelection(range, editor);
     };
     editor.on('text-change', textChange);
