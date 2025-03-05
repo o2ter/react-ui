@@ -85,15 +85,20 @@ export const Base = React.forwardRef(({
     content: new Delta,
     selection: null
   });
+
   React.useEffect(() => {
     const editor = editorRef.current;
     if (!editor || !capture.delta.length()) return;
     const content = capture.content.compose(capture.delta);
-    const selection = capture.selection;
-    editor.setContents(capture.content, 'silent');
-    editor.setSelection(selection, 'silent');
-    setCapture({ delta: new Delta, content, selection });
+    setCapture(v => ({ ...v, delta: new Delta }));
     _onChangeText(decodeContent(content), editor);
+  }, [capture]);
+
+  React.useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.setContents(capture.content, 'silent');
+    editor.setSelection(capture.selection, 'silent');
   }, [capture]);
 
   React.useEffect(() => {
@@ -102,10 +107,10 @@ export const Base = React.forwardRef(({
     const selection = editor.getSelection();
     const oldContent = editor.getContents();
     const delta = encodeContent(value ?? []);
-    editor.setContents(delta, 'silent');
+    setCapture(v => ({ ...v, content: delta }));
     if (selection && editor.hasFocus()) {
       const pos = oldContent.diff(delta).transformPosition(selection.index);
-      editor.setSelection(pos, selection.length, 'silent');
+      setCapture(v => ({ ...v, selection: new Range(pos, selection.length) }));
     }
   }, [value]);
 
@@ -170,8 +175,8 @@ export const Base = React.forwardRef(({
     editorRef.current = editor;
     const textChange = (delta: _Delta) => {
       setCapture(v => ({
+        ...v,
         delta: v.delta.compose(delta),
-        content: v.content,
         selection: v.delta.length() ? v.selection : editor.getSelection(),
       }));
     }
