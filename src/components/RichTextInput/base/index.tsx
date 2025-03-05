@@ -76,13 +76,23 @@ export const Base = React.forwardRef(({
   const _onChangeText = useStableCallback(onChangeText ?? (() => { }));
   const _onChangeSelection = useStableCallback(onChangeSelection ?? (() => { }));
 
-  const [capture, setCapture] = React.useState({ delta: new Delta, content: new Delta });
+  const [capture, setCapture] = React.useState<{
+    delta: _Delta;
+    content: _Delta;
+    selection: Range | null
+  }>({
+    delta: new Delta,
+    content: new Delta,
+    selection: null
+  });
   React.useEffect(() => {
     const editor = editorRef.current;
     if (!editor || !capture.delta.length()) return;
     const content = capture.content.compose(capture.delta);
+    const selection = capture.selection;
     editor.setContents(capture.content, 'silent');
-    setCapture({ delta: new Delta, content });
+    editor.setSelection(selection, 'silent');
+    setCapture({ delta: new Delta, content, selection });
     _onChangeText(decodeContent(content), editor);
   }, [capture]);
 
@@ -159,7 +169,11 @@ export const Base = React.forwardRef(({
     });
     editorRef.current = editor;
     const textChange = (delta: _Delta) => {
-      setCapture(v => ({ delta: v.delta.compose(delta), content: v.content }));
+      setCapture(v => ({
+        delta: v.delta.compose(delta),
+        content: v.content,
+        selection: v.delta.length() ? v.selection : editor.getSelection(),
+      }));
     }
     const selectionChange = (range: Range) => _onChangeSelection(range, editor);
     editor.on('text-change', textChange);
