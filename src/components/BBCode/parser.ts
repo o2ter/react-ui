@@ -214,3 +214,37 @@ export const parser = (
   }
   return result;
 };
+
+type Attrs = {
+  attributes: Record<string, Record<string, string>>;
+  range: readonly [number, number];
+}[];
+
+export class AttrString {
+
+  _str: string;
+  _attrs: Attrs;
+
+  constructor(str: string, attrs: Attrs) {
+    this._str = str;
+    this._attrs = attrs;
+  }
+
+  static fromAst(ast: Line[], lineSeparator = '\n') {
+    const attrs: Attrs = [];
+    let text = '';
+    for (const [i, line] of ast.entries()) {
+      if (i !== 0) text += lineSeparator;
+      for (const [j, segment] of line.segments.entries()) {
+        if (_.isString(segment.insert)) {
+          if (!_.isEmpty(segment.attributes)) attrs.push({
+            attributes: segment.attributes,
+            range: [text.length, text.length + segment.insert.length],
+          });
+          text += segment.insert;
+        }
+      }
+    }
+    return new AttrString(text, attrs);
+  }
+}
