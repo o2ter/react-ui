@@ -97,8 +97,8 @@ export const Base = React.forwardRef(({
   React.useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
-    editor.setContents(capture.content, 'silent');
-    editor.setSelection(capture.selection, 'silent');
+    if (capture.content.diff(editor.getContents()).length()) editor.setContents(capture.content, 'silent');
+    if (capture.selection) editor.setSelection(capture.selection, 'silent');
   }, [capture.content, capture.selection]);
 
   React.useEffect(() => {
@@ -106,10 +106,10 @@ export const Base = React.forwardRef(({
     if (!editor) return;
     const selection = editor.getSelection();
     const oldContent = editor.getContents();
-    const delta = encodeContent(value ?? []);
-    setCapture(v => ({ ...v, content: delta }));
+    const content = encodeContent(value ?? []);
+    setCapture(v => ({ ...v, content }));
     if (!selection || !editor.hasFocus()) return;
-    const pos = oldContent.diff(delta).transformPosition(selection.index);
+    const pos = oldContent.diff(content).transformPosition(selection.index);
     setCapture(v => ({ ...v, selection: new Range(pos, selection.length) }));
   }, [value]);
 
