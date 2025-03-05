@@ -39,7 +39,7 @@ type RichTextInputProps<F extends keyof Format> = Omit<React.ComponentPropsWitho
   format?: F;
   value?: ReturnType<Encoder<F>>;
   toolbarOptions?: ToolbarOptions;
-  onChangeText?: (text: ReturnType<Encoder<F>>, ...arg: [...Parameters<TextChangeHandler>, Quill]) => void;
+  onChangeText?: (text: ReturnType<Encoder<F>>, quill: Quill) => void;
 }
 
 const _RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
@@ -64,8 +64,8 @@ const _RichTextInput = createMemoComponent(<F extends keyof Format = 'bbcode'>(
     <Base
       ref={forwardRef}
       value={_value}
-      onChangeText={(value, ...arg) => {
-        if (_.isFunction(onChangeText)) onChangeText(encoder(value) as any, ...arg);
+      onChangeText={(value, quill) => {
+        if (_.isFunction(onChangeText)) onChangeText(encoder(value) as any, quill);
       }}
       options={{
         theme: 'snow',
