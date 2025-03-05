@@ -25,10 +25,12 @@
 
 import _ from 'lodash';
 import React from 'react';
+import type _Delta from 'quill-delta';
 import { useStableCallback } from 'sugax';
 import { Delta, Quill } from '../quill';
 import { Line } from '../format/types';
 import { RichTextInputProps, RichTextInputRef, SelectionChangeHandler, TextChangeHandler } from './types';
+import { Range } from 'quill';
 
 const encodeContent = (lines: Line[]) => {
   const content = new Delta();
@@ -59,8 +61,6 @@ const decodeContent = (content?: ReturnType<Quill['getContents']>) => {
   return result;
 }
 
-const _removeEmptyLines = (lines: Line[]) => _.dropRightWhile(lines, x => _.isEmpty(x.segments) && _.isEmpty(x.attributes));
-
 export const Base = React.forwardRef(({
   value = [],
   options = {},
@@ -76,14 +76,25 @@ export const Base = React.forwardRef(({
   const _onChangeText = useStableCallback(onChangeText ?? (() => { }));
   const _onChangeSelection = useStableCallback(onChangeSelection ?? (() => { }));
 
-  const [capture, setCapture] = React.useState(value);
+  const [capture, setCapture] = React.useState(new Delta);
+  React.useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor || !capture.length()) return;
+    _onChangeText(decodeContent(editor.getContents().compose(capture)), editor);
+    setCapture(new Delta);
+  }, [capture]);
+
   React.useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
-    if (_.isEqual(_removeEmptyLines(capture), _removeEmptyLines(value))) return;
     const selection = editor.getSelection();
-    editor.setContents(encodeContent(value ?? []), 'silent');
-    if (selection && editor.hasFocus()) editor.setSelection(selection, 'silent');
+    const oldContent = editor.getContents();
+    const delta = encodeContent(value ?? []);
+    editor.setContents(delta, 'silent');
+    if (selection && editor.hasFocus()) {
+      const pos = oldContent.diff(delta).transformPosition(selection.index);
+      editor.setSelection({ index: pos, length: selection.length }, 'silent');
+    }
   }, [value]);
 
   React.useImperativeHandle(forwardRef, () => ({
@@ -122,12 +133,7 @@ export const Base = React.forwardRef(({
       });
       if (!isChanged) return;
       const delta = new Delta(ops);
-      const selection = editor.getSelection();
-      editor.setContents(delta, 'silent');
-      if (selection) editor.setSelection(selection, 'silent');
-      const value = decodeContent(delta);
-      setCapture(value);
-      _onChangeText(value, delta, oldContents, 'silent', editor);
+      _onChangeText(decodeContent(delta), editor);
     },
   }), []);
 
@@ -150,12 +156,11 @@ export const Base = React.forwardRef(({
       },
     });
     editorRef.current = editor;
-    const textChange = (...args: Parameters<TextChangeHandler>) => {
-      const value = decodeContent(editor.getContents());
-      setCapture(value);
-      _onChangeText(value, ...args, editor);
+    const textChange = (delta: _Delta, oldContent: _Delta) => {
+      setCapture(v => v.compose(delta));
+      editor.setContents(oldContent, 'silent');
     }
-    const selectionChange = (...args: Parameters<SelectionChangeHandler>) => _onChangeSelection(...args, editor);
+    const selectionChange = (range: Range) => _onChangeSelection(range, editor);
     editor.on('text-change', textChange);
     editor.on('selection-change', selectionChange);
     if (!_.isEmpty(value)) editor.setContents(encodeContent(value), 'silent');
