@@ -108,10 +108,9 @@ export const Base = React.forwardRef(({
     const oldContent = editor.getContents();
     const delta = encodeContent(value ?? []);
     setCapture(v => ({ ...v, content: delta }));
-    if (selection && editor.hasFocus()) {
-      const pos = oldContent.diff(delta).transformPosition(selection.index);
-      setCapture(v => ({ ...v, selection: new Range(pos, selection.length) }));
-    }
+    if (!selection || !editor.hasFocus()) return;
+    const pos = oldContent.diff(delta).transformPosition(selection.index);
+    setCapture(v => ({ ...v, selection: new Range(pos, selection.length) }));
   }, [value]);
 
   React.useImperativeHandle(forwardRef, () => ({
