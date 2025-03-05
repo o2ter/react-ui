@@ -180,7 +180,6 @@ export const Base = React.forwardRef(({
       setCapture(v => ({
         ...v,
         delta: v.delta.compose(delta),
-        selection: v.delta.length() ? v.selection : editor.getSelection(),
       }));
     }
     const selectionChange = (range: Range) => {
