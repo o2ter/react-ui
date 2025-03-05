@@ -159,7 +159,7 @@ export const Base = React.forwardRef(({
     editor.on('text-change', textChange);
     editor.on('selection-change', selectionChange);
     if (!_.isEmpty(value)) editor.setContents(encodeContent(value), 'silent');
-    () => {
+    return () => {
       editor.off('text-change', textChange);
       editor.off('selection-change', selectionChange);
     };
