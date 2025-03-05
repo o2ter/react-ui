@@ -27,10 +27,6 @@ import React from 'react';
 import type Quill from 'quill';
 import type { Line } from '../format/types';
 import type { QuillOptions, Range } from 'quill';
-import { OverloadParameters } from '@o2ter/utils-js';
-
-export type TextChangeHandler = Extract<OverloadParameters<Quill['on']>, ['text-change', any]>[1];
-export type SelectionChangeHandler = Extract<OverloadParameters<Quill['on']>, ['selection-change', any]>[1];
 
 export type RichTextInputProps = React.ComponentPropsWithoutRef<'div'> & {
   value?: Line[];
