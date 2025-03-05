@@ -80,11 +80,11 @@ export const Base = React.forwardRef(({
     delta: _Delta;
     content: _Delta;
     selection: Range | null
-  }>({
+  }>(() => ({
     delta: new Delta,
-    content: new Delta,
+    content: encodeContent(value),
     selection: null
-  });
+  }));
 
   React.useEffect(() => {
     const editor = editorRef.current;
