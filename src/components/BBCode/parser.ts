@@ -235,7 +235,7 @@ export class AttrString {
     let text = '';
     for (const [i, line] of ast.entries()) {
       if (i !== 0) text += lineSeparator;
-      for (const [j, segment] of line.segments.entries()) {
+      for (const segment of line.segments) {
         if (!_.isString(segment.insert)) continue;
         if (!_.isEmpty(segment.attributes)) attrs.push({
           attributes: segment.attributes,
