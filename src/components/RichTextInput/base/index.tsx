@@ -67,6 +67,8 @@ export const Base = React.forwardRef(({
   onUploadImage,
   onChangeText,
   onChangeSelection,
+  onMouseDown,
+  onMouseUp,
   ...props
 }: RichTextInputProps, forwardRef: React.ForwardedRef<RichTextInputRef>) => {
 
@@ -75,6 +77,8 @@ export const Base = React.forwardRef(({
 
   const _onChangeText = useStableCallback(onChangeText ?? (() => { }));
   const _onChangeSelection = useStableCallback(onChangeSelection ?? (() => { }));
+
+  const [mouseDown, setMouseDown] = React.useState(false);
 
   const [capture, setCapture] = React.useState<{
     delta: _Delta;
@@ -88,11 +92,11 @@ export const Base = React.forwardRef(({
 
   React.useEffect(() => {
     const editor = editorRef.current;
-    if (!editor || !capture.delta.length()) return;
+    if (!editor || mouseDown || !capture.delta.length()) return;
     const content = capture.content.compose(capture.delta);
     setCapture(v => ({ ...v, delta: new Delta }));
     _onChangeText(decodeContent(content), editor);
-  }, [capture.content, capture.delta]);
+  }, [capture.content, capture.delta, mouseDown]);
 
   React.useEffect(() => {
     const editor = editorRef.current;
@@ -195,5 +199,16 @@ export const Base = React.forwardRef(({
     };
   }, []);
 
-  return <div ref={containerRef} {...props} />;
+  return <div
+    ref={containerRef}
+    onMouseDown={(e) => {
+      setMouseDown(true);
+      if (onMouseDown) onMouseDown(e);
+    }}
+    onMouseUp={(e) => {
+      setMouseDown(false);
+      if (onMouseUp) onMouseUp(e);
+    }}
+    {...props}
+  />;
 });
