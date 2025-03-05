@@ -236,13 +236,12 @@ export class AttrString {
     for (const [i, line] of ast.entries()) {
       if (i !== 0) text += lineSeparator;
       for (const [j, segment] of line.segments.entries()) {
-        if (_.isString(segment.insert)) {
-          if (!_.isEmpty(segment.attributes)) attrs.push({
-            attributes: segment.attributes,
-            range: [text.length, text.length + segment.insert.length],
-          });
-          text += segment.insert;
-        }
+        if (!_.isString(segment.insert)) continue;
+        if (!_.isEmpty(segment.attributes)) attrs.push({
+          attributes: segment.attributes,
+          range: [text.length, text.length + segment.insert.length],
+        });
+        text += segment.insert;
       }
     }
     return new AttrString(text, attrs);
