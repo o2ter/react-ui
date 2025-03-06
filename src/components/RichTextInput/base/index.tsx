@@ -42,11 +42,11 @@ const encodeContent = (lines: Line[]) => {
     }
     lineAttrs = line.attributes;
   }
-  content.insert('\n', lineAttrs);
+  if (!_.isEmpty(lineAttrs)) content.insert('\n', lineAttrs);
   return content;
 }
 
-const decodeContent = (content?: ReturnType<Quill['getContents']>) => {
+const decodeContent = (content?: _Delta) => {
   if (!content) return [];
   const result: Line[] = [];
   content.eachLine((line, attributes) => {
