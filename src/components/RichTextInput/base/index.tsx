@@ -66,6 +66,7 @@ const decodeContent = (content?: _Delta) => {
       segments.push({ insert: insert ?? '', attributes: attributes ?? {} });
     }
   });
+  if (!_.isEmpty(segments)) result.push({ segments, attributes: {} });
   return result;
 }
 
