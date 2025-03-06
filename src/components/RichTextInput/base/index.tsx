@@ -76,7 +76,6 @@ export const Base = React.forwardRef(({
   value = [],
   options = {},
   readOnly,
-  onUploadImage,
   onChangeText,
   onChangeSelection,
   onMouseDown,
@@ -178,13 +177,7 @@ export const Base = React.forwardRef(({
       ...options,
       modules: {
         imageResize: true,
-        imageUploader: {
-          upload: onUploadImage ?? (blob => new Promise(res => {
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => res(reader.result as string);
-          })),
-        },
+        imageUploader: true,
         ...options.modules ?? {},
       },
     });

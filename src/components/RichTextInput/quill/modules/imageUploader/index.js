@@ -7,11 +7,6 @@ export class ImageUploader {
     this.range = null;
     this.placeholderDelta = null;
 
-    if (typeof this.options.upload !== 'function')
-      console.warn(
-        '[Missing config] upload function that returns a promise is required'
-      );
-
     var toolbar = this.quill.getModule('toolbar');
     if (toolbar) {
       toolbar.addHandler('image', this.selectLocalImage.bind(this));
@@ -132,17 +127,6 @@ export class ImageUploader {
     if (file) {
       fileReader.readAsDataURL(file);
     }
-
-    this.options.upload(file).then(
-      (imageUrl) => {
-        this.insertToEditor(imageUrl);
-      },
-      (error) => {
-        isUploadReject = true;
-        this.removeBase64Image();
-        console.warn(error);
-      }
-    );
   }
 
   fileChanged() {
@@ -159,36 +143,5 @@ export class ImageUploader {
       `${url}`,
       'user'
     );
-  }
-
-  insertToEditor(url) {
-    const range = this.range;
-
-    const lengthToDelete = this.calculatePlaceholderInsertLength();
-
-    // Delete the placeholder image
-    this.quill.deleteText(range.index, lengthToDelete, 'user');
-    // Insert the server saved image
-    this.quill.insertEmbed(range.index, 'image', `${url}`, 'user');
-
-    range.index++;
-    this.quill.setSelection(range, 'user');
-  }
-
-  // The length of the insert delta from insertBase64Image can vary depending on what part of the line the insert occurs
-  calculatePlaceholderInsertLength() {
-    return this.placeholderDelta.ops.reduce((accumulator, deltaOperation) => {
-      if (deltaOperation.hasOwnProperty('insert'))
-        accumulator++;
-
-      return accumulator;
-    }, 0);
-  }
-
-  removeBase64Image() {
-    const range = this.range;
-    const lengthToDelete = this.calculatePlaceholderInsertLength();
-
-    this.quill.deleteText(range.index, lengthToDelete, 'user');
   }
 }
