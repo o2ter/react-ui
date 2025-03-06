@@ -42,7 +42,7 @@ const encodeContent = (lines: Line[]) => {
     }
     lineAttrs = line.attributes;
   }
-  if (!_.isEmpty(lineAttrs)) content.insert('\n', lineAttrs);
+  content.insert('\n', lineAttrs);
   return content;
 }
 
