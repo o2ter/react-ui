@@ -30,6 +30,7 @@ import { RichTextInputProps, RichTextInputRef } from './types';
 export const Base = React.forwardRef(({
   value,
   options,
+  readOnly,
   onChangeText,
   onChangeSelection,
   ...props

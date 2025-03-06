@@ -64,6 +64,7 @@ const decodeContent = (content?: ReturnType<Quill['getContents']>) => {
 export const Base = React.forwardRef(({
   value = [],
   options = {},
+  readOnly,
   onUploadImage,
   onChangeText,
   onChangeSelection,
@@ -116,6 +117,10 @@ export const Base = React.forwardRef(({
     const pos = oldContent.diff(content).transformPosition(selection.index);
     setCapture(v => ({ ...v, selection: new Range(pos, selection.length) }));
   }, [value]);
+
+  React.useEffect(() => {
+    editorRef.current?.enable(!readOnly);
+  }, [readOnly]);
 
   React.useImperativeHandle(forwardRef, () => ({
     get value() {
