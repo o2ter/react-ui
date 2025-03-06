@@ -103,18 +103,18 @@ export const Base = React.forwardRef(({
 
   React.useLayoutEffect(() => {
     const editor = editorRef.current;
-    if (!editor) return;
+    if (!editor || mouseDown) return;
     if (capture.content.diff(editor.getContents()).length()) editor.setContents(capture.content, 'silent');
     if (capture.selection) editor.setSelection(capture.selection, 'silent');
-  }, [capture.content, capture.selection]);
+  }, [capture.content, capture.selection, mouseDown]);
 
   React.useEffect(() => {
     const editor = editorRef.current;
-    if (!editor || mouseDown || !capture.delta.length()) return;
+    if (!editor || !capture.delta.length()) return;
     const content = capture.content.compose(capture.delta);
     setCapture(v => ({ ...v, delta: new Delta }));
     _onChangeText(decodeContent(content), editor);
-  }, [capture.content, capture.delta, mouseDown]);
+  }, [capture.content, capture.delta]);
 
   React.useEffect(() => {
     const editor = editorRef.current;
