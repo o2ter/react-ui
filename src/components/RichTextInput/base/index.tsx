@@ -110,11 +110,11 @@ export const Base = React.forwardRef(({
 
   React.useEffect(() => {
     const editor = editorRef.current;
-    if (!editor || !capture.delta.length()) return;
+    if (!editor || mouseDown || !capture.delta.length()) return;
     const content = capture.content.compose(capture.delta);
     setCapture(v => ({ ...v, delta: new Delta }));
     _onChangeText(decodeContent(content), editor);
-  }, [capture.content, capture.delta]);
+  }, [capture.content, capture.delta, mouseDown]);
 
   React.useEffect(() => {
     const editor = editorRef.current;
