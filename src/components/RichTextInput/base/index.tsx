@@ -28,7 +28,7 @@ import React from 'react';
 import type _Delta from 'quill-delta';
 import { useStableCallback } from 'sugax';
 import { Delta, Quill } from '../quill';
-import { Line } from '../format/types';
+import { Line, Segment } from '../format/types';
 import { RichTextInputProps, RichTextInputRef } from './types';
 import { Range } from 'quill';
 
@@ -49,14 +49,22 @@ const encodeContent = (lines: Line[]) => {
 const decodeContent = (content?: _Delta) => {
   if (!content) return [];
   const result: Line[] = [];
-  content.eachLine((line, attributes) => {
-    result.push({
-      attributes,
-      segments: line.map(({ insert, attributes }) => ({
-        attributes: attributes ?? {},
-        insert: insert ?? '',
-      })),
-    })
+  let segments: Segment[] = [];
+  content.forEach(({ insert, attributes }) => {
+    if (insert === '\n') {
+      result.push({ segments, attributes: attributes ?? {} });
+      segments = [];
+    } else if (_.isString(insert)) {
+      for (const [i, line] of insert.split('\n').entries()) {
+        if (i !== 0) {
+          result.push({ segments, attributes: {} });
+          segments = [];
+        }
+        segments.push({ insert: line, attributes: attributes ?? {} });
+      }
+    } else {
+      segments.push({ insert: insert ?? '', attributes: attributes ?? {} });
+    }
   });
   return result;
 }
