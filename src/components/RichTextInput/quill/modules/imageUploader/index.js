@@ -109,24 +109,14 @@ export class ImageUploader {
   }
 
   readAndUploadFile(file) {
-    let isUploadReject = false;
-
+    if (!file) return;
     const fileReader = new FileReader();
-
     fileReader.addEventListener(
       'load',
-      () => {
-        if (!isUploadReject) {
-          let base64ImageSrc = fileReader.result;
-          this.insertBase64Image(base64ImageSrc);
-        }
-      },
+      () => { this.insertBase64Image(fileReader.result); },
       false
     );
-
-    if (file) {
-      fileReader.readAsDataURL(file);
-    }
+    fileReader.readAsDataURL(file);
   }
 
   fileChanged() {
