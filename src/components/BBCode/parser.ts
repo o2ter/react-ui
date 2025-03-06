@@ -179,7 +179,7 @@ export const parser = (
       if (!(tag in tags)) {
         pushSegment(match);
       } else if (match.startsWith('[/')) {
-        if (tags[tag].lineAttr && !_.isEmpty(segments)) {
+        if (tags[tag].lineAttr) {
           pushLine();
           segments = [];
         }

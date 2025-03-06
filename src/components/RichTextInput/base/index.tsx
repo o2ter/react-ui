@@ -51,9 +51,11 @@ const decodeContent = (content?: _Delta) => {
   const result: Line[] = [];
   let segments: Segment[] = [];
   content.forEach(({ insert, attributes }) => {
-    if (insert === '\n') {
-      result.push({ segments, attributes: attributes ?? {} });
-      segments = [];
+    if (_.isString(insert) && _.every(insert, x => x === '\n')) {
+      _.range(insert.length).forEach(() => {
+        result.push({ segments, attributes: attributes ?? {} });
+        segments = [];
+      });
     } else if (_.isString(insert)) {
       for (const [i, line] of insert.split('\n').entries()) {
         if (i !== 0) {
