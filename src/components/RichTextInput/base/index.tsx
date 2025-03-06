@@ -100,19 +100,22 @@ export const Base = React.forwardRef(({
   const [capture, setCapture] = React.useState<{
     delta: _Delta;
     content: _Delta;
-    selection: Range | null
   }>(() => ({
     delta: new Delta,
     content: encodeContent(value),
-    selection: null
   }));
 
   React.useLayoutEffect(() => {
     const editor = editorRef.current;
     if (!editor || mouseDown) return;
-    if (!equal(capture.content, editor.getContents())) editor.setContents(capture.content, 'silent');
-    if (!equal(capture.selection, editor.getSelection())) editor.setSelection(capture.selection, 'silent');
-  }, [capture.content, capture.selection, mouseDown]);
+    if (equal(capture.content, editor.getContents())) return;
+    const selection = editor.getSelection();
+    const oldContent = editor.getContents();
+    editor.setContents(capture.content, 'silent');
+    if (!selection || !editor.hasFocus()) return;
+    const pos = oldContent.diff(capture.content).transformPosition(selection.index);
+    editor.setSelection(pos, selection.length, 'silent');
+  }, [capture.content, mouseDown]);
 
   React.useEffect(() => {
     const editor = editorRef.current;
@@ -125,13 +128,8 @@ export const Base = React.forwardRef(({
   React.useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
-    const selection = editor.getSelection();
-    const oldContent = editor.getContents();
     const content = encodeContent(value ?? []);
     setCapture(v => ({ ...v, content, delta: v.delta.length() ? content.diff(v.content.compose(v.delta)) : v.delta }));
-    if (!selection || !editor.hasFocus()) return;
-    const pos = oldContent.diff(content).transformPosition(selection.index);
-    setCapture(v => ({ ...v, selection: new Range(pos, selection.length) }));
   }, [value]);
 
   React.useEffect(() => {
@@ -192,7 +190,6 @@ export const Base = React.forwardRef(({
       setCapture(v => ({ ...v, delta: v.content.diff(oldContent.compose(delta)) }));
     }
     const selectionChange = (range: Range) => {
-      setCapture(v => ({ ...v, selection: v.delta.length() ? v.selection : range }));
       _onChangeSelection(range, editor);
     };
     editor.on('text-change', textChange);
