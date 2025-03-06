@@ -190,8 +190,8 @@ export const Base = React.forwardRef(({
       },
     });
     editorRef.current = editor;
-    const textChange = (delta: _Delta) => {
-      setCapture(v => ({ ...v, delta: v.delta.compose(delta) }));
+    const textChange = (delta: _Delta, oldContent: _Delta) => {
+      setCapture(v => ({ ...v, delta: v.content.diff(oldContent.compose(delta)) }));
     }
     const selectionChange = (range: Range) => {
       setCapture(v => ({ ...v, selection: v.delta.length() ? v.selection : range }));
