@@ -135,7 +135,7 @@ export const Base = React.forwardRef(({
 
   React.useImperativeHandle(forwardRef, () => ({
     get value() {
-      return decodeContent(editorRef.current?.getContents());
+      return decodeContent(capture.content);
     },
     get editor() {
       return editorRef.current;
@@ -144,9 +144,7 @@ export const Base = React.forwardRef(({
       return containerRef.current ?? undefined;
     },
     get assets() {
-      const editor = editorRef.current;
-      if (!editor) return [];
-      return _.compact(editor.getContents().map(op => {
+      return _.compact(capture.content.map(op => {
         if (_.isNil(op.insert) || _.isString(op.insert)) return;
         if (_.isString(op.insert.image)) return op.insert.image;
       }));
@@ -155,12 +153,11 @@ export const Base = React.forwardRef(({
       const editor = editorRef.current;
       if (!editor) return;
       let isChanged = false;
-      const oldContents = editor.getContents();
-      const ops = oldContents.map(op => {
+      const ops = capture.content.map(op => {
         if (_.isNil(op.insert) || _.isString(op.insert)) return op;
         if (_.isString(op.insert.image)) {
-          for (const [source, replace] of _.entries(assets)) {
-            if (source !== op.insert.image) continue;
+          const replace = assets[op.insert.image];
+          if (replace) {
             isChanged = true;
             return { ...op, insert: { image: replace } };
           }
@@ -171,7 +168,7 @@ export const Base = React.forwardRef(({
       const delta = new Delta(ops);
       _onChangeText(decodeContent(delta), editor);
     },
-  }), []);
+  }), [capture.content]);
 
   React.useEffect(() => {
     const element = containerRef.current;
