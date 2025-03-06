@@ -29,7 +29,7 @@
     "lottie-web": ">=5.12.2",
     "luxon": ">=3.4.4",
     "qrcode": ">=1.5.3",
-    "quill": "^2.0.2",
+    "quill": "^2.0.3",
     "quill-delta": "^5.1.0",
     "react-dom": ">=18.3.1",
     "react-native-fast-image": ">=8.6.3",
