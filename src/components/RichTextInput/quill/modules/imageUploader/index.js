@@ -5,7 +5,6 @@ export class ImageUploader {
     this.quill = quill;
     this.options = options;
     this.range = null;
-    this.placeholderDelta = null;
 
     var toolbar = this.quill.getModule('toolbar');
     if (toolbar) {
@@ -127,7 +126,7 @@ export class ImageUploader {
   insertBase64Image(url) {
     const range = this.range;
 
-    this.placeholderDelta = this.quill.insertEmbed(
+    this.quill.insertEmbed(
       range.index,
       LoadingImage.blotName,
       `${url}`,
