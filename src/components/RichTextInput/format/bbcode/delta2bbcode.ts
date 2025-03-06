@@ -29,7 +29,8 @@ import { Line } from '../types';
 
 export const delta2bbcode = (docs: Line[]) => {
   let result = '';
-  for (const line of docs) {
+  for (const [i, line] of docs.entries()) {
+    if (i !== 0) result += '\n';
     for (const [k, v] of _.toPairs(line.attributes)) {
       switch (k) {
         case 'align':
@@ -119,7 +120,6 @@ export const delta2bbcode = (docs: Line[]) => {
         case 'header': result += '[/header]'; break;
       }
     }
-    result += '\n';
   }
   return result;
 }
