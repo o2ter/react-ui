@@ -121,7 +121,7 @@ export const Base = React.forwardRef(({
     const selection = editor.getSelection();
     const oldContent = editor.getContents();
     const content = encodeContent(value ?? []);
-    setCapture(v => ({ ...v, content }));
+    setCapture(v => ({ ...v, content, delta: v.delta.length() ? content.diff(v.content.compose(v.delta)) : v.delta }));
     if (!selection || !editor.hasFocus()) return;
     const pos = oldContent.diff(content).transformPosition(selection.index);
     setCapture(v => ({ ...v, selection: new Range(pos, selection.length) }));
