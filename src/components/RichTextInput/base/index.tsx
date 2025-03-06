@@ -72,6 +72,12 @@ const decodeContent = (content?: _Delta) => {
   return result;
 }
 
+const equal = (lhs: any, rhs: any) => {
+  if (lhs instanceof Delta && rhs instanceof Delta) return !lhs.diff(rhs).length();
+  if (lhs instanceof Range && rhs instanceof Range) return lhs.index === rhs.index && lhs.length === rhs.length;
+  return _.isEqual(lhs, rhs);
+};
+
 export const Base = React.forwardRef(({
   value = [],
   options = {},
@@ -104,8 +110,8 @@ export const Base = React.forwardRef(({
   React.useLayoutEffect(() => {
     const editor = editorRef.current;
     if (!editor || mouseDown) return;
-    if (capture.content.diff(editor.getContents()).length()) editor.setContents(capture.content, 'silent');
-    if (capture.selection) editor.setSelection(capture.selection, 'silent');
+    if (!equal(capture.content, editor.getContents())) editor.setContents(capture.content, 'silent');
+    if (!equal(capture.selection, editor.getSelection())) editor.setSelection(capture.selection, 'silent');
   }, [capture.content, capture.selection, mouseDown]);
 
   React.useEffect(() => {
