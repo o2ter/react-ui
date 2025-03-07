@@ -115,7 +115,7 @@ export const Base = React.forwardRef(({
     if (!selection || !editor.hasFocus()) return;
     const pos = oldContent.diff(capture.content).transformPosition(selection.index);
     editor.setSelection(pos, selection.length, 'silent');
-  }, [capture.content, mouseDown]);
+  }, [capture, mouseDown]);
 
   React.useEffect(() => {
     const editor = editorRef.current;
@@ -123,7 +123,7 @@ export const Base = React.forwardRef(({
     const content = capture.content.compose(capture.delta);
     setCapture(v => ({ ...v, delta: new Delta }));
     _onChangeText(decodeContent(content), editor);
-  }, [capture.content, capture.delta, mouseDown]);
+  }, [capture, mouseDown]);
 
   React.useEffect(() => {
     const editor = editorRef.current;
