@@ -72,14 +72,8 @@ const decodeContent = (content?: _Delta) => {
   return result;
 }
 
-const equal = (lhs: any, rhs: any) => {
-  if (lhs instanceof Delta && rhs instanceof Delta) return !lhs.diff(rhs).length();
-  if (lhs instanceof Range && rhs instanceof Range) return lhs.index === rhs.index && lhs.length === rhs.length;
-  return _.isEqual(lhs, rhs);
-};
-
 export const Base = React.forwardRef(({
-  value = [],
+  value,
   options = {},
   readOnly,
   onChangeText,
@@ -96,36 +90,33 @@ export const Base = React.forwardRef(({
   const _onChangeSelection = useStableCallback(onChangeSelection ?? (() => { }));
 
   const [mouseDown, setMouseDown] = React.useState(false);
-
-  const [capture, setCapture] = React.useState<{
-    delta: _Delta;
-    content: _Delta;
-  }>(() => ({
-    delta: new Delta,
-    content: encodeContent(value),
-  }));
+  const [capture, setCapture] = React.useState<_Delta>();
+  const content = React.useMemo(() => encodeContent(value ?? []), [value]);
 
   React.useEffect(() => {
     const editor = editorRef.current;
-    if (!editor || mouseDown || !capture.delta.length()) return;
-    const content = capture.content.compose(capture.delta);
-    setCapture(v => ({ ...v, delta: new Delta }));
-    _onChangeText(decodeContent(content), editor);
+    if (!editor || mouseDown || _.isNil(capture)) return;
+    setCapture(undefined);
+    _onChangeText(decodeContent(capture), editor);
   }, [capture, mouseDown]);
 
   React.useEffect(() => {
+
     const editor = editorRef.current;
-    if (!editor) return;
-    const content = encodeContent(value ?? []);
-    setCapture(v => ({ ...v, content, delta: v.delta.length() ? content.diff(v.content.compose(v.delta)) : v.delta }));
-    if (mouseDown || equal(content, editor.getContents())) return;
-    const selection = editor.getSelection();
-    const oldContent = editor.getContents();
+    if (!editor || mouseDown) return;
+
+    const diff = editor.getContents().diff(content);
+    if (!diff.length()) return;
+
+    const selection = editor.hasFocus() && editor.getSelection();
     editor.setContents(content, 'silent');
-    if (!selection || !editor.hasFocus()) return;
-    const pos = oldContent.diff(content).transformPosition(selection.index);
+
+    if (!selection) return;
+
+    const pos = diff.transformPosition(selection.index);
     editor.setSelection(pos, selection.length, 'silent');
-  }, [value, mouseDown]);
+
+  }, [content, mouseDown]);
 
   React.useEffect(() => {
     editorRef.current?.enable(!readOnly);
@@ -133,7 +124,7 @@ export const Base = React.forwardRef(({
 
   React.useImperativeHandle(forwardRef, () => ({
     get value() {
-      return decodeContent(capture.content);
+      return value;
     },
     get editor() {
       return editorRef.current;
@@ -142,7 +133,7 @@ export const Base = React.forwardRef(({
       return containerRef.current ?? undefined;
     },
     get assets() {
-      return _.compact(capture.content.map(op => {
+      return _.compact(content.map(op => {
         if (_.isNil(op.insert) || _.isString(op.insert)) return;
         if (_.isString(op.insert.image)) return op.insert.image;
       }));
@@ -151,7 +142,7 @@ export const Base = React.forwardRef(({
       const editor = editorRef.current;
       if (!editor) return;
       let isChanged = false;
-      const ops = capture.content.map(op => {
+      const ops = content.map(op => {
         if (_.isNil(op.insert) || _.isString(op.insert)) return op;
         if (_.isString(op.insert.image)) {
           const replace = assets[op.insert.image];
@@ -166,7 +157,7 @@ export const Base = React.forwardRef(({
       const delta = new Delta(ops);
       _onChangeText(decodeContent(delta), editor);
     },
-  }), [capture.content]);
+  }), [content]);
 
   React.useEffect(() => {
     const element = containerRef.current;
@@ -182,14 +173,14 @@ export const Base = React.forwardRef(({
     });
     editorRef.current = editor;
     const textChange = (delta: _Delta, oldContent: _Delta) => {
-      setCapture(v => ({ ...v, delta: v.content.diff(oldContent.compose(delta)) }));
+      setCapture(oldContent.compose(delta));
     }
     const selectionChange = (range: Range) => {
       _onChangeSelection(range, editor);
     };
     editor.on('text-change', textChange);
     editor.on('selection-change', selectionChange);
-    if (!_.isEmpty(value)) editor.setContents(encodeContent(value), 'silent');
+    if (!_.isEmpty(value)) editor.setContents(content, 'silent');
     return () => {
       editor.off('text-change', textChange);
       editor.off('selection-change', selectionChange);
