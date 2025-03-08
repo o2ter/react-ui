@@ -105,18 +105,6 @@ export const Base = React.forwardRef(({
     content: encodeContent(value),
   }));
 
-  React.useLayoutEffect(() => {
-    const editor = editorRef.current;
-    if (!editor || mouseDown) return;
-    if (equal(capture.content, editor.getContents())) return;
-    const selection = editor.getSelection();
-    const oldContent = editor.getContents();
-    editor.setContents(capture.content, 'silent');
-    if (!selection || !editor.hasFocus()) return;
-    const pos = oldContent.diff(capture.content).transformPosition(selection.index);
-    editor.setSelection(pos, selection.length, 'silent');
-  }, [capture, mouseDown]);
-
   React.useEffect(() => {
     const editor = editorRef.current;
     if (!editor || mouseDown || !capture.delta.length()) return;
@@ -130,7 +118,14 @@ export const Base = React.forwardRef(({
     if (!editor) return;
     const content = encodeContent(value ?? []);
     setCapture(v => ({ ...v, content, delta: v.delta.length() ? content.diff(v.content.compose(v.delta)) : v.delta }));
-  }, [value]);
+    if (mouseDown || equal(content, editor.getContents())) return;
+    const selection = editor.getSelection();
+    const oldContent = editor.getContents();
+    editor.setContents(content, 'silent');
+    if (!selection || !editor.hasFocus()) return;
+    const pos = oldContent.diff(content).transformPosition(selection.index);
+    editor.setSelection(pos, selection.length, 'silent');
+  }, [value, mouseDown]);
 
   React.useEffect(() => {
     editorRef.current?.enable(!readOnly);
