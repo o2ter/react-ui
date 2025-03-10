@@ -169,7 +169,6 @@ export const Base = React.forwardRef(({
       ...options,
       modules: {
         imageResize: true,
-        imageUploader: true,
         ...options.modules ?? {},
       },
     });

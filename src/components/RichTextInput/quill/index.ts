@@ -27,14 +27,12 @@ import _ from 'lodash';
 import Quill from 'quill';
 import type _Delta from 'quill-delta';
 import { ImageResize } from './modules/imageResize';
-import { ImageUploader } from './modules/imageUploader';
 
 import './quill.scss';
 
 export const Delta = Quill.import('delta') as typeof _Delta;
 
 Quill.register('modules/imageResize', ImageResize);
-Quill.register("modules/imageUploader", ImageUploader);
 
 const Size = Quill.import('attributors/style/size') as any;
 Size.whitelist = null;
