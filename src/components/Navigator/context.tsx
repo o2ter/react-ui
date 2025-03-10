@@ -55,7 +55,7 @@ export const useNavigatorContext = (
   if (context) callback(context);
 };
 
-export const BrowserNavigator: React.FC<React.ComponentPropsWithRef<typeof BrowserRouter>> = ({
+export const BrowserNavigator: React.FC<React.ComponentPropsWithoutRef<typeof BrowserRouter>> = ({
   children,
   ...props
 }) => (
