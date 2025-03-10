@@ -92,7 +92,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown, F ext
     if (!uploadProps || _.isEmpty(uploads.promises)) return;
     const listener = async (action: string) => {
       if (action !== 'submit') return;
-      for (const item of _.values(uploads)) {
+      for (const item of _.values(uploads.promises)) {
         await (_.isFunction(item) ? item() : item);
       }
     }
