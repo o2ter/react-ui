@@ -70,6 +70,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown, F ext
     const assets = _.uniq(inputRef.current?.assets);
     for (const source of assets) {
       if (uploads.uploaded[source] || uploads.promises[source]) continue;
+      if (!source.startsWith('data:')) continue;
       const callback = async () => {
         try {
           const blob = await dataUrlToBlob(source);
