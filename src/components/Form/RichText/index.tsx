@@ -75,15 +75,21 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown, F ext
           const blob = await dataUrlToBlob(source);
           if (blob) throw Error('Invalid file');
           const saved = await uploadProps.onUpload(_.assign(blob, { source }));
-          setUploads(v => ({ ...v, [source]: { uploaded: saved } }));
+          setUploads(v => ({
+            uploaded: { ...v.uploaded, [source]: saved },
+            promises: _.omit(v.promises, source),
+          }));
         } catch (e) {
-          setUploads(v => ({ ...v, [source]: callback }));
+          setUploads(v => ({
+            ...v,
+            promises: { ...v.promises, [source]: callback },
+          }));
           throw e;
         }
       };
       setUploads(v => ({
         ...v,
-        [source]: callback(),
+        promises: { ...v.promises, [source]: callback },
       }));
     }
     inputRef.current?.replaceAssets(_.mapValues(uploads.uploaded, v => uploadProps.resolveUrl(v)));
