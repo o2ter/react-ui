@@ -72,6 +72,8 @@ const decodeContent = (content?: _Delta) => {
   return result;
 }
 
+const _removeEmptyLines = (lines: Line[]) => _.dropRightWhile(lines, x => _.every(x.segments, s => _.isEmpty(s.insert)) && _.isEmpty(x.attributes));
+
 export const Base = React.forwardRef(({
   value,
   options = {},
@@ -97,7 +99,7 @@ export const Base = React.forwardRef(({
     const editor = editorRef.current;
     if (!editor || mouseDown || _.isNil(capture)) return;
     setCapture(undefined);
-    _onChangeText(decodeContent(capture), editor);
+    _onChangeText(_removeEmptyLines(decodeContent(capture)), editor);
   }, [capture, mouseDown]);
 
   React.useEffect(() => {
