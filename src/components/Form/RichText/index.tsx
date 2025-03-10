@@ -82,7 +82,7 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown, F ext
         } catch (e) {
           setUploads(v => ({
             ...v,
-            promises: { ...v.promises, [source]: callback },
+            promises: { ...v.promises, [source]: callback() },
           }));
           throw e;
         }
