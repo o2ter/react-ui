@@ -26,15 +26,14 @@
 import _ from 'lodash';
 import React from 'react';
 import { RichTextInput, Format } from '../../RichTextInput';
-import { useField } from '../Form/hooks';
-import FormUploader from '../Uploader';
+import { useField, useForm } from '../Form/hooks';
 import { createMemoComponent } from '../../../internals/utils';
 import { useMergeRefs } from 'sugax';
-import { FormUploadHandler } from '../Uploader/handler';
 
 type FormRichTextProps<U, F extends keyof Format> = React.ComponentPropsWithoutRef<typeof RichTextInput<F>> & {
   name: string;
-  uploadProps?: Omit<React.ComponentPropsWithRef<typeof FormUploader<Blob & { source: string }, U>>, 'children'> & {
+  uploadProps?: {
+    onUpload: (file: Blob & { source: string }) => PromiseLike<U>;
     resolveUrl: (uploaded: U) => string;
   };
   validate?: (value: any) => void;
@@ -59,60 +58,47 @@ export const FormRichText = createMemoComponent(<Uploaded extends unknown, F ext
 ) => {
   const inputRef = React.useRef<React.ComponentRef<typeof RichTextInput<F>>>();
   const ref = useMergeRefs(inputRef, forwardRef);
+  const { addEventListener, removeEventListener } = useForm();
   const { value, setTouched, onChange, useValidator } = useField(name);
   useValidator(validate);
-  const cache = React.useRef(new Map<Blob & { source: string }, Uploaded>).current;
-  if (uploadProps) {
-    const { onUpload, resolveUrl, ..._props } = uploadProps;
-    const updateResolvedUploads = () => {
-      const editor = inputRef.current;
-      if (!editor) return;
-      const assets = _.fromPairs(_.map([...cache.entries()], ([blob, uploaded]) => [blob.source, resolveUrl(uploaded)]));
-      editor.replaceAssets(assets);
-    };
-    return (
-      <FormUploader
-        onUpload={async (file: Blob & { source: string }, progress) => {
-          const result = await onUpload(file, progress);
-          cache.set(file, result);
-          updateResolvedUploads();
-          return result;
-        }}
-        {..._props}
-      >
-        {({ setUploads, submitFiles }) => (
-          <RichTextInput
-            ref={ref}
-            value={value}
-            onChangeText={async (text) => {
-              onChange(text);
-              setTouched();
-              updateResolvedUploads();
-              const assets = inputRef.current?.assets;
-              if (!assets) return;
-              setUploads(uploads => {
-                let result = [...uploads];
-                for (const upload of uploads) {
-                  if (_.includes(
-                    assets,
-                    upload instanceof FormUploadHandler ? upload.file.source : resolveUrl(upload)
-                  )) continue;
-                  result = _.filter(result, x => x !== upload);
-                }
-                return result;
-              });
-              const files = _.compact(await Promise.all(assets.map(async source => {
-                const blob = await dataUrlToBlob(source);
-                if (blob) return _.assign(blob, { source });
-              })));
-              if (!_.isEmpty(files)) submitFiles(...files);
-            }}
-            {...props}
-          />
-        )}
-      </FormUploader>
-    );
-  }
+  const [uploads, setUploads] = React.useState<{
+    uploaded: Record<string, Uploaded>;
+    promises: Record<string, Promise<void> | (() => Promise<void>)>;
+  }>({ uploaded: {}, promises: {} });
+  React.useEffect(() => {
+    if (!uploadProps) return;
+    const assets = _.uniq(inputRef.current?.assets);
+    for (const source of assets) {
+      if (uploads.uploaded[source] || uploads.promises[source]) continue;
+      const callback = async () => {
+        try {
+          const blob = await dataUrlToBlob(source);
+          if (blob) throw Error('Invalid file');
+          const saved = await uploadProps.onUpload(_.assign(blob, { source }));
+          setUploads(v => ({ ...v, [source]: { uploaded: saved } }));
+        } catch (e) {
+          setUploads(v => ({ ...v, [source]: callback }));
+          throw e;
+        }
+      };
+      setUploads(v => ({
+        ...v,
+        [source]: callback(),
+      }));
+    }
+    inputRef.current?.replaceAssets(_.mapValues(uploads.uploaded, v => uploadProps.resolveUrl(v)));
+  }, [value, uploads]);
+  React.useEffect(() => {
+    if (!uploadProps || _.isEmpty(uploads.promises)) return;
+    const listener = async (action: string) => {
+      if (action !== 'submit') return;
+      for (const item of _.values(uploads)) {
+        await (_.isFunction(item) ? item() : item);
+      }
+    }
+    addEventListener(listener);
+    return () => removeEventListener(listener);
+  }, [uploads]);
   return (
     <RichTextInput
       ref={ref}
