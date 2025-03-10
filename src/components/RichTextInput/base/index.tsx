@@ -107,14 +107,14 @@ export const Base = React.forwardRef(({
     const editor = editorRef.current;
     if (!editor || mouseDown) return;
 
-    const diff = editor.getContents().diff(content);
-    if (!diff.length()) return;
+    if (!encodeContent(_removeEmptyLines(decodeContent(editor.getContents()))).diff(content).length()) return;
 
     const selection = editor.hasFocus() && editor.getSelection();
     editor.setContents(content, 'silent');
 
     if (!selection) return;
 
+    const diff = editor.getContents().diff(content);
     const pos = diff.transformPosition(selection.index);
     editor.setSelection(pos, selection.length, 'silent');
 
