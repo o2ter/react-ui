@@ -27,8 +27,8 @@ import _ from 'lodash';
 
 export const html_escaper = (() => {
 
-  const ds = /[0-9]{2,3}/g;
-  const es = /&(?:amp|lt|gt|apos|quot|#[0-9]{2,3});/g;
+  const ds = /[0-9a-fA-F]{1,3}/g;
+  const es = /&(?:amp|lt|gt|apos|quot|#[0-9]{1,3}|#x[0-9a-fA-F]{1,2});/g;
   const ca = /[&<>\[\]'"]/g;
 
   const esca = {
@@ -52,7 +52,7 @@ export const html_escaper = (() => {
   const cape = (m: string) => {
     const digits = m.match(ds);
     if (digits) {
-      const ascii = parseInt(digits as any);
+      const ascii = parseInt(digits as any, m.startsWith('&#x') ? 16 : 10);
       if (32 <= ascii && ascii <= 126)
         return String.fromCharCode(ascii);
     }
