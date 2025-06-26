@@ -4989,10 +4989,10 @@ sudo-prompt@^9.0.0:
   resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-9.2.1.tgz#77efb84309c9ca489527a4e749f287e6bdd52afd"
   integrity sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==
 
-sugax@^1.0.106:
-  version "1.0.106"
-  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.106.tgz#8e191f9c666b1947ade644bc1ef932c9b5d3df5f"
-  integrity sha512-RHvuD3eTwWZapkSdlpK/f58C8Fy7K3Y4X16SpgmEaA7embdDe1NGcMtf5Drbb21EZMbc0QJveqDtg32OrX5VbA==
+sugax@^1.0.107:
+  version "1.0.107"
+  resolved "https://registry.yarnpkg.com/sugax/-/sugax-1.0.107.tgz#affa8a46db015c5225cd79efe2d25b593353ed74"
+  integrity sha512-kg/GI9x+TaIO0dYc08CcmNgtbOlpOOFkOTaKR7Bx6EiE1e7F4lADeuicz/uFwS3pXJf9f3Xd0Jz8Cs9dk3v5KQ==
   dependencies:
     "@o2ter/utils-js" "^0.0.9"
 
